@@ -1,0 +1,80 @@
+/*
+ * fonts.css — @font-face for Anthropic Serif (Anthropic's proprietary brand
+ * serif; see the README in src/assets/fonts/anthropic-serif/).
+ *
+ * The .otf files are gitignored (not redistributable). When they're absent —
+ * e.g. in a fork — these src urls simply fail and the browser falls through to
+ * the next family in --font-display / --font-serif-text (EB Garamond).
+ *
+ * Two optical sizes: "Display" (large headings, greeting, wordmark) and
+ * "Text" (reading / body serif). Roman weights 400–700 wired; italics and
+ * Light/Extrabold live in the folder if we need them later.
+ */
+
+/* ── Anthropic Serif Display ──────────────────────────────────────── */
+@font-face {
+  font-family: "Anthropic Serif Display";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Display-Regular-Static.otf")
+    format("opentype");
+}
+@font-face {
+  font-family: "Anthropic Serif Display";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Display-Medium-Static.otf")
+    format("opentype");
+}
+@font-face {
+  font-family: "Anthropic Serif Display";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Display-Semibold-Static.otf")
+    format("opentype");
+}
+@font-face {
+  font-family: "Anthropic Serif Display";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Display-Bold-Static.otf")
+    format("opentype");
+}
+
+/* ── Anthropic Serif Text ─────────────────────────────────────────── */
+@font-face {
+  font-family: "Anthropic Serif Text";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Text-Regular-Static.otf")
+    format("opentype");
+}
+@font-face {
+  font-family: "Anthropic Serif Text";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Text-Medium-Static.otf")
+    format("opentype");
+}
+@font-face {
+  font-family: "Anthropic Serif Text";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Text-Semibold-Static.otf")
+    format("opentype");
+}
+@font-face {
+  font-family: "Anthropic Serif Text";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Text-Bold-Static.otf")
+    format("opentype");
+}

@@ -1,0 +1,21 @@
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+// Serifs, in fallback order. Anthropic Serif (proprietary; @font-face files
+// gitignored) is primary; EB Garamond (open, bundled) is the fork fallback.
+// Both consumed via --font-display / --font-serif-text.
+import "@fontsource-variable/eb-garamond";
+import "./styles/fonts.css";
+// UI sans (provisional): Hanken Grotesk — consumed via --font-ui.
+import "@fontsource-variable/hanken-grotesk";
+import "./index.css";
+import Root from "./Root";
+import { copy } from "./copy/copy";
+
+// Keep the tab title driven by the single copy source.
+document.title = copy.app.documentTitle;
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <Root />
+  </StrictMode>,
+);

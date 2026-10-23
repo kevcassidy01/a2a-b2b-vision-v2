@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Desktop: the Cowork window opening (scale 0.96 → 1 with a fade, COWORK_INTENT §3.4). */
+@theme {
+  --animate-window-open: window-open 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-fade-in: fade-in 180ms ease-out both;
+  /* Dictation's waveform strip: one sample's slide left per tick (Waveform.tsx remounts it each tick). */
+  --animate-wave-scroll: wave-scroll 110ms linear forwards;
+  @keyframes wave-scroll {
+    to { transform: translateX(-5px); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+  }
+  /* A macOS notification banner sliding in from the right edge. */
+  --animate-banner-in: banner-in 420ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  @keyframes banner-in {
+    from {
+      opacity: 0;
+      transform: translateX(calc(100% + 16px));
+    }
+  }
+  /* ...and sliding back out the way it came. */
+  --animate-banner-out: banner-out 320ms cubic-bezier(0.4, 0, 1, 1) both;
+  @keyframes banner-out {
+    to {
+      opacity: 0;
+      transform: translateX(calc(100% + 16px));
+    }
+  }
+  /* The sidenav's typing dots: each hops in turn (staggered by animation-delay). */
+  --animate-typing-dot: typing-dot 1s ease-in-out infinite;
+  @keyframes typing-dot {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
+    30% { transform: translateY(-3px); opacity: 1; }
+  }
+  @keyframes window-open {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+}
+
+/* Tailwind v4 defaults buttons to cursor: default — restore the hand pointer
+   for interactive controls (opt back into the pre-v4 behavior). */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* A macOS-style overlay scrollbar: invisible until the area scrolls. The
+   scroller sets data-scrolling while it moves (see useAutoHideScrollbar). */
+@utility scroll-autohide {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 300ms;
+  &[data-scrolling] {
+    scrollbar-color: rgb(0 0 0 / 0.28) transparent;
+  }
+}

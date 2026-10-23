@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Proprietary fonts — not redistributable. Drop the OTFs into the folder
+# locally; the app falls back to EB Garamond when they're absent.
+src/assets/fonts/anthropic-serif/*.otf
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
