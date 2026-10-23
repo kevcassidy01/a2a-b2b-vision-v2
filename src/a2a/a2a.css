@@ -1,0 +1,169 @@
+/* A2A prototype: the glass shell and the iPhone's metal (A2A_INTENT §4).
+   The OS chrome is dark mode (iOS / macOS dark) over a dark wallpaper;
+   the demo content inside (the white layer, the phone screen) stays light, for contrast. */
+
+/* SF Pro throughout the A2A stage, chrome and content alike (unless Somnath says
+   otherwise). It can't be bundled, so it comes from the system: Apple devices
+   render it; elsewhere this falls back to the system UI font. */
+.a2a-stage {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", system-ui, sans-serif;
+  --font-serif: var(--font-sans);
+  --font-reading: var(--font-sans);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+/* The scene: the dusk mountain photo, already dark, under a light wash that's a
+   little deeper in the middle where the chrome sits (Linear's dark stage). */
+.a2a-scene {
+  background:
+    radial-gradient(120% 90% at 55% 45%, rgb(8 9 10 / 0.4) 30%, rgb(8 9 10 / 0.15) 100%),
+    var(--a2a-wallpaper) center / cover;
+}
+
+/* The shell's material, in two layers like the iPhone body:
+   - .a2a-glass: the blur and the shadow, with a light tint, never masked;
+   - .a2a-glass-body: near-solid #131416 lit faintly from the top-left (Linear /
+     Raycast), fading toward the bottom, most at the bottom-left.
+   One even surface: the sidenav is this, not a layer on top of it. Only the
+   material fades; the sidenav's contents stay at full opacity. */
+.a2a-glass {
+  -webkit-backdrop-filter: blur(40px) saturate(140%);
+  backdrop-filter: blur(40px) saturate(140%);
+  background: rgb(19 20 22 / 0.18);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.7),
+    0 8px 24px rgb(0 0 0 / 0.35),
+    0 40px 120px -20px rgb(0 0 0 / 0.85);
+}
+.a2a-glass-body {
+  background:
+    radial-gradient(90% 50% at 0% 0%, rgb(255 255 255 / 0.06), transparent 70%),
+    rgb(19 20 22 / 0.68);
+  -webkit-mask-image: linear-gradient(200deg, #000 30%, rgb(0 0 0 / 0.5) 65%, rgb(0 0 0 / 0) 100%);
+  mask-image: linear-gradient(200deg, #000 30%, rgb(0 0 0 / 0.5) 65%, rgb(0 0 0 / 0) 100%);
+}
+
+/* Hairline rim, Linear-style: an even 1px white edge at low opacity, a touch
+   brighter along the top where the light falls (masked to the ring). */
+.a2a-glass-rim {
+  padding: 1px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.07) 30%, rgb(255 255 255 / 0.06));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* The white layer the Command Center sits on (light mode). Its edge against the
+   glass is what sets the sidenav apart, so no separator and no ring; just a
+   whisper of shadow so it sits in the shell rather than on it. */
+.a2a-white-layer {
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.5),
+    0 1px 3px rgb(0 0 0 / 0.25);
+}
+
+/* Sidenav rows on dark glass: a faint white wash on hover, a stronger one when active. */
+.a2a-nav-btn {
+  transition: background-color var(--dur-fast, 120ms) ease-out;
+}
+.a2a-nav-btn:hover {
+  background: rgb(255 255 255 / 0.05);
+}
+.a2a-nav-active,
+.a2a-nav-active:hover {
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+/* Tooltips on icon-only buttons: black, with a hairline so they hold on the dark glass. */
+.a2a-tooltip {
+  background: #000;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    0 4px 12px rgb(0 0 0 / 0.4);
+}
+
+/* Long chat titles fade into the right edge instead of an ellipsis (Cowork's recents). */
+.a2a-fade-end {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+}
+
+/* The app mark: a blue cloudy orb after ElevenLabs'. Spherical but with no edge:
+   a radial mask dissolves it into the glass. Inside, soft colour swirls (a blurred
+   conic gradient turning) under drifting cloud, a highlight up-left and shade
+   down-right for the roundness. Still when reduced motion is asked for. */
+.a2a-orb {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 9999px;
+  background: #2563eb;
+  -webkit-mask-image: radial-gradient(circle, #000 46%, rgb(0 0 0 / 0.55) 58%, rgb(0 0 0 / 0) 71%);
+  mask-image: radial-gradient(circle, #000 46%, rgb(0 0 0 / 0.55) 58%, rgb(0 0 0 / 0) 71%);
+}
+.a2a-orb::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  background: conic-gradient(from 0deg, #1d4ed8, #7dd3fc, #f0f9ff, #3b82f6, #1e3a8a, #93c5fd, #1d4ed8);
+  filter: blur(2.5px);
+  animation: a2a-orb-swirl 7s linear infinite;
+}
+.a2a-orb::after {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(30% 26% at 36% 32%, rgb(255 255 255 / 0.7), transparent 70%),
+    radial-gradient(42% 30% at 58% 58%, rgb(240 249 255 / 0.55), transparent 72%),
+    radial-gradient(50% 45% at 70% 78%, rgb(12 28 100 / 0.55), transparent 70%);
+  filter: blur(1.5px);
+  animation: a2a-orb-drift 9s ease-in-out infinite alternate;
+}
+@keyframes a2a-orb-swirl {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes a2a-orb-drift {
+  to {
+    transform: rotate(-50deg) scale(1.08);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .a2a-orb::before,
+  .a2a-orb::after {
+    animation: none;
+  }
+}
+
+/* The iPhone's body: black, no metal greys. Glass underneath; the black on top
+   fades toward the bottom, most at the bottom-left, least at the bottom-right. */
+.a2a-phone-glass {
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  background:
+    linear-gradient(160deg, rgb(255 255 255 / 0.08), transparent 40%),
+    rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 8px 24px rgb(0 0 0 / 0.35),
+    0 40px 120px -20px rgb(0 0 0 / 0.85);
+}
+.a2a-phone-body {
+  background: rgb(0 0 0 / 0.82);
+  -webkit-mask-image: linear-gradient(200deg, #000 12%, rgb(0 0 0 / 0.4) 50%, rgb(0 0 0 / 0) 88%);
+  mask-image: linear-gradient(200deg, #000 12%, rgb(0 0 0 / 0.4) 50%, rgb(0 0 0 / 0) 88%);
+}
+.a2a-phone-rim {
+  padding: 1px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0.1));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.a2a-phone-button {
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
+}

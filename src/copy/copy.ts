@@ -30,6 +30,47 @@ export const copy = {
       desktop: "Desktop",
     },
   },
+  /** The agent-to-agent B2B prototype (A2A_INTENT): one split screen, John's
+   *  storefront on an iPhone (left) and Alex's Command Center in a generic AI
+   *  chat app shell (right). */
+  a2a: {
+    /** The AI app shell's sidenav, laid out like Cowork's (header icons, nav,
+     *  projects, recents, account footer) but deliberately not Claude or ChatGPT.
+     *  Alex is a Fizz Drinks seller, so the chats are a seller's. */
+    shell: {
+      search: "Search",
+      collapse: "Collapse sidebar",
+      nav: { newChat: "New chat", artifacts: "Artifacts", agents: "Agents", scheduled: "Scheduled" },
+      /** The Command Center is an artifact Alex has pinned: it sits open under Artifacts, and it's the page on screen. */
+      pinnedArtifact: "B2B Command Center",
+      projectsLabel: "Projects",
+      newProject: "New project",
+      /** The first folder is expanded, showing its chats; the rest are closed. */
+      projects: [
+        {
+          name: "Oktoberfest 2026 · DACH",
+          chats: ["Munich bottler allocation", "Promo depth vs. margin floor", "Fizz Zero launch kit for Bavaria"],
+        },
+        { name: "Q4 key accounts", chats: [] },
+        { name: "Pricing and contracts", chats: [] },
+        { name: "Territory planning", chats: [] },
+      ],
+      recentsLabel: "Recents",
+      recents: [
+        "Why are Hamburg reorders down 12% this month",
+        "Draft renewal terms for Rheinland Getränke",
+        "Summarise last week's pipeline changes",
+        "Fizz Classic vs. Zero sell-through by region",
+        "Prep for Thursday's distributor call",
+      ],
+      user: { name: "Alex Rivera", initials: "AR", email: "alex.rivera@fizzdrinks.com" },
+    },
+    phone: {
+      time: "9:41",
+      placeholder: "Storefront",
+    },
+    commandCenter: { placeholder: "Command Center" },
+  },
   /** The simulated Mac desktop (COWORK_INTENT). */
   desktop: {
     /** Aaron's employer, the Salesforce customer (decision 10). One place to rebrand. */

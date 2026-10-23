@@ -2,7 +2,7 @@
 
 Flow charts for the Cowork-on-a-Mac-desktop demo, drawn for a terminal. Written 2026-10-11.
 Persona: **Aaron**, a Salesforce Commerce seller at Ohana Networks (networking hardware).
-Sources: `COWORK_INTENT.md` (§4.5 decisions 21-45, §4.6, §4.7, §8, §8.5), `src/copy/copy.ts`
+Sources: `old-intent/COWORK_INTENT.md` (§4.5 decisions 21-45, §4.6, §4.7, §8, §8.5), `src/copy/copy.ts`
 (`copy.desktop.cowork`), `src/desktop/CoworkWindow.tsx`, `src/desktop/cowork/*`.
 **Update this file whenever a flow changes.**
 

@@ -458,6 +458,20 @@ Same for checkout's `/reorder`: it reads the order and writes the reorder cart i
 - **Decision:** The recap's Things to do renders as Claude's own card (the file card's look: icon tile, title, meta), with no Salesforce Commerce header or footer. Its rows stay numbered tasks with a pill and Found / Do pairs.
 - **Why:** Somnath: pulling up everything to do is a Claude feature, not a Salesforce one, so it can be a card, but not from Salesforce Commerce.
 
+### 2026-10-23 A2A prototype: three views behind a toggle; the seller side is a generic AI chat shell
+
+- **Decision:** The agent-to-agent prototype has three views behind a toggle (form to be designed): **Storefront** (buyer, John), **Command Center** (seller, Alex) and **Both**. The Command Center lives inside Cowork in the story, but on screen it sits in a shell of our own that reads as an AI chat based app, not Cowork or ChatGPT specifically. **Both** isn't two full interfaces: it's the two agents' chat feeds split across the screen, showing how each works through the story. Details in `A2A_INTENT.md` §4.
+- **Why:** Somnath: the buyer and seller each need their real surface, and the split view explains how the agents work together without crowding two full apps into one screen. A neutral chat shell keeps the story about agent-to-agent commerce, not one AI product.
+
+---
+
+### 2026-10-23 A2A prototype: one split screen, a phone storefront on the left, the Command Center on the right (supersedes "three views behind a toggle" for the screen layout)
+
+- **Decision:** No tabs or toggle. One screen, split: the storefront on a mobile screen on the left (John), the Command Center in the AI chat shell on the right (Alex). The "Both" view of two agent feeds is dropped. The Command Center still sits in a generic AI chat shell, not Cowork or ChatGPT. The story also gains a display-only cross-sell step the buyer doesn't take (details to come).
+- **Why:** Somnath's update, the same day.
+
+---
+
 ## Undecided (to resolve in planning)
 
 - Interaction inventory + milestone ordering (rough order agreed; per-piece detail TBD).

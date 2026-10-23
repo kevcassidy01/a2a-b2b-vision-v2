@@ -86,7 +86,7 @@ The four flows, in demo order:
 | 3 | **Growth Scout** | Agent | The second **New session** row | It sends lapsed accounts approved win-back quotes with a recommended add-on, asks you about the big ones, and lets you change the discount by voice |
 | 4 | **Morning Brief** | Scheduled task | **Scheduled**, then the **Daily briefing** template | Set up one day, read the next morning (Ctrl+S jumps the clock). It covers accounts, the store, the inbox and Slack, and what both agents did overnight. You act on it by voice |
 
-Vision, decisions and build handoff: [COWORK_INTENT.md](./COWORK_INTENT.md).
+Vision, decisions and build handoff: [COWORK_INTENT.md](./docs/old-intent/COWORK_INTENT.md).
 
 ---
 
@@ -121,7 +121,8 @@ The repo keeps its own working memory. Read these at the start of a session:
 |---|---|
 | [SESSION_CONTEXT.md](./SESSION_CONTEXT.md) | What the project is and where it stands |
 | [DESIGN_DECISIONS.md](./DESIGN_DECISIONS.md) | Settled design and interaction decisions, with the reasons |
-| [COWORK_INTENT.md](./COWORK_INTENT.md) | The Cowork desktop vision, its numbered decisions and the build handoff |
+| [A2A_INTENT.md](./A2A_INTENT.md) | The agent-to-agent B2B commerce prototype: storyline, rules, screens, open questions |
+| [COWORK_INTENT.md](./docs/old-intent/COWORK_INTENT.md) | The Cowork desktop vision, its numbered decisions and the build handoff |
 | [CHANGE_LOG.md](./CHANGE_LOG.md) | Every change, newest first, versioned at commit |
 | [TODO.md](./TODO.md) | Open work in three priority buckets |
 | [CLAUDE.md](./CLAUDE.md) | Instructions and standing rules for Claude Code in this repo |

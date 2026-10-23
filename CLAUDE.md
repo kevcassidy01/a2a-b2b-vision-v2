@@ -16,7 +16,7 @@ sheet is [docs/cowork-demo-run-sheet.md](./docs/cowork-demo-run-sheet.md).
 2. **[DESIGN_DECISIONS.md](./DESIGN_DECISIONS.md)** — durable design & interaction decisions with rationale. Don't relitigate what's settled here.
 3. **[CHANGE_LOG.md](./CHANGE_LOG.md)** — chronological record of changes. Newest at top.
 4. **[TODO.md](./TODO.md)** — running to-do list across sessions. Check it at the start of every session and keep it current.
-5. **[COWORK_INTENT.md](./COWORK_INTENT.md)** — the Cowork-on-a-Mac-desktop vision work for the VP of Product (from 2026-10-08): what's agreed and what's still open.
+5. **[A2A_INTENT.md](./A2A_INTENT.md)** — the agent-to-agent B2B commerce prototype (from 2026-10-23): the Fizz Drinks storyline, its rules and screens, and what's still open. **Build from this.** Earlier intent docs (browser chat, Cowork desktop) are in [docs/old-intent/](./docs/old-intent/), reference only.
 
 ## How to maintain the harness
 
