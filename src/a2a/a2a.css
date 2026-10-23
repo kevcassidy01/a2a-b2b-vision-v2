@@ -138,6 +138,14 @@
   mask-image: linear-gradient(180deg, #000, rgb(0 0 0 / 0));
 }
 
+/* Rows that scroll sideways without showing a scrollbar. */
+.a2a-no-scrollbar {
+  scrollbar-width: none;
+}
+.a2a-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* An empty state's banner: grey at the top, fading down into the white card. */
 .a2a-empty-fade {
   background: linear-gradient(180deg, #f4f4f6, rgb(244 244 246 / 0));

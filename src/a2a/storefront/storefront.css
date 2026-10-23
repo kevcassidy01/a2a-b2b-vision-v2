@@ -1,0 +1,113 @@
+/* Fizz Drinks' B2B storefront on the phone, in Coca-Cola's design language:
+   a #eeeeee page, white cards (16px; 32px for the big ones), bold headings,
+   pill buttons in near-black. Fizz red only in the logo and the drinks. */
+
+.sf-page {
+  --fizz-red: #e8112d;
+  background: #eeeeee;
+}
+.sf-no-scrollbar {
+  scrollbar-width: none;
+}
+.sf-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* The wordmark: heavy, tight, a little italic. */
+.sf-logo {
+  color: var(--fizz-red);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+/* Pill buttons: filled near-black, white (on dark slides), or outlined. No
+   hover states anywhere on the phone: it's a touch screen, so a tap is direct. */
+.sf-pill {
+  display: inline-flex;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.sf-pill-sm {
+  height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+.sf-pill-dark {
+  background: #1d1d1f;
+  color: #fff;
+}
+.sf-pill-light {
+  background: #fff;
+  color: #1d1d1f;
+}
+.sf-pill-outline {
+  color: #1d1d1f;
+  box-shadow: inset 0 0 0 1.5px #1d1d1f;
+}
+
+/* A drawn can: the body's colour under a cylinder's sheen, metal rims top and bottom. */
+.sf-can {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 14% / 7%;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.28),
+      rgb(0 0 0 / 0) 22%,
+      rgb(255 255 255 / 0.32) 38%,
+      rgb(255 255 255 / 0) 52%,
+      rgb(0 0 0 / 0) 70%,
+      rgb(0 0 0 / 0.3)
+    ),
+    var(--can);
+  box-shadow: 0 12px 24px -10px rgb(0 0 0 / 0.45);
+}
+.sf-can::before,
+.sf-can::after {
+  content: "";
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  background: linear-gradient(90deg, #8e8e93, #f2f2f4 40%, #c7c7cc 60%, #8e8e93);
+}
+.sf-can::before {
+  top: 0;
+  height: 7%;
+  border-radius: 40% 40% 10% 10% / 80% 80% 20% 20%;
+}
+.sf-can::after {
+  bottom: 0;
+  height: 4%;
+  border-radius: 10% 10% 40% 40% / 20% 20% 80% 80%;
+}
+.sf-can-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* Soft light behind the cans on a slide, and the product and feature backdrops. */
+.sf-hero-glow {
+  background: radial-gradient(50% 45% at 50% 60%, rgb(255 255 255 / 0.22), transparent 70%);
+}
+.sf-product-shot {
+  background: radial-gradient(70% 60% at 50% 55%, #fff, #f4f4f4);
+}
+.sf-feature-shot {
+  background: radial-gradient(80% 70% at 50% 40%, #ff4d5e, var(--fizz-red) 70%);
+}

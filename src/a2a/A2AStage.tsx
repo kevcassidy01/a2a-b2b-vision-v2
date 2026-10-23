@@ -3,6 +3,7 @@ import { ArtifactFrame } from "./ArtifactFrame";
 import { CommandCenterShell } from "./CommandCenterShell";
 import { CommandCenter } from "./command-center/CommandCenter";
 import { IPhoneFrame } from "./IPhoneFrame";
+import { Storefront } from "./storefront/Storefront";
 import wallpaper from "../assets/a2a/wallpaper.jpg";
 import "./a2a.css";
 
@@ -15,10 +16,19 @@ import "./a2a.css";
 export function A2AStage() {
   return (
     <div
-      className="a2a-stage a2a-scene flex h-screen w-screen gap-6 overflow-hidden py-2.5 pl-6 pr-2.5"
-      style={{ "--a2a-wallpaper": `url(${wallpaper})` } as CSSProperties}
+      className="a2a-stage a2a-scene flex h-screen w-screen overflow-hidden py-2.5 pl-6 pr-2.5"
+      style={
+        {
+          "--a2a-wallpaper": `url(${wallpaper})`,
+          // Wide screens (office demos): the gap grows a little, from 24px at
+          // 1440 to at most 56px.
+          gap: "clamp(24px, calc(24px + (100vw - 1440px) * 0.06), 56px)",
+        } as CSSProperties
+      }
     >
-      <IPhoneFrame />
+      <IPhoneFrame>
+        <Storefront />
+      </IPhoneFrame>
       <CommandCenterShell>
         <ArtifactFrame>
           <CommandCenter />

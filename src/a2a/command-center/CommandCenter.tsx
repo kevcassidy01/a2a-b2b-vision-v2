@@ -6,15 +6,16 @@ import {
   Store,
   type LucideIcon,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { copy } from "../../copy/copy";
 import { Segmented } from "../../shell/Segmented";
 import { ThemeSegmented } from "../../shell/ThemeSegmented";
 import { Tooltip } from "../Tooltip";
-import { AgentButton } from "./AgentButton";
+import { AgentButton, type AgentStatus } from "./AgentButton";
 import { ApprovalsCard } from "./ApprovalsCard";
 import { CurrencyMenu } from "./CurrencyMenu";
 import { MetricTiles } from "./MetricTiles";
+import { OrdersByCountryCard } from "./OrdersByCountryCard";
 import { StoreMenu } from "./StoreMenu";
 import { ViewPicker } from "./ViewPicker";
 
@@ -35,13 +36,7 @@ export function CommandCenter() {
         <Section {...t.sections.last12Months}>
           <ApprovalsCard />
           <MetricTiles />
-          {/* Room for what comes next: a wide white card that fades out, border
-              and all, as it runs off the bottom of the page. The fade sits on a
-              wrapper 16px bigger all round, so it doesn't clip the hairline and
-              shadow, which are drawn outside the card. */}
-          <div className="a2a-fade-out -mx-4 px-4 pt-4 -mt-4" aria-hidden>
-            <div className="a2a-card h-64 rounded-t-xl" />
-          </div>
+          <OrdersByCountryCard />
         </Section>
       </div>
     </div>
@@ -55,6 +50,18 @@ export function CommandCenter() {
  * at the far right. Then, under a hairline, the view and the period.
  */
 function Header() {
+  // Demo hotkey: Ctrl+A sets the Agent working (dots bouncing), and back to idle.
+  const [agent, setAgent] = useState<AgentStatus>("idle");
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== "KeyA" || !e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.repeat) return;
+      e.preventDefault();
+      setAgent((s) => (s === "working" ? "idle" : "working"));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <header className="a2a-hero flex flex-col px-8 pb-6 pt-6">
       <p className="text-[13.5px] text-text-muted">{t.greeting}</p>
@@ -91,7 +98,7 @@ function Header() {
           initial={2}
           label={t.scope.label}
         />
-        <AgentButton className="ml-auto" />
+        <AgentButton status={agent} className="ml-auto" />
       </div>
       <div className="mt-5 h-px bg-border" aria-hidden />
       {/* What to look at: the view (a mode), then the period. */}

@@ -30,6 +30,15 @@ Entry format:
 
 ## Unreleased
 
+## 19.0.0 — 2026-10-24 01:58 IST
+**Kind:** large feature: Fizz Drinks' pre-login B2B storefront on the phone (Coca-Cola's design language); plus the Orders by bill-to-country card's title row and metric picker, a wider gap on wide screens, and the Ctrl+A Agent hotkey.
+- **Wide screens (office demos)** on `#a2a`: the gap between the phone and the desktop grows a little, from 24px at 1440 to at most 56px. The desktop still fills to the right edge; the phone never gets wider.
+- **Orders by bill-to-country**: the fading card under the metrics now has its title, with **Ask about this** (chat icon) and **Export CSV** (download icon) at the right of the title row. New `OrdersByCountryCard.tsx`; copy in `commandCenter.ordersByCountry`.
+- **Orders by bill-to-country metric picker**: a segmented control under the title row: Orders, Order value, Ordering accounts, Abandoned carts, Open cases, Returns, At-risk accounts, Product demand. Scrolls sideways (no scrollbar) when the card is too narrow for all eight. New `.a2a-no-scrollbar` helper.
+- **No hover states on the phone**: the storefront's pills and menu button no longer change on hover; it's a touch screen, so a tap is direct.
+- **Demo hotkey Ctrl+A** on `#a2a`: switches the Agent button between idle and working (the bouncing dots). Same pattern as the Cowork demo's Ctrl+S.
+- **Fizz Drinks B2B storefront on the phone** (`#a2a`, pre-login), in Coca-Cola's design language: a #eeeeee page, white 16/32px cards, bold centred headings, near-black pill buttons. Sections: a sticky white header (fizz B2B logo, Log in, menu), a hero carousel (snapping slides that peek in, pill dots), Shop by brand tiles, a sideways row of best sellers (prices locked behind login), an overlapping feature card, Why buy direct, a Log in / Request an account block, and an uppercase legal footer. Drawn CSS cans stand in for photos. Inter, with Fizz red only in the logo and the drinks. New `src/a2a/storefront/` (Storefront, Hero, Can, storefront.css); all copy under `copy.a2a.storefront`.
+
 ## 18.0.0 — 2026-10-24 01:17 IST
 **Kind:** large feature: the Command Center's header (title, controls, views, period, stores, Agent button) and its first section (approvals card, metric tiles, placeholder card), in Inter.
 - **Placeholder card** at the end of the "Last 12 months" section: a full-width, 256px white card, a stand-in for what comes next. It ends the page, so the body lost its bottom padding.

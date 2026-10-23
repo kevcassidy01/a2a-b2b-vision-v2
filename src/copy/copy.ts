@@ -82,6 +82,84 @@ export const copy = {
       time: "9:41",
       placeholder: "Storefront",
     },
+    /** John's view: Fizz Drinks' B2B store on the phone, before he logs in. */
+    storefront: {
+      brand: "fizz",
+      brandTag: "B2B",
+      /** The names drawn on the cans. */
+      canLabels: { fizz: "fizz", zero: "zero", lime: "lime", bubbl: "bubbl", zing: "zing", pulp: "pulp", brew: "brew" },
+      home: "Fizz Drinks B2B home",
+      logIn: "Log in",
+      menu: "Menu",
+      hero: {
+        label: "Featured offers",
+        slideOf: "Go to slide",
+        slides: [
+          {
+            eyebrow: "Summer stock-up",
+            title: "12% off when you order 50+ cases",
+            cta: "Log in to order",
+          },
+          {
+            eyebrow: "New in",
+            title: "Fizz Zero Lime, now in trade packs",
+            cta: "See the range",
+          },
+          {
+            eyebrow: "For business accounts",
+            title: "Net-30 terms on every order",
+            cta: "Apply now",
+          },
+        ],
+      },
+      brands: {
+        title: "Shop by brand",
+        items: [
+          { name: "Fizz", kind: "Cola" },
+          { name: "Fizz Zero", kind: "No sugar" },
+          { name: "Bubbl", kind: "Sparkling water" },
+          { name: "Zing", kind: "Energy" },
+          { name: "Pulp", kind: "Juice" },
+          { name: "Brew", kind: "Iced tea" },
+        ],
+      },
+      products: {
+        title: "Best sellers for outlets",
+        subtitle: "Trade packs, delivered from your nearest depot.",
+        priceGate: "Log in for trade pricing",
+        view: "View",
+        items: [
+          { name: "Fizz Original", pack: "24 × 330 ml cans", moq: "Min. 10 cases" },
+          { name: "Fizz Zero Lime", pack: "24 × 330 ml cans", moq: "Min. 10 cases" },
+          { name: "Bubbl Sparkling", pack: "12 × 500 ml bottles", moq: "Min. 20 cases" },
+          { name: "Zing Energy", pack: "24 × 250 ml cans", moq: "Min. 5 cases" },
+        ],
+      },
+      feature: {
+        eyebrow: "Multi-outlet ordering",
+        title: "One account for every outlet",
+        body: "Order for all your stores at once, with a delivery slot and an invoice for each location.",
+        link: "Learn more",
+      },
+      perks: {
+        title: "Why buy direct",
+        items: [
+          { title: "Volume pricing", body: "Tiered prices that drop as your order grows." },
+          { title: "Net terms", body: "Pay in 30 days once your account is approved." },
+          { title: "Scheduled delivery", body: "Pick a weekly slot and we restock before you run out." },
+        ],
+      },
+      cta: {
+        title: "Ready to restock?",
+        body: "Log in to see your prices, past orders and quotes.",
+        request: "Request a business account",
+      },
+      footer: {
+        links: ["About Fizz", "Contact sales", "Delivery areas", "Returns", "Help centre"],
+        legal: ["Terms of trade", "Privacy", "Cookies"],
+        copyright: "© 2026 Fizz Drinks Ltd. All rights reserved.",
+      },
+    },
     /** Alex's Command Center: the MCP app's full-screen frame, then the app itself. */
     commandCenter: {
       frame: { title: "B2B Command Center", share: "Share", close: "Close" },
@@ -132,6 +210,24 @@ export const copy = {
         },
       },
       /** Quote requests from the storefront waiting on the seller (empty for now). */
+      ordersByCountry: {
+        title: "Orders by bill-to-country",
+        metric: {
+          label: "Metric",
+          options: [
+            "Orders",
+            "Order value",
+            "Ordering accounts",
+            "Abandoned carts",
+            "Open cases",
+            "Returns",
+            "At-risk accounts",
+            "Product demand",
+          ],
+        },
+        ask: "Ask about this",
+        export: "Export CSV",
+      },
       approvals: {
         title: "Needs your approval",
         count: 0,
