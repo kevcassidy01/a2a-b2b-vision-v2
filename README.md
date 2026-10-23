@@ -9,7 +9,6 @@ Everything plays from authored scripts, so a demo never depends on the network, 
 
 | | |
 |---|---|
-| **Maintained by** | Somnath Mallela (somnath.mallela@salesforce.com) |
 | **Status** | Demo-ready prototypes. Scripted, not wired to a live org or the Claude API |
 | **Version** | See the top of [CHANGE_LOG.md](./CHANGE_LOG.md) |
 | **Default branch** | `master` (feature branches are kept on origin and never deleted) |

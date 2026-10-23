@@ -23,7 +23,7 @@ FigJam board: file key `iAI8B2tPDO2l9Tl5IBJFtD`
 - Keep it very simple. Cutting a story down to a demo takes a world of effort, so pick ones that survive the cut.
 - It must be **really B2B.** Demand comes from production plans, schedules, capacity and contracts, not from consumers. Festivals, diners and patients felt B2C. Stores were also out.
 - Don't restate Somnath's existing proto (see §5).
-- It must show **complex B2B workflows** and **agent-to-agent (A2A) conversations**. The VP Eng's criticism of the PM director's version was that it had neither.
+- It must show **complex B2B workflows** and **agent-to-agent (A2A) conversations**.
 - Industries outside consumer goods are fine. Consumer goods was the starting point because everyone relates to it.
 
 **The shape every story should have** (taken from the Coca-Cola story)
@@ -37,10 +37,10 @@ FigJam board: file key `iAI8B2tPDO2l9Tl5IBJFtD`
 **Board copy**
 - One phrase per box, in plain English.
 - No em dashes, colons or semicolons. Question marks are fine on diamonds.
-- Say "agent", "CCEP agent" or "Coca-Cola agent". Never say "persona agent", because it confused everyone.
+- Say "agent", "CCEP agent" or "Coca-Cola agent". Never say "persona agent".
 - Keep finance generic. There is no Finance ERP.
 - No storefront in the agent flows. Agents do the quote and cart work that people used to do.
-- Notifications go inside Claude or Cowork, not Slack. Patrick dislikes Slack.
+- Notifications go inside Claude or Cowork, not Slack.
 
 ## 3. The base story: Coca-Cola and CCEP at Oktoberfest
 
@@ -127,7 +127,7 @@ Somnath chose to add only **multi-cart** (the urgent cart next to the monthly ca
 ### Persona agents
 - The SVP talked about "persona agents". The idea: everyone in the Salesforce ecosystem has their own agent, and those agents work with each other instead of people. People handle exceptions.
 - **Escalation example:** a procurement manager has an over-policy quote they think is good. It goes to the procurement VP's agent, which reviews it, writes a report, and recommends approve or counter. Legal approval runs at the same time.
-- OpenAI's "Dots" was looked at for reference: always-on personal agents, rules for act alone, ask first or blocked, and available in ChatGPT, Slack and Teams. Somnath was clear: *"I didn't say we need dots. I said we need to build persona agents."*
+- OpenAI's "Dots" was looked at for reference: always-on personal agents, rules for act alone, ask first or blocked, and available in ChatGPT, Slack and Teams.
 
 ### Branding
 - The brand must be very short, easy to remember, and **separate from Agentforce**.
@@ -160,17 +160,17 @@ How it's built:
 
 New stories must go **beyond** this proto, not restate it.
 
-## 6. Story rounds and how Somnath reacted
+## 6. Story rounds
 
 ### Round 1: four "disruptive" ideas
-Somnath's response: stick to consumer goods.
+Direction: stick to consumer goods.
 1. **Intent is the new catalogue.** A hospital group equips ICU wings, and eight suppliers' agents compete with bundles.
 2. **Coalition commerce.** 300 independent hardware stores pool their demand to get enterprise pricing.
 3. **The contract is the store.** A signed contract sets up catalogues, prices and templates, with renewals using real usage data.
 4. **Outcome commerce.** A customer buys forklift uptime instead of parts.
 
 ### Round 2: consumer goods, store-based
-Somnath's response: think of something that isn't a store, and more B2B.
+Direction: something that isn't a store, and more B2B.
 - **"The shelf orders itself"** (recommended at the time):
   - A corner shop owner sends a WhatsApp shelf video.
   - Coca-Cola, PepsiCo and Mondelez agents compete for the gaps.
@@ -208,9 +208,9 @@ Somnath's response: think of something that isn't a store, and more B2B.
   - Agent identity and authority across companies.
 
 ### Round 3: non-store B2B, "The deal that runs itself"
-Coca-Cola and PepsiCo agents bid for a 400-hotel beverage contract. The contract becomes 400 order templates, and rebates and disputes are settled by agents. **Somnath's response: still not powerful enough.**
+Coca-Cola and PepsiCo agents bid for a 400-hotel beverage contract. The contract becomes 400 order templates, and rebates and disputes are settled by agents. **Direction: go bigger.**
 
-### The PM director's storyline
+### An earlier storyline
 https://kevcassidy01.github.io/agentic-b2b-commerce/storyline.html
 
 - **"The Conversational Storefront":** Jordan (Corner & Co.), Alex (Midtown Market) and a Coca-Cola agent team.
@@ -218,7 +218,6 @@ https://kevcassidy01.github.io/agentic-b2b-commerce/storyline.html
   - Launch a new store.
   - Delegated buying with authority checks.
   - Purchase patterns to trusted autopilot.
-- **VP Eng's criticism:** no complex B2B workflows and no agent-to-agent conversations. Everything happens inside one chat with one buyer.
 
 ### Round 4: five A2A blurbs
 1. Price increase season: 300 negotiations in a week.
@@ -253,10 +252,10 @@ Rules for the seller's system:
 
 Demo idea: "Same deal, four screens".
 
-**Somnath's response:** not what was asked. The ask was for more stories, using all of this context.
+**Direction:** more stories, using all of this context.
 
 ### Round 6: five more stories
-Summer schedule (airline caterer), festival sale-or-return, the menu launch (franchisees), festival gift packs, flu season. **Somnath's response: too B2C. Make it more B2B.**
+Summer schedule (airline caterer), festival sale-or-return, the menu launch (franchisees), festival gift packs, flu season. **Direction: make it more B2B.**
 
 ### Round 7: B2B within consumer goods
 The new can (can maker and bottler), sample to contract (sweetener supplier), overflow volume (co-packer tolling), the line is wearing out (bottling equipment), fill the container (exports). Somnath then said other industries are fine too.
@@ -268,10 +267,10 @@ The new can (can maker and bottler), sample to contract (sweetener supplier), ov
 4. Planting season (crop inputs and a co-op).
 5. **The AI data centre build (server maker and data-centre operator).** Liked.
 
-Somnath rejected discontinued parts and urgency as edge cases.
+Discontinued parts and urgency were set aside as edge cases.
 
 ### Round 9: keynote versions
-"The hospital that opened early" and "The AI factory that came online early". **Somnath's response: "early" is still an edge case. Make it a lot simpler.**
+"The hospital that opened early" and "The AI factory that came online early". **Direction: "early" is still an edge case. Make it a lot simpler.**
 
 ## 7. The current two stories (built on the FigJam board)
 

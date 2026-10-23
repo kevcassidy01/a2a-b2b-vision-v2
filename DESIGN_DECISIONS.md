@@ -394,7 +394,7 @@ The segments prompt is "How are buyers doing this quarter?" and the row button r
 
 **Decision:** In the browser chat, every prompt the presenter used to type is dictated: the mic beside send (greeting box, in-chat box and the full-screen prompt bar) plays the journey's next line, from a `dictations` list in each experience, a word or a few at a time with no hesitations or breaths, and the recording ends by itself; Enter sends. The mic offers the line after the last one sent. A dictated `/skill` shows as its chunk. Prompts that are only a slash skill (`/approve-quote`, `/export-report`) are still typed, and typing still works everywhere. The browser has its own dictation hook (`src/chat/useChatDictation.ts`); desktop Cowork keeps `shell/useDictation.ts` and its pacing unchanged, and the shared composers only take the browser path when given `chatDictation`.
 
-**Rationale:** A senior director mistyped prompts in a demo; typing invites that, dictation removes it. The browser prompts are short, so pauses only slow them down. Browser and desktop evolve independently: one's changes must not affect the other (Somnath, 2026-10-16).
+**Rationale:** Typing invites mistyped prompts in a live demo; dictation removes that. The browser prompts are short, so pauses only slow them down. Browser and desktop evolve independently: one's changes must not affect the other (Somnath, 2026-10-16).
 
 ---
 
@@ -436,7 +436,7 @@ Same for checkout's `/reorder`: it reads the order and writes the reorder cart i
 
 **Decision:** In the browser chat, switching journeys in the sidenav keeps each one's chat exactly as it was left: same messages, cards as clicked, permission cards as decided, timelines without replay, scroll where it was. A journey not yet run shows the greeting. A reply still generating when you switch away finishes into its own chat. **New** restarts only the armed journey; a page refresh restarts all three (memory only, nothing saved). Implementation: the store keeps a chat per journey (`chats`), and every started journey's `ChatStage` stays mounted, hidden (`invisible`) while another is shown; only the shown one has a prompt box. Switching closes the full-screen app and file preview. Desktop Cowork is untouched.
 
-**Rationale:** The director of PM ran order-on-behalf, then checkout anywhere, and found the first chat gone. At the end of a demo he wants to go back and scroll through the steps taken to explain them (Somnath, 2026-10-16). The flow is over, so it stays as is.
+**Rationale:** After running order-on-behalf, then checkout anywhere, the first chat should still be there. At the end of a demo the presenter wants to go back and scroll through the steps taken to explain them (Somnath, 2026-10-16). The flow is over, so it stays as is.
 
 ---
 

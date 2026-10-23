@@ -30,16 +30,16 @@ Entry format:
 
 ## Unreleased
 
+## 16.5.1 — 2026-10-23 18:31 IST
+**Kind:** copy fix (docs).
+- Docs: neutral wording in the discussion record and two design rationales (no remarks about individuals); README's Maintained by row removed.
+
 ## 16.5.0 — 2026-10-23 18:22 IST
 **Kind:** small addition (story wireframe, docs). First commit to the new repo `somnath-mallela/a2a-b2b-commerce-vision` (fresh history).
-- Story: brainstormed the VP of Eng's "B2B Story Line" (Fizz Drinks). Buyer John (storefront, agent in a docked right sidebar) and seller Alex (Command Center, full-screen HTML artifact in Cowork, new docked chat sidebar). Agents negotiate end to end; people step in 3 times (John starts it, Alex picks Net15, John approves). 15 steps.
-- Per VP of Eng feedback: no second vendor (ABC Corp dropped); Mike and John share a single cart (Mike's 5,000 lemonade + 10,000 orange added by John's agent).
+- Story: brainstormed the "B2B Story Line" (Fizz Drinks). Buyer John (storefront, agent in a docked right sidebar) and seller Alex (Command Center, full-screen HTML artifact in Cowork, new docked chat sidebar). Agents negotiate end to end; people step in 3 times (John starts it, Alex picks Net15, John approves). 15 steps.
+- Story changes: no second vendor (ABC Corp dropped); Mike and John share a single cart (Mike's 5,000 lemonade + 10,000 orange added by John's agent).
 - Figma wireframe (outside the repo): https://www.figma.com/design/lWnasgbunlULMbH2GTkdy6/Untitled — swimlane user flow on top, then buyer frames B1–B8 and seller frames S1–S6 (1440×900), NEW tags marking what each step created.
 - Context folders were copied in for reference only; no application code changed.
-
-## 16.4.4 — 2026-10-17 01:16 IST
-**Kind:** docs fix (README maintainer).
-- Docs: README's Maintained by is Somnath only (Amoolya, the PM, co-owns the demo guides and the story, not the repo).
 
 ## 16.4.3 — 2026-10-17 01:13 IST
 **Kind:** docs (browser chat demo guide for Sreeni; README revamp).
