@@ -1,4 +1,5 @@
 import { copy } from "../../copy/copy";
+import { SegmentLabel } from "../../shell/Segmented";
 
 export type CoworkMode = "chat" | "cowork";
 const MODES: CoworkMode[] = ["chat", "cowork"];
@@ -12,10 +13,20 @@ const MODES: CoworkMode[] = ["chat", "cowork"];
  * sized to each label, so the selected segment carries the thumb itself rather
  * than a sliding pill. Presentational for now: switching changes nothing else.
  */
-export function ChatCoworkToggle({ mode, onChange }: { mode: CoworkMode; onChange: (mode: CoworkMode) => void }) {
+export function ChatCoworkToggle({
+  mode,
+  onChange,
+}: {
+  mode: CoworkMode;
+  onChange: (mode: CoworkMode) => void;
+}) {
   const t = copy.desktop.cowork.composer;
   return (
-    <div role="tablist" aria-label={t.mode} className="ml-2 inline-flex shrink-0 items-center gap-0.5 rounded-md bg-track p-0.5">
+    <div
+      role="tablist"
+      aria-label={t.mode}
+      className="ml-2 inline-flex shrink-0 items-center gap-0.5 rounded-md bg-track p-0.5"
+    >
       {MODES.map((id) => {
         const active = mode === id;
         return (
@@ -25,11 +36,13 @@ export function ChatCoworkToggle({ mode, onChange }: { mode: CoworkMode; onChang
             role="tab"
             aria-selected={active}
             onClick={() => onChange(id)}
-            className={`h-6 rounded-sm px-2.5 text-ui transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)] ${
-              active ? "bg-track-thumb text-text shadow-sm" : "text-text-muted hover:text-text"
+            className={`h-6 rounded-sm pl-1.5 pr-2 text-ui transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)] ${
+              active
+                ? "bg-track-thumb font-semibold text-text shadow-thumb"
+                : "text-text-muted hover:text-text"
             }`}
           >
-            {t[id]}
+            <SegmentLabel selected={active}>{t[id]}</SegmentLabel>
           </button>
         );
       })}

@@ -8,20 +8,10 @@ import {
   Globe,
   Info,
   LogOut,
-  Monitor,
-  Moon,
   Settings,
-  Sun,
 } from "lucide-react";
 import { copy } from "../copy/copy";
-
-/** Theme segmented-control options (System / Light / Dark). */
-const THEME_OPTIONS = [
-  { key: "system", Icon: Monitor },
-  { key: "light", Icon: Sun },
-  { key: "dark", Icon: Moon },
-] as const;
-type ThemeKey = (typeof THEME_OPTIONS)[number]["key"];
+import { ThemeSegmented } from "./ThemeSegmented";
 
 /**
  * AccountMenu — the sidebar footer's account button + its popover.
@@ -54,8 +44,6 @@ export function AccountMenu({
   const address = email ?? acc.email;
   const it = acc.items;
   const [open, setOpen] = useState(false);
-  // Presentational for now — light theme only (see DESIGN_DECISIONS).
-  const [theme, setTheme] = useState<ThemeKey>("light");
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,7 +72,10 @@ export function AccountMenu({
   const divider = <div className="my-1.5 h-px bg-border" />;
 
   return (
-    <div ref={rootRef} className={collapsed ? "relative" : "relative min-w-0 flex-1"}>
+    <div
+      ref={rootRef}
+      className={collapsed ? "relative" : "relative min-w-0 flex-1"}
+    >
       {/* Identity trigger — full row (avatar + email + chevron) when expanded;
           avatar-only in the collapsed rail. Both open the same menu. */}
       {collapsed ? (
@@ -126,7 +117,10 @@ export function AccountMenu({
               {address}
             </span>
           )}
-          <ChevronDown className="size-4 shrink-0 text-text-muted" strokeWidth={2} />
+          <ChevronDown
+            className="size-4 shrink-0 text-text-muted"
+            strokeWidth={2}
+          />
         </button>
       )}
 
@@ -145,24 +139,7 @@ export function AccountMenu({
               above it. Interactive thumb; presentational (no reskin yet). */}
           <div className="flex h-9 w-full items-center px-2.5 text-ui text-text">
             <span className="flex-1">{it.theme}</span>
-            <div className="inline-flex items-center gap-0.5 rounded-md bg-track p-0.5">
-              {THEME_OPTIONS.map(({ key, Icon }) => (
-                <button
-                  key={key}
-                  type="button"
-                  aria-label={it.themeOptions[key]}
-                  aria-pressed={theme === key}
-                  onClick={() => setTheme(key)}
-                  className={`grid size-7 place-items-center rounded-sm transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)] ${
-                    theme === key
-                      ? "bg-track-thumb text-text shadow-sm"
-                      : "text-text-muted hover:text-text"
-                  }`}
-                >
-                  <Icon className="size-[18px]" strokeWidth={2} />
-                </button>
-              ))}
-            </div>
+            <ThemeSegmented iconSize={18} />
           </div>
 
           {divider}
@@ -200,7 +177,10 @@ export function AccountMenu({
           <button type="button" className={row}>
             <Info className={glyph} strokeWidth={2} />
             <span className="flex-1">{it.learnMore}</span>
-            <ChevronRight className="size-4 shrink-0 text-text-muted" strokeWidth={2} />
+            <ChevronRight
+              className="size-4 shrink-0 text-text-muted"
+              strokeWidth={2}
+            />
           </button>
 
           {divider}

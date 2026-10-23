@@ -21,6 +21,10 @@ const t = copy.a2a.shell;
 const SHELL_RADIUS = 22;
 const INSET = 8;
 
+/** Projects shown in full, then the last two, which start the sidenav's fade. */
+const lead = t.projects.slice(0, -2);
+const tail = t.projects.slice(-2);
+
 /**
  * CommandCenterShell — the right half: a generic AI chat app (not Claude,
  * Cowork or ChatGPT), shaped like Dia: one dark-mode glass window whose own
@@ -34,17 +38,13 @@ export function CommandCenterShell({ children }: { children?: ReactNode }) {
       <div className="flex h-full">
         <Sidenav />
         <main
-          className="a2a-white-layer min-w-0 flex-1 overflow-hidden bg-surface"
+          className="a2a-white-layer a2a-content min-w-0 flex-1 overflow-hidden bg-surface"
           style={{
             margin: `${INSET}px ${INSET}px ${INSET}px 0`,
             borderRadius: SHELL_RADIUS - INSET,
           }}
         >
-          {children ?? (
-            <div className="grid h-full place-items-center text-sm text-text-subtle">
-              {copy.a2a.commandCenter.placeholder}
-            </div>
-          )}
+          {children}
         </main>
       </div>
     </GlassPanel>
@@ -76,7 +76,7 @@ function Sidenav() {
           action={{ icon: Plus, label: t.newProject }}
         />
         <div className="flex flex-col gap-px px-2">
-          {t.projects.map((p, i) =>
+          {lead.map((p, i) =>
             i === 0 ? (
               <Group key={p.name} icon={FolderOpen} label={p.name}>
                 {p.chats.map((c) => (
@@ -89,11 +89,20 @@ function Sidenav() {
           )}
         </div>
 
-        <SectionLabel label={t.recentsLabel} className="mt-5" />
-        <div className="flex flex-col gap-px px-2">
-          {t.recents.map((c) => (
-            <ChatRow key={c} label={c} />
-          ))}
+        {/* Set dressing from here down: the last two folders and the recents fade
+            out, so the eye stays on the Command Center. */}
+        <div className="a2a-fade-down mt-px">
+          <div className="flex flex-col gap-px px-2">
+            {tail.map((p) => (
+              <NavRow key={p.name} icon={Folder} label={p.name} />
+            ))}
+          </div>
+          <SectionLabel label={t.recentsLabel} className="mt-5" />
+          <div className="flex flex-col gap-px px-2">
+            {t.recents.map((c) => (
+              <ChatRow key={c} label={c} />
+            ))}
+          </div>
         </div>
       </div>
 

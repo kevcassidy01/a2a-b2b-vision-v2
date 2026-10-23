@@ -30,6 +30,85 @@ Entry format:
 
 ## Unreleased
 
+## 18.0.0 — 2026-10-24 01:17 IST
+**Kind:** large feature: the Command Center's header (title, controls, views, period, stores, Agent button) and its first section (approvals card, metric tiles, placeholder card), in Inter.
+- **Placeholder card** at the end of the "Last 12 months" section: a full-width, 256px white card, a stand-in for what comes next. It ends the page, so the body lost its bottom padding.
+  - Its gap above is the same 12px as the cards above it.
+  - It has the same hairline border and shadow as the other cards. Both fade out downward with the card.
+  - The fade (`.a2a-fade-out`) is on a wrapper 16px bigger all round, so it doesn't clip the hairline and shadow, which are drawn outside the card.
+- **Approval card:**
+  - The space under the empty-state banner now matches its sides (20px).
+  - The auto-approval switch turns green (`bg-success`) when on. The Cowork `Switch` gained an optional `onClass` for this, and the Cowork settings keep their own colour.
+- **Approval card and tiles, refined:**
+  - The tile values are now 30px.
+  - The tiles lose their bottom notes; each is now its label, value, rise chip and comparison, where those exist. The notes are removed from `copy.ts`.
+  - Auto-approval is a switch (the Cowork settings `Switch`, off) at the card's top right.
+  - The "Approve and Reject…" explanation is gone; the empty-state banner now fades from grey down into the white card (`.a2a-empty-fade`).
+- **Needs your approval card and metric tiles** under "Last 12 months", as white cards (`.a2a-card`: hairline + soft low shadow, 12px radius) on the grey canvas. All text is in `copy.ts` (`approvals`, `metrics`).
+  - `ApprovalsCard`: full width. A 14px semibold title with a grey count, "Auto-approval: Off", the last-checked line, an empty state (an inbox icon in a grey inset: "No storefront quote requests are waiting."), then how Approve and Reject work.
+  - `MetricTiles`: eight tiles, four to a row: Orders, Order value, Avg order value, Checkout success, Carts with errors, Abandoned cart value, Buying accounts, Open cases.
+    - Each tile has a label, a 22px semibold value, a green rise chip (↑ n%, read as "Up n%"), the prior-period comparison, then a source or context note at the bottom.
+    - Each tile is a subgrid of its row, so these parts line up across the row even when a tile has no rise or comparison.
+    - Field names break after the dot (SalesOrder.TotalAmount).
+- **Command Center body, first section:** "Last 12 months", a 16px semibold heading (section headings stay smaller than the 24px store name), with a 13px grey line under it giving the date range, the comparison period and the time zone. Both strings live in `copy.ts` (`sections.last12Months.title` / `.subtitle`).
+  - The white-to-grey fade under the header is now its own 96px layer overlapping the content, so its length no longer depends on how tall the content is (it had a hard edge).
+- **Agent reds:** the done dot is `oklch(0.64 0.21 25)`. The question badge is the deeper `oklch(0.58 0.22 27)`, so its white number holds contrast. Both replace #ff3b30.
+- **Store dropdown** (`StoreMenu`), right of the period: All stores or Fizz Drinks B2B (the default), with no icon.
+  - The currency and store menus now share one `Dropdown` (trigger with an optional mark, menu with a semibold, checked current option, blue active stroke while open).
+  - The period control no longer reserves checkmark room in unselected segments (`Segmented reserveCheck={false}`), so the period and the stores fit on one line. Labels slide slightly when the check moves.
+- **Agent button, asking state:** `status="asking"` with `questions={n}`. The dots fold away and a red (#ff3b30) count badge grows from the centre: 16px round, or 22px wide for two digits. Screen readers hear "Agent has n questions for you". The done dot stays red.
+- **Command Center header, views and period:**
+  - Row 2 now runs USD, data source, scope, then Agent. Agent is wider (14/16px padding).
+  - A hairline follows, then a new row.
+  - **`ViewPicker`:** Console / Dashboard / Service as a radio group of button-shaped options. Each has a radio circle (`.a2a-radio`). The chosen one gets the blue active stroke, a filled radio and a semibold label. Console is the default.
+  - **Period:** a `Segmented` control with Today, MTD, QTD, YTD, 6 months, 1 year and All time (Today by default). It is led by a calendar glyph that labels it and can't be selected (`Segmented`'s new `icon` prop).
+  - At 1440px the period control wraps under the views; the two need about 780px and have about 700.
+- **Canvas:** the header itself is white (`.a2a-hero`), with a 96px white-to-transparent fade under it into the #ededf0 grey. The white now always ends with the header, instead of at a fixed 110px.
+- **Active state for fields and dropdowns: a blue stroke.** `.a2a-control-active` swaps the hairline for a 1px `--blue-500` stroke on white. The currency dropdown uses it while open, instead of the grey wash.
+- **Command Center header: the store is the title.**
+  - The greeting is now a small grey line (13.5px) above the title.
+  - The title is a store icon and "Fizz Drinks B2B" (24px regular), with a shaped open-in-new-tab icon button ("Open store" tooltip). It replaces the store chip.
+  - Row 1, right side: theme, Refresh, Notifications.
+  - Row 2: Org data / Demo data, CRM / Data 360 / Both and USD on the left, Agent at the far right. Everything fits at 1440px again.
+- **Agent button, corner accent:** the top-left of its stroke is darker, with a hint of the logo's violet. It fades out along both edges within about 44×26px. It's a masked 1px ring (`.a2a-agent::after`) over the normal hairline.
+- **Agent button: agent logo, plain stroke.**
+  - The sparkle icon is now Som's agent logo, a violet speech bubble with a white sparkle (`src/assets/a2a/agent-logo.png`, 16px).
+  - The iridescent stroke and its hover animation are gone. The button uses the standard `.a2a-control` hairline and shadow. It keeps the wider padding.
+- **A2A Command Center: currency dropdown** (`command-center/CurrencyMenu.tsx`).
+  - The trigger shows a small simplified flag and the code: USD by default.
+  - The menu lists Indian Rupee, US Dollar and British Pound by full name, each with its flag. The current one is semibold with a blue check.
+  - The menu has the button's 8px radius, with 6px inset rows. It closes on an outside click or Escape.
+  - The flags are inline SVGs (`command-center/Flag.tsx`) with a hairline edge. Picking a currency doesn't convert any figures.
+- **Command Center header, row 1:** all the right-side controls (Agent, theme, Refresh, Notifications) are now 8px apart, as in row 2. Before, groups were 16px apart.
+- **Agent button, shiny stroke:** 4px wider (10/12px padding, 10/10 while busy). The plain hairline is now a 1px iridescent stroke: a conic gradient of silver with a white glint and faint blue, violet, pink and cyan. On hover the gradient turns, so light runs round the edge (an animated `@property` angle), and a faint blue halo appears. If the computer asks for reduced motion, it shifts once instead of turning.
+- **A2A Command Center: Agent button** (`command-center/AgentButton.tsx`), in row 1 before the theme control. Row 2 was already full at 1440px, so it moved there by Som's call rather than sitting right of the data-scope control.
+  - It has a filled blue sparkle, "Agent" and a `status` prop.
+  - `idle` (the default) shows a plain button.
+  - `working` widens it for three grey dots that bounce in turn and rest, like typing.
+  - `done` folds the outer dots into the middle one, which grows and turns red (#ff3b30). Width, padding and dots all animate.
+  - The status is announced to screen readers. Only the buyer-agent flow (to come) moves it off idle.
+- **A2A canvas grey deepened:** it reaches #ededf0 by about 280px, up from #f5f5f7 at 340px, which barely showed.
+- **Optical centring on icon + label controls:** the padding on the icon's side is now 2px smaller than on the label's, so the pair reads as centred. This covers text segments with their checkmark (`Segmented` 8/10px and 6/8px, Chat/Cowork 6/8px), Share in the artifact frame (6/8px), and Home/Code (its content nudged 2px toward the icon). The store chip and the USD dropdown already followed this.
+- **Segmented controls, checkmarks:** the selected text segment shows a checkmark before its semibold label (`Segmented`, Chat/Cowork). Every segment reserves room for the check, so selecting doesn't shift anything. Side padding was trimmed by 2px to make up for it (`h-7`: px-3 → px-2.5; `h-6`: px-2.5 → px-2).
+- **A2A Command Center canvas:** `.a2a-canvas` is white behind the header and fades to a pale grey (#f5f5f7) by about 340px. The rest of the page is grey, ready for white cards with soft shadows.
+- **A2A: Inter replaces SF Pro** across the stage (chrome and content), bundled via `@fontsource-variable/inter`.
+- **Segmented controls, selected weight and dividers:**
+  - The selected label is semibold. Each label reserves its semibold width so selecting doesn't shift the neighbours (`SegmentLabel` in `src/shell/Segmented.tsx`). This applies to `Segmented`, Chat/Cowork and Home/Code.
+  - With three or more segments, a hairline sits between unselected neighbours, never beside the thumb.
+  - A2A colours now match Cowork's: `.a2a-content` no longer overrides the muted and subtle greys, so the controls use the app's own tokens. Text stays #1d1d1f.
+- **A2A Command Center header, refined** (Linear / Vercel / Apple finish):
+  - **Layout:** two rows. Row 1: a light-weight greeting, then the theme control, Refresh and Notifications. Row 2: the store chip (store icon, "Fizz Drinks B2B", open-in-new-tab icon) with the USD currency dropdown beside it. On the right sit the **Org data / Demo data** and **CRM / Data 360 / Both** segmented controls. Refresh moved out of the frame bar into an icon button.
+  - **Gradient wash removed:** the content is plain white.
+  - **`.a2a-content` scope:** text in Apple's near-blacks (#1d1d1f / #6e6e73), never #000. Controls are 13.5px.
+  - **`.a2a-control`:** icon-only buttons, the chip and the dropdown get a shaped white surface with a hairline and a soft shadow. Chips are 8px rounded, not pills.
+- **Segmented controls, shared:** the text `Segmented` moved from Cowork settings to `src/shell/Segmented.tsx` (settings still re-exports it). Every segmented control's selected segment now uses a new `--shadow-thumb` token with a little more lift than `shadow-sm`: theme, text, Chat/Code, Chat/Cowork and Home/Code.
+- **A2A Command Center, section 1: the header.** The Command Center now sits in **`ArtifactFrame`**, the host's bar for an MCP app shown full screen. It reads "B2B Command Center" on the left; Refresh and Share sit on the right with icons and labels, then Close (icon only, with a tooltip). Inside, **`command-center/CommandCenter.tsx`** opens with a large "Good morning, Alex" greeting. Under it is a store icon and "Fizz Drinks B2B". The theme control sits top right, with Notifications (the bell) at the far right. Behind the greeting is a very pale blue / lavender / peach wash from the top, fading to white (ElevenLabs / Perplexity style). Light mode throughout. New copy in `copy.a2a.commandCenter`.
+- **Shared `ThemeSegmented`** (`src/shell/ThemeSegmented.tsx`): the System / Light / Dark icon control was inline twice, in the account menu and Settings → General. Both now use the one component, and the Command Center reuses it.
+- **A2A sidenav: the lower half fades out downward.** It starts full at the last two project folders and is gone by the last recent chat. It's set dressing, so the focus stays on the Command Center.
+- **A2A: smaller Dynamic Island** on the iPhone, 126×37 → 112×33 pt, still centred in the status bar. The iPhone body is flat too: its white hairline rim and top sheen are gone, as on the desktop shell.
+- **A2A: flatter desktop glass.** Removed the white highlight rim (brightest along the top corner) and the faint top-left sheen. The shell's dark outline is now its only edge.
+- **A2A: darker glass on the desktop shell.** Base tint 0.18 → 0.3 and body 0.68 → 0.8. The fade keeps more body toward the bottom-left: it now ends at 15% instead of clear. (Tried pitch-black solid shells with a glow on `test/a2a-experiment`; dropped, not committed.)
+
 ## 17.0.0 — 2026-10-23 23:34 IST
 **Kind:** large feature (new A2A prototype shell, docs). First build of the agent-to-agent split screen at `#a2a`: the iPhone storefront frame on the left, the Command Center in a dark glass AI chat app shell on the right, both still holding placeholders for their content.
 - **A2A sidenav: black tooltips on icon-only buttons** (Search, Collapse sidebar, New project), shown on hover or keyboard focus. New `src/a2a/Tooltip.tsx` draws them fixed in a portal so the scroll area can't clip them. The account footer's hover now has a larger bottom-left corner (shell radius minus inset, 14px), concentric with the shell's corner like the white layer's.

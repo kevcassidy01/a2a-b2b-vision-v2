@@ -27,7 +27,7 @@ export function HomeCodeToggle() {
       {/* Sliding thumb: one pill that translates between the two halves. */}
       <span
         aria-hidden
-        className="absolute inset-y-0.5 left-0.5 w-[calc(50%-3px)] rounded-sm bg-track-thumb shadow-sm transition-transform duration-[var(--dur-base)] ease-[var(--ease-out)]"
+        className="absolute inset-y-0.5 left-0.5 w-[calc(50%-3px)] rounded-sm bg-track-thumb shadow-thumb transition-transform duration-[var(--dur-base)] ease-[var(--ease-out)]"
         style={{ transform: `translateX(calc(${activeIndex} * (100% + 2px)))` }}
       />
       {SEGMENTS.map(({ id, icon: Icon }) => {
@@ -39,8 +39,8 @@ export function HomeCodeToggle() {
             role="tab"
             aria-selected={active}
             onClick={() => setSelected(id)}
-            className={`relative z-10 flex h-6 items-center justify-center gap-1.5 rounded-sm text-ui transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)] ${
-              active ? "text-text" : "text-text-muted hover:text-text"
+            className={`relative z-10 flex h-6 items-center justify-center gap-1.5 rounded-sm pr-1 text-ui transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)] ${
+              active ? "font-semibold text-text" : "text-text-muted hover:text-text"
             }`}
           >
             <Icon className="size-3.5" strokeWidth={2} />

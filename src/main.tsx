@@ -7,6 +7,8 @@ import "@fontsource-variable/eb-garamond";
 import "./styles/fonts.css";
 // UI sans (provisional): Hanken Grotesk — consumed via --font-ui.
 import "@fontsource-variable/hanken-grotesk";
+// The A2A stage's sans: Inter — consumed via .a2a-stage's --font-sans.
+import "@fontsource-variable/inter";
 import "./index.css";
 import Root from "./Root";
 import { copy } from "./copy/copy";

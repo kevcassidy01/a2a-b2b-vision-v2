@@ -31,7 +31,7 @@ export function ChatCodeToggle() {
       {/* Sliding thumb — one pill that translates between segments. */}
       <span
         aria-hidden
-        className="absolute left-0.5 top-0.5 h-7 w-9 rounded-sm bg-track-thumb shadow-sm transition-transform duration-[var(--dur-base)] ease-[var(--ease-out)]"
+        className="absolute left-0.5 top-0.5 h-7 w-9 rounded-sm bg-track-thumb shadow-thumb transition-transform duration-[var(--dur-base)] ease-[var(--ease-out)]"
         style={{ transform: `translateX(calc(${activeIndex} * (100% + 2px)))` }}
       />
       {SEGMENTS.map(({ id, icon: Icon, label }) => {

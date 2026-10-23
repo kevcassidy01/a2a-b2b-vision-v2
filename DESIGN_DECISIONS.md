@@ -6,6 +6,18 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-24 Segmented controls and icon + label padding
+
+**Decision:**
+- The selected segment of a text segmented control is semibold, with a checkmark before its label.
+- Every segment reserves room for the check and the bold weight, so selecting never shifts anything.
+- With three or more segments, a hairline divides unselected neighbours, never next to the thumb.
+- Colours are Cowork's tokens: track #EFEFEC, a white thumb with `shadow-thumb`.
+- Any button or segment with an icon and a label has about 2px less padding on the icon's side, so the pair reads as optically centred.
+- Fields and dropdowns show their active state (open, focused) as a 1px blue stroke (`--blue-500`), not a grey wash.
+
+**Rationale:** Per Som, for a Linear / Vercel / Apple level of finish.
+
 ### 2026-10-08 Merchant insights: every segment row has See trends
 The segments prompt is "How are buyers doing this quarter?" and the row button reads **See trends** on all three rows, not just New Buyers. Each opens that segment's spend by category against the store average, so any row can be drilled into the same way. "Remember this" ideas (a bookmark on each card that fills and shows "Noted", plus an end-of-demo recall) are deferred until after the demo.
 

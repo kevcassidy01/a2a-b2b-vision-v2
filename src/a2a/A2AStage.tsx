@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
+import { ArtifactFrame } from "./ArtifactFrame";
 import { CommandCenterShell } from "./CommandCenterShell";
+import { CommandCenter } from "./command-center/CommandCenter";
 import { IPhoneFrame } from "./IPhoneFrame";
 import wallpaper from "../assets/a2a/wallpaper.jpg";
 import "./a2a.css";
@@ -17,7 +19,11 @@ export function A2AStage() {
       style={{ "--a2a-wallpaper": `url(${wallpaper})` } as CSSProperties}
     >
       <IPhoneFrame />
-      <CommandCenterShell />
+      <CommandCenterShell>
+        <ArtifactFrame>
+          <CommandCenter />
+        </ArtifactFrame>
+      </CommandCenterShell>
     </div>
   );
 }

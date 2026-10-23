@@ -2,11 +2,10 @@
    The OS chrome is dark mode (iOS / macOS dark) over a dark wallpaper;
    the demo content inside (the white layer, the phone screen) stays light, for contrast. */
 
-/* SF Pro throughout the A2A stage, chrome and content alike (unless Somnath says
-   otherwise). It can't be bundled, so it comes from the system: Apple devices
-   render it; elsewhere this falls back to the system UI font. */
+/* Inter throughout the A2A stage, chrome and content alike (unless Somnath says
+   otherwise). Bundled (@fontsource-variable/inter), so it renders the same everywhere. */
 .a2a-stage {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
   --font-serif: var(--font-sans);
   --font-reading: var(--font-sans);
   font-family: var(--font-sans);
@@ -17,41 +16,43 @@
    little deeper in the middle where the chrome sits (Linear's dark stage). */
 .a2a-scene {
   background:
-    radial-gradient(120% 90% at 55% 45%, rgb(8 9 10 / 0.4) 30%, rgb(8 9 10 / 0.15) 100%),
+    radial-gradient(
+      120% 90% at 55% 45%,
+      rgb(8 9 10 / 0.4) 30%,
+      rgb(8 9 10 / 0.15) 100%
+    ),
     var(--a2a-wallpaper) center / cover;
 }
 
 /* The shell's material, in two layers like the iPhone body:
    - .a2a-glass: the blur and the shadow, with a light tint, never masked;
-   - .a2a-glass-body: near-solid #131416 lit faintly from the top-left (Linear /
-     Raycast), fading toward the bottom, most at the bottom-left.
+   - .a2a-glass-body: near-solid #131416, flat (no sheen, no highlight rim),
+     fading toward the bottom, most at the bottom-left.
    One even surface: the sidenav is this, not a layer on top of it. Only the
    material fades; the sidenav's contents stay at full opacity. */
 .a2a-glass {
   -webkit-backdrop-filter: blur(40px) saturate(140%);
   backdrop-filter: blur(40px) saturate(140%);
-  background: rgb(19 20 22 / 0.18);
+  background: rgb(19 20 22 / 0.3);
   box-shadow:
     0 0 0 1px rgb(0 0 0 / 0.7),
     0 8px 24px rgb(0 0 0 / 0.35),
     0 40px 120px -20px rgb(0 0 0 / 0.85);
 }
 .a2a-glass-body {
-  background:
-    radial-gradient(90% 50% at 0% 0%, rgb(255 255 255 / 0.06), transparent 70%),
-    rgb(19 20 22 / 0.68);
-  -webkit-mask-image: linear-gradient(200deg, #000 30%, rgb(0 0 0 / 0.5) 65%, rgb(0 0 0 / 0) 100%);
-  mask-image: linear-gradient(200deg, #000 30%, rgb(0 0 0 / 0.5) 65%, rgb(0 0 0 / 0) 100%);
-}
-
-/* Hairline rim, Linear-style: an even 1px white edge at low opacity, a touch
-   brighter along the top where the light falls (masked to the ring). */
-.a2a-glass-rim {
-  padding: 1px;
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.07) 30%, rgb(255 255 255 / 0.06));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  background: rgb(19 20 22 / 0.8);
+  -webkit-mask-image: linear-gradient(
+    200deg,
+    #000 35%,
+    rgb(0 0 0 / 0.6) 70%,
+    rgb(0 0 0 / 0.15) 100%
+  );
+  mask-image: linear-gradient(
+    200deg,
+    #000 35%,
+    rgb(0 0 0 / 0.6) 70%,
+    rgb(0 0 0 / 0.15) 100%
+  );
 }
 
 /* The white layer the Command Center sits on (light mode). Its edge against the
@@ -84,10 +85,252 @@
     0 4px 12px rgb(0 0 0 / 0.4);
 }
 
+/* The sidenav's set dressing fades out top to bottom: present, but not asking for attention. */
+.a2a-fade-down {
+  -webkit-mask-image: linear-gradient(180deg, #000, rgb(0 0 0 / 0) 92%);
+  mask-image: linear-gradient(180deg, #000, rgb(0 0 0 / 0) 92%);
+}
+
 /* Long chat titles fade into the right edge instead of an ellipsis (Cowork's recents). */
 .a2a-fade-end {
-  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    #000 calc(100% - 28px),
+    transparent
+  );
   mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+}
+
+/* The light content (Command Center, storefront): a near-black for text, never
+   pure #000. Greys, tracks and thumbs are the app's own (Cowork's) tokens. */
+.a2a-content {
+  --color-text: #1d1d1f;
+  --text-ui: 0.84375rem; /* 13.5px: controls read as tools, not text */
+}
+
+/* The Command Center's canvas: pale grey, so white cards with soft shadows
+   stand out on it. The header sits on white (.a2a-hero), and a 96px fade under
+   it (.a2a-hero-fade, overlapping the content, so it never depends on how tall
+   that is) carries the white into the grey. */
+.a2a-canvas {
+  background: #ededf0;
+}
+.a2a-hero {
+  background: #fff;
+}
+.a2a-hero-fade {
+  height: 96px;
+  margin-bottom: -96px;
+  background: linear-gradient(180deg, #fff, rgb(255 255 255 / 0));
+}
+
+/* White cards on the grey canvas: a faint hairline and a soft, low shadow. */
+.a2a-card {
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.05),
+    0 1px 2px rgb(0 0 0 / 0.04),
+    0 4px 12px -2px rgb(0 0 0 / 0.04);
+}
+/* Fades its contents out downward, off the bottom of the page. */
+.a2a-fade-out {
+  -webkit-mask-image: linear-gradient(180deg, #000, rgb(0 0 0 / 0));
+  mask-image: linear-gradient(180deg, #000, rgb(0 0 0 / 0));
+}
+
+/* An empty state's banner: grey at the top, fading down into the white card. */
+.a2a-empty-fade {
+  background: linear-gradient(180deg, #f4f4f6, rgb(244 244 246 / 0));
+}
+
+/* Light controls with a shape (icon-only buttons, chips, dropdowns): white, a
+   hairline and a whisper of shadow, rather than floating glyphs. */
+.a2a-control {
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.09),
+    0 1px 2px rgb(0 0 0 / 0.04);
+  transition:
+    background-color var(--dur-fast, 120ms) ease-out,
+    color var(--dur-fast, 120ms) ease-out;
+}
+.a2a-control:hover {
+  background: #f7f7f8;
+}
+/* Active (a dropdown open, a field focused): the hairline turns blue, the
+   same blue as the checks in its menu. */
+.a2a-control-active,
+.a2a-control-active:hover {
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px var(--blue-500),
+    0 1px 2px rgb(0 0 0 / 0.04);
+}
+
+/* Radio circles in button-shaped options (the Command Center's views): a grey
+   ring; chosen, a blue disc with a white centre. */
+.a2a-radio {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1.5px #c7c7cc;
+  transition:
+    background-color var(--dur-fast, 120ms) ease-out,
+    box-shadow var(--dur-fast, 120ms) ease-out;
+}
+.a2a-radio-on {
+  background: var(--blue-500);
+  box-shadow:
+    inset 0 0 0 4px var(--blue-500),
+    inset 0 0 0 7px #fff;
+}
+
+/* The Agent button: the agent logo, the label, then a dots
+   slot, closed when idle. Working: 18px wide, three 4px dots bouncing in turn,
+   then a rest (typing). Done: 7px wide, the outer dots fold into the middle,
+   which grows and turns red. The slot's width animates, so the button widens
+   and narrows smoothly. */
+.a2a-agent {
+  position: relative;
+  transition:
+    background-color var(--dur-fast, 120ms) ease-out,
+    padding 240ms var(--ease-out, ease-out);
+}
+/* Its one mark of character: the top-left corner of the stroke is darker, with a
+   hint of the logo's violet, fading out along both edges. A 1px ring (masked
+   down to the border) over the normal hairline. */
+.a2a-agent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    44px 26px at 0 0,
+    rgb(76 29 149 / 0.55),
+    rgb(76 29 149 / 0) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.a2a-agent-dots {
+  position: relative;
+  height: 7px;
+  width: 0;
+  margin-left: 0;
+  opacity: 0;
+  transition:
+    width 240ms var(--ease-out, ease-out),
+    margin 240ms var(--ease-out, ease-out),
+    opacity 160ms ease-out;
+}
+.a2a-agent[data-status="working"] .a2a-agent-dots {
+  width: 18px;
+  margin-left: 6px;
+  opacity: 1;
+}
+.a2a-agent[data-status="done"] .a2a-agent-dots {
+  width: 7px;
+  margin-left: 6px;
+  opacity: 1;
+}
+.a2a-agent[data-status="asking"] .a2a-agent-dots {
+  width: var(--badge-w);
+  margin-left: 6px;
+  opacity: 1;
+}
+/* Each dot: the outer span places it (left, centre), the inner one bounces and colours. */
+.a2a-agent-dot {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--i) * 7px);
+  display: grid;
+  place-items: center;
+  width: 4px;
+  height: 7px;
+  transform: translateY(-50%);
+  transition:
+    left 240ms var(--ease-out, ease-out),
+    opacity 200ms ease-out;
+}
+.a2a-agent-dot > span {
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: #86868b;
+  transition:
+    width 240ms var(--ease-out, ease-out),
+    height 240ms var(--ease-out, ease-out),
+    background-color 240ms ease-out;
+}
+.a2a-agent[data-status="working"] .a2a-agent-dot > span {
+  animation: a2a-agent-bounce 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.14s);
+}
+.a2a-agent[data-status="done"] .a2a-agent-dot {
+  left: 1.5px;
+}
+.a2a-agent[data-status="done"] .a2a-agent-dot:not(:nth-child(2)) {
+  opacity: 0;
+}
+/* Asking: the dots fold away and a red count badge grows out of the centre. */
+.a2a-agent[data-status="asking"] .a2a-agent-dot {
+  left: calc(var(--badge-w) / 2 - 2px);
+  opacity: 0;
+}
+.a2a-agent-badge {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: var(--badge-w);
+  height: 16px;
+  border-radius: 9999px;
+  background: oklch(0.58 0.22 27); /* deeper than the dot, for white text */
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.4);
+  transition:
+    opacity 200ms ease-out,
+    transform 240ms var(--ease-out, ease-out);
+}
+.a2a-agent[data-status="asking"] .a2a-agent-badge {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+.a2a-agent[data-status="done"] .a2a-agent-dot:nth-child(2) > span {
+  width: 7px;
+  height: 7px;
+  background: oklch(0.64 0.21 25);
+}
+@keyframes a2a-agent-bounce {
+  0%,
+  45%,
+  100% {
+    transform: translateY(0);
+  }
+  15% {
+    transform: translateY(-3px);
+  }
+  30% {
+    transform: translateY(0.5px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .a2a-agent[data-status="working"] .a2a-agent-dot > span {
+    animation: none;
+  }
 }
 
 /* The app mark: a blue cloudy orb after ElevenLabs'. Spherical but with no edge:
@@ -100,14 +343,33 @@
   isolation: isolate;
   border-radius: 9999px;
   background: #2563eb;
-  -webkit-mask-image: radial-gradient(circle, #000 46%, rgb(0 0 0 / 0.55) 58%, rgb(0 0 0 / 0) 71%);
-  mask-image: radial-gradient(circle, #000 46%, rgb(0 0 0 / 0.55) 58%, rgb(0 0 0 / 0) 71%);
+  -webkit-mask-image: radial-gradient(
+    circle,
+    #000 46%,
+    rgb(0 0 0 / 0.55) 58%,
+    rgb(0 0 0 / 0) 71%
+  );
+  mask-image: radial-gradient(
+    circle,
+    #000 46%,
+    rgb(0 0 0 / 0.55) 58%,
+    rgb(0 0 0 / 0) 71%
+  );
 }
 .a2a-orb::before {
   content: "";
   position: absolute;
   inset: -35%;
-  background: conic-gradient(from 0deg, #1d4ed8, #7dd3fc, #f0f9ff, #3b82f6, #1e3a8a, #93c5fd, #1d4ed8);
+  background: conic-gradient(
+    from 0deg,
+    #1d4ed8,
+    #7dd3fc,
+    #f0f9ff,
+    #3b82f6,
+    #1e3a8a,
+    #93c5fd,
+    #1d4ed8
+  );
   filter: blur(2.5px);
   animation: a2a-orb-swirl 7s linear infinite;
 }
@@ -116,8 +378,16 @@
   position: absolute;
   inset: -10%;
   background:
-    radial-gradient(30% 26% at 36% 32%, rgb(255 255 255 / 0.7), transparent 70%),
-    radial-gradient(42% 30% at 58% 58%, rgb(240 249 255 / 0.55), transparent 72%),
+    radial-gradient(
+      30% 26% at 36% 32%,
+      rgb(255 255 255 / 0.7),
+      transparent 70%
+    ),
+    radial-gradient(
+      42% 30% at 58% 58%,
+      rgb(240 249 255 / 0.55),
+      transparent 72%
+    ),
     radial-gradient(50% 45% at 70% 78%, rgb(12 28 100 / 0.55), transparent 70%);
   filter: blur(1.5px);
   animation: a2a-orb-drift 9s ease-in-out infinite alternate;
@@ -144,24 +414,25 @@
 .a2a-phone-glass {
   -webkit-backdrop-filter: blur(24px) saturate(140%);
   backdrop-filter: blur(24px) saturate(140%);
-  background:
-    linear-gradient(160deg, rgb(255 255 255 / 0.08), transparent 40%),
-    rgb(0 0 0 / 0.1);
+  background: rgb(0 0 0 / 0.1);
   box-shadow:
     0 8px 24px rgb(0 0 0 / 0.35),
     0 40px 120px -20px rgb(0 0 0 / 0.85);
 }
 .a2a-phone-body {
   background: rgb(0 0 0 / 0.82);
-  -webkit-mask-image: linear-gradient(200deg, #000 12%, rgb(0 0 0 / 0.4) 50%, rgb(0 0 0 / 0) 88%);
-  mask-image: linear-gradient(200deg, #000 12%, rgb(0 0 0 / 0.4) 50%, rgb(0 0 0 / 0) 88%);
-}
-.a2a-phone-rim {
-  padding: 1px;
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0.1));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  -webkit-mask-image: linear-gradient(
+    200deg,
+    #000 12%,
+    rgb(0 0 0 / 0.4) 50%,
+    rgb(0 0 0 / 0) 88%
+  );
+  mask-image: linear-gradient(
+    200deg,
+    #000 12%,
+    rgb(0 0 0 / 0.4) 50%,
+    rgb(0 0 0 / 0) 88%
+  );
 }
 .a2a-phone-button {
   background: #000;

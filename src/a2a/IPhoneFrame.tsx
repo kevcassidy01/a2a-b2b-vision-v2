@@ -52,7 +52,7 @@ export function IPhoneFrame({ children }: { children?: ReactNode }) {
         >
           <SideButtons />
           {/* The body: glass underneath, black on top fading out toward the bottom
-              (most at bottom-left), and a hairline rim so the edge still reads. */}
+              (most at bottom-left). Flat: no highlight rim. */}
           <div
             className="a2a-phone-glass absolute inset-0"
             style={{ borderRadius: BODY_RADIUS }}
@@ -62,11 +62,7 @@ export function IPhoneFrame({ children }: { children?: ReactNode }) {
             style={{ borderRadius: BODY_RADIUS }}
           />
           <div
-            className="a2a-phone-rim pointer-events-none absolute inset-0"
-            style={{ borderRadius: BODY_RADIUS }}
-          />
-          <div
-            className="absolute overflow-hidden bg-white"
+            className="a2a-content absolute overflow-hidden bg-white"
             style={{ inset: BEZEL + BAND, borderRadius: SCREEN.radius }}
           >
             <StatusBar />
@@ -87,11 +83,11 @@ export function IPhoneFrame({ children }: { children?: ReactNode }) {
 /** Time on the left, signal / wifi / battery on the right, the Dynamic Island between. */
 function StatusBar() {
   return (
-    <div className="absolute inset-x-0 top-0 z-10 flex h-[54px] items-center justify-between px-[34px] pt-1 text-black">
+    <div className="absolute inset-x-0 top-0 z-10 flex h-[54px] items-center justify-between px-[34px] pt-1 text-text">
       <span className="w-[54px] text-center text-[17px] font-semibold tracking-tight">
         {copy.a2a.phone.time}
       </span>
-      <div className="absolute left-1/2 top-[11px] h-[37px] w-[126px] -translate-x-1/2 rounded-full bg-black" />
+      <div className="absolute left-1/2 top-[12px] h-[33px] w-[112px] -translate-x-1/2 rounded-full bg-black" />
       <div className="flex items-center gap-[6px]">
         <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden>
           {[0, 1, 2, 3].map((i) => (

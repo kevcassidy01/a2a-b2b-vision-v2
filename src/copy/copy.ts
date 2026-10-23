@@ -40,7 +40,12 @@ export const copy = {
     shell: {
       search: "Search",
       collapse: "Collapse sidebar",
-      nav: { newChat: "New chat", artifacts: "Artifacts", agents: "Agents", scheduled: "Scheduled" },
+      nav: {
+        newChat: "New chat",
+        artifacts: "Artifacts",
+        agents: "Agents",
+        scheduled: "Scheduled",
+      },
       /** The Command Center is an artifact Alex has pinned: it sits open under Artifacts, and it's the page on screen. */
       pinnedArtifact: "B2B Command Center",
       projectsLabel: "Projects",
@@ -49,7 +54,11 @@ export const copy = {
       projects: [
         {
           name: "Oktoberfest 2026 · DACH",
-          chats: ["Munich bottler allocation", "Promo depth vs. margin floor", "Fizz Zero launch kit for Bavaria"],
+          chats: [
+            "Munich bottler allocation",
+            "Promo depth vs. margin floor",
+            "Fizz Zero launch kit for Bavaria",
+          ],
         },
         { name: "Q4 key accounts", chats: [] },
         { name: "Pricing and contracts", chats: [] },
@@ -63,13 +72,98 @@ export const copy = {
         "Fizz Classic vs. Zero sell-through by region",
         "Prep for Thursday's distributor call",
       ],
-      user: { name: "Alex Rivera", initials: "AR", email: "alex.rivera@fizzdrinks.com" },
+      user: {
+        name: "Alex Rivera",
+        initials: "AR",
+        email: "alex.rivera@fizzdrinks.com",
+      },
     },
     phone: {
       time: "9:41",
       placeholder: "Storefront",
     },
-    commandCenter: { placeholder: "Command Center" },
+    /** Alex's Command Center: the MCP app's full-screen frame, then the app itself. */
+    commandCenter: {
+      frame: { title: "B2B Command Center", share: "Share", close: "Close" },
+      greeting: "Good morning, Alex",
+      store: "Fizz Drinks B2B",
+      openStore: "Open store",
+      opensInNewTab: "(opens in a new tab)",
+      /** The currency picker: USD by default. */
+      currency: {
+        label: "Currency",
+        default: "USD",
+        options: [
+          { code: "INR", name: "Indian Rupee" },
+          { code: "USD", name: "US Dollar" },
+          { code: "GBP", name: "British Pound" },
+        ],
+      },
+      /** Where the numbers come from, and which systems they cover (Org data and Both by default). */
+      source: { label: "Data source", options: ["Org data", "Demo data"] },
+      scope: { label: "Data scope", options: ["CRM", "Data 360", "Both"] },
+      /** The view (a mode of the Command Center), Console by default. */
+      view: { label: "View", options: ["Console", "Dashboard", "Service"] },
+      /** The period the figures cover, Today by default. */
+      period: {
+        label: "Period",
+        options: [
+          "Today",
+          "MTD",
+          "QTD",
+          "YTD",
+          "6 months",
+          "1 year",
+          "All time",
+        ],
+      },
+      /** Which stores the figures cover, this store by default. */
+      storeScope: {
+        label: "Stores",
+        default: "Fizz Drinks B2B",
+        options: ["All stores", "Fizz Drinks B2B"],
+      },
+      /** Section headings, top to bottom. */
+      sections: {
+        last12Months: {
+          title: "Last 12 months",
+          subtitle:
+            "Oct 23, 2025 - Oct 23, 2026, 10:11 • compared with Oct 23, 2024 - Oct 23, 2025, the same elapsed time. Days are counted in UTC+1.",
+        },
+      },
+      /** Quote requests from the storefront waiting on the seller (empty for now). */
+      approvals: {
+        title: "Needs your approval",
+        count: 0,
+        autoApproval: "Auto-approval",
+        checked: "Checked Oct 23, 2026, 10:11; it checks every 15 s while this page is open.",
+        empty: "No storefront quote requests are waiting.",
+      },
+      /** The last 12 months at a glance. `delta` is the rise on the prior 12
+       *  months; `compare` names that prior figure. */
+      metrics: [
+        { label: "Orders", value: "188", delta: "4%", compare: "vs the prior 12 months (181)" },
+        { label: "Order value", value: "$956K", delta: "62%", compare: "vs the prior 12 months ($590.2K)" },
+        { label: "Avg order value", value: "$5,085", delta: "56%", compare: "vs the prior 12 months ($3,261)" },
+        { label: "Checkout success", value: "55.6%", compare: "vs the prior 12 months (no checkouts)" },
+        { label: "Carts with errors", value: "13" },
+        { label: "Abandoned cart value", value: "$97" },
+        { label: "Buying accounts", value: "30", delta: "7%", compare: "vs the prior 12 months (28)" },
+        { label: "Open cases", value: "14" },
+      ],
+      /** Read out before a metric's rise, which is shown as an arrow. */
+      up: "Up",
+      refresh: "Refresh",
+      notifications: "Notifications",
+      /** The seller agent. Its status is read out to screen readers; the dots show it visually. */
+      agent: {
+        label: "Agent",
+        working: "Agent is working",
+        done: "Agent has finished",
+        asking: (n: number) =>
+          `Agent has ${n} ${n === 1 ? "question" : "questions"} for you`,
+      },
+    },
   },
   /** The simulated Mac desktop (COWORK_INTENT). */
   desktop: {
@@ -103,7 +197,10 @@ export const copy = {
        *  separators; `submenu` shows a chevron. Items don't act yet. */
       appMenu: [
         [{ label: "About Claude" }],
-        [{ label: "Settings…", shortcut: "⌘ ," }, { label: "Check for Updates…" }],
+        [
+          { label: "Settings…", shortcut: "⌘ ," },
+          { label: "Check for Updates…" },
+        ],
         [{ label: "Services", submenu: true }],
         [
           { label: "Hide Claude", shortcut: "⌘ H" },
@@ -142,7 +239,10 @@ export const copy = {
        *  app's "Finish setting up…" nudge, but the connector is already in, so
        *  it invites you to learn what Claude can now do instead. */
       /** Files dragged from the desktop into the start state's prompt box. */
-      home: { dropHint: "Drop files to add them to this session", removeFile: "Remove" },
+      home: {
+        dropHint: "Drop files to add them to this session",
+        removeFile: "Remove",
+      },
       salesforceBanner: {
         title: "Claude is connected to Salesforce",
         body: "Ask about your accounts, quotes, orders and storefront, or have Claude act on them for you. See what's possible.",
@@ -165,7 +265,8 @@ export const copy = {
       /** Chrome for Cowork's own chat view (the scripts carry their content). */
       chat: {
         ranSkill: "Ran skill",
-        usedIntegrations: (n: number) => `Used ${n} integration${n === 1 ? "" : "s"}`,
+        usedIntegrations: (n: number) =>
+          `Used ${n} integration${n === 1 ? "" : "s"}`,
         usingIntegrations: "Using integrations",
         writingSalesforce: "Writing to Salesforce",
         wroteRecords: (n: number) => `Wrote ${n} records to Salesforce`,
@@ -195,7 +296,13 @@ export const copy = {
           youNext: (n: number) => `${n} need you next`,
           toggle: "Show or hide the plan",
         },
-        approval: { needsOk: "Needs your OK", notNow: "Not now", approved: "Approved:", declined: "Left for now:", why: "Why I picked this" },
+        approval: {
+          needsOk: "Needs your OK",
+          notNow: "Not now",
+          approved: "Approved:",
+          declined: "Left for now:",
+          why: "Why I picked this",
+        },
         inCloud: "Runs in the cloud",
         /** The scheduled task's card, after the live app's (docs/references/cowork/scheduled-task.png). */
         scheduleTask: "Schedule task",
@@ -235,7 +342,15 @@ export const copy = {
           scheduledTask: "Scheduled task",
           liveAgent: "Live",
           connectors: "Connectors",
-          connectorNames: { salesforce: "Salesforce Headless 360", slack: "Slack", gmail: "Gmail", calendar: "Google Calendar", asana: "Asana", gong: "Gong", files: "Your files" },
+          connectorNames: {
+            salesforce: "Salesforce Headless 360",
+            slack: "Slack",
+            gmail: "Gmail",
+            calendar: "Google Calendar",
+            asana: "Asana",
+            gong: "Gong",
+            files: "Your files",
+          },
         },
       },
       /** The Agents page, built like Scheduled but lighter: a header and a few
@@ -243,13 +358,37 @@ export const copy = {
       agentsPage: {
         title: "Agents",
         search: "Search agents",
-        subline: ["Agents work toward a goal on their own, and check in when they need you. Type", "/agents", "in any session to build one."],
+        subline: [
+          "Agents work toward a goal on their own, and check in when they need you. Type",
+          "/agents",
+          "in any session to build one.",
+        ],
         newAgent: "New agent",
         templates: [
-          { id: "goal", title: "Work toward a goal", body: "Break a goal into steps and keep making progress on it every day.", when: "Checks in daily" },
-          { id: "research", title: "Research a question", body: "Dig into a question across the web and your files, and report back.", when: "Runs until it's done" },
-          { id: "followup", title: "Follow up for me", body: "Keep track of open threads and nudge people when replies go quiet.", when: "Weekdays at 9:00 AM" },
-          { id: "watch", title: "Watch for changes", body: "Keep an eye on something that matters to you, and act when it changes.", when: "Wakes when something changes" },
+          {
+            id: "goal",
+            title: "Work toward a goal",
+            body: "Break a goal into steps and keep making progress on it every day.",
+            when: "Checks in daily",
+          },
+          {
+            id: "research",
+            title: "Research a question",
+            body: "Dig into a question across the web and your files, and report back.",
+            when: "Runs until it's done",
+          },
+          {
+            id: "followup",
+            title: "Follow up for me",
+            body: "Keep track of open threads and nudge people when replies go quiet.",
+            when: "Weekdays at 9:00 AM",
+          },
+          {
+            id: "watch",
+            title: "Watch for changes",
+            body: "Keep an eye on something that matters to you, and act when it changes.",
+            when: "Wakes when something changes",
+          },
         ],
       },
       /** The Scheduled page, as in the live app (docs/references/cowork/
@@ -257,23 +396,64 @@ export const copy = {
        *  template's `preview` titles the card that peeks out on hover. */
       scheduledPage: {
         title: "Scheduled tasks",
-        subline: ["Run tasks on a schedule or whenever you need them. Type", "/schedule", "in any existing task to set one up."],
+        subline: [
+          "Run tasks on a schedule or whenever you need them. Type",
+          "/schedule",
+          "in any existing task to set one up.",
+        ],
         search: "Search tasks",
         newTask: "New task",
         /** What clicking the Daily briefing template sends to start the brief's session. */
         briefingPrompt: "Set up a daily briefing",
         /** The scheduled brief's card, above the templates once it's set up. */
-        taskBody: "A short summary, today's focus list, accounts at risk and what to fix on your store.",
+        taskBody:
+          "A short summary, today's focus list, accounts at risk and what to fix on your store.",
         taskWhen: "Weekdays at 8:30 AM",
         nextRun: "Next run tomorrow, 8:30 AM",
         lastRun: "Last run today, 8:30 AM",
         templates: [
-          { id: "briefing", title: "Daily briefing", body: "What needs your attention today across calendar, email, and messages.", when: "Weekdays at 8:00 AM", preview: "Today's brief" },
-          { id: "inbox", title: "Inbox triage", body: "Categorize your inbox and draft replies to anything urgent.", when: "Weekdays at 8:00 AM", preview: "Inbox" },
-          { id: "meeting", title: "Meeting prep", body: "A short brief before each meeting on your calendar, covering attendees, context, and agenda.", when: "Weekdays at 8:00 AM", preview: "Next meeting" },
-          { id: "weekly", title: "Weekly review", body: "A Friday summary of what happened this week.", when: "Every Friday at 4:00 PM", preview: "This week" },
-          { id: "content", title: "Content ideas", body: "Draft a few post ideas each week from the latest news in your industry.", when: "Every Monday at 9:00 AM", preview: "Post ideas" },
-          { id: "monitor", title: "Monitor a topic", body: "Watch for news or mentions of a topic, competitor, or keyword.", when: "Daily at 9:00 AM", preview: "Mentions" },
+          {
+            id: "briefing",
+            title: "Daily briefing",
+            body: "What needs your attention today across calendar, email, and messages.",
+            when: "Weekdays at 8:00 AM",
+            preview: "Today's brief",
+          },
+          {
+            id: "inbox",
+            title: "Inbox triage",
+            body: "Categorize your inbox and draft replies to anything urgent.",
+            when: "Weekdays at 8:00 AM",
+            preview: "Inbox",
+          },
+          {
+            id: "meeting",
+            title: "Meeting prep",
+            body: "A short brief before each meeting on your calendar, covering attendees, context, and agenda.",
+            when: "Weekdays at 8:00 AM",
+            preview: "Next meeting",
+          },
+          {
+            id: "weekly",
+            title: "Weekly review",
+            body: "A Friday summary of what happened this week.",
+            when: "Every Friday at 4:00 PM",
+            preview: "This week",
+          },
+          {
+            id: "content",
+            title: "Content ideas",
+            body: "Draft a few post ideas each week from the latest news in your industry.",
+            when: "Every Monday at 9:00 AM",
+            preview: "Post ideas",
+          },
+          {
+            id: "monitor",
+            title: "Monitor a topic",
+            body: "Watch for news or mentions of a topic, competitor, or keyword.",
+            when: "Daily at 9:00 AM",
+            preview: "Mentions",
+          },
         ],
       },
       /** The run of show's four sessions, fixed at the top of the sidenav. Each
@@ -373,7 +553,8 @@ export const copy = {
           textSizeHint: "Size of the conversation transcript text.",
           textSizes: ["Small", "Medium", "Large"],
           motion: "Motion",
-          motionHint: "Reduce animation in streaming responses and other interface elements.",
+          motionHint:
+            "Reduce animation in streaming responses and other interface elements.",
           motions: ["System", "Reduced"],
           voice: "Voice",
           language: "Language",
@@ -384,10 +565,22 @@ export const copy = {
           speedValue: "Normal",
           notifications: "Notifications",
           toggles: [
-            { label: "Response completions", hint: "Get notified when Claude has finished a response. Useful for long-running tasks." },
-            { label: "Code notifications", hint: "Claude can choose to notify you about important updates from a Code session." },
-            { label: "Code permission requests", hint: "Get a push notification when Claude needs your approval to run a command in a Code session." },
-            { label: "Emails from Claude Code cloud sessions", hint: "Get an email when a cloud session has finished building or needs your response." },
+            {
+              label: "Response completions",
+              hint: "Get notified when Claude has finished a response. Useful for long-running tasks.",
+            },
+            {
+              label: "Code notifications",
+              hint: "Claude can choose to notify you about important updates from a Code session.",
+            },
+            {
+              label: "Code permission requests",
+              hint: "Get a push notification when Claude needs your approval to run a command in a Code session.",
+            },
+            {
+              label: "Emails from Claude Code cloud sessions",
+              hint: "Get an email when a cloud session has finished building or needs your response.",
+            },
           ],
         },
         /** Shared by the Skills and Connectors panes' headers. */
@@ -402,7 +595,8 @@ export const copy = {
         skills: {
           title: "Skills",
           emptyTitle: "Add your first skills",
-          emptyBody: "Skills teach Claude how you work. Add them from Discover, or create your own.",
+          emptyBody:
+            "Skills teach Claude how you work. Add them from Discover, or create your own.",
           discoverCta: "Discover skills",
           orgCaption: "From your organization",
           /** Badge beside every org skill (Sales Cloud in the live app). */
@@ -410,16 +604,56 @@ export const copy = {
           updated: "2d ago",
           /** The Salesforce skills (ids from `shell.composer.skills.salesforceItems`), A–Z. */
           items: [
-            { id: "account-360", description: "Build a 360-degree brief on a buyer account from Commerce: orders, open quotes, entitlements, cases and spend trends." },
-            { id: "add-note", description: "Add a note to a quote, order or account record so the next person picks up where you left off." },
-            { id: "add-to-cart", description: "Add products to a buyer's cart on their behalf, with their contract pricing and entitlements applied." },
-            { id: "approve-quote", description: "Review a pending quote against discount policy, then approve, reject or send it back with comments." },
-            { id: "checkout", description: "Check out a cart on a buyer's behalf: shipping, payment terms and PO number, then place the order." },
-            { id: "entitlement-check", description: "Check which products, price books and discounts a buyer account is entitled to before you quote." },
-            { id: "find-products", description: "Search the Commerce catalog by name, SKU or need, with the buyer's pricing and stock levels." },
-            { id: "order-on-behalf", description: "Place an order for a buyer from a conversation, an email or site-visit notes, end to end." },
-            { id: "reorder", description: "Rebuild a buyer's previous order as a new cart, with today's prices and stock." },
-            { id: "store-health", description: "Check a storefront's health: conversion, cart abandonment, searches with no results and slow pages." },
+            {
+              id: "account-360",
+              description:
+                "Build a 360-degree brief on a buyer account from Commerce: orders, open quotes, entitlements, cases and spend trends.",
+            },
+            {
+              id: "add-note",
+              description:
+                "Add a note to a quote, order or account record so the next person picks up where you left off.",
+            },
+            {
+              id: "add-to-cart",
+              description:
+                "Add products to a buyer's cart on their behalf, with their contract pricing and entitlements applied.",
+            },
+            {
+              id: "approve-quote",
+              description:
+                "Review a pending quote against discount policy, then approve, reject or send it back with comments.",
+            },
+            {
+              id: "checkout",
+              description:
+                "Check out a cart on a buyer's behalf: shipping, payment terms and PO number, then place the order.",
+            },
+            {
+              id: "entitlement-check",
+              description:
+                "Check which products, price books and discounts a buyer account is entitled to before you quote.",
+            },
+            {
+              id: "find-products",
+              description:
+                "Search the Commerce catalog by name, SKU or need, with the buyer's pricing and stock levels.",
+            },
+            {
+              id: "order-on-behalf",
+              description:
+                "Place an order for a buyer from a conversation, an email or site-visit notes, end to end.",
+            },
+            {
+              id: "reorder",
+              description:
+                "Rebuild a buyer's previous order as a new cart, with today's prices and stock.",
+            },
+            {
+              id: "store-health",
+              description:
+                "Check a storefront's health: conversion, cart abandonment, searches with no results and slow pages.",
+            },
           ],
         },
         connectors: {
@@ -433,17 +667,52 @@ export const copy = {
            *  one would show an initial tile. */
           items: [
             { name: "Asana", connected: false, logo: "/connectors/asana.svg" },
-            { name: "Confluence", connected: false, logo: "/connectors/confluence.svg" },
-            { name: "GitHub", connected: false, logo: "/connectors/github.svg" },
+            {
+              name: "Confluence",
+              connected: false,
+              logo: "/connectors/confluence.svg",
+            },
+            {
+              name: "GitHub",
+              connected: false,
+              logo: "/connectors/github.svg",
+            },
             { name: "Gmail", connected: true, logo: "/connectors/gmail.svg" },
-            { name: "Google Calendar", connected: true, logo: "/connectors/google-calendar.svg" },
+            {
+              name: "Google Calendar",
+              connected: true,
+              logo: "/connectors/google-calendar.svg",
+            },
             { name: "Gong", connected: true, logo: "/connectors/gong.png" },
-            { name: "Google Drive", connected: true, logo: "/connectors/google-drive.svg" },
-            { name: "Notion", connected: false, logo: "/connectors/notion.svg" },
-            { name: "Salesforce Headless 360", connected: true, badge: "Custom", logo: "/salesforce.svg" },
+            {
+              name: "Google Drive",
+              connected: true,
+              logo: "/connectors/google-drive.svg",
+            },
+            {
+              name: "Notion",
+              connected: false,
+              logo: "/connectors/notion.svg",
+            },
+            {
+              name: "Salesforce Headless 360",
+              connected: true,
+              badge: "Custom",
+              logo: "/salesforce.svg",
+            },
             { name: "Slack", connected: true, logo: "/connectors/slack.svg" },
-            { name: "Tableau", connected: false, badge: "Community", logo: "/connectors/tableau.svg" },
-          ] as { name: string; connected: boolean; badge?: string; logo?: string }[],
+            {
+              name: "Tableau",
+              connected: false,
+              badge: "Community",
+              logo: "/connectors/tableau.svg",
+            },
+          ] as {
+            name: string;
+            connected: boolean;
+            badge?: string;
+            logo?: string;
+          }[],
         },
       },
     },
@@ -589,7 +858,10 @@ export const copy = {
         options: [
           { name: "Fable 5.1", description: "For your toughest challenges" },
           { name: "Opus 5.5", description: "Most capable for ambitious work" },
-          { name: "Sonnet 5", description: "Most efficient for everyday tasks" },
+          {
+            name: "Sonnet 5",
+            description: "Most efficient for everyday tasks",
+          },
           { name: "Haiku 4.5", description: "Fastest for quick answers" },
         ],
         /** Effort + More models rows — chevrons are presentational (no
@@ -607,7 +879,8 @@ export const copy = {
        *  until there's text). The disclaimer + model label sit below the pill. */
       inChat: {
         placeholder: "Write a message…",
-        disclaimer: "Claude is AI and can make mistakes. Please double-check cited sources.",
+        disclaimer:
+          "Claude is AI and can make mistakes. Please double-check cited sources.",
       },
       /** Slash skills. Typing "/" (at the start or after a space) opens a menu
        *  of available skills; picking one drops an atomic chunk into the box.
@@ -620,7 +893,13 @@ export const copy = {
         filterPlaceholder: "Type to filter",
         /** aria-label for the skill menu. */
         menuLabel: "Skills",
-        defaultItems: ["export-report", "google-workspace", "import-memory", "morning", "skill-creator"],
+        defaultItems: [
+          "export-report",
+          "google-workspace",
+          "import-memory",
+          "morning",
+          "skill-creator",
+        ],
         /** Salesforce skills across ALL three journeys — the slash menu is
          *  intentionally exhaustive, not scoped to the selected chat (updated on
          *  the go). Grouped by journey: quote approval, checkout anywhere,
@@ -686,7 +965,11 @@ export const copy = {
     /** Suggestion chips below the composer (presentational, inert). Salesforce
      *  actions in place of claude.ai's Write · Learn · Code; labels only, icons
      *  are paired by position in the component. */
-    suggestions: ["Lightning Design System", "Debug Apex", "Learn on Trailhead"],
+    suggestions: [
+      "Lightning Design System",
+      "Debug Apex",
+      "Learn on Trailhead",
+    ],
     /** Main-stage empty/home greeting. `timeOfDay` is static for now (will be
      *  time-based later); rendered as "{timeOfDay} {account.name}". */
     greeting: {
