@@ -71,7 +71,7 @@ function Header() {
             className="size-[22px] shrink-0 text-text-muted"
             strokeWidth={1.75}
           />
-          <h1 className="truncate text-[24px] font-normal leading-tight tracking-[-0.015em] text-text">
+          <h1 className="a2a-title truncate text-[24px] font-normal leading-tight tracking-[-0.015em] text-text">
             {t.store}
           </h1>
           <Tooltip label={t.openStore}>
@@ -135,7 +135,7 @@ function Section({
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <h2 className="text-[16px] font-semibold leading-snug tracking-[-0.01em] text-text">
+        <h2 className="a2a-title text-[16px] font-semibold leading-snug tracking-[-0.01em] text-text">
           {title}
         </h2>
         {subtitle && (

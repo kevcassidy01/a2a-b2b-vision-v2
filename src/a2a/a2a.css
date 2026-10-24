@@ -11,6 +11,11 @@
   font-family: var(--font-sans);
   letter-spacing: -0.01em;
 }
+/* Testing: Avant Garde for Salesforce on the Command Center's titles, store name and big numbers. */
+.a2a-title {
+  font-family: "Avant Garde for Salesforce", var(--font-sans);
+  letter-spacing: 0;
+}
 
 /* The scene: the dusk mountain photo, already dark, under a light wash that's a
    little deeper in the middle where the chrome sits (Linear's dark stage). */

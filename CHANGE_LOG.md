@@ -30,7 +30,11 @@ Entry format:
 
 ## Unreleased
 
-## 20.0.0 — 2026-10-24 11:30 IST
+## 20.1.0 — 2026-10-24 11:26 IST
+**Kind:** small addition: Avant Garde for Salesforce Demi on the Command Center's titles, store name and big numbers (from branch `test/avant-garde-font`).
+- **Font test (branch `test/avant-garde-font`)**: Avant Garde for Salesforce Demi on the Command Center's store name, section headings (e.g. "Last 12 months") card titles (Needs your approval, Orders by bill-to-country), and the metric tiles' big numbers (body text, deltas and small figures stay Inter). New `.a2a-title` class in `a2a.css`, `@font-face` in `fonts.css`. The woff2 is in `src/assets/fonts/avant-garde/` and gitignored (proprietary), so without it the titles fall back to Inter.
+
+## 20.0.0 — 2026-10-24 11:20 IST
 **Kind:** large feature: iOS 26 Safari around the storefront, with the phone's OS in dark mode; the Log in flow (page load, login page, AutoFill); the site renamed Fizz Partners.
 - **Login flow on the phone**: tapping Log in (the header, the hero's "Log in to order", or the closing block) loads the page as Safari does. The bar comes up, Reload turns to Stop (✕), and a blue progress line runs along the foot of the address pill. The storefront stays until the login page paints (~0.9s). The login page is in the storefront's style: Log in, work email and password, "Forgot password?", a black Log in pill, and "Request a business account". Tapping either field acts as iOS AutoFill: both fill with John's saved login (`john.mueller@isarbottling.de`, invented) in Safari's pale yellow tint. Log in then shows a spinner, since there's no signed-in page yet. Safari Back returns to the storefront with the same load. New `PartnerSite.tsx` (pages and navigation), `Login.tsx`, and `parts.tsx` (Header, Logo and Footer, shared). Safari takes `loading`, `onBack` and `pageKey`. Copy is in `storefront.login` and `safari.stop`.
 - **Phone OS in dark mode**: Safari's bar is dark Liquid Glass (smoky frost, thin light rim, white glyphs). The site itself stays light, so the status bar keeps dark text over it, as iOS does.

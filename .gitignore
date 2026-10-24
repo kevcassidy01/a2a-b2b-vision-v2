@@ -20,6 +20,8 @@ yarn-error.log*
 # Proprietary fonts — not redistributable. Drop the OTFs into the folder
 # locally; the app falls back to EB Garamond when they're absent.
 src/assets/fonts/anthropic-serif/*.otf
+# Avant Garde for Salesforce (the Command Center font test); falls back to Inter.
+src/assets/fonts/avant-garde/*.woff2
 
 # OS / editor cruft
 .DS_Store

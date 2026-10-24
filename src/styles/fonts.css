@@ -78,3 +78,15 @@
   src: url("../assets/fonts/anthropic-serif/AnthropicSerif-Text-Bold-Static.otf")
     format("opentype");
 }
+
+/* ── Avant Garde for Salesforce (Demi) ────────────────────────────── */
+/* Being tried on the Command Center's titles and store name. One weight, so
+   it answers every weight (no faux bold). Gitignored; absent, titles fall back
+   to Inter. */
+@font-face {
+  font-family: "Avant Garde for Salesforce";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/avant-garde/AvantGardeForSalesforceW05-Dm.woff2") format("woff2");
+}

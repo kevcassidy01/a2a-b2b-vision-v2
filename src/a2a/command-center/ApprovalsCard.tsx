@@ -14,7 +14,7 @@ export function ApprovalsCard() {
     <section className="a2a-card flex flex-col gap-4 rounded-xl p-5">
       <div className="flex items-start gap-4">
         <div className="mr-auto flex flex-col gap-0.5">
-          <h3 className="text-[14px] font-semibold text-text">
+          <h3 className="a2a-title text-[14px] font-semibold text-text">
             {t.title} <span className="tabular-nums text-text-muted">({t.count})</span>
           </h3>
           <p className="text-[13px] text-text-muted">{t.checked}</p>

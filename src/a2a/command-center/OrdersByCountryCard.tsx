@@ -18,7 +18,7 @@ export function OrdersByCountryCard() {
     <div className="a2a-fade-out -mx-4 -mt-4 px-4 pt-4">
       <section className="a2a-card h-64 rounded-t-xl p-5">
         <div className="flex items-center gap-2">
-          <h3 className="mr-auto text-[14px] font-semibold text-text">{t.title}</h3>
+          <h3 className="a2a-title mr-auto text-[14px] font-semibold text-text">{t.title}</h3>
           <ActionButton icon={MessageSquareText} label={t.ask} />
           <ActionButton icon={Download} label={t.export} />
         </div>

@@ -23,7 +23,7 @@ function Tile({ metric: m }: { metric: Metric }) {
   return (
     <div className="a2a-card row-span-4 grid grid-rows-subgrid gap-y-0 rounded-xl p-4">
       <p className="text-[13px] text-text-muted">{m.label}</p>
-      <p className="mt-1.5 text-[30px] font-semibold leading-none tracking-[-0.025em] tabular-nums text-text">
+      <p className="a2a-title mt-1.5 text-[30px] font-semibold leading-none tracking-[-0.025em] tabular-nums text-text">
         {m.value}
       </p>
       <div>
