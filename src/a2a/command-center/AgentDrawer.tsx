@@ -144,8 +144,8 @@ function PromptBox() {
   return (
     <div className="rounded-2xl bg-white p-2 shadow-[0_0_0_1px_rgb(0_0_0/0.1),0_2px_4px_rgb(0_0_0/0.03),0_12px_28px_-10px_rgb(0_0_0/0.14)] focus-within:shadow-[0_0_0_1px_rgb(0_0_0/0.22),0_2px_4px_rgb(0_0_0/0.03),0_12px_28px_-10px_rgb(0_0_0/0.14)]">
       {context && (
-        <span className="ml-1 mt-1 inline-flex h-6 items-center gap-1.5 rounded-md bg-[#f3f3f5] pl-2 pr-1 text-[12px] font-medium text-text">
-          <Store className="size-3.5 text-text-muted" strokeWidth={2} />
+        <span className="ml-1 mt-1 inline-flex h-6 items-center gap-1.5 rounded-md bg-[#e8f3fd] pl-2 pr-1 text-[12px] font-medium text-text">
+          <Store className="size-3.5 text-[#0176d3]" strokeWidth={2} />
           {c.context}
           <button
             type="button"

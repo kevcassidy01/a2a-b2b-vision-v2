@@ -30,6 +30,20 @@ Entry format:
 
 ## Unreleased
 
+## 21.1.0 — 2026-10-25 00:53 IST
+
+**Kind:** minor — the seller agent counters with v2; chat formatting; roomier knowledge cards; agent colours in the who's-acting bar.
+
+- **The Agent button is wider and has a second violet corner.** Padding goes from 14/16px to 18/20px, and the stroke's violet fade now sits at the bottom-right as well as the top-left.
+- **The seller agent counters with v2.** After "Weighing the options" it folds to "Weighed it up for Ns" (tap to reopen), says why it won't take 15% at Net30, then runs "Checks before countering" one at a time: stock (Omnichannel Inventory), Isar's price book (Revenue Cloud), the discount policy, Isar's credit (Billing), drafting v2, sending it over A2A. Each check names the system and how it touched it (read, fetch, write). Then the v2 counter-offer as a knowledge card (12,000 orange +2,000, 7,500 lemonade +2,500, 12%, Net30, $72,072, waiting on Isar), its reply and a done mark. Sending v2 sets the story's `counterSent`: the Approvals card's row turns to Q-1042 v2 and the agent stops working.
+- **The who's-acting bar colours its agents.** When lit, John's agent's label and dot glow blue and Alex's agent's glow gold, with a gentle shine (off under reduced motion). John and Alex stay white.
+- **Agents' messages pick out the facts that matter, on both sides.** A small `Rich` renderer (`src/a2a/Rich.tsx`) turns `**…**` in copy into semibold full-ink text. It's used in the agents' lead lines, replies and plan-step details. The seller's reply now leads with "**v2: 12% off, not the 15% they asked**", and its lead says "Isar wants **15% at Net30**, but the most I can give is **12%**". John's agent's reply names the ask: "**15,000 units at 15% off, Net30**".
+- **Open in Salesforce has 6px corners** (was 8px), to match the Command Center's other buttons.
+- **Knowledge cards breathe more (proposed language, pending Somnath's OK).** 20px in from the edges (was 16), a 40px icon tile, a 15px title. Quote lines drop the Site column: the site sits under the product name, what changed sits under the units (green text, no chip), and rows are taller. The terms are three separate tiles with a larger value. The request card goes from 480 to 520px wide.
+- **"At list" is now "List price"** on the quote cards' column head and notes. Everything on the seller agent's side of its chat (messages, checks, cards) now runs one width, 560px.
+- **The seller agent's context chip is light blue** (`#e8f3fd`, the store icon in Salesforce blue).
+- **Momentum replaces Gong** on the Command Center welcome's app tiles (Salesforce acquired Momentum and uses it; it doesn't use Gong). The mark only, cropped from the logo Somnath shared, at `public/connectors/momentum.png`.
+
 ## 21.0.0 — 2026-10-25 00:22 IST
 **Kind:** large feature: the user flow through Q-1042 landing at Fizz (the phone's agent and menu, the Command Center's cards and Today, the seller agent's chat and knowledge cards, the who's-acting bar driven by the story), the cross-sell story settled, and US dollars on both sides. Merged `user-flow-updates` into `master`.
 

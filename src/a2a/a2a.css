@@ -254,20 +254,26 @@
     background-color var(--dur-fast, 120ms) ease-out,
     padding 240ms var(--ease-out, ease-out);
 }
-/* Its one mark of character: the top-left corner of the stroke is darker, with a
-   hint of the logo's violet, fading out along both edges. A 1px ring (masked
-   down to the border) over the normal hairline. */
+/* Its one mark of character: the top-left and bottom-right corners of the
+   stroke are darker, with a hint of the logo's violet, fading out along both
+   edges. A 1px ring (masked down to the border) over the normal hairline. */
 .a2a-agent::after {
   content: "";
   position: absolute;
   inset: 0;
   padding: 1px;
   border-radius: inherit;
-  background: radial-gradient(
-    44px 26px at 0 0,
-    rgb(76 29 149 / 0.55),
-    rgb(76 29 149 / 0) 100%
-  );
+  background:
+    radial-gradient(
+      44px 26px at 0 0,
+      rgb(76 29 149 / 0.55),
+      rgb(76 29 149 / 0) 100%
+    ),
+    radial-gradient(
+      44px 26px at 100% 100%,
+      rgb(76 29 149 / 0.55),
+      rgb(76 29 149 / 0) 100%
+    );
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -683,6 +689,37 @@
 .a2a-actor[data-on] .a2a-actor-dot {
   background: #fff;
   box-shadow: 0 0 8px rgb(255 255 255 / 0.8);
+}
+/* The agents light up in their own colour, label and dot only: John's agent
+   blue, Alex's agent gold, each glowing and gently shining while it works. */
+.a2a-actor[data-on][data-actor="johnAgent"] {
+  --actor-ink: #8ccdff;
+  --actor-dot: #4aa8ff;
+  --actor-glow: rgb(74 168 255 / 0.55);
+}
+.a2a-actor[data-on][data-actor="alexAgent"] {
+  --actor-ink: #ffd76e;
+  --actor-dot: #ffc933;
+  --actor-glow: rgb(255 201 51 / 0.55);
+}
+.a2a-actor[data-on]:is([data-actor="johnAgent"], [data-actor="alexAgent"]) {
+  color: var(--actor-ink);
+  text-shadow: 0 0 10px var(--actor-glow);
+  animation: a2a-actor-shine 2.4s ease-in-out infinite;
+}
+.a2a-actor[data-on]:is([data-actor="johnAgent"], [data-actor="alexAgent"]) .a2a-actor-dot {
+  background: var(--actor-dot);
+  box-shadow: 0 0 8px var(--actor-glow), 0 0 2px var(--actor-dot);
+}
+@keyframes a2a-actor-shine {
+  50% {
+    text-shadow: 0 0 16px var(--actor-glow);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .a2a-actor[data-on] {
+    animation: none !important;
+  }
 }
 
 /* Orders by bill-to-country: pale land, white borders, blue bubbles by orders.

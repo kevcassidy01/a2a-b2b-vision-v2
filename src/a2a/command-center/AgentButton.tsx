@@ -38,8 +38,8 @@ export function AgentButton({
       data-status={status}
       aria-expanded={open}
       onClick={onClick}
-      className={`a2a-control a2a-agent ${open ? "a2a-control-active" : ""} ${className} flex h-8 items-center rounded-md pl-3.5 text-[13.5px] font-medium text-text ${
-        busy ? "pr-3.5" : "pr-4"
+      className={`a2a-control a2a-agent ${open ? "a2a-control-active" : ""} ${className} flex h-8 items-center rounded-md pl-[18px] text-[13.5px] font-medium text-text ${
+        busy ? "pr-[18px]" : "pr-5"
       }`}
     >
       <img src={agentLogo} alt="" className="size-4 shrink-0" />

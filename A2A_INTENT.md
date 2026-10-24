@@ -95,12 +95,12 @@ sees each agent's move land on the other side.
   whole width of the main content area.
 - **It opens on a welcome (added 2026-10-24):** "while you were away", not a login. App tiles and signal pills float around a headline and **Load Command Center**, which loads the dashboard (skeleton cards, a line sweeping along the bottom of the frame's bar). It follows the phone: on opening, the store loads as a skeleton under Safari's progress line, then the welcome's tiles and pills burst out.
 - **Today (added 2026-10-24):** once John's agent sends Q-1042 v1, a "Today" section opens above "Last 6 months", holding "Needs your approval" with the request, a short beat (0.6s) after the phone sends it. It shows who it's assigned to as a pill (the agent's avatar and "Agent responding"), with coloured typing dots while the agent works on it and none when it's idle.
-- The **seller agent** is a docked right chat sidebar (not floating). So far it has no chat, only what surrounds one (2026-10-24): a header, an empty state with its limits and suggestions, and a prompt box as wide as the chat column. Clicking Q-1042 (added 2026-10-24) opens it on a chat: Isar's agent's request, then the seller agent taking it in (reading, pulling up the account, checking the rules, weighing a counter), holding at "Weighing the options" until the next beat.
+- The **seller agent** is a docked right chat sidebar (not floating). So far it has no chat, only what surrounds one (2026-10-24): a header, an empty state with its limits and suggestions, and a prompt box as wide as the chat column. Clicking Q-1042 (added 2026-10-24) opens it on a chat: Isar's agent's request, then the seller agent taking it in (reading, pulling up the account, checking the rules, weighing a counter), holding at "Weighing the options", then (2026-10-25) folding, saying why 15% is over its limit, running its checks one at a time (stock, price book, policy, credit, drafting and sending v2) and showing the v2 counter-offer card, waiting on Isar.
 - **Shells come first:** the iPhone and the AI app shell get designed before anything inside them.
 
 **Under both: the "who's acting" bar (added 2026-10-24).** A thin dark bar along the bottom of the stage,
 four equal parts: **John · John's agent · Alex's agent · Alex**. The acting part lights up; the rest stay
-dull. Each story step (§5) names who acts, and the bar follows. No status text. Wired 2026-10-24: each agent lights while it works, and a person lights for a moment when their side is tapped.
+dull. Each story step (§5) names who acts, and the bar follows. No status text. Wired 2026-10-24: each agent lights while it works, and a person lights for a moment when their side is tapped. Lit agents take their colour (2026-10-25): John's agent blue, Alex's agent gold, label and dot only.
 
 *Superseded the same day:* a toggle with three views (Storefront, Command Center, and Both as two agent chat
 feeds side by side).

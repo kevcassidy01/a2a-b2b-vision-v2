@@ -181,7 +181,7 @@ export const copy = {
         thought: (s: number) => `Mulled it over for ${s}s`,
         reasoning:
           "Mike started this cart for Frankfurt's Oktoberfest stock. Munich runs the same three weeks and nothing is ordered for it yet. Check Munich's forecast, add what it needs to this cart so it stays one order, then ask Fizz for its best price on the lot.",
-        lead: "Mike's cart covers Frankfurt for Oktoberfest, but Munich isn't stocked yet. I'll top it up for Munich and get Fizz's best price on the whole order.",
+        lead: "Mike's cart covers **Frankfurt** for Oktoberfest, but **Munich isn't stocked yet**. I'll top it up for Munich and get Fizz's best price on the whole order.",
         plan: {
           title: "Stock up for Oktoberfest",
           of: "of",
@@ -192,14 +192,14 @@ export const copy = {
             {
               doing: "Reading Mike's cart",
               done: "Read Mike's cart",
-              detail: "5,000 lemonade concentrate for Frankfurt",
+              detail: "**5,000** lemonade concentrate for Frankfurt",
               kind: "read",
               source: "Fizz Partners · cart",
             },
             {
               doing: "Checking Munich's demand forecast",
               done: "Checked Munich's demand forecast",
-              detail: "+40% over the Oktoberfest weeks",
+              detail: "**+40%** over the Oktoberfest weeks",
               kind: "fetch",
               source: "SAP IBP · demand forecast",
             },
@@ -220,7 +220,7 @@ export const copy = {
             {
               doing: "Asking Fizz for a quote",
               done: "Asked Fizz for a quote",
-              detail: "15,000 units · 15% off · Net30",
+              detail: "**15,000 units** · **15% off** · Net30",
               kind: "write",
               source: "Fizz seller agent · quote request",
             },
@@ -235,7 +235,7 @@ export const copy = {
             { name: "Orange concentrate", qty: "10,000 units", site: "Munich", by: "Your agent", added: true },
           ],
         },
-        reply: "Fizz has our quote request. I'll negotiate within your limits and only come back to you if the terms change.",
+        reply: "Fizz has our quote request: **15,000 units at 15% off, Net30**. I'll negotiate within your limits and only come back to you if the terms change.",
         quote: { id: "Q-1042 v1", status: "Waiting for Fizz to respond", meta: "15,000 units · asking 15% off · Net30" },
         suggestions: ["What are my limits?", "Show the quote"],
         placeholder: "Ask your agent",
@@ -692,6 +692,12 @@ export const copy = {
           open: "Open",
           working: "working on it",
           time: "Just now",
+          /** Once the seller agent has sent v2: the row shows it, and the agent waits on the buyer (no dots). */
+          countered: {
+            id: "Q-1042 v2",
+            meta: ["19,500 units", "12% off", "Net30"],
+            agent: "Waiting on Isar",
+          },
         },
       },
       /** The last 6 months at a glance. `delta` is the rise on the prior 6
@@ -728,8 +734,8 @@ export const copy = {
             id: "Q-1042 · v1",
             from: "Isar Bottling · Oktoberfest stock-up",
             status: "New",
-            /** Column heads for the lines. Prices are dummy, $4.20 a unit at list. */
-            columns: { name: "Product", site: "Site", qty: "Units", amount: "At list" },
+            /** Column heads for the lines. Prices are dummy, $4.20 a unit list price. */
+            columns: { name: "Product", qty: "Units", amount: "List price" },
             lines: [
               { name: "Orange concentrate", site: "Munich", qty: "10,000", amount: "$42,000" },
               { name: "Lemonade concentrate", site: "Frankfurt", qty: "5,000", amount: "$21,000" },
@@ -738,7 +744,7 @@ export const copy = {
             terms: [
               { label: "Discount asked", value: "15%" },
               { label: "Payment terms", value: "Net30" },
-              { label: "Total at ask", value: "$53,550", note: "$63,000 at list" },
+              { label: "Total at ask", value: "$53,550", note: "$63,000 list price" },
             ],
             via: "Received over A2A · signed by Isar Bottling",
             open: "Open in Salesforce",
@@ -754,8 +760,44 @@ export const copy = {
             { kind: "wonder", label: "Weighing it up", text: "Munich's demand is up for Oktoberfest. Could they take more volume?" },
             { kind: "wonder", label: "Considering a counter", text: "A bigger order at a smaller discount might work for both sides" },
           ],
-          /** Where it stays once it's run through them, still at work. */
+          /** Where it stays once it's run through them, still at work, before it folds. */
           hold: "Weighing the options",
+          weighed: (s: number) => `Weighed it up for ${s}s`,
+          /** What it'll do, once it's weighed it up. */
+          lead: "Isar wants **15% at Net30**, but the most I can give is **12%**. Before I counter, I'll check stock, their price book and their credit.",
+          /** Fizz's checks before an offer goes out, then the counter. Present tense while running, past once done. */
+          plan: {
+            title: "Checks before countering",
+            of: "of",
+            done: "done",
+            toggle: "Show or hide the checks",
+            steps: [
+              { doing: "Checking stock in Munich and Frankfurt", done: "Checked stock in Munich and Frankfurt", detail: "**14,000** orange in Munich, **9,000** lemonade in Frankfurt: room for more", kind: "fetch", source: "Omnichannel Inventory" },
+              { doing: "Pulling Isar's price book", done: "Pulled Isar's price book", detail: "**$4.20** a unit list price, with a volume tier from **18,000 units**", kind: "fetch", source: "Revenue Cloud" },
+              { doing: "Checking the discount policy", done: "Checked the discount policy", detail: "Up to **12% at Net30**. More, or Net15, needs a person", kind: "read", source: "Pricing policy" },
+              { doing: "Checking Isar's credit", done: "Checked Isar's credit", detail: "**$250,000** limit, **$38,000** open: room for this order", kind: "fetch", source: "Billing" },
+              { doing: "Drafting counter-offer v2", done: "Drafted counter-offer v2", detail: "More volume at 12%: **12,000** orange and **7,500** lemonade", kind: "write", source: "Revenue Cloud" },
+              { doing: "Sending v2 to Isar Bottling's agent", done: "Sent v2 to Isar Bottling's agent", detail: "Over A2A, signed by Fizz Drinks", kind: "write", source: "A2A" },
+            ],
+          },
+          /** The counter-offer it sent, as a knowledge card. */
+          counter: {
+            title: "Counter-offer",
+            id: "Q-1042 · v2",
+            for: "To Isar Bottling · Oktoberfest stock-up",
+            status: "Waiting on Isar",
+            lines: [
+              { name: "Orange concentrate", site: "Munich", qty: "12,000", change: "+2,000", amount: "$50,400" },
+              { name: "Lemonade concentrate", site: "Frankfurt", qty: "7,500", change: "+2,500", amount: "$31,500" },
+            ],
+            terms: [
+              { label: "Discount", value: "12%", note: "They asked 15%" },
+              { label: "Payment terms", value: "Net30" },
+              { label: "Total", value: "$72,072", note: "$81,900 list price" },
+            ],
+            via: "Sent over A2A · signed by Fizz Drinks",
+          },
+          reply: "I've countered with **v2: 12% off, not the 15% they asked**, the most I can give at Net30. Munich's Oktoberfest demand can take more, so I offered **2,000 more orange** and **2,500 more lemonade**. That takes the order to **$72,072**, up from $53,550. I'll tell you when Isar's agent replies.",
         },
         empty: {
           title: "Ready when you are, Alex",

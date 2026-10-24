@@ -56,7 +56,7 @@ export function CommandCenter() {
     setAgentOpen(true);
   }, []);
   const closeAgent = useCallback(() => setAgentOpen(false), []);
-  const { quoteSent, setWorking } = useStory();
+  const { quoteSent, counterSent, setWorking } = useStory();
   const today = useToday(phase === "ready", quoteSent);
   // The seller agent picks Q-1042 up as it lands, whether or not Alex has the Command Center open, and stays at it.
   useEffect(() => {
@@ -64,6 +64,10 @@ export function CommandCenter() {
     const id = window.setTimeout(() => setWorking("alexAgent", true), QUOTE_GAP);
     return () => clearTimeout(id);
   }, [quoteSent, setWorking]);
+  // Once v2 is out, it waits on the buyer: no longer at work.
+  useEffect(() => {
+    if (counterSent) setWorking("alexAgent", false);
+  }, [counterSent, setWorking]);
   useEffect(() => {
     if (phase !== "loading") return;
     const id = window.setTimeout(() => setPhase("ready"), LOAD);
@@ -86,7 +90,7 @@ export function CommandCenter() {
               {today && (
                 <div className="a2a-load-in">
                   <Section {...t.sections.today}>
-                    <ApprovalsCard request onOpen={openQuote} />
+                    <ApprovalsCard request countered={counterSent} onOpen={openQuote} />
                   </Section>
                 </div>
               )}

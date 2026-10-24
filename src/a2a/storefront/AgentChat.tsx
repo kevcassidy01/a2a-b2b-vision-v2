@@ -17,6 +17,7 @@ import {
   Square,
   X,
 } from "lucide-react";
+import { Rich } from "../Rich";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { copy } from "../../copy/copy";
@@ -250,10 +251,10 @@ function Thread({ t, words, muse, done }: { t: number; words: number; muse: numb
         <div className="mt-7">
           <AgentMark className="sf-rise size-7" />
           <Reasoning thinking={t < T.thought} words={words} muse={muse} />
-          {t >= T.thought && <AgentSays className="mt-3">{a.lead}</AgentSays>}
+          {t >= T.thought && <AgentSays className="mt-3"><Rich text={a.lead} /></AgentSays>}
           {t >= T.plan && <Plan done={done} />}
           {t >= T.done && <Result />}
-          {t >= T.done + 300 && <AgentSays className="mt-5">{a.reply}</AgentSays>}
+          {t >= T.done + 300 && <AgentSays className="mt-5"><Rich text={a.reply} /></AgentSays>}
           {t >= T.done + 600 && <Quote />}
           {t >= T.done + 900 && <AgentMark className="sf-rise mt-5 size-7" />}
         </div>
@@ -392,7 +393,7 @@ function Plan({ done }: { done: number }) {
                   >
                     {state === "done" ? s.done : s.doing}
                   </p>
-                  {state !== "pending" && <p className="mt-0.5 text-[13.5px] leading-snug text-text-muted">{s.detail}</p>}
+                  {state !== "pending" && <p className="mt-0.5 text-[13.5px] leading-snug text-text-muted"><Rich text={s.detail} /></p>}
                   {state === "done" && (
                     <StepSource kind={s.kind} source={s.source} />
                   )}

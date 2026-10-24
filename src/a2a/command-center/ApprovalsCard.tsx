@@ -11,18 +11,23 @@ const t = copy.a2a.commandCenter.approvals;
  * saying nothing's waiting, fading down into the card. Once John's agent sends
  * Q-1042 it lists that: who it's from, what's asked, and who it's assigned to
  * (the seller agent, as an avatar pill). Clicking it opens the agent's chat about it.
+ * Once the agent sends v2, the row shows v2 and the pill waits on Isar, without dots.
  */
 export function ApprovalsCard({
   request = false,
-  working = true,
+  countered = false,
   onOpen,
 }: {
   request?: boolean;
-  working?: boolean;
+  /** Whether the seller agent has sent v2: the row shows it, and the agent waits on the buyer (no dots). */
+  countered?: boolean;
   /** Opens the request in the agent's drawer. */
   onOpen?: () => void;
 }) {
   const r = t.request;
+  const c = r.countered;
+  const id = countered ? c.id : r.id;
+  const meta = countered ? c.meta : r.meta;
   return (
     <section className="a2a-card flex flex-col gap-4 rounded-xl p-5">
       <div className="flex items-start gap-4">
@@ -37,7 +42,7 @@ export function ApprovalsCard({
         <button
           type="button"
           onClick={onOpen}
-          aria-label={`${r.open} ${r.id}`}
+          aria-label={`${r.open} ${id}`}
           className="a2a-load-in flex w-full items-center gap-3.5 rounded-lg px-3.5 py-3 text-left shadow-[0_0_0_1px_rgb(0_0_0/0.07)] transition-[background-color,box-shadow] hover:bg-[#f7f7f8] hover:shadow-[0_0_0_1px_rgb(0_0_0/0.14)] active:bg-[#f0f0f2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
         >
           <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#f3f3f5]">
@@ -45,14 +50,17 @@ export function ApprovalsCard({
           </span>
           <div className="mr-auto min-w-0">
             <p className="truncate text-[13.5px] font-semibold text-text">
-              {r.id}{" "}
+              <span key={id} className="a2a-load-in inline-block">
+                {id}
+              </span>{" "}
               <Fetched at={META_AT[0]} className="font-normal text-text-muted">
                 · {r.from}
               </Fetched>
             </p>
             <p className="truncate text-[12.5px] text-text-muted">
-              {r.meta.map((m, i) => (
-                <Fetched key={m} at={META_AT[i + 1]}>
+              {/* v2's figures come in quickly, one after another, in place of v1's. */}
+              {meta.map((m, i) => (
+                <Fetched key={m} at={countered ? i * 120 : META_AT[i + 1]}>
                   {i > 0 && " · "}
                   {m}
                 </Fetched>
@@ -60,7 +68,7 @@ export function ApprovalsCard({
             </p>
           </div>
           {/* A beat after the request lands, the seller agent picks it up, then the details come in. */}
-          <AgentPill name={r.agent} working={working} workingLabel={r.working} />
+          <AgentPill name={countered ? c.agent : r.agent} working={!countered} workingLabel={r.working} />
           <span className="w-16 shrink-0 text-right text-[12.5px] text-text-muted">{r.time}</span>
         </button>
       ) : (

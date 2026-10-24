@@ -15,7 +15,7 @@ const TILES: { src: string; x: number; y: number; size: number; tilt: number }[]
   { src: agentforce, x: 77, y: 17, size: 62, tilt: 7 },
   { src: "/connectors/asana.svg", x: 94, y: 40, size: 48, tilt: -9 },
   { src: "/connectors/notion.svg", x: 86, y: 52, size: 58, tilt: 6 },
-  { src: "/connectors/gong.png", x: 91, y: 85, size: 46, tilt: -4 },
+  { src: "/connectors/momentum.png", x: 91, y: 85, size: 46, tilt: -4 },
   { src: "/connectors/google-calendar.svg", x: 64, y: 80, size: 54, tilt: -8 },
 ];
 

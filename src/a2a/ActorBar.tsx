@@ -24,6 +24,7 @@ export function ActorBar({ active }: { active: ReadonlySet<Actor> }) {
           <div
             key={a}
             className="a2a-actor flex items-center justify-center gap-2 text-[13px] font-medium"
+            data-actor={a}
             data-on={on || undefined}
           >
             <span aria-hidden className="a2a-actor-dot size-1.5 rounded-full" />

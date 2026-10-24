@@ -35,14 +35,14 @@ export function KnowledgeCard({
       className={`overflow-hidden rounded-xl bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.09),0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-12px_rgb(0_0_0/0.12)] ${className}`}
     >
       {title && (
-        <header className="flex items-start gap-3 px-4 pb-3 pt-4">
+        <header className="flex items-start gap-3.5 px-5 pb-4 pt-5">
           {Icon && (
-            <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#f3f3f5]">
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#f3f3f5]">
               <Icon className="size-4 text-text" strokeWidth={1.75} />
             </span>
           )}
           <div className="mr-auto min-w-0">
-            <h4 className="flex items-center gap-2 text-[14px] font-semibold leading-snug text-text">
+            <h4 className="flex items-center gap-2 text-[15px] font-semibold leading-snug text-text">
               {title}
               {id && (
                 <span className="rounded-md bg-[#f3f3f5] px-1.5 py-px font-mono text-[11px] font-medium tracking-[0.02em] text-text-muted">
@@ -50,14 +50,14 @@ export function KnowledgeCard({
                 </span>
               )}
             </h4>
-            {subtitle && <p className="truncate text-[12.5px] text-text-muted">{subtitle}</p>}
+            {subtitle && <p className="mt-1 truncate text-[13px] text-text-muted">{subtitle}</p>}
           </div>
           {status}
         </header>
       )}
-      <div className="px-4 pb-4">{children}</div>
+      <div className="px-5 pb-5">{children}</div>
       {footer && (
-        <footer className="flex items-center gap-3 border-t border-black/[0.06] bg-[#fafafb] px-4 py-2.5">{footer}</footer>
+        <footer className="flex items-center gap-3 border-t border-black/[0.06] bg-[#fafafb] px-5 py-3">{footer}</footer>
       )}
     </article>
   );
@@ -73,12 +73,12 @@ export function CardStatus({ color, children }: { color: string; children: React
   );
 }
 
-/** A quiet footer action: outlined, 8px corners. */
+/** A quiet footer action: outlined, 6px corners like the Command Center's other buttons. */
 export function CardAction({ icon: Icon, children }: { icon?: LucideIcon; children: ReactNode }) {
   return (
     <button
       type="button"
-      className="flex h-7 shrink-0 items-center gap-1.5 rounded-lg bg-white px-2.5 text-[12.5px] font-medium text-text shadow-[0_0_0_1px_rgb(0_0_0/0.1)] transition-[background-color,box-shadow] hover:bg-[#f7f7f8] hover:shadow-[0_0_0_1px_rgb(0_0_0/0.16)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
+      className="flex h-7 shrink-0 items-center gap-1.5 rounded-md bg-white px-2.5 text-[12.5px] font-medium text-text shadow-[0_0_0_1px_rgb(0_0_0/0.1)] transition-[background-color,box-shadow] hover:bg-[#f7f7f8] hover:shadow-[0_0_0_1px_rgb(0_0_0/0.16)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
     >
       {children}
       {Icon && <Icon className="size-3.5 text-text-muted" strokeWidth={2} />}

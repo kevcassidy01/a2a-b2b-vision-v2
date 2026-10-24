@@ -5,14 +5,16 @@ export type AgentActor = "johnAgent" | "alexAgent";
 
 /**
  * What one side of the stage has done that the other side sees, and which
- * agents are at work (for the who's-acting bar). So far one beat: John's agent
- * has sent the quote request (Q-1042 v1) to Fizz. Both sides read it; the
- * phone's agent sets it once the quote is out. Each agent reports itself
- * working while it is.
+ * agents are at work (for the who's-acting bar). So far two beats: John's
+ * agent has sent the quote request (Q-1042 v1) to Fizz (the phone's agent sets
+ * it once the quote is out), and Fizz's agent has sent its counter-offer, v2
+ * (set from its chat). Each agent reports itself working while it is.
  */
 type Story = {
   quoteSent: boolean;
   sendQuote: () => void;
+  counterSent: boolean;
+  sendCounter: () => void;
   working: ReadonlySet<AgentActor>;
   setWorking: (agent: AgentActor, on: boolean) => void;
 };
@@ -20,12 +22,15 @@ type Story = {
 const StoryContext = createContext<Story>({
   quoteSent: false,
   sendQuote: () => {},
+  counterSent: false,
+  sendCounter: () => {},
   working: new Set(),
   setWorking: () => {},
 });
 
 export function StoryProvider({ children }: { children: ReactNode }) {
   const [quoteSent, setQuoteSent] = useState(false);
+  const [counterSent, setCounterSent] = useState(false);
   const [working, setWorkingSet] = useState<ReadonlySet<AgentActor>>(new Set());
   const setWorking = useCallback((agent: AgentActor, on: boolean) => {
     setWorkingSet((s) => {
@@ -37,9 +42,10 @@ export function StoryProvider({ children }: { children: ReactNode }) {
     });
   }, []);
   const sendQuote = useCallback(() => setQuoteSent(true), []);
+  const sendCounter = useCallback(() => setCounterSent(true), []);
   const story = useMemo(
-    () => ({ quoteSent, sendQuote, working, setWorking }),
-    [quoteSent, sendQuote, working, setWorking],
+    () => ({ quoteSent, sendQuote, counterSent, sendCounter, working, setWorking }),
+    [quoteSent, sendQuote, counterSent, sendCounter, working, setWorking],
   );
   return <StoryContext.Provider value={story}>{children}</StoryContext.Provider>;
 }
