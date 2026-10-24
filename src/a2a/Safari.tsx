@@ -8,28 +8,37 @@ const t = copy.a2a.phone.safari;
  * Safari — iOS 26 Safari's compact layout around the page on the phone, with
  * the OS in dark mode. The page scrolls full height, under a bottom bar of
  * dark Liquid Glass: Back on the
- * left, the address pill in the middle, More on the right. The first scroll
- * down shrinks the bar to a small capsule with just the domain; scrolling up,
- * reaching the end of the page, or tapping the capsule brings it back.
+ * left, the address pill in the middle, More on the right. A scroll either
+ * way shrinks the bar to a small capsule with just the domain; back at the
+ * top of the page, or tapping the capsule, brings it back.
  * While a page loads the bar comes back up, Reload turns to Stop and a blue
- * progress line runs along the foot of the address pill.
+ * progress line runs along the foot of the address pill. `overlay` is the
+ * page's own layers over it (a drawer, a sheet), still under the bar;
+ * `compact` keeps the bar down to its capsule while one is up. `float` is a
+ * page's floating button, bottom right, just above the bar: it rides down with
+ * the bar when it shrinks, and is told so by `data-collapsed`.
  */
 export function Safari({
   children,
   pageKey,
   loading = false,
   onBack,
+  overlay,
+  compact = false,
+  float,
 }: {
   children: ReactNode;
   /** Which page is showing; a new one starts at the top. */
   pageKey?: string;
   loading?: boolean;
   onBack?: () => void;
+  overlay?: ReactNode;
+  compact?: boolean;
+  float?: ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [progress, setProgress] = useState<"idle" | "run" | "done">("idle");
   const last = useRef(0);
-  const upRun = useRef(0);
 
   // A load brings the bar up and runs the line; when it ends the line
   // fills, then fades.
@@ -46,20 +55,16 @@ export function Safari({
 
   useEffect(() => {
     last.current = 0;
-    upRun.current = 0;
   }, [pageKey]);
 
-  // Any scroll down shrinks the bar; a short scroll back up (24px in total),
-  // the top of the page or its end brings it back.
+  // A scroll either way shrinks the bar; only the top of the page (or a tap
+  // on the capsule) brings it back.
   const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const y = el.scrollTop;
-    const dy = y - last.current;
+    const y = e.currentTarget.scrollTop;
+    const moved = y !== last.current;
     last.current = y;
-    upRun.current = dy < 0 ? upRun.current - dy : 0;
-    const atEnd = y + el.clientHeight >= el.scrollHeight - 2;
-    if (y <= 0 || atEnd || upRun.current > 24) setCollapsed(false);
-    else if (dy > 0) setCollapsed(true);
+    if (y <= 0) setCollapsed(false);
+    else if (moved) setCollapsed(true);
   };
 
   return (
@@ -69,10 +74,16 @@ export function Safari({
         {/* Room at the end, so the page's last lines clear the bar. */}
         <div className="h-24" aria-hidden />
       </div>
-      <div className="a2a-safari z-10" data-collapsed={collapsed || undefined}>
+      {float && (
+        <div className="a2a-safari-float" data-collapsed={collapsed || compact || undefined}>
+          {float}
+        </div>
+      )}
+      {overlay}
+      <div className="a2a-safari z-10" data-collapsed={collapsed || compact || undefined}>
         <GlassButton icon={ChevronLeft} label={t.back} side="left" onClick={onBack} />
         <div className="a2a-safari-address a2a-liquid-glass">
-          {collapsed && (
+          {collapsed && !compact && (
             <button
               type="button"
               aria-label={t.expand}

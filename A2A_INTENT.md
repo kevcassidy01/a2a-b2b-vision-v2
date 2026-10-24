@@ -48,7 +48,7 @@ The PDF's 7 steps, which our story walks through:
 | **John** | Procurement Director | **[Bottler]**, the buyer | Munich | Yes, the buyer side |
 | **Mike** | Procurement Manager | [Bottler] | Frankfurt | **No.** Only in what John sees: his notification, his cart lines and "Mike sees it" |
 | **Alex** | Sales Rep | **Fizz Drinks**, the seller ("Better Drinks. Brighter Tomorrow.") | New York | Yes, the seller side |
-| **Buyer agent** | John's agent | [Bottler] | | In John's sidebar |
+| **Buyer agent** | John's agent | [Bottler] | | In a sheet on John's phone |
 | **Seller agent** | Fizz's agent | Fizz Drinks | | In Alex's sidebar |
 
 - The bottler is still a placeholder, **"[Bottler]"**, until it's named (open question, §12).
@@ -67,12 +67,20 @@ sees each agent's move land on the other side.
 **Left: John on the storefront, on an iPhone.**
 - The latest iPhone's shell (check the current model before drawing it). Glass only where iOS has it: the
   phone's own shell and system menus, not the store.
+- **What the store sells (settled 2026-10-24):** concentrate, since the buyer is a bottler: Fizz cola flavours and
+  Pulp Orange and Lemonade by the unit (1 unit makes 1,000 L), then fountain syrups, cases only of new launches, and
+  packaging and marketing. Before login the agent pill reads "Ask agent" and opens Fizz's helpful agent (no login
+  wall); logged in, it's John's buyer agent ("New task").
 - **The store isn't the main thing.** The real storefront is built from LWR components that don't look
   great, so for the demo we recreate a big drinks brand's mobile site (PepsiCo or Coca-Cola style) under
   another name.
 - **The agent is the main thing.** John's agent can look more Salesforce, more futuristic and agentic, or
   like ChatGPT's mobile app (not unique, but not generic either). To be decided.
-- How the agent opens on a phone is still to be designed; the desktop wireframes show a docked right sidebar.
+- How the agent opens on a phone (settled 2026-10-24): no cart page or sidebar. **Assign to your agent** on Mike's
+  cart notice opens the agent as a bottom-sheet chat; it's also one tap away from a floating pill above Safari's bar (the
+  blue sparkle and "New task", shrinking to the sparkle when the bar shrinks) and a card at the top of the menu. Assign is a handoff (settled 2026-10-24): John types
+  nothing; the agent (**"Your agent"** on screen; "buyer agent" is only its role in these docs) reasons, shows a plan with its progress, and ends on Q-1042 v1. Its reasoning is a timeline of musings (what it reads from SAP, notices, wonders), one row at a time, folding to a chevron when done, and its plan steps name the systems they read or wrote; what it makes shows up as **knowledge cards** (see DESIGN_DECISIONS). Its chat follows shadcn
+  AI Elements' patterns, sized like Google's mobile AI; the prompt box is one field with Add and Send. See DESIGN_DECISIONS.
 
 **Right: Alex in the Fizz Command Center.**
 - A sales dashboard (accounts, orders, revenue by region, a **"Needs your approval"** panel).
@@ -85,12 +93,14 @@ sees each agent's move land on the other side.
   Claude's full-screen MCP display mode: centered, with its own width and side padding). Our AI app only gets
   part of the viewport, so we cut the side padding down, maybe to nothing, and the Command Center takes the
   whole width of the main content area.
-- The **seller agent** is a docked right chat sidebar (not floating).
+- **It opens on a welcome (added 2026-10-24):** "while you were away", not a login. App tiles and signal pills float around a headline and **Load Command Center**, which loads the dashboard (skeleton cards, a line sweeping along the bottom of the frame's bar). It follows the phone: on opening, the store loads as a skeleton under Safari's progress line, then the welcome's tiles and pills burst out.
+- **Today (added 2026-10-24):** once John's agent sends Q-1042 v1, a "Today" section opens above "Last 6 months", holding "Needs your approval" with the request, a short beat (0.6s) after the phone sends it. It shows who it's assigned to as a pill (the agent's avatar and "Agent responding"), with coloured typing dots while the agent works on it and none when it's idle.
+- The **seller agent** is a docked right chat sidebar (not floating). So far it has no chat, only what surrounds one (2026-10-24): a header, an empty state with its limits and suggestions, and a prompt box as wide as the chat column. Clicking Q-1042 (added 2026-10-24) opens it on a chat: Isar's agent's request, then the seller agent taking it in (reading, pulling up the account, checking the rules, weighing a counter), holding at "Weighing the options" until the next beat.
 - **Shells come first:** the iPhone and the AI app shell get designed before anything inside them.
 
 **Under both: the "who's acting" bar (added 2026-10-24).** A thin dark bar along the bottom of the stage,
 four equal parts: **John · John's agent · Alex's agent · Alex**. The acting part lights up; the rest stay
-dull. Each story step (§5) names who acts, and the bar follows. No status text.
+dull. Each story step (§5) names who acts, and the bar follows. No status text. Wired 2026-10-24: each agent lights while it works, and a person lights for a moment when their side is tapped.
 
 *Superseded the same day:* a toggle with three views (Storefront, Command Center, and Both as two agent chat
 feeds side by side).
@@ -102,11 +112,11 @@ People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (s
 
 | # | Buyer side (John) | Seller side (Alex) |
 |---|---|---|
-| 1 | John logs in. A notification: **"Mike started a cart."** | Alex goes about his day in the Command Center. |
+| 1 | John logs in. A moment later a notification arrives: **"Mike started a cart."** (the bell's dot, a ding, and Mike's cart card with Open cart and Assign). | Alex goes about his day in the Command Center. |
 | 2 | John opens the cart **"Oktoberfest stock-up"**. It holds Mike's **5,000 lemonade concentrate** (Frankfurt), added by Mike's agent. | |
-| 3 | John opens the agent sidebar: **"Oktoberfest is three weeks out. Top up our cart for Munich, then get Fizz's best price."** *(person 1 of 3)* | |
+| 3 | John taps **Assign to your agent** on Mike's cart. No prompt: the buyer agent works out that Mike's cart covers Frankfurt and Munich isn't stocked yet, and plans to top it up and get Fizz's best price. *(person 1 of 3)* | |
 | 4 | The agent reads the demand forecast (**Munich +40%**) and adds **10,000 orange concentrate** (Munich) to the **same cart**. Mike sees it. | |
-| 5 | The agent turns the cart into quote request **Q-1042 v1**: 15,000 units, asking **15%** off, **Net30**. | Q-1042 lands in **"Needs your approval"**, tagged **"Agent handling"**. |
+| 5 | The agent turns the cart into quote request **Q-1042 v1**: 15,000 units, asking **15%** off, **Net30**. | Q-1042 lands in **"Needs your approval"**, assigned to the **Fizz agent** (its avatar pill, dots while it works). |
 | 6 | | Alex clicks it. The seller agent's sidebar opens with its work already done. |
 | 7 | | The seller agent checks stock, account pricing and discount policy: **up to 12% at Net30**. |
 | 8 | Counter-offer **v2** arrives. | The seller agent sends **v2**: **12,000 orange + 7,500 lemonade at 12%** (more volume, lower discount). |
@@ -118,14 +128,32 @@ People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (s
 | 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows. |
 | 15 | The order is saved as the template **"Oktoberfest stock-up"** for next year. | |
 
-**A cross-sell step is coming (added 2026-10-23).** The story gets one more step that shows a cross-sell.
-It's display only: the buyer doesn't take it, so nothing about the order changes. Where it goes and what it
-shows are to come from Somnath; the step numbers above stay as they are until then.
+**The cross-sell: a bundle (settled 2026-10-24).** Upsell is the seller agent's v2 (more volume, lower
+discount). Cross-sell is a **bundled offer: +1,000 Ginger Ale concentrate, keeping 15% at Net30**. It brings in
+two parts of B2B commerce, bundles and cross-sell. Display only: nobody takes it and the order doesn't change.
+- **Ginger Ale is new.** It isn't sold on its own in the store, and appears only inside the bundle.
+- **The storefront gets a Bundles row.** The Ginger Ale bundle is one of the bundles in it.
+- **John's agent sees the bundle and weighs it**, then recommends Net15 to John. It shows this in its thinking.
+  Its reasons:
+  1. Ginger Ale isn't on Isar's approved product list, so taking it is outside the agent's limits (§7). A new
+     concentrate would also need quality sign-off first.
+  2. There's no demand plan for it in SAP IBP. 1,000 units is about 1 million litres of a drink Isar has never
+     sold, ordered just before Oktoberfest.
+  3. The money: the bundle adds about $3,570 of unplanned stock. Net15 means paying 15 days early, which costs
+     about $115 in cash (at 4% a year on $69,615).
+- **Alex's choices change (settled 2026-10-24):** "Send both: Net15 or the bundle" (recommended), "Net15 only",
+  or "Decline". Alex sends both, so the buyer gets v3a (15% · Net15) and v3b (the bundle). John's agent
+  recommends v3a, **and says why not each of the others** (why not the bundle, why not hold out at Net30), and John
+  approves v3a. People still step in 3 times; the final order stays 19,500 units · 15% · Net15. Prices are dummy
+  ($4.20 a unit).
 
-**John's prompt (step 3)** is the one trigger for the buyer agent. Each part sets up what follows:
-"three weeks out" sets the deadline, "our cart" means Mike's cart, "for Munich" leads to the orange line
-(step 4), and "Fizz's best price" leads to the quote and the negotiation (steps 5–9). The prompt stays
-simple: John doesn't mention the forecast; the agent reads it on its own.
+**Assign (step 3)** is the one trigger for the buyer agent (settled 2026-10-24, replacing John's typed
+prompt). Its reasoning sets up what follows: Mike's cart covers Frankfurt; Munich runs the same Oktoberfest
+weeks and has nothing ordered, which leads to the forecast and the orange line (step 4); one order and "Fizz's
+best price" lead to the quote and the negotiation (steps 5–9).
+
+*Superseded:* John's prompt, "Oktoberfest is three weeks out. Top up our cart for Munich, then get Fizz's best
+price."
 
 **Why the agents stop where they do:**
 - **Step 9 (no ask):** the buyer agent is inside John's spend and discount limits, so it doesn't bother him.
@@ -196,6 +224,11 @@ Wireframes are in Figma: <https://www.figma.com/design/lWnasgbunlULMbH2GTkdy6/Un
 The top is a swimlane user flow (frame `7:2`: Mike, John, buyer agent, seller agent, Alex across 9
 columns). Below it, 1440×900 frames, with NEW tags marking what each step adds.
 
+**v2 (added 2026-10-24), below everything above:** a new swimlane flow with the cross-sell (frame `36:3`) and
+split-screen wireframes **W1–W10** (phone + Command Center + who's-acting bar; W1 is `38:5`, W2–W10 are
+`39:4` … `39:765`). W7 shows Alex's three options, including the bundle (+1,000 Ginger Ale, keeps 15% at Net30),
+shown but not taken. The older frames below are kept as they were.
+
 **Buyer (John's storefront + agent sidebar)**
 
 | Frame | Node | Shows | Steps |
@@ -251,7 +284,7 @@ columns). Below it, 1440×900 frames, with NEW tags marking what each step adds.
 3. **Look:** start from the wireframe, or go straight to a styled storefront and Command Center?
 4. **The bottler's name** (and its logo).
 5. **Does Mike approve anything?** Currently no; John approves alone.
-6. **Real-feeling numbers:** unit prices, currency (€?), order total, and the dashboard's figures.
+6. **Real-feeling numbers:** unit prices, currency (settled 2026-10-24: US dollars on both sides), order total, and the dashboard's figures.
 7. ~~**Cowork frame**~~ Settled 2026-10-23: a generic AI chat app shell, not Cowork. Still open: its design
    (Somnath to design it with Claude).
 8. **Step 15:** does John save the template himself, or does the agent offer it?

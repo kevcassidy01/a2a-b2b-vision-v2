@@ -1,11 +1,11 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ACTORS, ActorBar, type Actor } from "./ActorBar";
 import { ArtifactFrame } from "./ArtifactFrame";
 import { CommandCenterShell } from "./CommandCenterShell";
 import { CommandCenter } from "./command-center/CommandCenter";
 import { IPhoneFrame } from "./IPhoneFrame";
 import { PartnerSite } from "./storefront/PartnerSite";
-import wallpaper from "../assets/a2a/wallpaper.jpg";
+import { StoryProvider, useStory } from "./story";
 import "./a2a.css";
 
 /**
@@ -16,12 +16,28 @@ import "./a2a.css";
  * floats on depth and shadow (Linear's scene).
  */
 export function A2AStage() {
-  const active = useActorHotkeys();
   return (
-    <div
-      className="a2a-stage a2a-scene flex h-screen w-screen flex-col gap-2.5 overflow-hidden py-2.5 pl-6 pr-2.5"
-      style={{ "--a2a-wallpaper": `url(${wallpaper})` } as CSSProperties}
-    >
+    <StoryProvider>
+      <Stage />
+    </StoryProvider>
+  );
+}
+
+/**
+ * The stage itself. The bar lights whoever's acting: an agent while it works
+ * (each reports itself), a person for a moment whenever their side is touched
+ * (John on the phone, Alex in the Command Center), and the demo hotkeys on top.
+ */
+function Stage() {
+  const hotkeys = useActorHotkeys();
+  const { working } = useStory();
+  const john = useTouched();
+  const alex = useTouched();
+  const active = new Set<Actor>([...hotkeys, ...working]);
+  if (john.on) active.add("john");
+  if (alex.on) active.add("alex");
+  return (
+    <div className="a2a-stage a2a-scene flex h-screen w-screen flex-col gap-2.5 overflow-hidden py-2.5 pl-6 pr-2.5">
       <div
         className="flex min-h-0 flex-1"
         style={{
@@ -30,22 +46,42 @@ export function A2AStage() {
           gap: "clamp(24px, calc(24px + (100vw - 1440px) * 0.06), 56px)",
         }}
       >
-        <IPhoneFrame>
-          <PartnerSite />
-        </IPhoneFrame>
-        <CommandCenterShell>
-          <ArtifactFrame>
-            <CommandCenter />
-          </ArtifactFrame>
-        </CommandCenterShell>
+        <div className="contents" onPointerDownCapture={john.touch}>
+          <IPhoneFrame>
+            <PartnerSite />
+          </IPhoneFrame>
+        </div>
+        <div className="contents" onPointerDownCapture={alex.touch}>
+          <CommandCenterShell>
+            <ArtifactFrame>
+              <CommandCenter />
+            </ArtifactFrame>
+          </CommandCenterShell>
+        </div>
       </div>
       <ActorBar active={active} />
     </div>
   );
 }
 
+/** How long a person stays lit after touching their side, in ms. */
+const TOUCH_HOLD = 1500;
+
+/** Whether a person has just touched their side: on at each tap, off TOUCH_HOLD after the last. */
+function useTouched() {
+  const [on, setOn] = useState(false);
+  const timer = useRef(0);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const touch = () => {
+    setOn(true);
+    clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setOn(false), TOUCH_HOLD);
+  };
+  return { on, touch };
+}
+
 /**
- * Demo hotkeys until the scripted story drives the bar: Ctrl+1–4 lights or
+ * Demo hotkeys, on top of what the story lights: Ctrl+1–4 lights or
  * dims John, John's agent, Alex's agent, Alex; Ctrl+0 dims all.
  */
 function useActorHotkeys() {

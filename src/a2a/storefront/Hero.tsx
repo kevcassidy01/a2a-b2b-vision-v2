@@ -1,14 +1,27 @@
 import { useRef, useState } from "react";
 import { copy } from "../../copy/copy";
-import { CanGroup, type Tone } from "./Can";
+import autumn from "../../assets/a2a/products/hero-autumn-cans.jpg";
+import credit from "../../assets/a2a/products/hero-credit-card.jpg";
+import lime from "../../assets/a2a/products/hero-lime-pouches.jpg";
+import { CanGroup, DrumGroup, type Tone } from "./Can";
 
 const t = copy.a2a.storefront.hero;
 
-/** Each slide's backdrop and cans. Visuals, not copy. */
-const LOOKS: { bg: string; ink: "light" | "dark"; tones: [Tone, Tone, Tone]; logsIn?: boolean }[] = [
-  { bg: "#e8112d", ink: "light", tones: ["zero", "fizz", "zero"], logsIn: true },
-  { bg: "#dff1cf", ink: "dark", tones: ["lime", "zero", "lime"] },
-  { bg: "#1d1d1f", ink: "light", tones: ["bubbl", "fizz", "zing"] },
+/** Each slide's look: its colour and Somnath's photo, shot on that colour
+ *  (`photo`, under the title), or filling the slide behind the words
+ *  (`backdrop`); or drawn cans or drums. Visuals, not copy. */
+const LOOKS: {
+  bg: string;
+  ink: "light" | "dark";
+  tones: [Tone, Tone, Tone];
+  drums?: boolean;
+  photo?: string;
+  backdrop?: string;
+  logsIn?: boolean;
+}[] = [
+  { bg: "#bed487", ink: "dark", tones: ["lime", "zero", "lime"], photo: lime },
+  { bg: "#1f2022", ink: "light", tones: ["bubbl", "fizz", "zing"], backdrop: credit },
+  { bg: "#e80c2d", ink: "light", tones: ["lime", "zero", "lime"], photo: autumn, logsIn: true },
 ];
 
 /**
@@ -44,25 +57,32 @@ export function Hero({ onLogIn }: { onLogIn: () => void }) {
           return (
             <article
               key={s.title}
-              className="relative flex h-[420px] w-[calc(100%-32px)] shrink-0 snap-start flex-col overflow-hidden rounded-[32px] p-6"
+              className="relative flex h-[480px] w-[calc(100%-32px)] shrink-0 snap-start flex-col overflow-hidden rounded-[32px] p-6"
               style={{ background: look.bg }}
             >
-              <p className={`text-[13px] font-semibold uppercase tracking-[0.06em] ${light ? "text-white/75" : "text-text-muted"}`}>
+              {look.backdrop && (
+                <img src={look.backdrop} alt="" className="absolute inset-0 size-full object-cover object-bottom" />
+              )}
+              <p className={`relative text-[13px] font-semibold uppercase tracking-[0.06em] ${light ? "text-white/75" : "text-text-muted"}`}>
                 {s.eyebrow}
               </p>
-              <h2 className={`sf-display mt-2 text-[36px] leading-[1.04] ${light ? "text-white" : "text-text"}`}>
+              <h2 className={`sf-display relative mt-2 text-[36px] leading-[1.04] ${light ? "text-white" : "text-text"}`}>
                 {s.title}
               </h2>
-              <div className="sf-hero-glow mt-auto grid place-items-center pb-2">
-                <CanGroup tones={look.tones} size={150} />
-              </div>
+              {look.backdrop ? null : look.photo ? (
+                <img src={look.photo} alt="" className="mt-3 min-h-0 w-full flex-1 object-contain" />
+              ) : (
+                <div className="sf-hero-glow mt-auto grid place-items-center pb-2">
+                  {look.drums ? <DrumGroup tones={look.tones} size={150} /> : <CanGroup tones={look.tones} size={150} />}
+                </div>
+              )}
               <a
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   if (look.logsIn) onLogIn();
                 }}
-                className={`sf-pill mt-5 self-start ${light ? "sf-pill-light" : "sf-pill-dark"}`}
+                className={`sf-pill relative self-start ${look.backdrop ? "mt-auto" : "mt-5"} ${light ? "sf-pill-light" : "sf-pill-dark"}`}
               >
                 {s.cta}
               </a>

@@ -104,7 +104,13 @@
   position: absolute;
   left: 4%;
   right: 4%;
-  background: linear-gradient(90deg, #8e8e93, #f2f2f4 40%, #c7c7cc 60%, #8e8e93);
+  background: linear-gradient(
+    90deg,
+    #8e8e93,
+    #f2f2f4 40%,
+    #c7c7cc 60%,
+    #8e8e93
+  );
 }
 .sf-can::before {
   top: 0;
@@ -125,13 +131,309 @@
   line-height: 1;
 }
 
-/* Soft light behind the cans on a slide, and the product and feature backdrops. */
+/* A drawn concentrate drum: the can's cylinder sheen over the brand colour,
+   two darker rolling hoops, a metal lid on top, and a white label. */
+.sf-drum {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 12% / 5%;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.3),
+      rgb(0 0 0 / 0) 20%,
+      rgb(255 255 255 / 0.3) 36%,
+      rgb(255 255 255 / 0) 50%,
+      rgb(0 0 0 / 0) 72%,
+      rgb(0 0 0 / 0.32)
+    ),
+    linear-gradient(
+      transparent 24%,
+      rgb(0 0 0 / 0.22) 24%,
+      rgb(0 0 0 / 0.22) 26.5%,
+      rgb(255 255 255 / 0.28) 26.5%,
+      rgb(255 255 255 / 0.28) 27.5%,
+      transparent 27.5%,
+      transparent 74%,
+      rgb(0 0 0 / 0.22) 74%,
+      rgb(0 0 0 / 0.22) 76.5%,
+      rgb(255 255 255 / 0.28) 76.5%,
+      rgb(255 255 255 / 0.28) 77.5%,
+      transparent 77.5%
+    ),
+    var(--can);
+  box-shadow: 0 12px 24px -10px rgb(0 0 0 / 0.45);
+}
+.sf-drum::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 2%;
+  right: 2%;
+  height: 5%;
+  border-radius: 40% 40% 12% 12% / 80% 80% 20% 20%;
+  background: linear-gradient(
+    90deg,
+    #8e8e93,
+    #f2f2f4 40%,
+    #c7c7cc 60%,
+    #8e8e93
+  );
+}
+.sf-drum-label {
+  display: flex;
+  width: 74%;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25em;
+  border-radius: 0.4em;
+  background: #fff;
+  padding: 0.55em 0 0.5em;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
+}
+.sf-drum-kind {
+  font-size: 0.36em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1d1d1f;
+}
+
+/* Soft light behind the cans on a slide, and the product backdrop. */
 .sf-hero-glow {
-  background: radial-gradient(50% 45% at 50% 60%, rgb(255 255 255 / 0.22), transparent 70%);
+  background: radial-gradient(
+    50% 45% at 50% 60%,
+    rgb(255 255 255 / 0.22),
+    transparent 70%
+  );
 }
 .sf-product-shot {
   background: radial-gradient(70% 60% at 50% 55%, #fff, #f4f4f4);
 }
-.sf-feature-shot {
-  background: radial-gradient(80% 70% at 50% 40%, #ff4d5e, var(--fizz-red) 70%);
+
+/* The menu drawer and the agent sheet: always mounted, hidden once they've
+   gone. In on iOS's spring-like ease, out quicker on an ease-in, the scrim
+   fading with them. The drawer's groups follow it in, a beat apart. */
+.sf-drawer,
+.sf-sheet {
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  visibility: hidden;
+  transition: visibility 0s linear 320ms;
+}
+.sf-drawer[data-open],
+.sf-sheet[data-open] {
+  visibility: visible;
+  transition-delay: 0s;
+}
+.sf-scrim {
+  background: rgb(0 0 0 / 0.38);
+  opacity: 0;
+  transition: opacity 280ms ease-out;
+}
+[data-open] > .sf-scrim {
+  opacity: 1;
+  transition-duration: 420ms;
+}
+.sf-drawer-panel {
+  transform: translateX(100%);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.8, 0.6);
+}
+.sf-drawer[data-open] .sf-drawer-panel {
+  transform: none;
+  box-shadow: -16px 0 48px rgb(0 0 0 / 0.16);
+  transition: transform 520ms var(--ease);
+}
+.sf-drawer-item {
+  opacity: 0;
+  transform: translateX(28px);
+  transition:
+    opacity 0s 320ms,
+    transform 0s 320ms;
+}
+.sf-drawer[data-open] .sf-drawer-item {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 320ms ease-out calc(90ms + var(--i, 0) * 40ms),
+    transform 560ms var(--ease) calc(60ms + var(--i, 0) * 40ms);
+}
+.sf-sheet-panel {
+  transform: translateY(100%);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.8, 0.6);
+}
+.sf-sheet[data-open] .sf-sheet-panel {
+  transform: none;
+  transition: transform 560ms var(--ease);
+}
+
+/* The agent's floating pill: Safari's dark Liquid Glass (a2a-liquid-glass),
+   tinted darker so it stands apart from the bar, 48px like its pills: the
+   sparkle and "New task". When the bar shrinks, the label folds away and it's
+   a sparkle in a circle. */
+.sf-fab.a2a-liquid-glass {
+  background: rgb(10 10 12 / 0.82);
+}
+.sf-fab {
+  display: flex;
+  height: 48px;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0 18px 0 8px;
+  transition: padding 380ms var(--fab-ease);
+  --fab-ease: cubic-bezier(0.32, 0.72, 0, 1);
+}
+.sf-fab-label {
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-left: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition:
+    max-width 380ms var(--fab-ease),
+    padding 380ms var(--fab-ease),
+    opacity 220ms ease-out;
+}
+[data-collapsed] .sf-fab {
+  padding: 0 8px;
+}
+[data-collapsed] .sf-fab-label {
+  max-width: 0;
+  padding-left: 0;
+  opacity: 0;
+}
+
+/* The agent's chat: new lines rise in; the step at work shimmers; the caret
+   blinks while John's prompt types in; the quote's dot pulses while it waits. */
+.sf-rise {
+  animation: sf-rise 380ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+@keyframes sf-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.sf-shimmer {
+  background: linear-gradient(90deg, #1d1d1f 35%, #b5b5bb 50%, #1d1d1f 65%) 0
+    0 / 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sf-shimmer 1.6s linear infinite;
+}
+@keyframes sf-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+.sf-caret {
+  animation: sf-caret 1s steps(1) infinite;
+}
+@keyframes sf-caret {
+  50% {
+    opacity: 0;
+  }
+}
+.sf-pulse {
+  animation: sf-pulse 1.6s ease-in-out infinite;
+}
+@keyframes sf-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-shimmer,
+  .sf-pulse {
+    animation: none;
+  }
+  .sf-shimmer {
+    background: none;
+    color: #1d1d1f;
+  }
+  .sf-rise {
+    animation-duration: 1ms;
+  }
+  .sf-fab,
+  .sf-fab-label,
+  .sf-drawer-panel,
+  .sf-sheet-panel,
+  .sf-drawer-item,
+  .sf-drawer[data-open] .sf-drawer-panel,
+  .sf-sheet[data-open] .sf-sheet-panel,
+  .sf-drawer[data-open] .sf-drawer-item {
+    transition: none;
+  }
+}
+
+/* Mike's cart notification. The card opens in, pushing the page down, then
+   rises into place; the bell swings and its dot pops. */
+.sf-arrive {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 520ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.sf-arrive[data-shown] {
+  grid-template-rows: 1fr;
+}
+.sf-arrive-card {
+  opacity: 0;
+  transform: translateY(-12px) scale(0.98);
+  transition:
+    opacity 320ms ease-out,
+    transform 560ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+[data-shown] .sf-arrive-card {
+  opacity: 1;
+  transform: none;
+  transition-delay: 120ms;
+}
+.sf-ring {
+  transform-origin: 50% 8%;
+  animation: sf-ring 900ms ease-in-out;
+}
+@keyframes sf-ring {
+  10%,
+  30%,
+  50% {
+    transform: rotate(14deg);
+  }
+  20%,
+  40%,
+  60% {
+    transform: rotate(-14deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+  0%,
+  100% {
+    transform: none;
+  }
+}
+.sf-pop {
+  animation: sf-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes sf-pop {
+  from {
+    transform: scale(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sf-arrive,
+  .sf-arrive-card {
+    transition: none;
+  }
+  .sf-ring,
+  .sf-pop {
+    animation: none;
+  }
 }

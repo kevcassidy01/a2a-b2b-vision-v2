@@ -6,16 +6,17 @@ import { Footer, Header } from "./parts";
 const t = copy.a2a.storefront;
 const l = t.login;
 
-/** How long after the page appears AutoFill fills it in, in ms. */
+/** How long after the page appears AutoFill fills it in, and how long logging in takes, in ms. */
 const AUTOFILL = 600;
+const SIGN_IN = 1200;
 
 /**
  * Login — Fizz Partners' login page. It appears empty, then iOS AutoFill puts
  * in John's saved email and password a moment later (the fields take Safari's
  * pale yellow AutoFill tint); tapping a field before then fills them too.
- * Then Log in turns to a spinner.
+ * Then Log in turns to a spinner, and a moment later John is logged in.
  */
-export function Login() {
+export function Login({ onSignedIn }: { onSignedIn: () => void }) {
   const [filled, setFilled] = useState(false);
   const [signingIn, setSigningIn] = useState(false);
   const fill = () => setFilled(true);
@@ -23,6 +24,11 @@ export function Login() {
     const id = window.setTimeout(fill, AUTOFILL);
     return () => clearTimeout(id);
   }, []);
+  useEffect(() => {
+    if (!signingIn) return;
+    const id = window.setTimeout(onSignedIn, SIGN_IN);
+    return () => clearTimeout(id);
+  }, [signingIn, onSignedIn]);
 
   return (
     <div className="sf-page isolate flex min-h-full flex-col">
