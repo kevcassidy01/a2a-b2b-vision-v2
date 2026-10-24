@@ -18,7 +18,10 @@
 }
 
 /* The scene: the dusk mountain photo, already dark, under a light wash that's a
-   little deeper in the middle where the chrome sits (Linear's dark stage). */
+   little deeper in the middle where the chrome sits (Linear's dark stage).
+   The photo is named here, in the stylesheet (Vite bundles it), not passed in
+   from the component, so no markup change can drop it; near-black under it
+   until it loads. */
 .a2a-scene {
   background:
     radial-gradient(
@@ -26,7 +29,7 @@
       rgb(8 9 10 / 0.4) 30%,
       rgb(8 9 10 / 0.15) 100%
     ),
-    var(--a2a-wallpaper) center / cover;
+    url("../assets/a2a/wallpaper.jpg") center / cover #0d0e10;
 }
 
 /* The shell's material, in two layers like the iPhone body:
@@ -139,6 +142,24 @@
   transform: none;
   visibility: visible;
   transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Behind the agent drawer: a translucent black glass over the dashboard, so the
+   focus is the chat. Fades with the drawer's slide. */
+.a2a-scrim {
+  background: rgb(10 10 14 / 0.32);
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
+  backdrop-filter: blur(6px) saturate(140%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 320ms ease,
+    visibility 0s linear 320ms;
+}
+.a2a-scrim[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 320ms ease;
 }
 
 /* Under the sticky header's hairline: a short white fade, so what scrolls up
@@ -473,6 +494,18 @@
 .a2a-safari > * {
   pointer-events: auto;
 }
+/* A page's floating button: bottom right, 12px above the bar, riding down
+   with it when it shrinks. Under the page's drawer and sheet. */
+.a2a-safari-float {
+  position: absolute;
+  right: 16px;
+  bottom: 86px;
+  z-index: 4;
+  transition: bottom 380ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.a2a-safari-float[data-collapsed] {
+  bottom: 62px;
+}
 .a2a-safari-side {
   position: absolute;
   bottom: 26px;
@@ -606,18 +639,25 @@
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
 }
 
-/* The bar under the stage: who is acting. Dark like the shell's glass, four
-   equal parts split by faint hairlines. Every part sits dull; the acting one
-   lights up: brighter label, a soft light from below, its dot glowing. */
+/* The bar under the stage: who is acting. Dark glass: the wallpaper shows
+   through, blurred, under a light smoky tint, with a faint light rim on top.
+   Four equal parts split by faint hairlines. Every part sits dull; the acting
+   one lights up: brighter label, a soft light from below, its dot glowing. */
 .a2a-actor-bar {
   border-radius: 10px;
   overflow: hidden;
-  -webkit-backdrop-filter: blur(40px) saturate(140%);
-  backdrop-filter: blur(40px) saturate(140%);
-  background: rgb(19 20 22 / 0.8);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  background: linear-gradient(
+    rgb(255 255 255 / 0.06),
+    rgb(255 255 255 / 0.02)
+  ),
+  rgb(19 20 22 / 0.35);
   box-shadow:
-    0 0 0 1px rgb(0 0 0 / 0.7),
-    0 8px 24px rgb(0 0 0 / 0.35);
+    inset 0 1px 0 rgb(255 255 255 / 0.1),
+    inset 0 0 0 1px rgb(255 255 255 / 0.05),
+    0 0 0 1px rgb(0 0 0 / 0.5),
+    0 8px 24px rgb(0 0 0 / 0.3);
 }
 .a2a-actor {
   color: rgb(255 255 255 / 0.32);
@@ -643,4 +683,181 @@
 .a2a-actor[data-on] .a2a-actor-dot {
   background: #fff;
   box-shadow: 0 0 8px rgb(255 255 255 / 0.8);
+}
+
+/* Orders by bill-to-country: pale land, white borders, blue bubbles by orders.
+   Hovering a bubble or its row dims the others (as the charts do elsewhere). */
+.a2a-map-land {
+  fill: #ebebee;
+  stroke: #fff;
+  stroke-width: 0.75;
+}
+.a2a-map-bubble circle {
+  fill: var(--blue-500);
+  fill-opacity: 0.8;
+  stroke: #fff;
+  transition: fill-opacity 150ms ease;
+}
+.a2a-map-bubble text {
+  font-weight: 500;
+  fill: var(--color-text);
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.a2a-map-bubble[data-dim] circle {
+  fill-opacity: 0.25;
+}
+.a2a-map-row {
+  border-radius: 6px;
+  transition: background-color 150ms ease;
+}
+.a2a-map-row[data-on] {
+  background: rgb(45 127 249 / 0.09);
+  box-shadow: inset 0 0 0 1px rgb(45 127 249 / 0.25);
+  border-bottom-color: transparent;
+}
+
+/* Monthly revenue bars: the brand blue; the month so far paler; the others
+   dim while one is hovered. */
+.a2a-bar {
+  background: var(--blue-500);
+  transition: opacity 120ms;
+}
+.a2a-bar[data-partial] {
+  background: rgb(45 127 249 / 0.4);
+}
+.a2a-bar[data-dim] {
+  opacity: 0.35;
+}
+
+/* Checkout funnel (a Sankey): the steps carrying on in the brand blue, the
+   carts that leave in grey, pending approval in yellow; flows lighter than their nodes; the rest dim while
+   one is hovered. */
+.a2a-flow {
+  fill: rgb(45 127 249 / 0.22);
+  transition: fill 120ms, opacity 120ms;
+}
+.a2a-flow:hover {
+  fill: rgb(45 127 249 / 0.34);
+}
+.a2a-flow[data-drop] {
+  fill: rgb(20 20 25 / 0.07);
+}
+.a2a-flow[data-drop]:hover {
+  fill: rgb(20 20 25 / 0.12);
+}
+.a2a-flow-node {
+  fill: var(--blue-500);
+  transition: opacity 120ms;
+}
+.a2a-flow-node[data-drop] {
+  fill: #b9b9c0;
+}
+/* Pending approval: waiting on someone, in yellow (the Activity badge's dot too). */
+.a2a-flow[data-waiting] {
+  fill: rgb(245 181 0 / 0.26);
+}
+.a2a-flow[data-waiting]:hover {
+  fill: rgb(245 181 0 / 0.4);
+}
+.a2a-flow-node[data-waiting] {
+  fill: #f5b500;
+}
+.a2a-flow[data-dim],
+.a2a-flow-node[data-dim] {
+  opacity: 0.4;
+}
+
+/* The Command Center's welcome (Alex has been away): 2.2s in, once the phone's
+   site has loaded, the tiles and pills burst out to their places from part-way
+   toward the centre, fading in as one motion; then they bob, slowly and out of
+   step. Then Load Command Center: a line sweeps along the bottom of the
+   artifact frame's bar, left to right, and fades, as the cards settle in. */
+.a2a-welcome {
+  container-type: size;
+}
+.a2a-burst {
+  animation: a2a-burst 900ms 2.2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+@keyframes a2a-burst {
+  from { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.6); }
+}
+.a2a-float {
+  animation: a2a-float 7s ease-in-out infinite;
+}
+@keyframes a2a-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.a2a-load-swipe {
+  background: linear-gradient(90deg, rgb(1 118 211 / 0), #0176d3 30%, #1b96ff);
+  border-radius: 0 3px 3px 0;
+  transform-origin: left;
+  animation: a2a-load-swipe 1500ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+@keyframes a2a-load-swipe {
+  0% { transform: scaleX(0); opacity: 1; }
+  75% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+.a2a-load-in {
+  animation: a2a-load-in 500ms cubic-bezier(0.2, 0, 0, 1) backwards;
+}
+@keyframes a2a-load-in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .a2a-burst, .a2a-float, .a2a-load-in, .a2a-bone { animation: none; }
+  .a2a-load-swipe { animation-timing-function: linear; }
+}
+
+/* Skeleton bones: pale grey with a soft light sweeping across, while the
+   phone's site or the Command Center loads. */
+.a2a-bone {
+  background: linear-gradient(90deg, #e6e6e9 0%, #f2f2f4 40%, #e6e6e9 80%) 0 0 / 300% 100%, #e6e6e9;
+  animation: a2a-bone 1.3s ease-in-out infinite;
+}
+@keyframes a2a-bone {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}
+
+/* A status dot that's live (the seller agent handling a request): a slow breath. */
+.a2a-pulse {
+  animation: a2a-pulse 1.6s ease-in-out infinite;
+}
+/* The seller agent's step at work shimmers (as the phone agent's does). */
+.a2a-shimmer {
+  background: linear-gradient(90deg, #1d1d1f 35%, #b5b5bb 50%, #1d1d1f 65%) 0 0 / 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: a2a-shimmer 1.6s linear infinite;
+}
+@keyframes a2a-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}
+/* Typing dots in an agent's pill (ApprovalsCard): the Agent button's bounce, staggered. */
+.a2a-typing-dot {
+  animation: a2a-agent-bounce 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.14s);
+}
+@keyframes a2a-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .a2a-pulse,
+  .a2a-typing-dot {
+    animation: none;
+  }
+  .a2a-shimmer {
+    animation: none;
+    background: none;
+    color: #1d1d1f;
+  }
 }

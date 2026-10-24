@@ -19,7 +19,7 @@ export const copy = {
   app: {
     /** Product name. Also the browser tab / document title. */
     name: "Claude XKit",
-    documentTitle: "Claudeforce",
+    documentTitle: "Agentic Commerce Vision",
   },
   /** Demo chrome that floats above both views (not part of either app). */
   demo: {
@@ -107,28 +107,284 @@ export const copy = {
       brand: "fizz",
       brandTag: "Partners",
       /** The names drawn on the cans. */
-      canLabels: { fizz: "fizz", zero: "zero", lime: "lime", bubbl: "bubbl", zing: "zing", pulp: "pulp", brew: "brew" },
+      canLabels: {
+        fizz: "fizz",
+        zero: "zero",
+        lime: "lime",
+        bubbl: "bubbl",
+        zing: "zing",
+        pulp: "pulp",
+        brew: "brew",
+        cherry: "fizz",
+        vanilla: "fizz",
+        lemon: "pulp",
+      },
+      /** On the drums' labels. */
+      concentrate: "Concentrate",
       home: "Fizz Partners home",
       logIn: "Log in",
+      /** The bell beside John's pill, and how it reads once Mike's cart notification is in. */
+      notifications: { label: "Notifications", unread: "Notifications, 1 new" },
+      /** Where Log in was, once John is logged in: his avatar and name. */
+      account: {
+        name: "John",
+        label: "Your account",
+        fullName: "John Müller",
+        role: "Procurement Director",
+        company: "Isar Bottling",
+      },
       menu: "Menu",
+      closeMenu: "Close menu",
+      /** John's buyer agent: the bottler's, not Fizz's (A2A_INTENT §3), opened
+       *  from the agent button in the header (logged in or not), the card atop
+       *  the menu, or Assign to your agent on Mike's cart. Assigning hands the
+       *  cart off: John types nothing. The agent works out what's needed (story
+       *  steps 3–5) and shows its thinking, its plan, the cart it built and
+       *  where it's left the quote. Plan steps have a running and a done form. */
+      agent: {
+        name: "Your agent",
+        owner: "Isar Bottling",
+        open: "Open your agent",
+        close: "Close your agent",
+        fab: "New task",
+        card: { title: "Your agent", status: "3 tasks in motion" },
+        working: "Working…",
+        intro: {
+          title: "What should I work on?",
+          body: "I buy for Isar Bottling, inside the spend limits and approval rules you set.",
+        },
+        suggestion: "Assign Oktoberfest stock-up",
+        /** Before login, no wall: Fizz's helpful agent for the store's questions.
+         *  Delegating tasks is for John's own buyer agent, once he's logged in. */
+        signedOut: {
+          name: "Fizz agent",
+          owner: "Fizz Partners",
+          fab: "Ask agent",
+          title: "How can I help?",
+          body: "Ask about our concentrates, syrups, delivery areas or opening a business account.",
+          suggestions: ["Which concentrates do you sell?", "Do you deliver to Munich?", "How do I open an account?"],
+          placeholder: "Ask anything",
+        },
+        handoff: { label: "You assigned this cart", time: "Just now" },
+        cart: { name: "Oktoberfest stock-up", meta: "1 line · 5,000 units · Shared with Mike" },
+        /** While it reasons, a timeline of what it's doing in its head, one row after another (no "Thinking"):
+         *  what it reads and fetches, what it notices, what it wonders. `kind` picks the icon. Folded, they stay in the timeline. */
+        mulling: "Working through the cart",
+        musings: [
+          { kind: "read", text: "Reading Mike's cart and who it's meant for" },
+          { kind: "fetch", text: "Pulling Isar's open orders from SAP S/4HANA" },
+          { kind: "notice", text: "Noticing Munich has nothing on order for Oktoberfest" },
+          { kind: "wonder", text: "Wondering if Mike's 5,000 was meant to cover both plants" },
+          { kind: "fetch", text: "Checking plant stock in SAP: Munich has 9 days of cover" },
+          { kind: "wonder", text: "Weighing one combined order against two smaller ones" },
+        ],
+        thought: (s: number) => `Mulled it over for ${s}s`,
+        reasoning:
+          "Mike started this cart for Frankfurt's Oktoberfest stock. Munich runs the same three weeks and nothing is ordered for it yet. Check Munich's forecast, add what it needs to this cart so it stays one order, then ask Fizz for its best price on the lot.",
+        lead: "Mike's cart covers Frankfurt for Oktoberfest, but Munich isn't stocked yet. I'll top it up for Munich and get Fizz's best price on the whole order.",
+        plan: {
+          title: "Stock up for Oktoberfest",
+          of: "of",
+          done: "done",
+          toggle: "Show or hide the plan",
+          /** Each step names the system it touched and how (`kind`: read, fetch or write), shown once it's done. */
+          steps: [
+            {
+              doing: "Reading Mike's cart",
+              done: "Read Mike's cart",
+              detail: "5,000 lemonade concentrate for Frankfurt",
+              kind: "read",
+              source: "Fizz Partners · cart",
+            },
+            {
+              doing: "Checking Munich's demand forecast",
+              done: "Checked Munich's demand forecast",
+              detail: "+40% over the Oktoberfest weeks",
+              kind: "fetch",
+              source: "SAP IBP · demand forecast",
+            },
+            {
+              doing: "Finding the right items for Munich",
+              done: "Found the right items for Munich",
+              detail: "Orange concentrate, Munich's best seller over Oktoberfest",
+              kind: "fetch",
+              source: "SAP S/4HANA · sales history",
+            },
+            {
+              doing: "Adding 10,000 orange concentrate",
+              done: "Added 10,000 orange concentrate",
+              detail: "To the same cart, for Munich. Mike can see it.",
+              kind: "write",
+              source: "Fizz Partners · cart",
+            },
+            {
+              doing: "Asking Fizz for a quote",
+              done: "Asked Fizz for a quote",
+              detail: "15,000 units · 15% off · Net30",
+              kind: "write",
+              source: "Fizz seller agent · quote request",
+            },
+          ],
+        },
+        result: {
+          name: "Oktoberfest stock-up",
+          meta: "2 lines · 15,000 units",
+          isNew: "New",
+          lines: [
+            { name: "Lemonade concentrate", qty: "5,000 units", site: "Frankfurt", by: "Mike's agent" },
+            { name: "Orange concentrate", qty: "10,000 units", site: "Munich", by: "Your agent", added: true },
+          ],
+        },
+        reply: "Fizz has our quote request. I'll negotiate within your limits and only come back to you if the terms change.",
+        quote: { id: "Q-1042 v1", status: "Waiting for Fizz to respond", meta: "15,000 units · asking 15% off · Net30" },
+        suggestions: ["What are my limits?", "Show the quote"],
+        placeholder: "Ask your agent",
+        add: "Add",
+        send: "Send",
+        stop: "Stop",
+      },
+      /** The menu, a drawer from the right. Logged in: John, his agent, a
+       *  search, what a B2B buyer comes back for, then Log out. `count` is a
+       *  badge. Logged out: the shop and the way in. */
+      nav: {
+        label: "Site menu",
+        search: "Search products or SKUs",
+        signedIn: [
+          {
+            title: "Buying",
+            items: [
+              { label: "Carts", icon: "cart", count: 2 },
+              { label: "Quick order", icon: "quick" },
+              { label: "Buy again", icon: "again" },
+              { label: "Order templates", icon: "template" },
+              { label: "Quotes", icon: "quote" },
+              { label: "Approvals", icon: "approval" },
+            ],
+          },
+          {
+            title: "Orders and billing",
+            items: [
+              { label: "Orders", icon: "order" },
+              { label: "Deliveries", icon: "delivery" },
+              { label: "Invoices and payments", icon: "invoice" },
+            ],
+          },
+          {
+            title: "Account",
+            items: [
+              { label: "Delivery sites", icon: "site", detail: "Munich, Frankfurt" },
+              { label: "Team and permissions", icon: "team" },
+              { label: "Agent and limits", icon: "agent" },
+            ],
+          },
+          {
+            title: "Help",
+            items: [
+              { label: "Support and cases", icon: "support" },
+              { label: "Your Fizz rep", icon: "rep", detail: "Alex Rivera" },
+            ],
+          },
+        ],
+        logOut: "Log out",
+        signedOut: [
+          {
+            title: "Shop",
+            items: [
+              { label: "Concentrates", icon: "concentrate" },
+              { label: "Fountain syrups", icon: "syrup" },
+              { label: "New launches", icon: "launch" },
+              { label: "Packaging and marketing", icon: "marketing" },
+              { label: "Brands", icon: "brand" },
+              { label: "Offers", icon: "offer" },
+            ],
+          },
+          {
+            title: "Help",
+            items: [
+              { label: "Delivery areas", icon: "delivery" },
+              { label: "Help centre", icon: "support" },
+              { label: "Contact sales", icon: "rep" },
+            ],
+          },
+        ],
+      },
+      /** The store's home once John is logged in (story step 1): Mike's cart
+       *  waiting for him, then what he buys with. Euro: John buys in Germany.
+       *  Prices are still to be set (A2A_INTENT §12), so none show. */
+      accountHome: {
+        greeting: "Good morning, John",
+        company: "Isar Bottling · 2 delivery sites",
+        notice: {
+          from: "Mike",
+          title: "Mike started a cart",
+          body: "Oktoberfest stock-up: 5,000 lemonade concentrate for Frankfurt.",
+          /** What the cart's worth, on a line of its own (dummy: $4.20 a unit). */
+          value: "$21,000",
+          valueLabel: "Cart value",
+          time: "now",
+          cta: "Open cart",
+          assign: "Assign to your agent",
+        },
+        quick: [
+          { label: "Quick order", icon: "quick" },
+          { label: "Buy again", icon: "again" },
+          { label: "Quotes", icon: "quote" },
+          { label: "Invoices", icon: "invoice" },
+        ],
+        carts: {
+          title: "Your carts",
+          all: "All carts",
+          items: [
+            { name: "Oktoberfest stock-up", meta: "Started by Mike today", lines: "1 line · 5,000 units", shared: "Shared" },
+            { name: "Weekly restock, Munich", meta: "Saved Oct 16", lines: "4 lines · 1,240 units" },
+          ],
+        },
+        account: {
+          title: "Your account",
+          credit: { label: "Credit available", value: "$84,200", of: "of $150,000", share: 0.56 },
+          rows: [
+            { label: "Payment terms", value: "Net30" },
+            { label: "Next delivery", value: "Tue, Oct 27 · Munich" },
+            { label: "Open quotes", value: "None" },
+          ],
+        },
+        buyAgain: {
+          title: "Buy again",
+          add: "Add",
+          items: [
+            { name: "Pulp Orange concentrate", pack: "1 unit makes 1,000 L", last: "Last ordered Sep 12" },
+            { name: "Pulp Lemonade concentrate", pack: "1 unit makes 1,000 L", last: "Last ordered Sep 12" },
+            { name: "Fizz cola syrup", pack: "20 L bag-in-box", last: "Last ordered Aug 28" },
+          ],
+        },
+        orders: {
+          title: "Recent orders",
+          all: "All orders",
+          items: [
+            { id: "O-5512", date: "Oct 14", total: "$21,860", status: "In transit" },
+            { id: "O-5498", date: "Sep 30", total: "$18,420", status: "Delivered" },
+            { id: "O-5476", date: "Sep 12", total: "$34,075", status: "Delivered" },
+          ],
+        },
+      },
       hero: {
         label: "Featured offers",
         slideOf: "Go to slide",
         slides: [
           {
-            eyebrow: "Summer stock-up",
-            title: "12% off when you order 50+ cases",
-            cta: "Log in to order",
-          },
-          {
             eyebrow: "New in",
-            title: "Fizz Zero Lime, now in trade packs",
+            title: "Fizz Zero Lime concentrate, now shipping",
             cta: "See the range",
           },
           {
-            eyebrow: "For business accounts",
-            title: "Net-30 terms on every order",
+            eyebrow: "Fizz trade credit",
+            title: "A credit line that grows with your orders",
             cta: "Apply now",
+          },
+          {
+            eyebrow: "Autumn stock-up",
+            title: "12% off concentrate orders over 10,000 units",
+            cta: "Log in to order",
           },
         ],
       },
@@ -143,22 +399,54 @@ export const copy = {
           { name: "Brew", kind: "Iced tea" },
         ],
       },
+      /** What a bottler buys from Fizz: concentrate first (it makes the drinks
+       *  itself), then fountain syrups, cases only of what it can't make yet, and
+       *  packaging and marketing. A unit of concentrate makes 1,000 L. */
       products: {
-        title: "Best sellers for outlets",
-        subtitle: "Trade packs, delivered from your nearest depot.",
+        title: "Concentrates",
+        subtitle: "Shipped in drums from Fizz's concentrate plant in Cork, Ireland.",
         priceGate: "Log in for trade pricing",
         view: "View",
         items: [
-          { name: "Fizz Original", pack: "24 × 330 ml cans", moq: "Min. 10 cases" },
-          { name: "Fizz Zero Lime", pack: "24 × 330 ml cans", moq: "Min. 10 cases" },
-          { name: "Bubbl Sparkling", pack: "12 × 500 ml bottles", moq: "Min. 20 cases" },
-          { name: "Zing Energy", pack: "24 × 250 ml cans", moq: "Min. 5 cases" },
+          { name: "Fizz Original", pack: "Cola · 1 unit makes 1,000 L", moq: "Min. 500 units" },
+          { name: "Fizz Zero", pack: "No sugar cola · 1 unit makes 1,000 L", moq: "Min. 500 units" },
+          { name: "Fizz Cherry", pack: "Cherry cola · 1 unit makes 1,000 L", moq: "Min. 250 units" },
+          { name: "Fizz Vanilla", pack: "Vanilla cola · 1 unit makes 1,000 L", moq: "Min. 250 units" },
+          { name: "Fizz Zero Lime", pack: "No sugar lime cola · new", moq: "Min. 250 units" },
+          { name: "Pulp Orange", pack: "Orange juice drink · 1 unit makes 1,000 L", moq: "Min. 500 units" },
+          { name: "Pulp Lemonade", pack: "Cloudy lemonade · 1 unit makes 1,000 L", moq: "Min. 500 units" },
+        ],
+      },
+      syrups: {
+        title: "Fountain syrups",
+        subtitle: "Bag-in-box, for the bars and restaurants you supply.",
+        items: [
+          { name: "Fizz cola syrup", pack: "20 L bag-in-box" },
+          { name: "Fizz Zero syrup", pack: "20 L bag-in-box" },
+          { name: "Pulp Lemonade syrup", pack: "10 L bag-in-box" },
+          { name: "Brew iced tea syrup", pack: "10 L bag-in-box" },
+        ],
+      },
+      launches: {
+        title: "New launches",
+        subtitle: "Made by Fizz and sold by the case, until your lines can make them.",
+        items: [
+          { name: "Zing Energy Mango", pack: "24 × 250 ml cans · Test market", moq: "Min. 20 cases" },
+          { name: "Brew Peach Iced Tea", pack: "12 × 500 ml bottles · Limited edition", moq: "Min. 20 cases" },
+        ],
+      },
+      marketing: {
+        title: "Packaging and marketing",
+        items: [
+          { name: "Oktoberfest cooler and display kit", detail: "For 50 outlets · Ships in 5 days", icon: "kit" },
+          { name: "Label and sleeve artwork", detail: "Approved files for every pack", icon: "artwork" },
+          { name: "Fizz closures, 38 mm", detail: "Cartons of 5,000", icon: "closure" },
         ],
       },
       feature: {
-        eyebrow: "Multi-outlet ordering",
-        title: "One account for every outlet",
-        body: "Order for all your stores at once, with a delivery slot and an invoice for each location.",
+        eyebrow: "Multi-plant ordering",
+        title: "One account for every plant",
+        body: "Order concentrate for all your plants at once, with a delivery slot and an invoice for each site.",
         link: "Learn more",
       },
       perks: {
@@ -166,7 +454,7 @@ export const copy = {
         items: [
           { title: "Volume pricing", body: "Tiered prices that drop as your order grows." },
           { title: "Net terms", body: "Pay in 30 days once your account is approved." },
-          { title: "Scheduled delivery", body: "Pick a weekly slot and we restock before you run out." },
+          { title: "Scheduled delivery", body: "Pick a slot for each plant and we ship before your lines run low." },
         ],
       },
       login: {
@@ -196,7 +484,25 @@ export const copy = {
     },
     /** Alex's Command Center: the MCP app's full-screen frame, then the app itself. */
     commandCenter: {
-      frame: { title: "B2B Command Center", share: "Share", close: "Close" },
+      frame: {
+        title: "B2B Command Center",
+        updated: "Data updated 20 minutes ago",
+        reload: "Reload",
+        share: "Share",
+        popOut: "Pop out",
+        more: "More",
+        close: "Close",
+      },
+      /** What Alex sees first: he's been away, and one tap loads the Command Center. */
+      welcome: {
+        eyebrow: "14 updates while you were away",
+        /** Two lines, broken here. */
+        title: ["Every store, every market,", "at your fingertips"],
+        body: "Orders, revenue and approvals from all your storefronts, pulled together from Salesforce, Slack and the tools your team already uses.",
+        cta: "Load Command Center",
+        /** Floating around the edges: what the Command Center tracks, each with its colour dot. */
+        signals: ["Orders", "Revenue", "Approvals", "Germany +18%", "Checkout", "Agent handling"],
+      },
       greeting: "Good morning, Alex",
       store: "Fizz Partners B2B",
       openStore: "Open store",
@@ -237,6 +543,11 @@ export const copy = {
       },
       /** Section headings, top to bottom. */
       sections: {
+        /** Shown once John's agent has sent its quote request: what's come in today, above the period. */
+        today: {
+          title: "Today",
+          subtitle: "Oct 23, 2026, so far. Days are counted in UTC+1.",
+        },
         last6Months: {
           title: "Last 6 months",
           subtitle:
@@ -261,13 +572,127 @@ export const copy = {
         },
         ask: "Ask about this",
         export: "Export CSV",
+        scope: "Orders: all stores",
+        description:
+          "Orders in the period, by the bill-to address on the order. The bill-to address stands in for ship-to, which the org does not record.",
+        zoomIn: "Zoom in",
+        zoomOut: "Zoom out",
+        reset: "Reset",
+        fullScreen: "Full screen",
+        byCountry: "By country",
+        /** Orders in the last 6 months; `none` have no bill-to country. With
+         *  them, the total is the Orders tile's 188. `at` is where the bubble
+         *  sits ([longitude, latitude]); `label` names it on the map. */
+        total: 188,
+        none: "4 orders have no bill-to country.",
+        countries: [
+          { name: "United States", code: "US", orders: 116, at: [-98, 39], label: true },
+          { name: "Canada", code: "CA", orders: 14, at: [-106, 58], label: true },
+          { name: "Brazil", code: "BR", orders: 11, at: [-52, -10], label: true },
+          { name: "Germany", code: "DE", orders: 8, at: [10.4, 51.2], label: true },
+          { name: "India", code: "IN", orders: 8, at: [79, 22], label: true },
+          { name: "Japan", code: "JP", orders: 6, at: [138.5, 36.5], label: true },
+          { name: "United Arab Emirates", code: "AE", orders: 6, at: [54, 24], label: false },
+          { name: "United Kingdom", code: "GB", orders: 4, at: [-2, 53], label: false },
+          { name: "Australia", code: "AU", orders: 3, at: [134, -25], label: false },
+          { name: "France", code: "FR", orders: 3, at: [2.5, 46.5], label: false },
+          { name: "Mexico", code: "MX", orders: 3, at: [-102, 23.5], label: false },
+          { name: "Netherlands", code: "NL", orders: 2, at: [5.3, 52.2], label: false },
+        ],
+      },
+      monthlyRevenue: {
+        title: "Monthly revenue (USD), last 24 months",
+        scope: "Orders: all stores",
+        ask: "Ask about this",
+        export: "Export CSV",
+        description: "Sum of order totals by order month; the last bar is month to date.",
+        monthToDate: "month to date",
+        /** Revenue by order month, oldest first, in thousands of USD; the last
+         *  is October 2026 so far. Every third month is labelled on the axis. */
+        months: [
+          { label: "Nov 24", k: 40 }, { label: "Dec 24", k: 56 }, { label: "Jan 25", k: 44 },
+          { label: "Feb 25", k: 19 }, { label: "Mar 25", k: 38 }, { label: "Apr 25", k: 45 },
+          { label: "May 25", k: 44 }, { label: "Jun 25", k: 59 }, { label: "Jul 25", k: 43 },
+          { label: "Aug 25", k: 82 }, { label: "Sep 25", k: 36 }, { label: "Oct 25", k: 84 },
+          { label: "Nov 25", k: 38 }, { label: "Dec 25", k: 67 }, { label: "Jan 26", k: 41 },
+          { label: "Feb 26", k: 46 }, { label: "Mar 26", k: 61 }, { label: "Apr 26", k: 73 },
+          { label: "May 26", k: 76 }, { label: "Jun 26", k: 31 }, { label: "Jul 26", k: 62 },
+          { label: "Aug 26", k: 63 }, { label: "Sep 26", k: 37 }, { label: "Oct 26", k: 332 },
+        ],
+      },
+      checkoutFunnel: {
+        title: "Checkout funnel",
+        ask: "Ask about this",
+        export: "Export CSV",
+        description:
+          "Carts created in the period, followed to checkout and an order. Each share is of the step before; pending and activated split the orders placed by their CRM status.",
+        /** The steps, each with the step it comes `from` and what its share is
+         *  `of`. `drop` marks where carts leave the funnel; `waiting`, orders waiting on
+         *  someone (yellow). Checkout started to
+         *  Order placed (20 of 36) is the Checkout success tile's 55.6%. */
+        nodes: [
+          { id: "carts", label: "Carts created", n: 109 },
+          { id: "checkout", label: "Checkout started", n: 36, from: "carts", of: "of carts created" },
+          { id: "noCheckout", label: "No checkout", n: 73, from: "carts", of: "of carts created", drop: true },
+          { id: "ordered", label: "Order placed", n: 20, from: "checkout", of: "of checkouts" },
+          { id: "noOrder", label: "No order", n: 16, from: "checkout", of: "of checkouts", drop: true },
+          { id: "pending", label: "Pending approval", n: 6, from: "ordered", of: "of orders placed", waiting: true },
+          { id: "activated", label: "Activated", n: 14, from: "ordered", of: "of orders placed" },
+        ],
+      },
+      activity: {
+        title: "Activity",
+        scope: "Orders: all stores",
+        ask: "Ask about this",
+        export: "Export CSV",
+        description:
+          "The newest orders in the period. J and K move through the list and Enter opens the row; quotes and cases open their account.",
+        kind: { label: "Activity", options: ["Orders", "Carts", "Quotes", "Cases"] },
+        columns: { date: "Date", order: "Order", account: "Account", status: "Status", total: "Total" },
+        /** The Orders tile's 188, of which the newest 12 show. All in 2026, so dates drop the year. */
+        total: 188,
+        /** "12 of 188" under the table. */
+        of: "of",
+        showAll: "Show all",
+        /** `tone` colours the status's dot: done, in progress, waiting on someone, not started. */
+        statuses: {
+          activated: { label: "Activated", tone: "success" },
+          created: { label: "Created", tone: "info" },
+          pending: { label: "Pending approval", tone: "warning" },
+          draft: { label: "Draft", tone: "neutral" },
+        },
+        rows: [
+          { date: "Oct 22, 11:01", order: "00001882", store: "Fizz Partners", account: "Boston Barista Co.", status: "activated", total: "$10,125" },
+          { date: "Oct 22, 09:47", order: "00001881", store: "Fizz Partners", account: "Isar Getränke GmbH", status: "pending", total: "$24,600" },
+          { date: "Oct 21, 16:12", order: "00001880", store: "Alpine B2B", account: "Alpenhof Hotels", status: "created", total: "$1,500" },
+          { date: "Oct 21, 08:30", order: "00001879", store: "Fizz Partners", account: "Lakeshore Grocers", status: "activated", total: "$3,840" },
+          { date: "Oct 20, 20:39", order: "00001878", store: "Fizz Partners", account: "Maple Leaf Vending", status: "activated", total: "$2,105" },
+          { date: "Oct 20, 14:05", order: "00001877", store: "Alpine B2B", account: "Rheinland Bottling", status: "pending", total: "$18,250" },
+          { date: "Oct 19, 19:36", order: "00001876", store: "Fizz Partners", account: "Harbor Café Group", status: "activated", total: "$500" },
+          { date: "Oct 19, 05:30", order: "00001875", store: "Fizz Partners", account: "São Paulo Bebidas", status: "created", total: "$6,720" },
+          { date: "Oct 18, 19:04", order: "00001874", store: "Alpine B2B", account: "Tokyo Kissa Co.", status: "activated", total: "$304" },
+          { date: "Oct 18, 18:29", order: "00001873", store: "Fizz Partners", account: "Northwind Foodservice", status: "pending", total: "$9,410" },
+          { date: "Oct 14, 06:10", order: "00001872", store: "Fizz Partners", account: "Prairie Wind Markets", status: "activated", total: "$1,290" },
+          { date: "Oct 12, 03:26", order: "00001871", store: "Alpine B2B", account: "Midwest Campus Dining", status: "draft", total: "$52,009" },
+        ],
       },
       approvals: {
         title: "Needs your approval",
-        count: 0,
-        autoApproval: "Auto-approval",
         checked: "Checked Oct 23, 2026, 10:11; it checks every 15 s while this page is open.",
         empty: "No storefront quote requests are waiting.",
+        /** The quote request from John's agent, once it's sent: the seller agent has already picked it up. */
+        request: {
+          id: "Q-1042 v1",
+          from: "Isar Bottling",
+          /** Read in one at a time by the seller agent. */
+          meta: ["15,000 units", "asking 15% off", "Net30"],
+          /** Who it's assigned to, as an avatar pill; dots bounce while the agent works on it. */
+          agent: "Agent responding",
+          /** Read out before the id: the row opens the request in the agent's drawer. */
+          open: "Open",
+          working: "working on it",
+          time: "Just now",
+        },
       },
       /** The last 6 months at a glance. `delta` is the rise on the prior 6
        *  months; `compare` names that prior figure. */
@@ -288,8 +713,71 @@ export const copy = {
       /** The seller agent. Its status is read out to screen readers; the dots show it visually. */
       agent: {
         label: "Agent",
-        /** The drawer the Agent button opens (no content yet). */
+        /** The drawer the Agent button opens: no chat yet, just what's around it. */
         close: "Close Agent",
+        status: "Fizz's seller agent",
+        newChat: "New chat",
+        history: "Chat history",
+        more: "More",
+        /** The chat about Q-1042, once Alex opens the request: what came in, then the agent taking it in. It doesn't conclude yet. */
+        quote: {
+          from: "Isar Bottling's agent",
+          time: "Just now",
+          request: {
+            title: "Quote request",
+            id: "Q-1042 · v1",
+            from: "Isar Bottling · Oktoberfest stock-up",
+            status: "New",
+            /** Column heads for the lines. Prices are dummy, $4.20 a unit at list. */
+            columns: { name: "Product", site: "Site", qty: "Units", amount: "At list" },
+            lines: [
+              { name: "Orange concentrate", site: "Munich", qty: "10,000", amount: "$42,000" },
+              { name: "Lemonade concentrate", site: "Frankfurt", qty: "5,000", amount: "$21,000" },
+            ],
+            /** What they ask, as facts: the discount, the terms, and what it comes to. */
+            terms: [
+              { label: "Discount asked", value: "15%" },
+              { label: "Payment terms", value: "Net30" },
+              { label: "Total at ask", value: "$53,550", note: "$63,000 at list" },
+            ],
+            via: "Received over A2A · signed by Isar Bottling",
+            open: "Open in Salesforce",
+          },
+          /** One at a time; `label` heads the timeline while that musing is the one at work. Varied on purpose: not "thinking" throughout. */
+          musings: [
+            { kind: "read", label: "Reading the request", text: "15,000 units across two sites, Munich and Frankfurt" },
+            { kind: "read", label: "Reading the request", text: "They're asking for 15% off at Net30, ahead of Oktoberfest" },
+            { kind: "fetch", label: "Pulling up the account", text: "Looking up Isar Bottling's account and price book in Salesforce" },
+            { kind: "notice", label: "Pulling up the account", text: "A steady account: 3 orders this year, all paid on time" },
+            { kind: "fetch", label: "Checking our rules", text: "Checking the discount policy for this account" },
+            { kind: "notice", label: "Checking our rules", text: "Policy allows up to 12% at Net30, so 15% is over the line" },
+            { kind: "wonder", label: "Weighing it up", text: "Munich's demand is up for Oktoberfest. Could they take more volume?" },
+            { kind: "wonder", label: "Considering a counter", text: "A bigger order at a smaller discount might work for both sides" },
+          ],
+          /** Where it stays once it's run through them, still at work. */
+          hold: "Weighing the options",
+        },
+        empty: {
+          title: "Ready when you are, Alex",
+          body: "Hand me a task, from a quote to a report, and I'll take it from there. Anything that needs your call comes back to you.",
+          suggestionsLabel: "Suggestions",
+          suggestions: [
+            "What's waiting on me today?",
+            "Summarise this week's orders in Germany",
+            "Which accounts are near their credit limit?",
+            "Show the quotes you're handling",
+          ],
+        },
+        composer: {
+          placeholder: "Ask anything, or type @ to add an account or quote",
+          context: "Fizz Partners B2B · Last 6 months",
+          removeContext: "Remove context",
+          add: "Add files or records",
+          mention: "Mention an account or quote",
+          dictate: "Dictate",
+          send: "Send",
+          note: "Your agent can make mistakes. Check quotes and terms before they go out.",
+        },
         working: "Agent is working",
         done: "Agent has finished",
         asking: (n: number) =>

@@ -6,6 +6,117 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-24 A2A: knowledge cards, and what an agent chat is made of
+
+**Decision: a knowledge card is a card the AI generates as a response.**
+- **Structure:**
+  - an optional **header**;
+  - a **body** that can hold many kinds of content, laid out with clear hierarchy, colour and structure;
+  - a **footer with actions**.
+- **What it shows:** information, or **something the agent did**: it created a quote, built a cart, filled in a form.
+- **Why it matters:** if a person does that work by hand, the result lives on its own page (the cart page, the quote page). When the agent does it in the chat, the result shows up as a knowledge card.
+
+**Decision: an agent chat combines, as the situation needs:**
+- tool calls;
+- data fetches;
+- reads;
+- writes;
+- knowledge cards;
+- plain text, where the AI is talking to us.
+
+Use each where it's relevant. Don't force every kind into every scenario.
+
+**Decision: the reasoning is transparent and specific, and never says "Thinking".**
+- **A timeline, not a list (revised the same day):** a header row ("Working through the cart", shimmering, with a pulsing dot), then one row per musing, each with its icon, joined to the next by a vertical line and arriving one at a time: what it reads or fetches (naming the system, e.g. SAP S/4HANA or SAP IBP), what it notices, what it wonders. The reasoning paragraph, small and quiet, is the last row.
+- **Folding:** once it's done, the timeline folds to a chevron and "Mulled it over for Ns"; a tap opens it to see what the agent did.
+- **Pacing:** fetches from a system hold longer (1.6s) than other musings (0.8s), so the demo shows the agent going out and waiting.
+- **Separate timelines:** each burst of activity is its own timeline, between the agent's text and cards, not one timeline for the whole turn. On the phone the reasoning and the Plan are two.
+- **No name:** the agent's turn starts with its avatar alone, not "Your agent".
+- *Superseded:* the label being the current musing, with the musings so far listed under it.
+- **Plan steps:** each step names the system it touched and whether it read, fetched or wrote.
+
+**Rationale:** Somnath. B2B work runs through ERP and planning systems. Showing what the agent interprets and wonders, not just what it does, is the transparency the story needs.
+
+### 2026-10-24 A2A: the Command Center's knowledge cards
+
+**Decision:** In Alex's chat, knowledge cards are white and outlined, with three parts, as Copilot's and other agents' result cards are. They differ from the phone's cards on purpose.
+- **Header:** an icon tile; the title with the object's id as a mono chip; a subtitle (who it's for); a status chip at the right.
+- **Body:** what the object needs. For a quote: its lines as a table, then the terms as a strip of facts.
+- **Footer:** on a faint grey. Where it came from on the left (e.g. received over A2A, signed). Quiet outlined actions on the right.
+- **Another agent's turn:** the card is on the right, with that agent's mark and name above it and the time, small, under it.
+
+The component is `KnowledgeCard` in `src/a2a/command-center/`.
+**Rationale:** Somnath asked for well-designed white cards with a header, body and footer, drawing on Copilot and other agents.
+
+### 2026-10-24 A2A: the agent drawer dims the dashboard under a dark glass scrim
+
+**Decision:** While the seller agent's drawer is open, a translucent black, lightly blurred layer covers the Command Center behind it. Clicking it closes the drawer.
+*Supersedes:* the drawer opening with no dimming, so the figures stayed readable beside it.
+**Rationale:** Somnath wanted the focus on the agent chat.
+
+### 2026-10-24 A2A: chat bubbles: the agent on the left, square at the bottom left; the person on the right, square at the bottom right; a mark when the agent's done
+
+**Decision:** These rules apply in both chats, John's on the phone and Alex's in the Command Center.
+- **The agent:** its messages sit on the left. They're light grey bubbles with the bottom-left corner square. On the phone they run the full width of the thread.
+- **The person:** their messages sit on the right, as dark bubbles with the bottom-right corner square, so a prompt never looks like a response.
+- **Cards keep all four corners:** plans, carts, quotes, reasoning and multiple-choice questions.
+- **The done mark:** at the end of each of the agent's responses, its logo sits on a line of its own, to say it's done.
+**Rationale:** Somnath asked for a clear difference between a prompt and a response, and for a signal that the agent has finished.
+
+### 2026-10-24 A2A: the seller agent's drawer: one centred column for the chat and its prompt box
+
+**Decision:** Inside the wide Agent drawer, the chat sits in a centred column (max 680px, 32px side margins). The prompt box lives in that same column, so it's always as wide as the chat. Around the chat:
+- the header: status, New chat, history, more and close;
+- an empty state: a greeting, the limits the agent works within as monospace chips, and suggestions;
+- the prompt box: a context chip, Add, Mention, Dictate and Send;
+- a note under the box.
+**Rationale:** Somnath asked for margin either side of the chat, with the prompt box the chat's width. The limits make the policy side of the story (12%, Net15 needs Alex) visible before anything happens.
+
+### 2026-10-24 A2A: the Command Center opens on a "while you were away" welcome, then loads with a swipe
+
+**Decision:** Alex's Command Center doesn't open loaded, and there's no login. It first shows a light welcome screen: "14 updates while you were away"; the apps it draws from float as tilted rounded-square tiles, which burst out from part-way toward the centre once the phone has loaded (2.2s), unevenly close to the headline; 8px pills (not fully rounded) carry uppercase monospace signal labels with colour dots; and in the middle are a headline, a subline and **Load Command Center**. That button loads the dashboard: skeleton cards under the real header while a thin blue line sweeps along the bottom edge of the artifact frame's bar (Reload, Share, Pop out), from left to right, before fading. *(Revised the same day: it first ran along the Command Center header's own hairline.)*
+The opening sequence: the phone's store loads as a skeleton under Safari's progress line; then the welcome bursts; then Load Command Center, its skeleton, and the Command Center.
+**Rationale:** Somnath: "it isn't login, it is more like you were away", after a dark welcome screen he shared, done here in light mode.
+
+### 2026-10-24 A2A: on screen, John's agent is just "Your agent"
+
+**Decision:** The phone never says "buyer agent": John's agent is "Your agent" (sheet, thread, menu card, labels). Its menu status talks about the work in hand, not watching ("3 tasks in motion"). Logged out, Fizz agent's prompt box says "Ask anything", generic, not a repeat of its suggestions. "Buyer agent" stays as the story's role name in the docs.
+**Rationale:** Somnath: "Your agent", not "Your buyer agent"; an agent handles tasks rather than watching carts.
+
+### 2026-10-24 A2A: Mike's cart notification arrives after John logs in, with a bell and a ding
+
+**Decision:** John's logged-in home loads quiet, with no notice. A moment later (about 1.6 s) the notification arrives all at once: the bell beside John's pill (an outlined circle) swings and gets a red dot, a short ding plays, and Mike's cart card (Mike's avatar, Open cart, Assign to your agent) opens in at the top of the page. It arrives once per login. The ding is our own Web Audio chime, not Apple's sound.
+**Rationale:** Somnath: the card shouldn't already be there when he logs in; bringing it in makes step 1 a moment the audience sees happen, and the ding makes it fun.
+**Supersedes:** the notice shown on the logged-in home from the start ("the logged-in store is John's buying desk").
+
+### 2026-10-24 A2A: Fizz Partners sells concentrate to bottlers; the agent helps before login
+
+**Decision:** The store's buyers are bottlers, who make the drinks themselves, so it sells concentrates first (Fizz cola in several flavours, Pulp Orange and Pulp Lemonade; by the unit, 1 unit makes 1,000 L, in drums), then fountain syrups (bag-in-box), finished cases only for new launches and limited editions a bottler can't make yet, and packaging and marketing (promo kits, artwork, closures). Concentrates are drawn as drums in the brand's colour; cans stay as brand imagery and for the new launches. Lemonade is Pulp's. Before login the agent has no wall: the pill reads "Ask agent" and opens Fizz's helpful agent for the store's questions; once logged in it's John's buyer agent ("New task"), which he delegates to.
+**Rationale:** Somnath: a bottler wouldn't buy filled cans or bottles; it buys concentrate, and maybe cases of a new drink. And the agent can be helpful outside the login; delegation is what logging in adds.
+
+### 2026-10-24 A2A: John's agent is a floating pill above Safari's bar, not a header button
+
+**Decision:** The agent's way in on the phone is a floating pill in Safari's dark Liquid Glass, tinted darker, bottom right, just above Safari's bar: the sparkle and "New task". It shrinks to a sparkle circle whenever Safari's bar shrinks, and rides down with it. It shows on every page but the login, logged in or out. Its label is "New task" logged in, "Ask agent" logged out, and its glass is darker than the bar's. The header keeps only the logo, Log in or John's pill, and the menu. The menu's agent card and Assign stay.
+**Rationale:** Somnath: the grey circle in the header didn't match the site; make it a floating chip. Chosen from four options (floating pill, a pill with live status, a header chip like Log in, a bottom Ask bar), after the patterns of Salesforce.com's Agentforce launcher, Intercom and Zendesk bubbles, Amazon's Rufus and Walmart's Sparky, and Google's AI Mode.
+**Supersedes:** the header's agent button in the entry below.
+
+### 2026-10-24 A2A: Assign is a handoff; the phone agent's chat follows shadcn AI Elements, sized like Google's mobile AI
+
+**Decision:** Tapping **Assign to your agent** hands the job over: John types no prompt. The agent works out the job itself (Mike's cart is for Frankfurt's Oktoberfest; Munich runs the same weeks and isn't stocked) and starts. The chat is built in the manner of shadcn AI Elements (not with shadcn): John's turn is the handed-over cart; the agent's turn is **Reasoning** (streams while thinking, folds to "Thought for Ns"), a lead line, a **Plan** (title, "X of Y done", steps pending / running with a shimmer and present tense / done with a check and past tense, sources as chips; open while running, folded when done; a tap wins), the resulting cart, a reply, the quote, and **Suggestions**. On the phone it's sized like Google's and Microsoft's mobile AI: big type, generous spacing, 22–24px rounded cards, big round buttons. The prompt box is **one pill field**: Add on the left, Send on the right (Stop while working, dimmed when empty). The agent is the **Buyer agent**. The shadcn patterns may carry over to desktop; the Google/Microsoft sizing is for the phone.
+**Rationale:** Somnath: assigning means it's handed off, so no prompt should be needed after it. Showing reasoning, then a plan with progress, makes the agent's initiative legible without John saying anything.
+**Supersedes:** in the entry below, "John's prompt types in for him and he taps Send"; and A2A_INTENT §5's step 3 prompt as the trigger.
+
+### 2026-10-24 A2A: John's agent on the phone is a sheet, reached from the header's agent button, the menu, or Assign
+
+**Decision:** No cart page and no sidebar on the phone (unlike the desktop wireframes). John hands Mike's cart to his agent with **Assign to your agent** on the notice; that opens the agent as a bottom sheet chat (ChatGPT-mobile-like, with the agent's steps shown as it works). The agent is always one tap away from the agent button in the header (a circle with the blue 3D sparkle, Somnath's asset; beside John's pill, or beside Log in before login) and a dark card at the top of the menu. The sparkle is the agent's mark everywhere on the phone. The menu is a right drawer at 85% width. The chat runs story steps 3–5 and ends on Q-1042 v1 waiting for Fizz.
+**Rationale:** Somnath: no cart page or sidebar on mobile, just Assign. The menu card makes the agent discoverable with its status; Assign is the in-context way in. A sheet keeps the store visible behind the chat, so it reads as the agent working on John's behalf in the store. John's prompt types in for him and he taps Send, so the presenter controls "person 1 of 3".
+**Supersedes:** the menu as a sheet under the header (entry below).
+
+### 2026-10-24 A2A: the logged-in store is John's buying desk, not the shop again
+
+**Decision:** Once John logs in, the phone's home is a different page (AccountHome), in the same look (grey page, white cards, pills, Anton only on the greeting) but built for buying: a greeting, then Mike's new cart as the first card (story step 1, with Open cart), quick actions (Quick order, Buy again, Quotes, Invoices), his carts (the shared Oktoberfest stock-up first), his account (credit available, terms, next delivery, open quotes), Buy again (the concentrates) and recent orders. No prices until they're set. The menu is a sheet under the header: logged in, John's account, a search, then Buying, Orders and billing, Account (including his buyer agent and its limits) and Help (support, his Fizz rep), then Log out; logged out, the shop, help, and Log in.
+**Rationale:** A B2B buyer logs in to reorder and follow up, not to be sold to, and the story starts from a cart that's waiting for John. Putting it first leads straight into step 2. The buyer company is "Isar Bottling", from the login's AutoFill email, until the bottler is named.
+
 ### 2026-10-24 A2A: a "who's acting" bar under the stage
 
 **Decision:** A thin dark bar runs along the bottom of the A2A prototype, in four equal parts: **John · John's agent · Alex's agent · Alex**. All stay dull; the part that is acting at that point of the story lights up (two can be lit for a handoff between agents). It shows only who is acting, with no status line, and it isn't aligned to the screens above.

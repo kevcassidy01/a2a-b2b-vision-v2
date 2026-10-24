@@ -1,0 +1,525 @@
+import {
+  AlignLeft,
+  ArrowUp,
+  ChevronDown,
+  Circle,
+  CircleCheck,
+  CircleDot,
+  Database,
+  Eye,
+  FileSearch,
+  FileText,
+  Lightbulb,
+  PencilLine,
+  Plus,
+  Route,
+  ShoppingCart,
+  Square,
+  X,
+} from "lucide-react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import { copy } from "../../copy/copy";
+import { ProductPhoto } from "./Photo";
+import { PHOTOS } from "./photos";
+import { useStory } from "../story";
+import { AgentMark } from "./parts";
+
+const a = copy.a2a.storefront.agent;
+const STEPS = a.plan.steps;
+const WORDS = a.reasoning.split(" ");
+const WORD = 35;
+const MUSINGS = a.musings;
+/** How long each musing runs before the next, in ms: fetches from SAP take
+ *  longer, so the demo shows the agent going out to a system and waiting. */
+const MUSE = { fetch: 1600, other: 800 };
+const museFor = (kind: string) => (kind === "fetch" ? MUSE.fetch : MUSE.other);
+
+/** What a musing or a step did, as an icon: read, fetched, wrote, noticed, wondered. */
+const KIND: Record<string, LucideIcon> = {
+  read: FileSearch,
+  fetch: Database,
+  write: PencilLine,
+  notice: Eye,
+  wonder: Lightbulb,
+};
+
+/**
+ * The handoff's timeline, in ms from Assign: the reasoning, a timeline of
+ * musings one after another, then the paragraph streaming in a word at a
+ * time, then it folds away; the lead line, then the plan, whose steps run one
+ * after another; then the cart it built, the reply, the quote and suggestions.
+ */
+const T = (() => {
+  const think = 700;
+  // When each musing starts, then the paragraph after the last.
+  const muse = MUSINGS.map((_, i) => think + MUSINGS.slice(0, i).reduce((n, m) => n + museFor(m.kind), 0));
+  const para = think + MUSINGS.reduce((n, m) => n + museFor(m.kind), 0);
+  const thinkFor = para - think + WORDS.length * WORD + 300;
+  const thought = think + thinkFor + 300;
+  const plan = thought + 700;
+  const step = (i: number) => plan + 700 + i * 1400; // when step i is done
+  const done = step(STEPS.length - 1) + 500;
+  return { think, muse, para, thinkFor, thought, plan, step, done, end: done + 1200 };
+})();
+const TICK = 50;
+
+/** Ms since the handoff, ticking until the story's done; null before it. */
+function useClock(started: boolean) {
+  const [t, setT] = useState<number | null>(null);
+  useEffect(() => {
+    if (!started) return;
+    const t0 = performance.now();
+    setT(0);
+    const id = window.setInterval(() => {
+      const now = performance.now() - t0;
+      setT(now);
+      if (now > T.end) clearInterval(id);
+    }, TICK);
+    return () => clearInterval(id);
+  }, [started]);
+  return t;
+}
+
+/**
+ * AgentChat — John's buyer agent on the phone, a sheet that slides up over the
+ * page, stopping short of the status bar so the store shows dimmed above it.
+ * The agent's sparkle and name at the top, the thread, and one prompt field at
+ * the foot (Add, the field, Send), just above Safari's bar, which stays down to
+ * its capsule while the sheet is up.
+ *
+ * Assign to your agent is a handoff: John types nothing. His turn is the cart
+ * he handed over. The agent's turn, in shadcn AI Elements' patterns: its
+ * Reasoning runs as a timeline of musings, one row at a time joined by a line, and folds to "Mulled it over for 8s"; a lead line says what it
+ * will do; a Plan lists the steps with how many are done, each pending, running
+ * (shimmering, in the present tense) or done (checked, past tense), with the
+ * system each touched (read, fetch or write); then the cart as it now stands, the reply, the quote
+ * waiting for Fizz, and Suggestions; then its sparkle on a line of its own,
+ * to say it's done. Its messages are grey bubbles square at the bottom left;
+ * John's would be dark, square at the bottom right. Cards keep all corners. Opened before anything's assigned, it
+ * offers the handoff as a suggestion. It stays where it got to when closed.
+ * Before John logs in there's no wall: it's Fizz's agent, helpful with the
+ * store's questions (suggestions, display only). Delegating work is for his
+ * own buyer agent, once he's logged in.
+ */
+export function AgentChat({
+  open,
+  assign,
+  signedIn,
+  onClose,
+}: {
+  open: boolean;
+  assign: boolean;
+  signedIn: boolean;
+  onClose: () => void;
+}) {
+  const [started, setStarted] = useState(false);
+  const t = useClock(started);
+  const thread = useRef<HTMLDivElement>(null);
+  const { sendQuote, setWorking } = useStory();
+  // Fizz has the request the moment the reply says so, not once the quote card is drawn.
+  const quoted = t !== null && t >= T.done + 300;
+
+  useEffect(() => {
+    if (open && assign && signedIn) setStarted(true);
+  }, [open, assign, signedIn]);
+
+  const done = STEPS.filter((_, i) => t !== null && t >= T.step(i)).length;
+  const working = t !== null && t < T.done;
+  const words = t === null ? 0 : Math.max(0, Math.min(WORDS.length, Math.floor((t - T.para) / WORD)));
+  // How many musings have started.
+  const muse = t === null ? 0 : T.muse.filter((x) => t >= x).length;
+  // What's on screen changes in beats, not every tick: scroll on those.
+  const beat = t === null ? -1 : [T.think, T.thought, T.plan, T.done, T.done + 300, T.done + 600, T.done + 900].filter((x) => t >= x).length;
+
+  // The who's-acting bar lights John's agent while it works.
+  useEffect(() => {
+    setWorking("johnAgent", working);
+  }, [working, setWorking]);
+
+  // The quote's out: Fizz's side sees it land.
+  useEffect(() => {
+    if (quoted) sendQuote();
+  }, [quoted, sendQuote]);
+
+  useEffect(() => {
+    const el = thread.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+  }, [beat, done, words, muse]);
+
+  return (
+    <div className="sf-sheet absolute inset-0 z-[5]" data-open={open || undefined} inert={!open}>
+      <button type="button" aria-label={a.close} tabIndex={-1} onClick={onClose} className="sf-scrim absolute inset-0" />
+      <section
+        role="dialog"
+        aria-label={signedIn ? a.name : a.signedOut.name}
+        className="sf-sheet-panel absolute inset-x-0 bottom-0 top-[62px] flex flex-col overflow-hidden rounded-t-[28px] bg-white"
+      >
+        <div aria-hidden className="mx-auto mt-2 h-[5px] w-9 shrink-0 rounded-full bg-black/15" />
+        <header className="flex shrink-0 items-center gap-3 px-5 pb-3 pt-2">
+          <AgentMark className="size-10" />
+          <div className="min-w-0 flex-1">
+            <p className="text-[17px] font-bold tracking-[-0.015em] text-text">{signedIn ? a.name : a.signedOut.name}</p>
+            <p className="truncate text-[13.5px] text-text-muted">
+              {!signedIn ? a.signedOut.owner : working ? a.working : a.owner}
+            </p>
+          </div>
+          <button
+            type="button"
+            aria-label={a.close}
+            onClick={onClose}
+            className="grid size-10 place-items-center rounded-full bg-black/[0.06] text-text"
+          >
+            <X className="size-5" strokeWidth={2.25} />
+          </button>
+        </header>
+
+        <div ref={thread} className="sf-no-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-6 pt-3">
+          {!signedIn ? (
+            <Empty title={a.signedOut.title} body={a.signedOut.body}>
+              <div className="mt-7 flex w-full flex-col gap-2.5">
+                {a.signedOut.suggestions.map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    className="flex h-12 items-center justify-center rounded-full px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </Empty>
+          ) : t === null ? (
+            <Empty title={a.intro.title} body={a.intro.body}>
+              <button
+                type="button"
+                onClick={() => setStarted(true)}
+                className="mt-7 flex h-12 items-center gap-2 rounded-full px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+              >
+                <ShoppingCart className="size-[18px]" strokeWidth={2.25} />
+                {a.suggestion}
+              </button>
+            </Empty>
+          ) : (
+            <Thread t={t} words={words} muse={muse} done={done} />
+          )}
+        </div>
+
+        <Composer
+          working={working}
+          suggestions={t !== null && t >= T.done + 900}
+          placeholder={signedIn ? a.placeholder : a.signedOut.placeholder}
+        />
+      </section>
+    </div>
+  );
+}
+
+/** Nothing in the thread yet: the sparkle, a title, a line, and what to do. */
+function Empty({ title, body, children }: { title: string; body: string; children: ReactNode }) {
+  return (
+    <div className="my-auto flex flex-col items-center px-4 text-center">
+      <AgentMark className="size-[72px]" />
+      <h2 className="mt-6 text-[24px] font-bold leading-tight tracking-[-0.025em] text-text">{title}</h2>
+      <p className="mt-2 text-[16px] leading-normal text-text-muted">{body}</p>
+      {children}
+    </div>
+  );
+}
+
+/** John's turn (the cart he handed over), then the agent's, as far as it's got. */
+function Thread({ t, words, muse, done }: { t: number; words: number; muse: number; done: number }) {
+  return (
+    <>
+      <div className="sf-rise flex flex-col items-end">
+        <p className="mb-2 pr-1 text-[13px] text-text-muted">
+          {a.handoff.label} · {a.handoff.time}
+        </p>
+        <div className="flex items-center gap-3 rounded-[22px] bg-[#f2f2f4] p-3 pr-5">
+          <span className="grid size-11 place-items-center rounded-2xl bg-white">
+            <ShoppingCart className="size-5 text-text" strokeWidth={2} />
+          </span>
+          <span>
+            <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{a.cart.name}</span>
+            <span className="block text-[13px] text-text-muted">{a.cart.meta}</span>
+          </span>
+        </div>
+      </div>
+
+      {t >= T.think && (
+        <div className="mt-7">
+          <AgentMark className="sf-rise size-7" />
+          <Reasoning thinking={t < T.thought} words={words} muse={muse} />
+          {t >= T.thought && <AgentSays className="mt-3">{a.lead}</AgentSays>}
+          {t >= T.plan && <Plan done={done} />}
+          {t >= T.done && <Result />}
+          {t >= T.done + 300 && <AgentSays className="mt-5">{a.reply}</AgentSays>}
+          {t >= T.done + 600 && <Quote />}
+          {t >= T.done + 900 && <AgentMark className="sf-rise mt-5 size-7" />}
+        </div>
+      )}
+    </>
+  );
+}
+
+/** A message from the agent: a soft grey bubble, square at the bottom left (the
+ *  side it comes from), the full width of the thread. Cards keep all their corners. */
+function AgentSays({ className = "", children }: { className?: string; children: ReactNode }) {
+  return (
+    <p className={`sf-rise rounded-[20px] rounded-bl-none bg-[#f2f2f4] px-4 py-3 text-[16px] leading-[1.5] text-text ${className}`}>
+      {children}
+    </p>
+  );
+}
+
+/**
+ * The agent's reasoning, as a timeline: a header row, then one row per musing
+ * (what it's reading, fetching, noticing or wondering, each with its icon),
+ * joined by a line and arriving one at a time, the current one shimmering;
+ * then the paragraph, small and quiet, streaming in as the last row. Once it's
+ * done it folds to a chevron and how long it took; a tap opens or folds it.
+ */
+function Reasoning({ thinking, words, muse }: { thinking: boolean; words: number; muse: number }) {
+  const [userOpen, setUserOpen] = useState<boolean | null>(null);
+  const open = userOpen ?? thinking;
+  const shown = thinking ? MUSINGS.slice(0, muse) : MUSINGS;
+  const para = !thinking || muse === MUSINGS.length;
+  return (
+    <div className="sf-rise mt-3">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setUserOpen(!open)}
+        className="relative flex min-h-8 items-center gap-2 text-left text-[14px] font-medium text-text-muted"
+      >
+        <span className="grid size-4 shrink-0 place-items-center">
+          {thinking ? (
+            <span aria-hidden className="sf-pulse size-2 rounded-full bg-[#0b84d0]" />
+          ) : (
+            <CircleCheck className="size-4" strokeWidth={2.25} />
+          )}
+        </span>
+        <span className={thinking ? "sf-shimmer" : undefined}>
+          {thinking ? a.mulling : a.thought(Math.round(T.thinkFor / 1000))}
+        </span>
+        <ChevronDown className={`size-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2.25} />
+      </button>
+      {open && (
+        <ol>
+          {shown.map((m, i) => (
+            <TimelineRow
+              key={m.text}
+              icon={KIND[m.kind]}
+              current={thinking && !para && i === muse - 1}
+            >
+              {m.text}
+            </TimelineRow>
+          ))}
+          {para && (
+            <TimelineRow icon={AlignLeft}>
+              <span className="text-text-muted/80">{WORDS.slice(0, thinking ? words : WORDS.length).join(" ")}</span>
+            </TimelineRow>
+          )}
+        </ol>
+      )}
+    </div>
+  );
+}
+
+/** One row of the reasoning's timeline: a line up to the row above, its icon, and what it did (shimmering while it's the one running). */
+function TimelineRow({ icon: Icon, current = false, children }: { icon: LucideIcon; current?: boolean; children: ReactNode }) {
+  // The line runs from the row above (or the header) to this icon, and on below it to the foot of the row,
+  // so it joins up however many lines a row wraps to; it's solid, so where segments meet they don't darken.
+  return (
+    <li className="group/row sf-rise relative flex gap-2 pt-2.5 text-[12.5px] leading-snug text-text-muted">
+      <span aria-hidden className="absolute -top-1.5 left-[7.5px] h-[14px] w-px bg-[#dcdce0]" />
+      <span aria-hidden className="absolute bottom-0 left-[7.5px] top-[29px] w-px bg-[#dcdce0] group-last/row:hidden" />
+      <span className="grid h-[17px] w-4 shrink-0 place-items-center">
+        <Icon className={`size-3.5 ${current ? "text-text" : ""}`} strokeWidth={2} />
+      </span>
+      <span className={current ? "sf-shimmer" : undefined}>{children}</span>
+    </li>
+  );
+}
+
+/** The plan: its goal and how many steps are done, then each step pending, running or done. Open while it runs, folded once it's done; a tap on the header opens or folds it. */
+function Plan({ done }: { done: number }) {
+  const [userOpen, setUserOpen] = useState<boolean | null>(null);
+  const open = userOpen ?? done < STEPS.length;
+  const p = a.plan;
+  return (
+    <div className="sf-rise mt-4 rounded-[24px] bg-[#f6f6f8] px-4 py-1">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-label={p.toggle}
+        onClick={() => setUserOpen(!open)}
+        className="flex h-14 w-full items-center gap-3 text-left"
+      >
+        <Route className="size-5 shrink-0 text-text" strokeWidth={2} />
+        <span className="min-w-0 flex-1">
+          <span className="block text-[15.5px] font-bold tracking-[-0.01em] text-text">{p.title}</span>
+          <span className="block text-[13px] text-text-muted">
+            {done} {p.of} {STEPS.length} {p.done}
+          </span>
+        </span>
+        <ChevronDown
+          className={`size-5 shrink-0 text-text-muted transition-transform ${open ? "rotate-180" : ""}`}
+          strokeWidth={2.25}
+        />
+      </button>
+      {open && (
+        <ol className="pb-3">
+          {STEPS.map((s, i) => {
+            const state = i < done ? "done" : i === done ? "running" : "pending";
+            return (
+              <li key={s.done} className="relative flex gap-3 py-2.5">
+                {i < STEPS.length - 1 && (
+                  <span aria-hidden className="absolute -bottom-2.5 left-[9.5px] top-[34px] w-px bg-black/10" />
+                )}
+                {state === "done" ? (
+                  <CircleCheck className="mt-px size-5 shrink-0 text-text" strokeWidth={2.25} />
+                ) : state === "running" ? (
+                  <CircleDot className="mt-px size-5 shrink-0 text-[#0b84d0]" strokeWidth={2.25} />
+                ) : (
+                  <Circle className="mt-px size-5 shrink-0 text-black/20" strokeWidth={2.25} />
+                )}
+                <div className="min-w-0">
+                  <p
+                    className={`text-[15px] font-semibold tracking-[-0.01em] ${
+                      state === "running" ? "sf-shimmer" : state === "pending" ? "text-text-muted" : "text-text"
+                    }`}
+                  >
+                    {state === "done" ? s.done : s.doing}
+                  </p>
+                  {state !== "pending" && <p className="mt-0.5 text-[13.5px] leading-snug text-text-muted">{s.detail}</p>}
+                  {state === "done" && (
+                    <StepSource kind={s.kind} source={s.source} />
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </div>
+  );
+}
+
+/** What a done step touched: how (read, fetch, write, in small capitals) and which system. */
+function StepSource({ kind, source }: { kind: string; source: string }) {
+  const Icon = KIND[kind];
+  return (
+    <span className="mt-2 inline-flex h-7 items-center gap-1.5 rounded-full bg-white px-2.5 text-[12.5px] font-medium text-text shadow-[0_0_0_1px_rgb(0_0_0/0.06)]">
+      <Icon className="size-3.5 shrink-0" strokeWidth={2.25} />
+      <span className="font-mono text-[10.5px] uppercase tracking-[0.06em] text-text-muted">{kind}</span>
+      {source}
+    </span>
+  );
+}
+
+/** The cart as the agent left it: Mike's line, then the one it added, marked new. */
+function Result() {
+  const r = a.result;
+  return (
+    <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+      <div className="flex items-center gap-2.5">
+        <ShoppingCart className="size-5 text-text" strokeWidth={2} />
+        <span className="mr-auto text-[16px] font-bold tracking-[-0.01em] text-text">{r.name}</span>
+        <span className="text-[13px] text-text-muted">{r.meta}</span>
+      </div>
+      <ul className="mt-3">
+        {r.lines.map((l) => {
+          const added = "added" in l && l.added;
+          return (
+            <li key={l.name} className="flex items-center gap-3 border-t border-black/[0.07] py-3 last:pb-0">
+              <ProductPhoto photo={added ? PHOTOS.orange : PHOTOS.lemonade} pad="3px" className="size-11 shrink-0 rounded-xl" />
+              <span className="min-w-0 flex-1">
+                <span className="flex items-center gap-2">
+                  <span className="truncate text-[15px] font-semibold tracking-[-0.01em] text-text">{l.name}</span>
+                  {added && (
+                    <span className="rounded-full bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{r.isNew}</span>
+                  )}
+                </span>
+                <span className="block text-[13px] text-text-muted">
+                  {l.qty} · {l.site} · {l.by}
+                </span>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+/** The quote request, waiting on Fizz: white and outlined like the cart, its status at the foot. */
+function Quote() {
+  const q = a.quote;
+  return (
+    <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+      <div className="flex items-center gap-3">
+        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+          <FileText className="size-5 text-text" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{q.id}</span>
+          <span className="mt-0.5 block text-[13px] text-text-muted">{q.meta}</span>
+        </span>
+      </div>
+      <span className="mt-4 inline-flex h-7 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
+        <span aria-hidden className="sf-pulse size-2 rounded-full bg-[#f5b500]" />
+        {q.status}
+      </span>
+    </div>
+  );
+}
+
+/** Suggestions once the agent's done, then one field: Add, the field, and Send (Stop while it works). */
+function Composer({
+  working,
+  suggestions,
+  placeholder,
+}: {
+  working: boolean;
+  suggestions: boolean;
+  placeholder: string;
+}) {
+  return (
+    <div className="shrink-0 px-4 pb-[60px] pt-2">
+      {suggestions && (
+        <div className="sf-rise sf-no-scrollbar -mx-4 mb-2.5 flex gap-2 overflow-x-auto px-4">
+          {a.suggestions.map((s) => (
+            <button
+              key={s}
+              type="button"
+              className="h-10 shrink-0 rounded-full px-4 text-[14.5px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="flex h-[54px] items-center gap-1 rounded-full bg-[#f2f2f4] px-[7px]">
+        <button type="button" aria-label={a.add} className="grid size-10 shrink-0 place-items-center rounded-full text-text">
+          <Plus className="size-[22px]" strokeWidth={2} />
+        </button>
+        <input
+          type="text"
+          readOnly
+          aria-label={placeholder}
+          placeholder={placeholder}
+          className="h-full min-w-0 flex-1 bg-transparent px-1 text-[16px] text-text outline-none placeholder:text-text-muted"
+        />
+        <button
+          type="button"
+          aria-label={working ? a.stop : a.send}
+          disabled={!working}
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-[#1d1d1f] text-white disabled:opacity-20"
+        >
+          {working ? <Square className="size-3.5" strokeWidth={0} fill="currentColor" /> : <ArrowUp className="size-5" strokeWidth={2.5} />}
+        </button>
+      </div>
+    </div>
+  );
+}

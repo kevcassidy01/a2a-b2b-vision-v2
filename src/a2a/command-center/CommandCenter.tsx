@@ -6,47 +6,139 @@ import {
   Store,
   type LucideIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { copy } from "../../copy/copy";
 import { Segmented } from "../../shell/Segmented";
 import { ThemeSegmented } from "../../shell/ThemeSegmented";
+import { useFrameLoading } from "../ArtifactFrame";
+import { useStory } from "../story";
 import { Tooltip } from "../Tooltip";
 import { AgentButton, type AgentStatus } from "./AgentButton";
 import { AgentDrawer } from "./AgentDrawer";
+import { ActivityCard } from "./ActivityCard";
 import { ApprovalsCard } from "./ApprovalsCard";
+import { CheckoutFunnelCard } from "./CheckoutFunnelCard";
+import { CommandCenterSkeleton } from "./CommandCenterSkeleton";
 import { CurrencyMenu } from "./CurrencyMenu";
 import { MetricTiles } from "./MetricTiles";
+import { MonthlyRevenueCard } from "./MonthlyRevenueCard";
 import { OrdersByCountryCard } from "./OrdersByCountryCard";
 import { SourceMenu } from "./SourceMenu";
 import { StoreMenu } from "./StoreMenu";
 import { ViewPicker } from "./ViewPicker";
+import { Welcome } from "./Welcome";
 
 const t = copy.a2a.commandCenter;
+/** How long the Command Center loads, in ms (skeleton cards, the frame's load line), before it's ready. Matches .a2a-load-swipe. */
+const LOAD = 1500;
+/** If the quote's already in when the Command Center loads, Today follows the cards this long after, in ms. */
+const TODAY_AFTER = 700;
+/** How long after John's agent sends its quote it lands here, in ms: a short hop, so the send and the arrival read as two moments. */
+const QUOTE_GAP = 600;
 
 /**
  * CommandCenter — Alex's B2B Command Center, the MCP app inside the artifact
  * frame. Light mode: white behind the header, fading into a pale grey canvas
  * for the white cards below. Built top to bottom a section at a time from the
  * engineering version; so far, the header.
+ *
+ * It opens on the Welcome (Alex has been away). Load Command Center brings it
+ * in: skeleton cards under the header while the frame's load line sweeps
+ * along the bottom of its bar, edge to edge; then the real cards fade up.
  */
 export function CommandCenter() {
+  const [phase, setPhase] = useState<"away" | "loading" | "ready">("away");
   const [agentOpen, setAgentOpen] = useState(false);
+  // Once Alex opens Q-1042, the drawer holds the agent's chat about it from then on.
+  const [quoteOpen, setQuoteOpen] = useState(false);
+  const openQuote = useCallback(() => {
+    setQuoteOpen(true);
+    setAgentOpen(true);
+  }, []);
   const closeAgent = useCallback(() => setAgentOpen(false), []);
+  const { quoteSent, setWorking } = useStory();
+  const today = useToday(phase === "ready", quoteSent);
+  // The seller agent picks Q-1042 up as it lands, whether or not Alex has the Command Center open, and stays at it.
+  useEffect(() => {
+    if (!quoteSent) return;
+    const id = window.setTimeout(() => setWorking("alexAgent", true), QUOTE_GAP);
+    return () => clearTimeout(id);
+  }, [quoteSent, setWorking]);
+  useEffect(() => {
+    if (phase !== "loading") return;
+    const id = window.setTimeout(() => setPhase("ready"), LOAD);
+    return () => clearTimeout(id);
+  }, [phase]);
+  useFrameLoading(phase === "loading");
+  if (phase === "away") return <Welcome onLoad={() => setPhase("loading")} />;
+  const loading = phase === "loading";
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden" aria-busy={loading}>
       <div className="a2a-canvas a2a-no-scrollbar absolute inset-0 overflow-y-auto">
         <Header agentOpen={agentOpen} onAgent={() => setAgentOpen((o) => !o)} />
         <div className="relative flex flex-col gap-8 px-8 pb-8 pt-2">
-          <Section {...t.sections.last6Months}>
-            <ApprovalsCard />
-            <MetricTiles />
-            <OrdersByCountryCard />
-          </Section>
+          {loading ? (
+            <CommandCenterSkeleton />
+          ) : (
+            <div className="a2a-load-in flex flex-col gap-8">
+              {/* Once John's agent sends its quote, Today opens above the period, and the
+                  approvals card moves up into it with the request. */}
+              {today && (
+                <div className="a2a-load-in">
+                  <Section {...t.sections.today}>
+                    <ApprovalsCard request onOpen={openQuote} />
+                  </Section>
+                </div>
+              )}
+              <Section {...t.sections.last6Months}>
+                {!today && <ApprovalsCard />}
+                <MetricTiles />
+                <OrdersByCountryCard />
+                <MonthlyRevenueCard />
+                <CheckoutFunnelCard />
+                <ActivityCard />
+              </Section>
+            </div>
+          )}
         </div>
       </div>
-      <AgentDrawer open={agentOpen} onClose={closeAgent} />
+      {/* While the agent's open, a dark glass scrim over the dashboard keeps the eye on the chat. Clicking it closes the drawer. */}
+      <button
+        type="button"
+        aria-label={t.agent.close}
+        tabIndex={-1}
+        onClick={closeAgent}
+        data-open={agentOpen || undefined}
+        className="a2a-scrim absolute inset-0 z-[25]"
+      />
+      <AgentDrawer open={agentOpen} quote={quoteOpen} onClose={closeAgent} />
     </div>
   );
+}
+
+/**
+ * Whether Today shows. The moment the quote's sent if the Command Center is
+ * already up; if it loads with the quote already in, a beat after its cards
+ * (TODAY_AFTER), so the request lands on its own rather than with everything.
+ */
+function useToday(ready: boolean, quoteSent: boolean) {
+  const readyAt = useRef(0);
+  const sentAt = useRef(0);
+  const [today, setToday] = useState(false);
+  useEffect(() => {
+    if (ready) readyAt.current = performance.now();
+  }, [ready]);
+  useEffect(() => {
+    if (quoteSent) sentAt.current = performance.now();
+  }, [quoteSent]);
+  useEffect(() => {
+    if (!ready || !quoteSent || today) return;
+    const at = Math.max(readyAt.current + TODAY_AFTER, sentAt.current + QUOTE_GAP);
+    const wait = Math.max(0, at - performance.now());
+    const id = window.setTimeout(() => setToday(true), wait);
+    return () => clearTimeout(id);
+  }, [ready, quoteSent, today]);
+  return today;
 }
 
 /**
