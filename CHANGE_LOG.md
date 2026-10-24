@@ -30,6 +30,9 @@ Entry format:
 
 ## Unreleased
 
+## 20.4.1 — 2026-10-24 13:50 IST
+**Kind:** docs. `test/anton-hero` (20.3.0 and 20.4.0) is merged into `master` as a fast-forward; the branch is kept. SESSION_CONTEXT notes the merge. Not pushed.
+
 ## 20.4.0 — 2026-10-24 12:20 IST
 **Kind:** small addition, on branch `test/anton-hero`. The "who's acting" bar under the A2A stage.
 - **Actor bar** (`src/a2a/ActorBar.tsx`): a thin (32px) dark bar along the bottom of `/#a2a`, under both the phone and the Command Center, in four equal parts: **John · John's agent · Alex's agent · Alex** (people at the ends, their agents meeting in the middle). Every part sits dull; the acting one lights up (bright label, a soft light from below, its dot glowing), with a 300ms ease. Two can be lit at once, for a handoff between the agents. No status text: the agentic chats show what's happening; the bar only shows who.
