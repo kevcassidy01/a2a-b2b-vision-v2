@@ -22,6 +22,16 @@
   line-height: 1;
 }
 
+/* Display titles: Anton, tall and condensed, in capitals, like a can's label
+   or a promo banner. On the hero headlines and the section titles; cards,
+   products and the login page stay Inter bold. */
+.sf-display {
+  font-family: "Anton", var(--font-sans);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+}
+
 /* Pill buttons: filled near-black, white (on dark slides), or outlined. No
    hover states anywhere on the phone: it's a touch screen, so a tap is direct. */
 .sf-pill {

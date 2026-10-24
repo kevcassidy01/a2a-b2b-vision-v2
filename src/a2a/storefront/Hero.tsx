@@ -50,7 +50,7 @@ export function Hero({ onLogIn }: { onLogIn: () => void }) {
               <p className={`text-[13px] font-semibold uppercase tracking-[0.06em] ${light ? "text-white/75" : "text-text-muted"}`}>
                 {s.eyebrow}
               </p>
-              <h2 className={`mt-2 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] ${light ? "text-white" : "text-text"}`}>
+              <h2 className={`sf-display mt-2 text-[36px] leading-[1.04] ${light ? "text-white" : "text-text"}`}>
                 {s.title}
               </h2>
               <div className="sf-hero-glow mt-auto grid place-items-center pb-2">

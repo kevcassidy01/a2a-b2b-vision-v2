@@ -1,20 +1,28 @@
 import { Eye, LoaderCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { copy } from "../../copy/copy";
 import { Footer, Header } from "./parts";
 
 const t = copy.a2a.storefront;
 const l = t.login;
 
+/** How long after the page appears AutoFill fills it in, in ms. */
+const AUTOFILL = 600;
+
 /**
- * Login — Fizz Partners' login page. Empty at first; tapping either field has
- * iOS AutoFill put in John's saved email and password (the fields take
- * Safari's pale yellow AutoFill tint). Then Log in turns to a spinner.
+ * Login — Fizz Partners' login page. It appears empty, then iOS AutoFill puts
+ * in John's saved email and password a moment later (the fields take Safari's
+ * pale yellow AutoFill tint); tapping a field before then fills them too.
+ * Then Log in turns to a spinner.
  */
 export function Login() {
   const [filled, setFilled] = useState(false);
   const [signingIn, setSigningIn] = useState(false);
   const fill = () => setFilled(true);
+  useEffect(() => {
+    const id = window.setTimeout(fill, AUTOFILL);
+    return () => clearTimeout(id);
+  }, []);
 
   return (
     <div className="sf-page isolate flex min-h-full flex-col">

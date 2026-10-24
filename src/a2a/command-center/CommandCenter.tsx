@@ -6,12 +6,13 @@ import {
   Store,
   type LucideIcon,
 } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { copy } from "../../copy/copy";
 import { Segmented } from "../../shell/Segmented";
 import { ThemeSegmented } from "../../shell/ThemeSegmented";
 import { Tooltip } from "../Tooltip";
 import { AgentButton, type AgentStatus } from "./AgentButton";
+import { AgentDrawer } from "./AgentDrawer";
 import { ApprovalsCard } from "./ApprovalsCard";
 import { CurrencyMenu } from "./CurrencyMenu";
 import { MetricTiles } from "./MetricTiles";
@@ -29,16 +30,21 @@ const t = copy.a2a.commandCenter;
  * engineering version; so far, the header.
  */
 export function CommandCenter() {
+  const [agentOpen, setAgentOpen] = useState(false);
+  const closeAgent = useCallback(() => setAgentOpen(false), []);
   return (
-    <div className="a2a-canvas a2a-no-scrollbar absolute inset-0 overflow-y-auto">
-      <Header />
-      <div className="relative flex flex-col gap-8 px-8 pb-8 pt-2">
-        <Section {...t.sections.last6Months}>
-          <ApprovalsCard />
-          <MetricTiles />
-          <OrdersByCountryCard />
-        </Section>
+    <div className="absolute inset-0 overflow-hidden">
+      <div className="a2a-canvas a2a-no-scrollbar absolute inset-0 overflow-y-auto">
+        <Header agentOpen={agentOpen} onAgent={() => setAgentOpen((o) => !o)} />
+        <div className="relative flex flex-col gap-8 px-8 pb-8 pt-2">
+          <Section {...t.sections.last6Months}>
+            <ApprovalsCard />
+            <MetricTiles />
+            <OrdersByCountryCard />
+          </Section>
+        </div>
       </div>
+      <AgentDrawer open={agentOpen} onClose={closeAgent} />
     </div>
   );
 }
@@ -46,12 +52,18 @@ export function CommandCenter() {
 /**
  * The greeting, small and grey. Then the store as the page title (with a link
  * that opens it in a new tab), and at the far right the theme, Refresh,
- * Notifications and the Agent. Under it: the view, and at the far right the
+ * Notifications and the Agent (which opens its drawer). Under it: the view, and at the far right the
  * currency, data source and scope. All that, down to the hairline, stays put as
  * the page scrolls, with a light fade under it so the content slips behind it.
  * Then the period, which scrolls with the page.
  */
-function Header() {
+function Header({
+  agentOpen,
+  onAgent,
+}: {
+  agentOpen: boolean;
+  onAgent: () => void;
+}) {
   // Demo hotkey: Ctrl+A sets the Agent working (dots bouncing), and back to idle.
   const [agent, setAgent] = useState<AgentStatus>("idle");
   useEffect(() => {
@@ -100,7 +112,7 @@ function Header() {
           <ThemeSegmented />
           <IconButton icon={RotateCw} label={t.refresh} />
           <IconButton icon={Bell} label={t.notifications} />
-          <AgentButton status={agent} className="ml-1" />
+          <AgentButton status={agent} open={agentOpen} onClick={onAgent} className="ml-1" />
         </div>
         <div className="mt-4 flex flex-wrap items-start gap-2">
           {/* What to look at: the view (a mode). */}

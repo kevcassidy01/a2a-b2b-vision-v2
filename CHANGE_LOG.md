@@ -30,6 +30,13 @@ Entry format:
 
 ## Unreleased
 
+## 20.3.0 — 2026-10-24 12:07 IST
+**Kind:** small addition, on branch `test/anton-hero` (not merged). Anton on the storefront's titles, the store name "Fizz Partners B2B", an empty wide Agent drawer, and the login page filling itself in. The harness (SESSION_CONTEXT, TODO) is updated with the A2A build state for a fresh session.
+- **The login page fills itself in:** about 0.6s after the page appears, AutoFill puts in John's email and password in the yellow tint, with no tap needed. Tapping a field before then still fills them.
+- **Agent drawer (empty for now):** the Agent button opens a wide panel (three-quarters of the Command Center: 560px minimum, 960px maximum, as it will hold a lot) that slides in from the Command Center's right edge, over the page and without dimming it. It has a hairline and a soft shadow, and a header with the agent mark, "Agent" and a close button. The button shows the blue active outline while the panel is open, and Escape or ✕ closes it. New `AgentDrawer.tsx` and `.a2a-drawer`; copy is `agent.close`.
+- **The Command Center's store name now reads "Fizz Partners B2B".** The store menu still says Fizz Partners.
+- **Anton on the storefront (branch `test/anton-hero`)**: the hero headlines (36px) and the section titles ("Shop by brand", "Best sellers for outlets", "Ready to restock?"; 32px) are in Anton, in capitals, like a can label. Product names, cards, the feature block and the login page stay in Inter bold. The font comes from `@fontsource/anton` (open licence, bundled) via the new `.sf-display` class in `storefront.css`.
+
 ## 20.2.0 — 2026-10-24 11:43 IST
 **Kind:** small addition and a bug fix. The Command Center header is sticky with a soft fade, the background stays still while the page scrolls, Data source is now a dropdown, and the Agent and view picker have moved. The period defaults to 6 months. Fix: the phone opens on the storefront again.
 - **Fix: the phone opens on the storefront again.** 20.0.0 and 20.1.0 were committed with the phone starting on the login page, left over from a screenshot test.

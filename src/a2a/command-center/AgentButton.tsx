@@ -19,9 +19,14 @@ export type AgentStatus = "idle" | "working" | "done" | "asking";
 export function AgentButton({
   status = "idle",
   questions = 1,
+  open = false,
+  onClick,
   className = "",
 }: {
   status?: AgentStatus;
+  /** Whether its drawer is open (the button takes the blue active stroke). */
+  open?: boolean;
+  onClick?: () => void;
   /** How many questions are waiting (asking). */
   questions?: number;
   className?: string;
@@ -31,7 +36,9 @@ export function AgentButton({
     <button
       type="button"
       data-status={status}
-      className={`a2a-control a2a-agent ${className} flex h-8 items-center rounded-md pl-3.5 text-[13.5px] font-medium text-text ${
+      aria-expanded={open}
+      onClick={onClick}
+      className={`a2a-control a2a-agent ${open ? "a2a-control-active" : ""} ${className} flex h-8 items-center rounded-md pl-3.5 text-[13.5px] font-medium text-text ${
         busy ? "pr-3.5" : "pr-4"
       }`}
     >

@@ -53,7 +53,7 @@ function Section({
 }) {
   return (
     <section className="px-4 pt-14">
-      <h2 className="text-center text-[28px] font-bold leading-tight tracking-[-0.025em] text-text">
+      <h2 className="sf-display text-center text-[32px] leading-[1.05] text-text">
         {title}
       </h2>
       {subtitle && (
@@ -189,7 +189,7 @@ function Cta({ onLogIn }: { onLogIn: () => void }) {
   return (
     <section className="px-4 pt-14">
       <div className="flex flex-col items-center rounded-[32px] bg-white px-6 py-10 text-center">
-        <h2 className="text-[28px] font-bold leading-tight tracking-[-0.025em] text-text">
+        <h2 className="sf-display text-[32px] leading-[1.05] text-text">
           {t.cta.title}
         </h2>
         <p className="mt-2 max-w-[280px] text-[16px] leading-normal text-text-muted">

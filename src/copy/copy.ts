@@ -188,7 +188,7 @@ export const copy = {
     commandCenter: {
       frame: { title: "B2B Command Center", share: "Share", close: "Close" },
       greeting: "Good morning, Alex",
-      store: "Fizz Partners",
+      store: "Fizz Partners B2B",
       openStore: "Open store",
       opensInNewTab: "(opens in a new tab)",
       /** The currency picker: USD by default. */
@@ -278,6 +278,8 @@ export const copy = {
       /** The seller agent. Its status is read out to screen readers; the dots show it visually. */
       agent: {
         label: "Agent",
+        /** The drawer the Agent button opens (no content yet). */
+        close: "Close Agent",
         working: "Agent is working",
         done: "Agent has finished",
         asking: (n: number) =>
