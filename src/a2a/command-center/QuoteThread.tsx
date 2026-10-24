@@ -8,6 +8,7 @@ import {
   Eye,
   FileSearch,
   FileText,
+  History,
   Lightbulb,
   ListChecks,
   PencilLine,
@@ -50,7 +51,7 @@ const T = (() => {
   // When check i is done.
   const step = STEPS.map((_, i) => plan + 600 + STEPS.slice(0, i + 1).reduce((n, s) => n + STEP[s.kind], 0));
   const sent = step[step.length - 1];
-  return { start, muse, hold, folded, weighedFor: folded - start, lead, plan, step, sent, card: sent + 400, reply: sent + 900, end: sent + 1300 };
+  return { start, muse, hold, folded, weighedFor: folded - start, lead, plan, step, sent, card: sent + 400, reply: sent + 900, turns: sent + 1300, end: sent + 1500 };
 })();
 
 /** What a musing or a check did, as an icon: read, looked up, wrote, noticed, wondered. */
@@ -99,7 +100,7 @@ export function QuoteThread() {
   }, [sent, sendCounter]);
 
   // Keep the newest thing in view, above the prompt box, as each one comes in.
-  const beat = [T.start, T.folded, T.lead, T.plan, T.card, T.reply, T.end].filter((x) => t >= x).length;
+  const beat = [T.start, T.folded, T.lead, T.plan, T.card, T.reply, T.turns, T.end].filter((x) => t >= x).length;
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const scroller = ref.current?.closest<HTMLElement>(".overflow-y-auto");
@@ -119,6 +120,7 @@ export function QuoteThread() {
           {t >= T.plan && <Checks done={done} />}
           {t >= T.card && <Counter />}
           {t >= T.reply && <AgentSays className="mt-4"><Rich text={q.reply} /></AgentSays>}
+          {t >= T.turns && <Turns />}
           {t >= T.end && (
             <span className="a2a-load-in mt-4 grid size-7 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.08)]">
               <img src={agentLogo} alt="" className="size-4" />
@@ -169,8 +171,41 @@ function Weighing({ t, shown }: { t: number; shown: number }) {
       {open && (
         <ol aria-live="polite">
           {MUSINGS.slice(0, weighing ? shown : MUSINGS.length).map((m, i) => (
-            <Row key={m.text} icon={KIND[m.kind]} current={weighing && t < T.hold && i === shown - 1}>
+            <Row key={m.text} icon={KIND[m.kind]} tool={"tool" in m ? m.tool : undefined} current={weighing && t < T.hold && i === shown - 1}>
               {m.text}
+            </Row>
+          ))}
+        </ol>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The back and forth on Q-1042 so far (there's been more than one turn once v2
+ * is out): a clock, how many turns, a chevron, folded until clicked; open, a
+ * timeline of who did what, each by its agent's mark. Sits before the done mark.
+ */
+function Turns() {
+  const [open, setOpen] = useState(false);
+  const turns = q.turns;
+  return (
+    <div className="a2a-load-in mt-4">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className="flex min-h-8 items-center gap-2 text-left text-[14px] font-medium text-text-muted hover:text-text"
+      >
+        <History className="size-4 shrink-0" strokeWidth={2.25} />
+        {turns.title(turns.list.length)}
+        <ChevronDown className={`size-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2.25} />
+      </button>
+      {open && (
+        <ol>
+          {turns.list.map((x) => (
+            <Row key={x.text} mark={<img src={x.by === "seller" ? agentLogo : buyerAgent} alt="" className="size-3.5" />} current={false}>
+              <Rich text={x.text} />
             </Row>
           ))}
         </ol>
@@ -243,10 +278,11 @@ function Checks({ done }: { done: number }) {
                   >
                     {state === "done" ? s.done : s.doing}
                   </p>
+                  {"tool" in s && state !== "pending" && <ToolCall tool={s.tool} />}
                   {state === "done" && (
-                    <p className="a2a-load-in mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] leading-snug text-text-muted">
+                    <p className="a2a-load-in mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] leading-snug text-text-muted">
                       <span><Rich text={s.detail} /></span>
-                      <Source kind={s.kind} source={s.source} />
+                      {!("tool" in s) && <Source kind={s.kind} source={s.source} />}
                     </p>
                   )}
                 </div>
@@ -259,7 +295,23 @@ function Checks({ done }: { done: number }) {
   );
 }
 
-/** The system a check touched, and how: read, fetch or write. */
+type Tool = { name: string; target: string };
+
+/** A Salesforce tool call behind a musing or a check, as Cowork shows it: the
+ *  logo (unless the row already wears it), "Called", the MCP tool as a mono
+ *  chunk and the SOR it went to. */
+function ToolCall({ tool, logo = true }: { tool: Tool; logo?: boolean }) {
+  return (
+    <p className="a2a-load-in mt-1 flex flex-wrap items-center gap-1.5 text-[12px] text-text-muted">
+      {logo && <img src="/salesforce.svg" alt="Salesforce" className="h-3 w-[18px] shrink-0 object-contain" />}
+      {q.called}
+      <code className="rounded bg-black/[0.05] px-1 py-px font-mono text-[11px] text-text">{tool.name}</code>
+      <span className="font-mono text-[11px]">{tool.target}</span>
+    </p>
+  );
+}
+
+/** A non-Salesforce system a check touched, and how: read, fetch or write. */
 function Source({ kind, source }: { kind: string; source: string }) {
   const Icon = KIND[kind];
   return (
@@ -382,16 +434,37 @@ function QuoteBody({ lines, terms }: { lines: readonly Line[]; terms: readonly T
   );
 }
 
-/** One musing: a line up to the row above, its icon, and what it did (shimmering while it's the one at work). Matches the phone agent's timeline. */
-function Row({ icon: Icon, current, children }: { icon: LucideIcon; current: boolean; children: ReactNode }) {
+/** One musing: a line up to the row above, its icon, and what it did (shimmering while it's the one at work). Matches the phone agent's timeline.
+ *  A musing that went to Salesforce wears its logo for an icon, with the call under it. */
+function Row({
+  icon: Icon,
+  mark,
+  tool,
+  current,
+  children,
+}: {
+  icon?: LucideIcon;
+  mark?: ReactNode;
+  tool?: Tool;
+  current: boolean;
+  children: ReactNode;
+}) {
   return (
     <li className="group/row a2a-load-in relative flex gap-2 pt-2.5 text-[13px] leading-snug text-text-muted">
       <span aria-hidden className="absolute -top-1.5 left-[7.5px] h-[14px] w-px bg-[#dcdce0]" />
       <span aria-hidden className="absolute bottom-0 left-[7.5px] top-[29px] w-px bg-[#dcdce0] group-last/row:hidden" />
       <span className="grid h-[18px] w-4 shrink-0 place-items-center">
-        <Icon className={`size-3.5 ${current ? "text-text" : ""}`} strokeWidth={2} />
+        {mark ??
+          (tool ? (
+            <img src="/salesforce.svg" alt="Salesforce" className="h-3 w-4 object-contain" />
+          ) : (
+            Icon && <Icon className={`size-3.5 ${current ? "text-text" : ""}`} strokeWidth={2} />
+          ))}
       </span>
-      <span className={current ? "a2a-shimmer" : undefined}>{children}</span>
+      <div className="min-w-0">
+        <span className={current ? "a2a-shimmer" : undefined}>{children}</span>
+        {tool && <ToolCall tool={tool} logo={false} />}
+      </div>
     </li>
   );
 }

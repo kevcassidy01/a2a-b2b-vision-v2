@@ -238,6 +238,84 @@ export const copy = {
         reply: "Fizz has our quote request: **15,000 units at 15% off, Net30**. I'll negotiate within your limits and only come back to you if the terms change.",
         quote: { id: "Q-1042 v1", status: "Waiting for Fizz to respond", meta: "15,000 units · asking 15% off · Net30" },
         suggestions: ["What are my limits?", "Show the quote"],
+        /** Story steps 8–9: Fizz's counter-offer, v2, lands in the thread (on
+         *  the right, as the other side's turn), and the agent weighs it. It takes
+         *  the extra volume but holds out for 15% at Net30: inside John's limits,
+         *  so it doesn't ask him. Limits are dummy. */
+        counter: {
+          from: "Fizz's agent",
+          time: "Just now",
+          offer: {
+            title: "Counter-offer",
+            id: "Q-1042 v2",
+            lines: [
+              { name: "Orange concentrate", site: "Munich", qty: "12,000", change: "+2,000" },
+              { name: "Lemonade concentrate", site: "Frankfurt", qty: "7,500", change: "+2,500" },
+            ],
+            terms: [
+              { label: "Discount", value: "12%", note: "You asked 15%" },
+              { label: "Terms", value: "Net30" },
+              { label: "Total", value: "$72,072" },
+            ],
+          },
+          mulling: "Weighing Fizz's counter",
+          thought: (s: number) => `Weighed it up for ${s}s`,
+          musings: [
+            { kind: "read", text: "Fizz came back with v2: 12% off at Net30, and more of both" },
+            { kind: "fetch", text: "Checking the extra units against the forecast in SAP IBP" },
+            { kind: "notice", text: "Both plants can sell 19,500 units over Oktoberfest" },
+            { kind: "notice", text: "$72,072 is inside John's $100,000 limit for an order" },
+            { kind: "wonder", text: "12% is short of our 15%. Can we keep the volume and push on price?" },
+          ],
+          lead: "v2 gives us **more volume** but only **12% off**. The extra units fit Oktoberfest demand, so I'll **take the quantities** and **hold out for 15%**.",
+          plan: {
+            title: "Reply to Fizz",
+            of: "of",
+            done: "done",
+            toggle: "Show or hide the plan",
+            steps: [
+              {
+                doing: "Checking the extra units against demand",
+                done: "Checked the extra units against demand",
+                detail: "Munich and Frankfurt can sell **19,500 units** over Oktoberfest",
+                kind: "fetch",
+                source: "SAP IBP · demand forecast",
+              },
+              {
+                doing: "Checking your limits",
+                done: "Checked your limits",
+                detail: "**$72,072** is inside your **$100,000** limit. No need to ask you.",
+                kind: "read",
+                source: "Isar buying policy",
+              },
+              {
+                doing: "Taking v2's quantities",
+                done: "Took v2's quantities",
+                detail: "**12,000** orange and **7,500** lemonade, in the same cart",
+                kind: "write",
+                source: "Fizz Partners · cart",
+              },
+              {
+                doing: "Asking Fizz for 15%",
+                done: "Asked Fizz for 15%",
+                detail: "**19,500 units** · **15% off** · Net30",
+                kind: "write",
+                source: "Fizz seller agent · quote reply",
+              },
+            ],
+          },
+          reply: "I've told Fizz we'll take **19,500 units** if they meet us at **15% off, Net30**. That's inside your limits, so there's nothing for you to do yet. I'll come back to you if the terms change.",
+          quote: { id: "Q-1042 v2", status: "Waiting for Fizz to respond", meta: "19,500 units · asking 15% off · Net30" },
+          /** The back and forth on Q-1042 so far, folded under a chevron before the done mark. `by` picks the avatar. */
+          turns: {
+            title: (n: number) => `${n} turns on Q-1042`,
+            list: [
+              { by: "buyer", text: "**John's agent** sent v1: 15,000 units at **15% off**, Net30" },
+              { by: "seller", text: "**Fizz's agent** countered with v2: 19,500 units at **12% off**, Net30, $72,072" },
+              { by: "buyer", text: "**John's agent** took v2's units and asked for **15% off**" },
+            ],
+          },
+        },
         placeholder: "Ask your agent",
         add: "Add",
         send: "Send",
@@ -753,13 +831,15 @@ export const copy = {
           musings: [
             { kind: "read", label: "Reading the request", text: "15,000 units across two sites, Munich and Frankfurt" },
             { kind: "read", label: "Reading the request", text: "They're asking for 15% off at Net30, ahead of Oktoberfest" },
-            { kind: "fetch", label: "Pulling up the account", text: "Looking up Isar Bottling's account and price book in Salesforce" },
+            { kind: "fetch", label: "Pulling up the account", text: "Looking up Isar Bottling's account and price book in Salesforce", tool: { name: "dispatch_readonly", target: "buyer-profile-management" } },
             { kind: "notice", label: "Pulling up the account", text: "A steady account: 3 orders this year, all paid on time" },
-            { kind: "fetch", label: "Checking our rules", text: "Checking the discount policy for this account" },
+            { kind: "fetch", label: "Checking our rules", text: "Checking the discount policy for this account", tool: { name: "get_sor_detail", target: "b2b-merchant-quote-management" } },
             { kind: "notice", label: "Checking our rules", text: "Policy allows up to 12% at Net30, so 15% is over the line" },
             { kind: "wonder", label: "Weighing it up", text: "Munich's demand is up for Oktoberfest. Could they take more volume?" },
             { kind: "wonder", label: "Considering a counter", text: "A bigger order at a smaller discount might work for both sides" },
           ],
+          /** Ahead of a Salesforce tool call (a musing's or a check's `tool`): "Called `dispatch_readonly` <SOR>", as on Cowork. */
+          called: "Called",
           /** Where it stays once it's run through them, still at work, before it folds. */
           hold: "Weighing the options",
           weighed: (s: number) => `Weighed it up for ${s}s`,
@@ -772,11 +852,11 @@ export const copy = {
             done: "done",
             toggle: "Show or hide the checks",
             steps: [
-              { doing: "Checking stock in Munich and Frankfurt", done: "Checked stock in Munich and Frankfurt", detail: "**14,000** orange in Munich, **9,000** lemonade in Frankfurt: room for more", kind: "fetch", source: "Omnichannel Inventory" },
-              { doing: "Pulling Isar's price book", done: "Pulled Isar's price book", detail: "**$4.20** a unit list price, with a volume tier from **18,000 units**", kind: "fetch", source: "Revenue Cloud" },
-              { doing: "Checking the discount policy", done: "Checked the discount policy", detail: "Up to **12% at Net30**. More, or Net15, needs a person", kind: "read", source: "Pricing policy" },
-              { doing: "Checking Isar's credit", done: "Checked Isar's credit", detail: "**$250,000** limit, **$38,000** open: room for this order", kind: "fetch", source: "Billing" },
-              { doing: "Drafting counter-offer v2", done: "Drafted counter-offer v2", detail: "More volume at 12%: **12,000** orange and **7,500** lemonade", kind: "write", source: "Revenue Cloud" },
+              { doing: "Checking stock in Munich and Frankfurt", done: "Checked stock in Munich and Frankfurt", detail: "**14,000** orange in Munich, **9,000** lemonade in Frankfurt: room for more", kind: "fetch", source: "Omnichannel Inventory", tool: { name: "dispatch_readonly", target: "merchant-catalog-management" } },
+              { doing: "Pulling Isar's price book", done: "Pulled Isar's price book", detail: "**$4.20** a unit list price, with a volume tier from **18,000 units**", kind: "fetch", source: "Revenue Cloud", tool: { name: "dispatch_readonly", target: "promotion-management" } },
+              { doing: "Checking the discount policy", done: "Checked the discount policy", detail: "Up to **12% at Net30**. More, or Net15, needs a person", kind: "read", source: "Pricing policy", tool: { name: "get_sor_detail", target: "b2b-merchant-quote-management" } },
+              { doing: "Checking Isar's credit", done: "Checked Isar's credit", detail: "**$250,000** limit, **$38,000** open: room for this order", kind: "fetch", source: "Billing", tool: { name: "dispatch_readonly", target: "merchant-payment-management" } },
+              { doing: "Drafting counter-offer v2", done: "Drafted counter-offer v2", detail: "More volume at 12%: **12,000** orange and **7,500** lemonade", kind: "write", source: "Revenue Cloud", tool: { name: "dispatch_write", target: "b2b-merchant-quote-management" } },
               { doing: "Sending v2 to Isar Bottling's agent", done: "Sent v2 to Isar Bottling's agent", detail: "Over A2A, signed by Fizz Drinks", kind: "write", source: "A2A" },
             ],
           },
@@ -798,6 +878,14 @@ export const copy = {
             via: "Sent over A2A · signed by Fizz Drinks",
           },
           reply: "I've countered with **v2: 12% off, not the 15% they asked**, the most I can give at Net30. Munich's Oktoberfest demand can take more, so I offered **2,000 more orange** and **2,500 more lemonade**. That takes the order to **$72,072**, up from $53,550. I'll tell you when Isar's agent replies.",
+          /** The back and forth on Q-1042 so far, folded under a chevron before the done mark. `by` picks the avatar. */
+          turns: {
+            title: (n: number) => `${n} turns on Q-1042`,
+            list: [
+              { by: "buyer", text: "**Isar's agent** asked for v1: 15,000 units at **15% off**, Net30" },
+              { by: "seller", text: "**Fizz's agent** countered with v2: 19,500 units at **12% off**, Net30, $72,072" },
+            ],
+          },
         },
         empty: {
           title: "Ready when you are, Alex",

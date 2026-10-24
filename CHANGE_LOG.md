@@ -30,6 +30,12 @@ Entry format:
 
 ## Unreleased
 
+## 21.2.0 — 2026-10-25 01:15 IST · minor (phone v2 turn, Salesforce tool calls, turns timeline)
+- **Both agent chats: "N turns on Q-1042"**, a folded timeline of the back and forth so far, before the done mark once there's been more than one turn: a clock icon, the count and a chevron; opened, one brief line per turn by the acting agent's mark (phone: John's agent v1 → Fizz's agent v2 → John's agent asks 15%; Command Center: Isar's agent v1 → Fizz's agent v2). Copy in `storefront.agent.counter.turns` and `commandCenter.agent.quote.turns`.
+- **Phone: "Fizz's agent"** (was "Fizz's seller agent") on the counter-offer, and its mark is now the same size as John's agent's (28px).
+- **Phone: v2 arrives, John's agent holds out at 15%** (story steps 8–9). Once Fizz sends v2, the phone's chat gets a second turn: Fizz's counter-offer as a card from "Fizz's seller agent" (12,000 orange +2,000, 7,500 lemonade +2,500; 12% "You asked 15%", Net30, $72,072), then the agent weighs it (five musings), says it'll take the quantities and hold out for 15%, runs a four-step plan and replies; the quote card reads "Waiting for Fizz to respond". Sets the new story beat `heldOut`. Copy in `storefront.agent.counter`; `Reasoning`, `Plan` and `Quote` take their copy as props now.
+- **Command Center: Salesforce tool calls in the seller agent's thinking**, after Cowork's integrations timeline. A musing or check that goes to Salesforce shows "Called `dispatch_readonly` <SOR>" under it, with the Salesforce logo: the account lookup (`buyer-profile-management`), the discount policy (`get_sor_detail` `b2b-merchant-quote-management`), stock (`merchant-catalog-management`), price book (`promotion-management`), credit (`merchant-payment-management`) and drafting v2 (`dispatch_write` `b2b-merchant-quote-management`). Musings wear the logo as their icon; a check shows its call while it runs and keeps it once done, in place of the source chip. Sending v2 over A2A isn't Salesforce, so it keeps its chip. Optional `tool` on musings and checks in copy.
+
 ## 21.1.0 — 2026-10-25 00:53 IST
 
 **Kind:** minor — the seller agent counters with v2; chat formatting; roomier knowledge cards; agent colours in the who's-acting bar.

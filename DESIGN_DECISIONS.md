@@ -600,6 +600,13 @@ Same for checkout's `/reorder`: it reads the order and writes the reorder cart i
 
 ---
 
+### 2026-10-25 A2A agent chats: Salesforce tool calls in the thinking; a "turns so far" timeline once there's been back and forth
+
+- **Decision:** In the seller agent's chat, any musing or check that goes to Salesforce shows the call under it, as Cowork does: the Salesforce logo, "Called `dispatch_readonly` <SOR>". Once a quote has gone back and forth (more than one turn), both agents' chats end each turn with a folded row before the done mark: a clock, "N turns on Q-1042", a chevron. Opened, it's a timeline of who did what, one brief line per turn by that agent's mark. In the phone chat, Fizz's agent is just "Fizz's agent", and its mark is the same size as John's agent's.
+- **Why:** Somnath's review: the seller agent's work should visibly run on Salesforce, and anyone should be able to see the negotiation so far at a glance.
+
+---
+
 ## Undecided (to resolve in planning)
 
 - Interaction inventory + milestone ordering (rough order agreed; per-piece detail TBD).

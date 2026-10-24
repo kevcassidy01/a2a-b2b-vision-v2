@@ -9,6 +9,7 @@ import {
   Eye,
   FileSearch,
   FileText,
+  History,
   Lightbulb,
   PencilLine,
   Plus,
@@ -20,6 +21,7 @@ import {
 import { Rich } from "../Rich";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
+import agentLogo from "../../assets/a2a/agent-logo.png";
 import { copy } from "../../copy/copy";
 import { ProductPhoto } from "./Photo";
 import { PHOTOS } from "./photos";
@@ -63,10 +65,27 @@ const T = (() => {
   const done = step(STEPS.length - 1) + 500;
   return { think, muse, para, thinkFor, thought, plan, step, done, end: done + 1200 };
 })();
+
+const C = a.counter;
+/**
+ * The counter's timeline, in ms from v2 landing: Fizz's offer comes in; the
+ * agent weighs it (musings one after another, no paragraph), folds; the lead
+ * line, then its reply plan step by step; then the reply and where the quote stands.
+ */
+const T2 = (() => {
+  const offer = 600;
+  const think = offer + 1400;
+  const muse = C.musings.map((_, i) => think + C.musings.slice(0, i).reduce((n, m) => n + museFor(m.kind), 0));
+  const thought = think + C.musings.reduce((n, m) => n + museFor(m.kind), 0) + 900;
+  const plan = thought + 700;
+  const step = (i: number) => plan + 700 + i * 1400;
+  const done = step(C.plan.steps.length - 1) + 500;
+  return { offer, think, muse, thinkFor: thought - think, thought, plan, step, done, end: done + 1200 };
+})();
 const TICK = 50;
 
-/** Ms since the handoff, ticking until the story's done; null before it. */
-function useClock(started: boolean) {
+/** Ms since a turn began (the handoff, or v2 landing), ticking until it's done; null before it. */
+function useClock(started: boolean, end: number) {
   const [t, setT] = useState<number | null>(null);
   useEffect(() => {
     if (!started) return;
@@ -75,10 +94,10 @@ function useClock(started: boolean) {
     const id = window.setInterval(() => {
       const now = performance.now() - t0;
       setT(now);
-      if (now > T.end) clearInterval(id);
+      if (now > end) clearInterval(id);
     }, TICK);
     return () => clearInterval(id);
-  }, [started]);
+  }, [started, end]);
   return t;
 }
 
@@ -115,23 +134,31 @@ export function AgentChat({
   onClose: () => void;
 }) {
   const [started, setStarted] = useState(false);
-  const t = useClock(started);
+  const t = useClock(started, T.end);
   const thread = useRef<HTMLDivElement>(null);
-  const { sendQuote, setWorking } = useStory();
+  const { sendQuote, counterSent, holdOut, setWorking } = useStory();
   // Fizz has the request the moment the reply says so, not once the quote card is drawn.
   const quoted = t !== null && t >= T.done + 300;
+  // Fizz's v2 lands in the thread once its agent sends it.
+  const t2 = useClock(counterSent, T2.end);
+  const held = t2 !== null && t2 >= T2.done + 300;
 
   useEffect(() => {
     if (open && assign && signedIn) setStarted(true);
   }, [open, assign, signedIn]);
 
   const done = STEPS.filter((_, i) => t !== null && t >= T.step(i)).length;
-  const working = t !== null && t < T.done;
+  const done2 = C.plan.steps.filter((_, i) => t2 !== null && t2 >= T2.step(i)).length;
+  const muse2 = t2 === null ? 0 : T2.muse.filter((x) => t2 >= x).length;
+  const working2 = t2 !== null && t2 >= T2.think && t2 < T2.done;
+  const working = (t !== null && t < T.done) || working2;
   const words = t === null ? 0 : Math.max(0, Math.min(WORDS.length, Math.floor((t - T.para) / WORD)));
   // How many musings have started.
   const muse = t === null ? 0 : T.muse.filter((x) => t >= x).length;
   // What's on screen changes in beats, not every tick: scroll on those.
-  const beat = t === null ? -1 : [T.think, T.thought, T.plan, T.done, T.done + 300, T.done + 600, T.done + 900].filter((x) => t >= x).length;
+  const beat =
+    (t === null ? -1 : [T.think, T.thought, T.plan, T.done, T.done + 300, T.done + 600, T.done + 900].filter((x) => t >= x).length) +
+    (t2 === null ? 0 : [T2.offer, T2.think, T2.thought, T2.plan, T2.done, T2.done + 300, T2.done + 600, T2.done + 900, T2.done + 1100].filter((x) => t2 >= x).length);
 
   // The who's-acting bar lights John's agent while it works.
   useEffect(() => {
@@ -143,10 +170,15 @@ export function AgentChat({
     if (quoted) sendQuote();
   }, [quoted, sendQuote]);
 
+  // The reply's out: Fizz's side sees Isar holding out for 15%.
+  useEffect(() => {
+    if (held) holdOut();
+  }, [held, holdOut]);
+
   useEffect(() => {
     const el = thread.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  }, [beat, done, words, muse]);
+  }, [beat, done, words, muse, done2, muse2]);
 
   return (
     <div className="sf-sheet absolute inset-0 z-[5]" data-open={open || undefined} inert={!open}>
@@ -202,13 +234,16 @@ export function AgentChat({
               </button>
             </Empty>
           ) : (
-            <Thread t={t} words={words} muse={muse} done={done} />
+            <>
+              <Thread t={t} words={words} muse={muse} done={done} />
+              {t2 !== null && <CounterTurn t={t2} muse={muse2} done={done2} />}
+            </>
           )}
         </div>
 
         <Composer
           working={working}
-          suggestions={t !== null && t >= T.done + 900}
+          suggestions={t !== null && t >= T.done + 900 && (t2 === null || t2 >= T2.done + 1100)}
           placeholder={signedIn ? a.placeholder : a.signedOut.placeholder}
         />
       </section>
@@ -250,16 +285,147 @@ function Thread({ t, words, muse, done }: { t: number; words: number; muse: numb
       {t >= T.think && (
         <div className="mt-7">
           <AgentMark className="sf-rise size-7" />
-          <Reasoning thinking={t < T.thought} words={words} muse={muse} />
+          <Reasoning
+            thinking={t < T.thought}
+            musings={MUSINGS}
+            muse={muse}
+            mulling={a.mulling}
+            thought={a.thought(Math.round(T.thinkFor / 1000))}
+            paragraph={WORDS.slice(0, t < T.thought ? words : WORDS.length).join(" ")}
+          />
           {t >= T.thought && <AgentSays className="mt-3"><Rich text={a.lead} /></AgentSays>}
-          {t >= T.plan && <Plan done={done} />}
+          {t >= T.plan && <Plan plan={a.plan} done={done} />}
           {t >= T.done && <Result />}
           {t >= T.done + 300 && <AgentSays className="mt-5"><Rich text={a.reply} /></AgentSays>}
-          {t >= T.done + 600 && <Quote />}
+          {t >= T.done + 600 && <Quote q={a.quote} />}
           {t >= T.done + 900 && <AgentMark className="sf-rise mt-5 size-7" />}
         </div>
       )}
     </>
+  );
+}
+
+/**
+ * Story steps 8–9: Fizz's turn, its counter-offer v2 on the right (the other
+ * side, as John's own turns are); then the agent's: it weighs v2, takes the
+ * extra volume, holds out for 15% at Net30 (inside John's limits, so it doesn't
+ * ask him), and says where the quote stands.
+ */
+function CounterTurn({ t, muse, done }: { t: number; muse: number; done: number }) {
+  return (
+    <>
+      {t >= T2.offer && <Offer />}
+      {t >= T2.think && (
+        <div className="mt-7">
+          <AgentMark className="sf-rise size-7" />
+          <Reasoning
+            thinking={t < T2.thought}
+            musings={C.musings}
+            muse={muse}
+            mulling={C.mulling}
+            thought={C.thought(Math.round(T2.thinkFor / 1000))}
+          />
+          {t >= T2.thought && <AgentSays className="mt-3"><Rich text={C.lead} /></AgentSays>}
+          {t >= T2.plan && <Plan plan={C.plan} done={done} />}
+          {t >= T2.done + 300 && <AgentSays className="mt-5"><Rich text={C.reply} /></AgentSays>}
+          {t >= T2.done + 600 && <Quote q={C.quote} />}
+          {t >= T2.done + 900 && <Turns turns={C.turns} />}
+          {t >= T2.done + 1100 && <AgentMark className="sf-rise mt-5 size-7" />}
+        </div>
+      )}
+    </>
+  );
+}
+
+/** Fizz's agent's mark, the same size as John's agent's wherever they sit side by side. */
+function FizzMark({ className = "" }: { className?: string }) {
+  return (
+    <span aria-hidden className={`grid shrink-0 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.1)] ${className}`}>
+      <img src={agentLogo} alt="" className="size-[58%]" />
+    </span>
+  );
+}
+
+/**
+ * The back and forth on the quote so far, once there's been more than one
+ * turn: a clock, how many turns, a chevron, folded until tapped; open, a
+ * timeline of who did what, each by its agent's mark. Sits before the done mark.
+ */
+function Turns({ turns }: { turns: { title: (n: number) => string; list: readonly { by: string; text: string }[] } }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="sf-rise mt-5">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className="flex min-h-8 items-center gap-2 text-left text-[14px] font-medium text-text-muted"
+      >
+        <History className="size-4 shrink-0" strokeWidth={2.25} />
+        {turns.title(turns.list.length)}
+        <ChevronDown className={`size-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2.25} />
+      </button>
+      {open && (
+        <ol>
+          {turns.list.map((x) => (
+            <TimelineRow
+              key={x.text}
+              mark={x.by === "seller" ? <FizzMark className="size-4" /> : <AgentMark className="size-4" />}
+            >
+              <Rich text={x.text} />
+            </TimelineRow>
+          ))}
+        </ol>
+      )}
+    </div>
+  );
+}
+
+/** Fizz's counter-offer as it lands: who sent it (Fizz's agent's mark and name), the offer as a card (what changed in green), and when. */
+function Offer() {
+  const o = C.offer;
+  return (
+    <div className="sf-rise mt-8 flex flex-col items-end">
+      <p className="mb-2 flex items-center gap-1.5 pr-1 text-[13px] text-text-muted">
+        <FizzMark className="size-7" />
+        {C.from}
+      </p>
+      <div className="w-[92%] rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+        <div className="flex items-center gap-3">
+          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+            <FileText className="size-5 text-text" strokeWidth={2} />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{o.title}</span>
+            <span className="block text-[13px] text-text-muted">{o.id}</span>
+          </span>
+        </div>
+        <ul className="mt-3">
+          {o.lines.map((l) => (
+            <li key={l.name} className="flex items-start gap-3 border-t border-black/[0.07] py-3 tabular-nums">
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] font-semibold tracking-[-0.01em] text-text">{l.name}</span>
+                <span className="block text-[13px] text-text-muted">{l.site}</span>
+              </span>
+              <span className="text-right">
+                <span className="block text-[15px] font-semibold text-text">{l.qty}</span>
+                <span className="block text-[13px] font-semibold text-[#1f7a3d]">{l.change}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <dl className="mt-1 grid grid-cols-3 gap-2">
+          {o.terms.map((f) => (
+            <div key={f.label} className="rounded-2xl bg-[#f6f6f8] px-3 py-2.5">
+              <dt className="text-[12px] text-text-muted">{f.label}</dt>
+              <dd className="mt-0.5 text-[17px] font-bold tabular-nums tracking-[-0.01em] text-text">{f.value}</dd>
+              {"note" in f && f.note && <dd className="text-[11.5px] leading-snug text-text-muted">{f.note}</dd>}
+            </div>
+          ))}
+        </dl>
+      </div>
+      <p className="mt-1.5 pr-1 text-[12px] text-text-muted">{C.time}</p>
+    </div>
   );
 }
 
@@ -280,11 +446,27 @@ function AgentSays({ className = "", children }: { className?: string; children:
  * then the paragraph, small and quiet, streaming in as the last row. Once it's
  * done it folds to a chevron and how long it took; a tap opens or folds it.
  */
-function Reasoning({ thinking, words, muse }: { thinking: boolean; words: number; muse: number }) {
+function Reasoning({
+  thinking,
+  musings,
+  muse,
+  mulling,
+  thought,
+  paragraph,
+}: {
+  thinking: boolean;
+  musings: readonly { kind: string; text: string }[];
+  muse: number;
+  mulling: string;
+  thought: string;
+  /** The paragraph so far, streamed in after the musings; none on later turns. */
+  paragraph?: string;
+}) {
   const [userOpen, setUserOpen] = useState<boolean | null>(null);
   const open = userOpen ?? thinking;
-  const shown = thinking ? MUSINGS.slice(0, muse) : MUSINGS;
-  const para = !thinking || muse === MUSINGS.length;
+  const shown = thinking ? musings.slice(0, muse) : musings;
+  const para = paragraph !== undefined && (!thinking || muse === musings.length);
+  const last = paragraph === undefined ? thinking && muse > 0 : thinking && !para;
   return (
     <div className="sf-rise mt-3">
       <button
@@ -301,7 +483,7 @@ function Reasoning({ thinking, words, muse }: { thinking: boolean; words: number
           )}
         </span>
         <span className={thinking ? "sf-shimmer" : undefined}>
-          {thinking ? a.mulling : a.thought(Math.round(T.thinkFor / 1000))}
+          {thinking ? mulling : thought}
         </span>
         <ChevronDown className={`size-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2.25} />
       </button>
@@ -311,14 +493,14 @@ function Reasoning({ thinking, words, muse }: { thinking: boolean; words: number
             <TimelineRow
               key={m.text}
               icon={KIND[m.kind]}
-              current={thinking && !para && i === muse - 1}
+              current={last && i === muse - 1}
             >
               {m.text}
             </TimelineRow>
           ))}
           {para && (
             <TimelineRow icon={AlignLeft}>
-              <span className="text-text-muted/80">{WORDS.slice(0, thinking ? words : WORDS.length).join(" ")}</span>
+              <span className="text-text-muted/80">{paragraph}</span>
             </TimelineRow>
           )}
         </ol>
@@ -327,8 +509,18 @@ function Reasoning({ thinking, words, muse }: { thinking: boolean; words: number
   );
 }
 
-/** One row of the reasoning's timeline: a line up to the row above, its icon, and what it did (shimmering while it's the one running). */
-function TimelineRow({ icon: Icon, current = false, children }: { icon: LucideIcon; current?: boolean; children: ReactNode }) {
+/** One row of the reasoning's timeline: a line up to the row above, its icon (or an agent's mark), and what it did (shimmering while it's the one running). */
+function TimelineRow({
+  icon: Icon,
+  mark,
+  current = false,
+  children,
+}: {
+  icon?: LucideIcon;
+  mark?: ReactNode;
+  current?: boolean;
+  children: ReactNode;
+}) {
   // The line runs from the row above (or the header) to this icon, and on below it to the foot of the row,
   // so it joins up however many lines a row wraps to; it's solid, so where segments meet they don't darken.
   return (
@@ -336,7 +528,7 @@ function TimelineRow({ icon: Icon, current = false, children }: { icon: LucideIc
       <span aria-hidden className="absolute -top-1.5 left-[7.5px] h-[14px] w-px bg-[#dcdce0]" />
       <span aria-hidden className="absolute bottom-0 left-[7.5px] top-[29px] w-px bg-[#dcdce0] group-last/row:hidden" />
       <span className="grid h-[17px] w-4 shrink-0 place-items-center">
-        <Icon className={`size-3.5 ${current ? "text-text" : ""}`} strokeWidth={2} />
+        {mark ?? (Icon && <Icon className={`size-3.5 ${current ? "text-text" : ""}`} strokeWidth={2} />)}
       </span>
       <span className={current ? "sf-shimmer" : undefined}>{children}</span>
     </li>
@@ -344,10 +536,18 @@ function TimelineRow({ icon: Icon, current = false, children }: { icon: LucideIc
 }
 
 /** The plan: its goal and how many steps are done, then each step pending, running or done. Open while it runs, folded once it's done; a tap on the header opens or folds it. */
-function Plan({ done }: { done: number }) {
+type PlanCopy = {
+  title: string;
+  of: string;
+  done: string;
+  toggle: string;
+  steps: readonly { doing: string; done: string; detail: string; kind: string; source: string }[];
+};
+
+function Plan({ plan: p, done }: { plan: PlanCopy; done: number }) {
   const [userOpen, setUserOpen] = useState<boolean | null>(null);
+  const STEPS = p.steps;
   const open = userOpen ?? done < STEPS.length;
-  const p = a.plan;
   return (
     <div className="sf-rise mt-4 rounded-[24px] bg-[#f6f6f8] px-4 py-1">
       <button
@@ -455,8 +655,7 @@ function Result() {
 }
 
 /** The quote request, waiting on Fizz: white and outlined like the cart, its status at the foot. */
-function Quote() {
-  const q = a.quote;
+function Quote({ q }: { q: { id: string; status: string; meta: string } }) {
   return (
     <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
       <div className="flex items-center gap-3">
