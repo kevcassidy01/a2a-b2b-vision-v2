@@ -30,6 +30,12 @@ Entry format:
 
 ## Unreleased
 
+## 20.4.0 — 2026-10-24 12:20 IST
+**Kind:** small addition, on branch `test/anton-hero`. The "who's acting" bar under the A2A stage.
+- **Actor bar** (`src/a2a/ActorBar.tsx`): a thin (32px) dark bar along the bottom of `/#a2a`, under both the phone and the Command Center, in four equal parts: **John · John's agent · Alex's agent · Alex** (people at the ends, their agents meeting in the middle). Every part sits dull; the acting one lights up (bright label, a soft light from below, its dot glowing), with a 300ms ease. Two can be lit at once, for a handoff between the agents. No status text: the agentic chats show what's happening; the bar only shows who.
+- **Demo hotkeys until the script drives it:** Ctrl+1–4 lights or dims John, John's agent, Alex's agent, Alex; Ctrl+0 dims all.
+- The stage is now a column: the phone and shell on top (their row keeps the widening gap), the bar 10px below. Copy is `copy.a2a.actors`; styles `.a2a-actor-bar`, `.a2a-actor`, `.a2a-actor-dot`.
+
 ## 20.3.0 — 2026-10-24 12:07 IST
 **Kind:** small addition, on branch `test/anton-hero` (not merged). Anton on the storefront's titles, the store name "Fizz Partners B2B", an empty wide Agent drawer, and the login page filling itself in. The harness (SESSION_CONTEXT, TODO) is updated with the A2A build state for a fresh session.
 - **The login page fills itself in:** about 0.6s after the page appears, AutoFill puts in John's email and password in the yellow tint, with no tap needed. Tapping a field before then still fills them.

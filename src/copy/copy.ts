@@ -92,6 +92,16 @@ export const copy = {
         expand: "Show the address bar",
       },
     },
+    /** The bar under the stage: who is acting right now. People at the ends,
+     *  their agents meeting in the middle. */
+    actors: {
+      label: "Who's acting",
+      active: "acting",
+      john: "John",
+      johnAgent: "John's agent",
+      alexAgent: "Alex's agent",
+      alex: "Alex",
+    },
     /** John's view: Fizz Drinks' B2B store on the phone, before he logs in. */
     storefront: {
       brand: "fizz",

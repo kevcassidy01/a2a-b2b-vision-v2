@@ -88,6 +88,10 @@ sees each agent's move land on the other side.
 - The **seller agent** is a docked right chat sidebar (not floating).
 - **Shells come first:** the iPhone and the AI app shell get designed before anything inside them.
 
+**Under both: the "who's acting" bar (added 2026-10-24).** A thin dark bar along the bottom of the stage,
+four equal parts: **John · John's agent · Alex's agent · Alex**. The acting part lights up; the rest stay
+dull. Each story step (§5) names who acts, and the bar follows. No status text.
+
 *Superseded the same day:* a toggle with three views (Storefront, Command Center, and Both as two agent chat
 feeds side by side).
 

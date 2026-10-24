@@ -6,6 +6,11 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-24 A2A: a "who's acting" bar under the stage
+
+**Decision:** A thin dark bar runs along the bottom of the A2A prototype, in four equal parts: **John · John's agent · Alex's agent · Alex**. All stay dull; the part that is acting at that point of the story lights up (two can be lit for a handoff between agents). It shows only who is acting, with no status line, and it isn't aligned to the screens above.
+**Rationale:** Somnath's idea: the audience sees at a glance which agent is working and when a person steps in. People at the ends and agents in the middle reads as the chain (person → agent ⇄ agent ← person). Equal parts look cleaner than parts matched to the phone and the Command Center. What's happening is the agentic chats' job.
+
 ### 2026-10-24 Segmented controls and icon + label padding
 
 **Decision:**

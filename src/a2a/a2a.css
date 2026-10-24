@@ -605,3 +605,42 @@
   background: #000;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
 }
+
+/* The bar under the stage: who is acting. Dark like the shell's glass, four
+   equal parts split by faint hairlines. Every part sits dull; the acting one
+   lights up: brighter label, a soft light from below, its dot glowing. */
+.a2a-actor-bar {
+  border-radius: 10px;
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(40px) saturate(140%);
+  backdrop-filter: blur(40px) saturate(140%);
+  background: rgb(19 20 22 / 0.8);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.7),
+    0 8px 24px rgb(0 0 0 / 0.35);
+}
+.a2a-actor {
+  color: rgb(255 255 255 / 0.32);
+  transition:
+    color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+.a2a-actor + .a2a-actor {
+  border-left: 1px solid rgb(255 255 255 / 0.06);
+}
+.a2a-actor-dot {
+  background: rgb(255 255 255 / 0.2);
+  transition:
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+.a2a-actor[data-on] {
+  color: rgb(255 255 255 / 0.96);
+  background: rgb(255 255 255 / 0.07);
+  box-shadow: inset 0 -12px 20px -12px rgb(255 255 255 / 0.18);
+}
+.a2a-actor[data-on] .a2a-actor-dot {
+  background: #fff;
+  box-shadow: 0 0 8px rgb(255 255 255 / 0.8);
+}
