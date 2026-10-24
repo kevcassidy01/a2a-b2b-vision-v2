@@ -30,6 +30,16 @@ Entry format:
 
 ## Unreleased
 
+## 20.2.0 — 2026-10-24 11:43 IST
+**Kind:** small addition and a bug fix. The Command Center header is sticky with a soft fade, the background stays still while the page scrolls, Data source is now a dropdown, and the Agent and view picker have moved. The period defaults to 6 months. Fix: the phone opens on the storefront again.
+- **Fix: the phone opens on the storefront again.** 20.0.0 and 20.1.0 were committed with the phone starting on the login page, left over from a screenshot test.
+- **The Command Center scrolls on its own**, so the white-to-grey background stays still behind the cards instead of scrolling with them (replaces `.a2a-hero-fade`).
+- **Row 2 on narrower screens:** USD, Org data and the scope form a right-aligned group, and only the scope drops to a second line, still at the right. Everything sits on one line at 16-inch MacBook width and wider.
+- **Command Center header is sticky down to its hairline.** A 20px white fade under the line lets cards scroll behind it softly instead of meeting it.
+- **Header rows rearranged:** the Agent button moved to the end of row 1, after Notifications. Row 2 is now the view (Console / Dashboard / Service) on the left, with the currency, data source and scope on the right.
+- **Data source is now a dropdown** (Org data / Demo data), using the same Dropdown as currency and stores (new `SourceMenu.tsx`), in place of the segmented control.
+- **The period defaults to 6 months**, so the section is now "Last 6 months" (Apr 23, 2026 – Oct 23, 2026, compared with Oct 23, 2025 – Apr 23, 2026), and the tiles read "vs the prior 6 months". The tile figures are unchanged. The period row scrolls with the page, under the sticky part.
+
 ## 20.1.0 — 2026-10-24 11:26 IST
 **Kind:** small addition: Avant Garde for Salesforce Demi on the Command Center's titles, store name and big numbers (from branch `test/avant-garde-font`).
 - **Font test (branch `test/avant-garde-font`)**: Avant Garde for Salesforce Demi on the Command Center's store name, section headings (e.g. "Last 12 months") card titles (Needs your approval, Orders by bill-to-country), and the metric tiles' big numbers (body text, deltas and small figures stay Inter). New `.a2a-title` class in `a2a.css`, `@font-face` in `fonts.css`. The woff2 is in `src/assets/fonts/avant-garde/` and gitignored (proprietary), so without it the titles fall back to Inter.

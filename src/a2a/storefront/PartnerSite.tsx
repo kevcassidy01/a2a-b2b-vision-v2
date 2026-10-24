@@ -15,7 +15,7 @@ const DONE = 1150;
  * line runs, the new page replaces the old one). Back returns to the store.
  */
 export function PartnerSite() {
-  const [page, setPage] = useState<Page>("login");
+  const [page, setPage] = useState<Page>("home");
   const [loading, setLoading] = useState(false);
   const timers = useRef<number[]>([]);
 

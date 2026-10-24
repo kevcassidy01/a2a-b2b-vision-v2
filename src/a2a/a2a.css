@@ -114,19 +114,23 @@
 }
 
 /* The Command Center's canvas: pale grey, so white cards with soft shadows
-   stand out on it. The header sits on white (.a2a-hero), and a 96px fade under
-   it (.a2a-hero-fade, overlapping the content, so it never depends on how tall
-   that is) carries the white into the grey. */
+   stand out on it. It is its own scroller, so its background stays put while
+   the page scrolls: white behind the header and the period row, fading to the
+   grey over 100px. The sticky header sits on white (.a2a-hero). */
 .a2a-canvas {
-  background: #ededf0;
+  background: linear-gradient(180deg, #fff 0, #fff 250px, #ededf0 350px) no-repeat, #ededf0;
 }
 .a2a-hero {
   background: #fff;
 }
-.a2a-hero-fade {
-  height: 96px;
-  margin-bottom: -96px;
+/* Under the sticky header's hairline: a short white fade, so what scrolls up
+   goes soft before it reaches the line instead of butting against it. */
+.a2a-sticky-fade {
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 20px;
   background: linear-gradient(180deg, #fff, rgb(255 255 255 / 0));
+  pointer-events: none;
 }
 
 /* White cards on the grey canvas: a faint hairline and a soft, low shadow. */

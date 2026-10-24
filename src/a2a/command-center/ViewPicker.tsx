@@ -9,13 +9,13 @@ const t = copy.a2a.commandCenter.view;
  * label; the chosen one gets the blue active stroke, a filled radio and a
  * semibold label (its width reserved, so nothing shifts).
  */
-export function ViewPicker() {
+export function ViewPicker({ className = "" }: { className?: string }) {
   const [selected, setSelected] = useState(0);
   return (
     <div
       role="radiogroup"
       aria-label={t.label}
-      className="flex items-center gap-2"
+      className={`flex items-center gap-2 ${className}`}
     >
       {t.options.map((option, i) => {
         const on = selected === i;

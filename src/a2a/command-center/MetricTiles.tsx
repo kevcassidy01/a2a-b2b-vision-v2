@@ -5,7 +5,7 @@ const t = copy.a2a.commandCenter;
 type Metric = (typeof t.metrics)[number];
 
 /**
- * MetricTiles — the last 12 months in eight tiles, four to a row. Each tile is
+ * MetricTiles — the last 6 months in eight tiles, four to a row. Each tile is
  * a subgrid of the row, so labels, values, rises and comparisons line up
  * across a row even when a tile has no rise or comparison.
  */

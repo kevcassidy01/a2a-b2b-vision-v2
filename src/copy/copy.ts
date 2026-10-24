@@ -206,7 +206,7 @@ export const copy = {
       scope: { label: "Data scope", options: ["CRM", "Data 360", "Both"] },
       /** The view (a mode of the Command Center), Console by default. */
       view: { label: "View", options: ["Console", "Dashboard", "Service"] },
-      /** The period the figures cover, Today by default. */
+      /** The period the figures cover, 6 months by default. */
       period: {
         label: "Period",
         options: [
@@ -227,10 +227,10 @@ export const copy = {
       },
       /** Section headings, top to bottom. */
       sections: {
-        last12Months: {
-          title: "Last 12 months",
+        last6Months: {
+          title: "Last 6 months",
           subtitle:
-            "Oct 23, 2025 - Oct 23, 2026, 10:11 • compared with Oct 23, 2024 - Oct 23, 2025, the same elapsed time. Days are counted in UTC+1.",
+            "Apr 23, 2026 - Oct 23, 2026, 10:11 • compared with Oct 23, 2025 - Apr 23, 2026, the same elapsed time. Days are counted in UTC+1.",
         },
       },
       /** Quote requests from the storefront waiting on the seller (empty for now). */
@@ -259,16 +259,16 @@ export const copy = {
         checked: "Checked Oct 23, 2026, 10:11; it checks every 15 s while this page is open.",
         empty: "No storefront quote requests are waiting.",
       },
-      /** The last 12 months at a glance. `delta` is the rise on the prior 12
+      /** The last 6 months at a glance. `delta` is the rise on the prior 6
        *  months; `compare` names that prior figure. */
       metrics: [
-        { label: "Orders", value: "188", delta: "4%", compare: "vs the prior 12 months (181)" },
-        { label: "Order value", value: "$956K", delta: "62%", compare: "vs the prior 12 months ($590.2K)" },
-        { label: "Avg order value", value: "$5,085", delta: "56%", compare: "vs the prior 12 months ($3,261)" },
-        { label: "Checkout success", value: "55.6%", compare: "vs the prior 12 months (no checkouts)" },
+        { label: "Orders", value: "188", delta: "4%", compare: "vs the prior 6 months (181)" },
+        { label: "Order value", value: "$956K", delta: "62%", compare: "vs the prior 6 months ($590.2K)" },
+        { label: "Avg order value", value: "$5,085", delta: "56%", compare: "vs the prior 6 months ($3,261)" },
+        { label: "Checkout success", value: "55.6%", compare: "vs the prior 6 months (no checkouts)" },
         { label: "Carts with errors", value: "13" },
         { label: "Abandoned cart value", value: "$97" },
-        { label: "Buying accounts", value: "30", delta: "7%", compare: "vs the prior 12 months (28)" },
+        { label: "Buying accounts", value: "30", delta: "7%", compare: "vs the prior 6 months (28)" },
         { label: "Open cases", value: "14" },
       ],
       /** Read out before a metric's rise, which is shown as an arrow. */
