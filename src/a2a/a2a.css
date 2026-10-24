@@ -417,6 +417,138 @@
   }
 }
 
+/* iOS 26 Liquid Glass, dark (the phone's OS is in dark mode): a smoky frost
+   over the page, a thin light rim lit from the top, white glyphs. */
+.a2a-liquid-glass {
+  background: rgb(28 28 30 / 0.58);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  backdrop-filter: blur(14px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0.5px rgb(255 255 255 / 0.22),
+    inset 0 -0.5px 0.5px rgb(255 255 255 / 0.08),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.12),
+    0 0 0 0.5px rgb(0 0 0 / 0.3),
+    0 8px 28px -6px rgb(0 0 0 / 0.35);
+  color: #fff;
+}
+
+/* Safari's compact bottom bar. Expanded: two 48px glass circles either side of
+   a 48px address pill. Collapsed (scrolled down): the circles shrink away and
+   the pill narrows to a 30px capsule with just the domain, lower down. */
+.a2a-safari {
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 96px;
+  pointer-events: none;
+}
+.a2a-safari > * {
+  pointer-events: auto;
+}
+.a2a-safari-side {
+  position: absolute;
+  bottom: 26px;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  transition:
+    opacity 220ms ease-out,
+    transform 380ms var(--ease);
+}
+.a2a-safari[data-collapsed] .a2a-safari-side {
+  opacity: 0;
+  transform: scale(0.5) translateY(12px);
+  pointer-events: none;
+}
+.a2a-safari-address {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 32px - 2 * 56px);
+  height: 48px;
+  padding: 0 6px;
+  border-radius: 9999px;
+  transform: translateX(-50%);
+  transition:
+    width 380ms var(--ease),
+    height 380ms var(--ease),
+    bottom 380ms var(--ease),
+    padding 380ms var(--ease);
+}
+.a2a-safari[data-collapsed] .a2a-safari-address {
+  width: 172px;
+  height: 30px;
+  bottom: 20px;
+  padding: 0;
+}
+.a2a-safari-inner {
+  flex-shrink: 0;
+  border-radius: 9999px;
+  transition:
+    opacity 200ms ease-out,
+    width 380ms var(--ease);
+}
+.a2a-safari[data-collapsed] .a2a-safari-inner {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+.a2a-safari-domain {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: font-size 380ms var(--ease);
+}
+.a2a-safari[data-collapsed] .a2a-safari-domain {
+  font-size: 12px;
+}
+
+/* The load's progress line along the foot of the address pill: it runs most of
+   the way while the page loads, fills when it paints, then fades. */
+.a2a-safari-progress {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 0;
+  height: 2.5px;
+  border-radius: 9999px;
+  background: #0a84ff;
+  transform-origin: left;
+  transform: scaleX(0);
+  opacity: 0;
+  pointer-events: none;
+}
+.a2a-safari-progress[data-state="run"] {
+  opacity: 1;
+  animation: a2a-safari-progress 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+.a2a-safari-progress[data-state="done"] {
+  opacity: 0;
+  transform: scaleX(1);
+  transition:
+    transform 200ms ease-out,
+    opacity 200ms ease-out 200ms;
+}
+@keyframes a2a-safari-progress {
+  from {
+    transform: scaleX(0.04);
+  }
+  to {
+    transform: scaleX(0.8);
+  }
+}
+
 /* The iPhone's body: black, no metal greys. Glass underneath; the black on top
    fades toward the bottom, most at the bottom-left, least at the bottom-right. */
 .a2a-phone-glass {

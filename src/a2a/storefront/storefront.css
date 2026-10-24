@@ -54,6 +54,20 @@
   box-shadow: inset 0 0 0 1.5px #1d1d1f;
 }
 
+/* A text field: 52px, white, a hairline ring. AutoFill tints it pale yellow, as Safari does. */
+.sf-field {
+  display: flex;
+  height: 52px;
+  align-items: center;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.22);
+  transition: background-color 250ms ease-out;
+}
+.sf-field-autofilled {
+  background: rgb(250 255 189);
+}
+
 /* A drawn can: the body's colour under a cylinder's sheen, metal rims top and bottom. */
 .sf-can {
   position: relative;

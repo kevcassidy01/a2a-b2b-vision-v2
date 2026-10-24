@@ -3,7 +3,7 @@ import { ArtifactFrame } from "./ArtifactFrame";
 import { CommandCenterShell } from "./CommandCenterShell";
 import { CommandCenter } from "./command-center/CommandCenter";
 import { IPhoneFrame } from "./IPhoneFrame";
-import { Storefront } from "./storefront/Storefront";
+import { PartnerSite } from "./storefront/PartnerSite";
 import wallpaper from "../assets/a2a/wallpaper.jpg";
 import "./a2a.css";
 
@@ -27,7 +27,7 @@ export function A2AStage() {
       }
     >
       <IPhoneFrame>
-        <Storefront />
+        <PartnerSite />
       </IPhoneFrame>
       <CommandCenterShell>
         <ArtifactFrame>

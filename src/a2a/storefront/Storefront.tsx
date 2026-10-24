@@ -3,7 +3,6 @@ import {
   BadgePercent,
   CalendarClock,
   Lock,
-  Menu,
   ReceiptText,
   type LucideIcon,
 } from "lucide-react";
@@ -11,6 +10,7 @@ import type { ReactNode } from "react";
 import { copy } from "../../copy/copy";
 import { Can, CanGroup, TONES, type Tone } from "./Can";
 import { Hero } from "./Hero";
+import { Footer, Header } from "./parts";
 import "./storefront.css";
 
 const t = copy.a2a.storefront;
@@ -21,56 +21,23 @@ const PRODUCT_TONES: Tone[] = ["fizz", "lime", "bubbl", "zing"];
 const PERK_ICONS: LucideIcon[] = [BadgePercent, ReceiptText, CalendarClock];
 
 /**
- * Storefront — Fizz Drinks' B2B store on John's phone, before he logs in. In
+ * Storefront — Fizz Partners, Fizz Drinks' B2B store, on John's phone, before he logs in. In
  * Coca-Cola's design language: a light grey page, white cards with big radii,
  * bold centred headings, black pill buttons. Drawn cans stand in for photos.
+ * Safari (the chrome around it) does the scrolling.
  */
-export function Storefront() {
+export function Storefront({ onLogIn }: { onLogIn: () => void }) {
   return (
-    <div className="sf-page sf-no-scrollbar absolute inset-0 isolate overflow-y-auto">
-      <Header />
-      <Hero />
+    <div className="sf-page isolate min-h-full">
+      <Header onLogIn={onLogIn} />
+      <Hero onLogIn={onLogIn} />
       <Brands />
       <Products />
       <Feature />
       <Perks />
-      <Cta />
+      <Cta onLogIn={onLogIn} />
       <Footer />
     </div>
-  );
-}
-
-/** White, thin and sticky, under the status bar: the logo, Log in, the menu. */
-function Header() {
-  return (
-    <header className="sticky top-0 z-20 bg-white pt-[54px]">
-      <div className="flex h-14 items-center gap-2 px-4">
-        <a href="#" aria-label={t.home} onClick={(e) => e.preventDefault()} className="mr-auto">
-          <Logo />
-        </a>
-        <button type="button" className="sf-pill sf-pill-outline sf-pill-sm">
-          {t.logIn}
-        </button>
-        <button
-          type="button"
-          aria-label={t.menu}
-          className="grid size-10 place-items-center rounded-full text-text"
-        >
-          <Menu className="size-[22px]" strokeWidth={2} />
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function Logo() {
-  return (
-    <span className="flex items-baseline gap-1.5">
-      <span className="sf-logo text-[28px]">{t.brand}</span>
-      <span className="rounded-[4px] bg-text px-1 py-px text-[10px] font-bold tracking-[0.04em] text-white">
-        {t.brandTag}
-      </span>
-    </span>
   );
 }
 
@@ -218,7 +185,7 @@ function Perks() {
 }
 
 /** The ask: log in, or apply for an account. */
-function Cta() {
+function Cta({ onLogIn }: { onLogIn: () => void }) {
   return (
     <section className="px-4 pt-14">
       <div className="flex flex-col items-center rounded-[32px] bg-white px-6 py-10 text-center">
@@ -228,7 +195,7 @@ function Cta() {
         <p className="mt-2 max-w-[280px] text-[16px] leading-normal text-text-muted">
           {t.cta.body}
         </p>
-        <button type="button" className="sf-pill sf-pill-dark mt-6 w-full">
+        <button type="button" onClick={onLogIn} className="sf-pill sf-pill-dark mt-6 w-full">
           {t.logIn}
         </button>
         <button type="button" className="sf-pill sf-pill-outline mt-3 w-full">
@@ -236,36 +203,5 @@ function Cta() {
         </button>
       </div>
     </section>
-  );
-}
-
-/** Dense and quiet, as Coca-Cola's: the logo, links, then uppercase legal lines. */
-function Footer() {
-  return (
-    <footer className="mt-14 bg-white px-6 pb-12 pt-10">
-      <Logo />
-      <ul className="mt-6 flex flex-col gap-3">
-        {t.footer.links.map((l) => (
-          <li key={l}>
-            <a href="#" onClick={(e) => e.preventDefault()} className="text-[16px] font-semibold text-text">
-              {l}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="mt-8 h-px bg-black/[0.08]" aria-hidden />
-      <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-text-muted">
-        {t.footer.legal.map((l) => (
-          <li key={l}>
-            <a href="#" onClick={(e) => e.preventDefault()}>
-              {l}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <p className="mt-4 text-[11px] uppercase tracking-[0.06em] text-text-muted">
-        {t.footer.copyright}
-      </p>
-    </footer>
   );
 }

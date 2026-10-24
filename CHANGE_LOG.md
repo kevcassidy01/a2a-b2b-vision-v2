@@ -30,6 +30,14 @@ Entry format:
 
 ## Unreleased
 
+## 20.0.0 — 2026-10-24 11:30 IST
+**Kind:** large feature: iOS 26 Safari around the storefront, with the phone's OS in dark mode; the Log in flow (page load, login page, AutoFill); the site renamed Fizz Partners.
+- **Login flow on the phone**: tapping Log in (the header, the hero's "Log in to order", or the closing block) loads the page as Safari does. The bar comes up, Reload turns to Stop (✕), and a blue progress line runs along the foot of the address pill. The storefront stays until the login page paints (~0.9s). The login page is in the storefront's style: Log in, work email and password, "Forgot password?", a black Log in pill, and "Request a business account". Tapping either field acts as iOS AutoFill: both fill with John's saved login (`john.mueller@isarbottling.de`, invented) in Safari's pale yellow tint. Log in then shows a spinner, since there's no signed-in page yet. Safari Back returns to the storefront with the same load. New `PartnerSite.tsx` (pages and navigation), `Login.tsx`, and `parts.tsx` (Header, Logo and Footer, shared). Safari takes `loading`, `onBack` and `pageKey`. Copy is in `storefront.login` and `safari.stop`.
+- **Phone OS in dark mode**: Safari's bar is dark Liquid Glass (smoky frost, thin light rim, white glyphs). The site itself stays light, so the status bar keeps dark text over it, as iOS does.
+- **Address bar shrinks on the first scroll down**, not after a long one; 24px of scrolling back up (or the top or end of the page) brings it back.
+- **The site is now Fizz Partners** (as Coca-Cola's is): the logo reads fizz PARTNERS, the domain is `partners.fizzdrinks.com`, and the Command Center's store name and store menu say Fizz Partners.
+- **iOS 26 Safari on the phone** (`#a2a`): the compact bottom bar in Liquid Glass: Back and More as glass circles either side of the address pill (page menu, `b2b.fizzdrinks.com`, Reload). Scrolling down shrinks it to a small domain-only capsule (the circles shrink away); scrolling up, reaching the end, or tapping the capsule brings it back. Safari now owns the page's scrolling (the storefront is just content). New `src/a2a/Safari.tsx`, `.a2a-liquid-glass` and `.a2a-safari*` styles; copy in `a2a.phone.safari`.
+
 ## 19.0.0 — 2026-10-24 01:58 IST
 **Kind:** large feature: Fizz Drinks' pre-login B2B storefront on the phone (Coca-Cola's design language); plus the Orders by bill-to-country card's title row and metric picker, a wider gap on wide screens, and the Ctrl+A Agent hotkey.
 - **Wide screens (office demos)** on `#a2a`: the gap between the phone and the desktop grows a little, from 24px at 1440 to at most 56px. The desktop still fills to the right edge; the phone never gets wider.

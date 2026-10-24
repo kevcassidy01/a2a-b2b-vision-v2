@@ -81,14 +81,24 @@ export const copy = {
     phone: {
       time: "9:41",
       placeholder: "Storefront",
+      /** Safari's bottom bar (iOS 26, compact). */
+      safari: {
+        domain: "partners.fizzdrinks.com",
+        back: "Back",
+        pageMenu: "Page menu",
+        reload: "Reload",
+        stop: "Stop loading",
+        more: "More",
+        expand: "Show the address bar",
+      },
     },
     /** John's view: Fizz Drinks' B2B store on the phone, before he logs in. */
     storefront: {
       brand: "fizz",
-      brandTag: "B2B",
+      brandTag: "Partners",
       /** The names drawn on the cans. */
       canLabels: { fizz: "fizz", zero: "zero", lime: "lime", bubbl: "bubbl", zing: "zing", pulp: "pulp", brew: "brew" },
-      home: "Fizz Drinks B2B home",
+      home: "Fizz Partners home",
       logIn: "Log in",
       menu: "Menu",
       hero: {
@@ -149,6 +159,20 @@ export const copy = {
           { title: "Scheduled delivery", body: "Pick a weekly slot and we restock before you run out." },
         ],
       },
+      login: {
+        title: "Log in",
+        subtitle: "Welcome back to Fizz Partners.",
+        email: "Work email",
+        emailPlaceholder: "name@company.com",
+        password: "Password",
+        showPassword: "Show password",
+        forgot: "Forgot password?",
+        submit: "Log in",
+        signingIn: "Logging in",
+        newHere: "New to Fizz Partners?",
+        /** What iOS AutoFill puts in (John, the buyer). */
+        autofill: { email: "john.mueller@isarbottling.de", password: "fizz-partners-26" },
+      },
       cta: {
         title: "Ready to restock?",
         body: "Log in to see your prices, past orders and quotes.",
@@ -164,7 +188,7 @@ export const copy = {
     commandCenter: {
       frame: { title: "B2B Command Center", share: "Share", close: "Close" },
       greeting: "Good morning, Alex",
-      store: "Fizz Drinks B2B",
+      store: "Fizz Partners",
       openStore: "Open store",
       opensInNewTab: "(opens in a new tab)",
       /** The currency picker: USD by default. */
@@ -198,8 +222,8 @@ export const copy = {
       /** Which stores the figures cover, this store by default. */
       storeScope: {
         label: "Stores",
-        default: "Fizz Drinks B2B",
-        options: ["All stores", "Fizz Drinks B2B"],
+        default: "Fizz Partners",
+        options: ["All stores", "Fizz Partners"],
       },
       /** Section headings, top to bottom. */
       sections: {

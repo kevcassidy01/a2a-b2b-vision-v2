@@ -5,8 +5,8 @@ import { CanGroup, type Tone } from "./Can";
 const t = copy.a2a.storefront.hero;
 
 /** Each slide's backdrop and cans. Visuals, not copy. */
-const LOOKS: { bg: string; ink: "light" | "dark"; tones: [Tone, Tone, Tone] }[] = [
-  { bg: "#e8112d", ink: "light", tones: ["zero", "fizz", "zero"] },
+const LOOKS: { bg: string; ink: "light" | "dark"; tones: [Tone, Tone, Tone]; logsIn?: boolean }[] = [
+  { bg: "#e8112d", ink: "light", tones: ["zero", "fizz", "zero"], logsIn: true },
   { bg: "#dff1cf", ink: "dark", tones: ["lime", "zero", "lime"] },
   { bg: "#1d1d1f", ink: "light", tones: ["bubbl", "fizz", "zing"] },
 ];
@@ -15,7 +15,7 @@ const LOOKS: { bg: string; ink: "light" | "dark"; tones: [Tone, Tone, Tone] }[] 
  * The hero carousel, after Coca-Cola's: big rounded slides that snap, the next
  * one peeking in at the edge, and dots under them (the current one a pill).
  */
-export function Hero() {
+export function Hero({ onLogIn }: { onLogIn: () => void }) {
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
 
@@ -58,7 +58,10 @@ export function Hero() {
               </div>
               <a
                 href="#"
-                onClick={(e) => e.preventDefault()}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (look.logsIn) onLogIn();
+                }}
                 className={`sf-pill mt-5 self-start ${light ? "sf-pill-light" : "sf-pill-dark"}`}
               >
                 {s.cta}
