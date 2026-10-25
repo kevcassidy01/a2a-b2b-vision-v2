@@ -30,6 +30,7 @@ import { Rich } from "../Rich";
 import { useStory } from "../story";
 import { CardAction, CardStatus, KnowledgeCard } from "./KnowledgeCard";
 import { Pulse } from "../Pulse";
+import { demoNow } from "../demoClock";
 
 const q = copy.a2a.commandCenter.agent.quote;
 const MUSINGS = q.musings;
@@ -128,10 +129,10 @@ function useClock(started: boolean, end: number) {
   const [t, setT] = useState<number | null>(null);
   useEffect(() => {
     if (!started) return;
-    const t0 = performance.now();
+    const t0 = demoNow();
     setT(0);
     const id = window.setInterval(() => {
-      const now = performance.now() - t0;
+      const now = demoNow() - t0;
       setT(now);
       if (now > end) clearInterval(id);
     }, 100);

@@ -9,6 +9,7 @@ import { Menu } from "./Menu";
 import { AgentFab } from "./parts";
 import { SiteContext, type Site } from "./site";
 import { Storefront } from "./Storefront";
+import { demoTimeout } from "../demoClock";
 
 type Page = "home" | "login";
 
@@ -40,28 +41,27 @@ export function PartnerSite() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [agent, setAgent] = useState<{ assign: boolean } | null>(null);
   const [notified, setNotified] = useState(false);
-  const timers = useRef<number[]>([]);
+  const timers = useRef<(() => void)[]>([]);
 
   /** Loads `to`, logged in or out as `signed`, once the old page has had its moment. */
   const load = useCallback((to: Page, signed: boolean) => {
     setLoading(true);
     timers.current = [
-      window.setTimeout(() => {
+      demoTimeout(() => {
         setPage(to);
         setSignedIn(signed);
       }, PAINT),
-      window.setTimeout(() => setLoading(false), DONE),
+      demoTimeout(() => setLoading(false), DONE),
     ];
   }, []);
-  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  useEffect(() => () => timers.current.forEach((cancel) => cancel()), []);
 
   // The phone opens on the store loading: its skeleton under Safari's progress line, then the store.
   useEffect(() => {
-    const id = window.setTimeout(() => {
+    return demoTimeout(() => {
       setBooted(true);
       setLoading(false);
     }, BOOT);
-    return () => clearTimeout(id);
   }, []);
 
   // Once a session: Mike's notification, a moment after John's home first shows.
@@ -69,11 +69,10 @@ export function PartnerSite() {
   useEffect(() => {
     if (!signedIn) return setNotified(false);
     if (!home || notified) return;
-    const id = window.setTimeout(() => {
+    return demoTimeout(() => {
       setNotified(true);
       ding();
     }, NOTIFY);
-    return () => clearTimeout(id);
   }, [signedIn, home, notified]);
 
   const go = (to: Page) => {

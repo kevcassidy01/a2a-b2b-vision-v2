@@ -1,6 +1,7 @@
 import { ChevronLeft, Ellipsis, PanelTop, RotateCw, X, type LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { copy } from "../copy/copy";
+import { demoTimeout } from "./demoClock";
 
 const t = copy.a2a.phone.safari;
 
@@ -49,8 +50,7 @@ export function Safari({
       return;
     }
     setProgress((p) => (p === "run" ? "done" : p));
-    const id = window.setTimeout(() => setProgress((p) => (p === "done" ? "idle" : p)), 450);
-    return () => clearTimeout(id);
+    return demoTimeout(() => setProgress((p) => (p === "done" ? "idle" : p)), 450);
   }, [loading]);
 
   useEffect(() => {

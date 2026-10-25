@@ -27,6 +27,7 @@ import { StoreMenu } from "./StoreMenu";
 import { Today } from "./Today";
 import { ViewPicker } from "./ViewPicker";
 import { Welcome } from "./Welcome";
+import { demoNow, demoTimeout } from "../demoClock";
 
 const t = copy.a2a.commandCenter;
 /** How long the Command Center loads, in ms (skeleton cards, the frame's load line), before it's ready. Matches .a2a-load-swipe. */
@@ -63,13 +64,11 @@ export function CommandCenter() {
   // stays at it until Alex opens it; from then on, its chat (QuoteThread) says when it's at work.
   useEffect(() => {
     if (!quoteSent || quoteOpen) return setWorking("alexAgent:inbox", false);
-    const id = window.setTimeout(() => setWorking("alexAgent:inbox", true), QUOTE_GAP);
-    return () => clearTimeout(id);
+    return demoTimeout(() => setWorking("alexAgent:inbox", true), QUOTE_GAP);
   }, [quoteSent, quoteOpen, setWorking]);
   useEffect(() => {
     if (phase !== "loading") return;
-    const id = window.setTimeout(() => setPhase("ready"), LOAD);
-    return () => clearTimeout(id);
+    return demoTimeout(() => setPhase("ready"), LOAD);
   }, [phase]);
   useFrameLoading(phase === "loading");
   const canvas = useRef<HTMLDivElement>(null);
@@ -125,17 +124,15 @@ function useTaskIn(ready: boolean, quoteSent: boolean) {
   const sentAt = useRef(0);
   const [today, setToday] = useState(false);
   useEffect(() => {
-    if (ready) readyAt.current = performance.now();
+    if (ready) readyAt.current = demoNow();
   }, [ready]);
   useEffect(() => {
-    if (quoteSent) sentAt.current = performance.now();
+    if (quoteSent) sentAt.current = demoNow();
   }, [quoteSent]);
   useEffect(() => {
     if (!ready || !quoteSent || today) return;
     const at = Math.max(readyAt.current + TODAY_AFTER, sentAt.current + QUOTE_GAP);
-    const wait = Math.max(0, at - performance.now());
-    const id = window.setTimeout(() => setToday(true), wait);
-    return () => clearTimeout(id);
+    return demoTimeout(() => setToday(true), Math.max(0, at - demoNow()));
   }, [ready, quoteSent, today]);
   return today;
 }

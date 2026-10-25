@@ -31,6 +31,7 @@ import { PHOTOS } from "./photos";
 import { useStory } from "../story";
 import { AgentMark } from "./parts";
 import { Pulse } from "../Pulse";
+import { demoNow } from "../demoClock";
 
 const a = copy.a2a.storefront.agent;
 const STEPS = a.plan.steps;
@@ -136,10 +137,10 @@ function useClock(started: boolean, end: number) {
   const [t, setT] = useState<number | null>(null);
   useEffect(() => {
     if (!started) return;
-    const t0 = performance.now();
+    const t0 = demoNow();
     setT(0);
     const id = window.setInterval(() => {
-      const now = performance.now() - t0;
+      const now = demoNow() - t0;
       setT(now);
       if (now > end) clearInterval(id);
     }, TICK);

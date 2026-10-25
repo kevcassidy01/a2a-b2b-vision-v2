@@ -995,3 +995,11 @@
     color: #1d1d1f;
   }
 }
+
+/* The presenter's pause (the ` key, demoClock): every animation on the stage
+   holds its frame. Nothing on screen says so: the audience just sees it hold. */
+.a2a-stage[data-paused] *,
+.a2a-stage[data-paused] *::before,
+.a2a-stage[data-paused] *::after {
+  animation-play-state: paused !important;
+}

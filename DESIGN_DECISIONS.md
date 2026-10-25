@@ -6,6 +6,10 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-25 A2A: ` pauses and plays the demo; Shift+` restarts it
+**Decision:** One key, the backtick, pauses and plays the whole demo: its clocks, its timers and its animations. Shift+backtick (~) restarts the story from the top. Nothing on screen shows it's paused (Somnath, 2026-10-25): the demo just holds. Both keys are ignored while typing in a field. Everything that times the story reads `demoClock` (no raw `setTimeout` or `performance.now()` for story timing).
+**Rationale:** The presenter needs to stop and talk mid-beat, and to rerun the demo without a page reload. The backtick is a single key that the browser and the demo don't otherwise use, unlike Ctrl+P / Ctrl+S (print, save), Space (scrolls, presses buttons) or Esc (closes the drawer).
+
 ### 2026-10-25 A2A: a success card wears a green check tile
 **Decision:** On both sides, a card that confirms something done (an acceptance, an order placed or arrived, a recurring order saved) shows a pale green tile with a green check in place of its object's icon, and its status dot is green. Cards that ask for a choice keep their object icon, even once the choice is made (John's approval keeps its "Approved" chip). When an ask is answered with a success, the ask's buttons go and a separate success card follows; the ask doesn't also get a chip.
 **Rationale:** The audience should be able to tell at a glance which cards are outcomes. A single success per outcome keeps it from being said twice.

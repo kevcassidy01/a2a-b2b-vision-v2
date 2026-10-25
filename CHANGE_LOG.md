@@ -30,6 +30,11 @@ Entry format:
 
 ## Unreleased
 
+## 24.2.0 — 2026-10-25 21:41 IST
+**Kind:** minor (small addition): presenter keys to pause/play and restart the demo.
+
+- **Pause and restart the demo (branch `a2a-pause-restart`).** **`** (backtick) pauses and plays: the chats' clocks, the one-off timers (login autofill, Mike's notification, the Command Center loading, Today's task card, the seller agent picking Q-1042 up) and every CSS animation hold where they are, and play carries on from there. Nothing on screen says it's paused. **Shift+`** (~) restarts the whole story from the top, playing. Neither key does anything while typing in a prompt box. New `src/a2a/demoClock.ts` (the story's time, less any spent paused; `demoTimeout`; `usePaused`). Clicks still work while paused. Short CSS transitions (hover, a drawer sliding) just finish.
+
 ## 24.1.0 — 2026-10-25 20:29 IST
 **Kind:** minor (small additions plus a fix): success cards on both sides, a "Recurring order saved" card ending step 15, a hover state on Today's task card, and the who's-acting bar lighting the right party at every beat.
 

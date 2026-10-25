@@ -3,6 +3,7 @@ import { ACTORS, ActorBar, type Actor } from "./ActorBar";
 import { ArtifactFrame } from "./ArtifactFrame";
 import { CommandCenterShell } from "./CommandCenterShell";
 import { CommandCenter } from "./command-center/CommandCenter";
+import { setPaused, usePaused } from "./demoClock";
 import { IPhoneFrame } from "./IPhoneFrame";
 import { PartnerSite } from "./storefront/PartnerSite";
 import { StoryProvider, useStory } from "./story";
@@ -16,11 +17,42 @@ import "./a2a.css";
  * floats on depth and shadow (Linear's scene).
  */
 export function A2AStage() {
+  const run = useDemoKeys();
   return (
-    <StoryProvider>
+    <StoryProvider key={run}>
       <Stage />
     </StoryProvider>
   );
+}
+
+/** Whether a key press is typing in a field (a prompt box), so not the presenter's. */
+function isTyping(e: KeyboardEvent) {
+  const el = e.target as HTMLElement | null;
+  return !!el && (el.isContentEditable || el.tagName === "INPUT" || el.tagName === "TEXTAREA");
+}
+
+/**
+ * The presenter's keys: ` pauses and plays the demo (its clocks, timers and
+ * animations, demoClock); Shift+` (~) restarts it from the top, playing. They
+ * do nothing while typing in a field. Returns the run, a key that remounts
+ * the whole story on restart.
+ */
+function useDemoKeys() {
+  const [run, setRun] = useState(0);
+  const paused = usePaused();
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== "Backquote" || e.ctrlKey || e.metaKey || e.altKey || e.repeat || isTyping(e)) return;
+      e.preventDefault();
+      if (e.shiftKey) {
+        setPaused(false);
+        setRun((r) => r + 1);
+      } else setPaused(!paused);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [paused]);
+  return run;
 }
 
 /**
@@ -32,13 +64,17 @@ export function A2AStage() {
 function Stage() {
   const hotkeys = useActorHotkeys();
   const { working } = useStory();
+  const paused = usePaused();
   const john = useTouched();
   const alex = useTouched();
   const active = new Set<Actor>([...hotkeys, ...[...working].map((w) => w.split(":")[0] as Actor)]);
   if (john.on) active.add("john");
   if (alex.on) active.add("alex");
   return (
-    <div className="a2a-stage a2a-scene flex h-screen w-screen flex-col gap-2.5 overflow-hidden py-2.5 pl-6 pr-2.5">
+    <div
+      className="a2a-stage a2a-scene relative flex h-screen w-screen flex-col gap-2.5 overflow-hidden py-2.5 pl-6 pr-2.5"
+      data-paused={paused || undefined}
+    >
       <div
         className="flex min-h-0 flex-1"
         style={{

@@ -2,6 +2,7 @@ import { Eye, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { copy } from "../../copy/copy";
 import { Footer, Header } from "./parts";
+import { demoTimeout } from "../demoClock";
 
 const t = copy.a2a.storefront;
 const l = t.login;
@@ -21,13 +22,11 @@ export function Login({ onSignedIn }: { onSignedIn: () => void }) {
   const [signingIn, setSigningIn] = useState(false);
   const fill = () => setFilled(true);
   useEffect(() => {
-    const id = window.setTimeout(fill, AUTOFILL);
-    return () => clearTimeout(id);
+    return demoTimeout(fill, AUTOFILL);
   }, []);
   useEffect(() => {
     if (!signingIn) return;
-    const id = window.setTimeout(onSignedIn, SIGN_IN);
-    return () => clearTimeout(id);
+    return demoTimeout(onSignedIn, SIGN_IN);
   }, [signingIn, onSignedIn]);
 
   return (
