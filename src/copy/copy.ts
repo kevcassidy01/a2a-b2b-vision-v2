@@ -101,6 +101,13 @@ export const copy = {
       alexAgent: "Alex's agent",
       alex: "Alex",
     },
+    /** The macOS notification on Alex's side once O-5531 is placed: Gmail sent the bottler its confirmation. */
+    mail: {
+      app: "Gmail",
+      time: "now",
+      title: "Order confirmation sent",
+      body: "O-5531 · to John Müller, Isar Bottling",
+    },
     /** John's view: Fizz Drinks' B2B store on the phone, before he logs in. */
     storefront: {
       brand: "fizz",

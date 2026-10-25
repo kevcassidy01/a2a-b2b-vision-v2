@@ -18,7 +18,7 @@ Legend: `[ ]` open · `[~]` in progress · `[x]` done · **(S)** needs Somnath �
 
 ## 🔴 Urgent & Important
 
-- [~] **(S/C, on instruction)** **Agent-to-agent B2B commerce prototype (Fizz Drinks).** Intent doc drafted 2026-10-23 (`A2A_INTENT.md`); wireframes in Figma. **Built through v23.1.0 (2026-10-25, `/#a2a`): story steps 1–14, plus the pulse loader, mono thinking states, John picking v3a or v3b, and a line of text with every agent message.** The shell and "who's acting" bar; John's phone (login, Mike's cart, Assign, the agent's reasoning and plan, Q-1042 v1, then v2 landing and the hold-out for 15%); the Command Center (welcome, dashboard, "Needs your approval", the seller agent's chat: Salesforce tool calls, checks, v2 sent); the turns timeline in both chats. **Next:** step 15, saving the order as a template.
+- [~] **(S/C, on instruction)** **Agent-to-agent B2B commerce prototype (Fizz Drinks).** Intent doc drafted 2026-10-23 (`A2A_INTENT.md`); wireframes in Figma. **Built through v24.3.0 (2026-10-25, `/#a2a`): all 15 story steps, success cards, the Gmail notification at the end (with sound), and the presenter keys (` pause/play, Shift+` restart, on branch `a2a-pause-restart`).** The shell and "who's acting" bar; John's phone (login, Mike's cart, Assign, the agent's reasoning and plan, Q-1042 v1, then v2 landing and the hold-out for 15%); the Command Center (welcome, dashboard, "Needs your approval", the seller agent's chat: Salesforce tool calls, checks, v2 sent); the turns timeline in both chats. **Next:** the storefront's Bundles row; the run sheet.
   - [x] **(C)** A2A step 9, seller side: Fizz's agent receives the hold-out (v2's units at 15%), weighs it with Salesforce tool calls, finds 15% over its limit; Q-1042 shows it needs Alex; the timeline gets turn 3.
   - [x] **(C)** A2A step 10: Alex's decision card (Send both: Net15 or the bundle · Net15 only · Decline), the bundle shown.
   - [x] **(C)** A2A step 11: Alex sends both; v3a (15% · Net15) and v3b (the Ginger Ale bundle) go out.
@@ -53,7 +53,7 @@ Legend: `[ ]` open · `[~]` in progress · `[x]` done · **(S)** needs Somnath �
 ## 🟢 Do at some point
 
 - [x] **(S)** A2A: roomier knowledge-card spacing on the other drawer cards (yes 2026-10-25; done: option and offer tiles, the quote table boxed).
-- [ ] **(C)** A2A: Figma updates to match what's built.
+- [x] **(S)** A2A: Figma updates to match what's built: not needed (Somnath, 2026-10-25).
 - [ ] **(C)** A2A: demo script and run sheet in `docs/demo-scripts/`.
 - [x] **(S)** Fill in the "My standing instructions" slot in `CLAUDE.md` with durable rules (5 hard rules + change-log versioning). — 2026-10-01
 - [x] **(S/C)** First commit + push to origin done; `mcp-apps-slots` branched and merged to `master`. — 2026-10-01

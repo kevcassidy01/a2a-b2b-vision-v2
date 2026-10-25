@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Safari } from "../Safari";
 import { AccountHome } from "./AccountHome";
 import { AgentChat } from "./AgentChat";
-import { ding } from "./ding";
+import { ding } from "../sounds";
 import { Login } from "./Login";
 import { SiteSkeleton } from "./SiteSkeleton";
 import { Menu } from "./Menu";

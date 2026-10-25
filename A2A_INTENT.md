@@ -131,7 +131,7 @@ People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (s
 | 11 | | Alex picks **Net15**. *(person 2 of 3)* **v3** (15%, Net15) goes back. |
 | 12 | The terms changed (Net30 → Net15), so the buyer agent **asks John to approve v3**. It recommends v3a, but John can pick v3a or v3b (2026-10-25). | |
 | 13 | John approves. *(person 3 of 3)* The quote is approved on both sides. | Q-1042 shows approved. |
-| 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows. |
+| 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows. A beat later, a macOS notification from **Gmail**: "Order confirmation sent", O-5531 to John Müller, Isar Bottling (2026-10-25). |
 | 15 | The order is saved as the template **"Oktoberfest stock-up"** for next year. John's agent sees Oktoberfest is yearly (it checks 2027's dates on oktoberfest.de, in its thinking only), offers the template with a reminder on Aug 16, 2027, and **John taps Save template** (2026-10-25). The agent confirms with a "Recurring order saved" card. | |
 
 **Built so far (2026-10-25): steps 1–15.** Fizz's agent receives the hold-out, hands Alex the decision card,
@@ -293,13 +293,13 @@ shown but not taken. The older frames below are kept as they were.
 
 1. ~~**Surfaces**~~ Settled 2026-10-23: one split screen, the storefront on a phone on the left and the
    Command Center on the right (§4). Still open: how John's agent opens on the phone, and how wide each side is.
-2. **Branch:** build on `master`, or a new branch (e.g. `a2a-prototype`)? Needs Somnath's go-ahead either way.
+2. ~~**Branch**~~ Settled: built on `master`; features that need one get their own branch on Somnath's say (e.g. `a2a-pause-restart`).
 3. **Look:** start from the wireframe, or go straight to a styled storefront and Command Center?
-4. **The bottler's name** (and its logo).
-5. **Does Mike approve anything?** Currently no; John approves alone.
+4. ~~**The bottler's name**~~ Settled: **Isar Bottling** (Munich and Frankfurt).
+5. ~~**Does Mike approve anything?**~~ Settled 2026-10-25: no. John approves alone.
 6. **Real-feeling numbers:** unit prices, currency (settled 2026-10-24: US dollars on both sides), order total, and the dashboard's figures.
 7. ~~**Cowork frame**~~ Settled 2026-10-23: a generic AI chat app shell, not Cowork. Still open: its design
    (Somnath to design it with Claude).
-8. **Step 15:** does John save the template himself, or does the agent offer it?
-9. **The cross-sell step** (§5): where it goes and what it shows. Somnath will share the details.
-10. **The Figma wireframes** are desktop storefront frames. Redo the buyer side as phone frames?
+8. ~~**Step 15**~~ Settled 2026-10-25: the agent offers the template; John saves it.
+9. ~~**The cross-sell step**~~ Settled 2026-10-25: the cross-sell is the bundle (v3b, +1,000 Ginger Ale concentrate), §5.
+10. ~~**The Figma wireframes**~~ Settled 2026-10-25: no need to redo them as phone frames.

@@ -6,6 +6,10 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-25 A2A: the finale ends with Gmail's "Order confirmation sent" on Alex's Mac
+**Decision:** After O-5531, a macOS notification (dark glass, top right, with an air-woosh sound) says Gmail sent the bottler the order confirmation. It shows on Alex's side only, not on John's phone.
+**Rationale:** Fizz's side sends the confirmation, so it reads as Salesforce carrying the order through to the tools Alex already uses. One notification keeps the finale calm.
+
 ### 2026-10-25 A2A: ` pauses and plays the demo; Shift+` restarts it
 **Decision:** One key, the backtick, pauses and plays the whole demo: its clocks, its timers and its animations. Shift+backtick (~) restarts the story from the top. Nothing on screen shows it's paused (Somnath, 2026-10-25): the demo just holds. Both keys are ignored while typing in a field. Everything that times the story reads `demoClock` (no raw `setTimeout` or `performance.now()` for story timing).
 **Rationale:** The presenter needs to stop and talk mid-beat, and to rerun the demo without a page reload. The backtick is a single key that the browser and the demo don't otherwise use, unlike Ctrl+P / Ctrl+S (print, save), Space (scrolls, presses buttons) or Esc (closes the drawer).

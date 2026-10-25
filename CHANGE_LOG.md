@@ -30,6 +30,12 @@ Entry format:
 
 ## Unreleased
 
+## 24.3.0 — 2026-10-25 21:58 IST
+**Kind:** minor (small addition): Gmail's order-confirmation notification on Alex's Mac, and real notification sounds.
+- **Gmail tells Alex the order confirmation went out.** About 2s after O-5531 is placed, once the seller agent has said it's in, a macOS notification slides in at the top right of the screen: the Gmail icon, "Order confirmation sent", "O-5531 · to John Müller, Isar Bottling". It's dark glass, like the rest of the OS chrome, and arrives with Mixkit's "Air woosh" (`public/a2a/sounds/mail.wav`). It stays 6s and slides back out (`MailNotification.tsx`, on the demo clock, so it pauses too).
+- **Mike's notification has a real tone.** When John sees Mike's notification on the storefront after logging in, Mixkit's "Confirmation tone" plays (`public/a2a/sounds/notify.wav`), replacing the Web Audio synth ding. Both sounds now live in `src/a2a/sounds.ts` (was `storefront/ding.ts`).
+- **A2A_INTENT §12 settled:** the cross-sell is the bundle, Mike approves nothing, no Figma redo as phone frames, the bottler is Isar Bottling, and step 15's template is offered by the agent.
+
 ## 24.2.0 — 2026-10-25 21:41 IST
 **Kind:** minor (small addition): presenter keys to pause/play and restart the demo.
 

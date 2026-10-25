@@ -5,6 +5,7 @@ import { CommandCenterShell } from "./CommandCenterShell";
 import { CommandCenter } from "./command-center/CommandCenter";
 import { setPaused, usePaused } from "./demoClock";
 import { IPhoneFrame } from "./IPhoneFrame";
+import { MailNotification } from "./MailNotification";
 import { PartnerSite } from "./storefront/PartnerSite";
 import { StoryProvider, useStory } from "./story";
 import "./a2a.css";
@@ -63,7 +64,7 @@ function useDemoKeys() {
  */
 function Stage() {
   const hotkeys = useActorHotkeys();
-  const { working } = useStory();
+  const { working, ordered } = useStory();
   const paused = usePaused();
   const john = useTouched();
   const alex = useTouched();
@@ -97,6 +98,7 @@ function Stage() {
         </div>
       </div>
       <ActorBar active={active} />
+      <MailNotification ordered={ordered} />
     </div>
   );
 }
