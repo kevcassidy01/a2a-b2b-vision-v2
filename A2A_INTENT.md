@@ -134,8 +134,11 @@ People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (s
 | 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows. |
 | 15 | The order is saved as the template **"Oktoberfest stock-up"** for next year. | |
 
-**Built so far (2026-10-25): steps 1–11.** Fizz's agent receives the hold-out, hands Alex the decision card,
-and sends v3a and v3b once he picks "Send both" (the only option scripted). The phone doesn't receive v3 yet (step 12).
+**Built so far (2026-10-25): steps 1–14.** Fizz's agent receives the hold-out, hands Alex the decision card,
+and sends v3a and v3b once he picks "Send both" (the only option scripted). On the phone, John's agent weighs the
+two offers (always stacked on the phone, never side by side), recommends v3a and says why not the others, and John
+approves it. The agent accepts v3a, places O-5531 and logs the PO; the Command Center gets the acceptance and the
+order, and the dashboard updates (Orders 189, Germany 9, O-5531 in Recent activity). Step 15, the template, is next.
 
 **The cross-sell: a bundle (settled 2026-10-24).** Upsell is the seller agent's v2 (more volume, lower
 discount). Cross-sell is a **bundled offer: +1,000 Ginger Ale concentrate, keeping 15% at Net30**. It brings in

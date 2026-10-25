@@ -1,6 +1,7 @@
 import { Download, MessageSquareText } from "lucide-react";
 import type { KeyboardEvent } from "react";
 import { copy } from "../../copy/copy";
+import { useStory } from "../story";
 import { Segmented } from "../../shell/Segmented";
 import { ActionButton } from "./ActionButton";
 
@@ -41,6 +42,10 @@ function onRowKey(e: KeyboardEvent<HTMLTableRowElement>) {
  */
 export function ActivityCard() {
   const c = t.columns;
+  // Once O-5531 is in, it heads the list (rising in with a pale blue wash), and the oldest row goes.
+  const { ordered } = useStory();
+  const rows = ordered ? [t.newRow, ...t.rows.slice(0, -1)] : t.rows;
+  const total = ordered ? t.total + 1 : t.total;
   return (
     <section className="a2a-card @container rounded-xl p-5">
       <div className="flex items-center gap-2">
@@ -67,14 +72,14 @@ export function ActivityCard() {
             </tr>
           </thead>
           <tbody>
-            {t.rows.map((r) => {
+            {rows.map((r) => {
               const s = t.statuses[r.status as keyof typeof t.statuses];
               return (
                 <tr
                   key={r.order}
                   tabIndex={0}
                   onKeyDown={onRowKey}
-                  className="h-11 cursor-pointer border-b border-border outline-none transition-colors last:border-b-0 hover:bg-black/[0.025] focus-visible:bg-[rgb(45_127_249/0.06)]"
+                  className={`${r === t.newRow ? "a2a-arrive" : ""} h-11 cursor-pointer border-b border-border outline-none transition-colors last:border-b-0 hover:bg-black/[0.025] focus-visible:bg-[rgb(45_127_249/0.06)]`}
                 >
                   <td className="px-3 tabular-nums text-text-muted">{r.date}</td>
                   <td className="px-3">
@@ -101,10 +106,10 @@ export function ActivityCard() {
           type="button"
           className="a2a-control flex h-8 items-center rounded-md px-3 text-[13.5px] font-medium text-text"
         >
-          {t.showAll} {t.total}
+          {t.showAll} {total}
         </button>
         <span className="text-[13px] text-text-muted">
-          {t.rows.length} {t.of} {t.total}
+          {rows.length} {t.of} {total}
         </span>
       </div>
     </section>

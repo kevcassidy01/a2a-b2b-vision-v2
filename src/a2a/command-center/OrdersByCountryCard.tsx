@@ -1,13 +1,13 @@
 import { Download, MessageSquareText } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { copy } from "../../copy/copy";
 import { Segmented } from "../../shell/Segmented";
+import { useStory } from "../story";
 import { ActionButton } from "./ActionButton";
-import { OrdersMap } from "./OrdersMap";
+import { OrdersMap, type Country } from "./OrdersMap";
 
 const t = copy.a2a.commandCenter.ordersByCountry;
-
-const share = (n: number) => `${((n / t.total) * 100).toFixed(1)}%`;
+const after = t.afterOrder;
 
 /**
  * OrdersByCountryCard — the wide card under the metrics: its title and scope,
@@ -20,6 +20,14 @@ const share = (n: number) => `${((n / t.total) * 100).toFixed(1)}%`;
  */
 export function OrdersByCountryCard() {
   const [hovered, setHovered] = useState<string | null>(null);
+  // Once O-5531 is in, Germany has one more order, and every share is of one more.
+  const { ordered } = useStory();
+  const total = ordered ? after.total : t.total;
+  const countries: readonly Country[] = useMemo(
+    () => (ordered ? t.countries.map((c) => (c.code === after.code ? { ...c, orders: after.orders } : c)) : t.countries),
+    [ordered],
+  );
+  const share = (n: number) => `${((n / total) * 100).toFixed(1)}%`;
   return (
     <section className="a2a-card @container rounded-xl p-5">
       <div className="flex items-center gap-2">
@@ -38,12 +46,12 @@ export function OrdersByCountryCard() {
           the list under it in two columns. */}
       <div className="mt-5 grid gap-6 @5xl:grid-cols-[minmax(0,1fr)_260px] @5xl:gap-8">
         <div className="flex flex-col">
-          <OrdersMap hovered={hovered} onHover={setHovered} />
+          <OrdersMap countries={countries} fresh={ordered ? after.code : undefined} hovered={hovered} onHover={setHovered} />
         </div>
         <div>
           <h4 className="text-[13.5px] font-semibold text-text">{t.byCountry}</h4>
           <ul className="-mx-2 mt-2 grid @max-5xl:grid-flow-col @max-5xl:grid-cols-2 @max-5xl:grid-rows-6 @max-5xl:gap-x-8">
-            {t.countries.map((c) => (
+            {countries.map((c) => (
               <li
                 key={c.code}
                 className="a2a-map-row flex h-9 items-center gap-3 border-b border-border px-2 text-[13.5px]"
@@ -52,7 +60,9 @@ export function OrdersByCountryCard() {
                 onPointerLeave={() => setHovered(null)}
               >
                 <span className="mr-auto truncate text-text">{c.name}</span>
-                <span className="tabular-nums text-text">{c.orders}</span>
+                <span key={c.orders} className={`tabular-nums text-text ${ordered && c.code === after.code ? "a2a-bump" : ""}`}>
+                  {c.orders}
+                </span>
                 <span className="w-11 text-right tabular-nums text-text-muted">{share(c.orders)}</span>
               </li>
             ))}

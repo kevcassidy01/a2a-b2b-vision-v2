@@ -1,4 +1,4 @@
-import { FileText, Inbox } from "lucide-react";
+import { FileText, Inbox, Package } from "lucide-react";
 import { useRef, type CSSProperties, type ReactNode } from "react";
 import agentLogo from "../../assets/a2a/agent-logo.png";
 import { copy } from "../../copy/copy";
@@ -23,18 +23,30 @@ export function ApprovalsCard({
 }: {
   request?: boolean;
   /** Where Q-1042 has got to: v1 in, the agent on it; v2 out, waiting on the buyer (no dots); the buyer held
-   *  out, the agent on it again; it needs Alex (no dots, flagged); v3a and v3b out, waiting on the buyer. */
-  stage?: "request" | "countered" | "heldOut" | "needsYou" | "v3";
+   *  out, the agent on it again; it needs Alex (no dots, flagged); v3a and v3b out, waiting on the buyer;
+   *  Isar took v3a (approved, green); the order's in (the row becomes O-5531, green). */
+  stage?: "request" | "countered" | "heldOut" | "needsYou" | "v3" | "accepted" | "ordered";
   /** Opens the request in the agent's drawer. */
   onOpen?: () => void;
 }) {
   const r = t.request;
   const row =
-    stage === "countered" ? r.countered : stage === "heldOut" || stage === "needsYou" ? r.heldOut : stage === "v3" ? r.v3 : r;
+    stage === "countered"
+      ? r.countered
+      : stage === "heldOut" || stage === "needsYou"
+        ? r.heldOut
+        : stage === "v3"
+          ? r.v3
+          : stage === "accepted"
+            ? r.accepted
+            : stage === "ordered"
+              ? r.ordered
+              : r;
   const { id, meta } = row;
   const changed = stage !== "request";
   const working = stage === "request" || stage === "heldOut";
   const needsYou = stage === "needsYou";
+  const settled = stage === "accepted" || stage === "ordered";
   const body = useRef<HTMLDivElement>(null);
   useGlide(body, request);
   return (
@@ -69,8 +81,12 @@ export function ApprovalsCard({
             aria-label={`${r.open} ${id}`}
             className="a2a-arrive relative flex w-full items-center gap-3.5 rounded-lg px-3.5 py-3 text-left shadow-[0_0_0_1px_rgb(0_0_0/0.07)] transition-[background-color,box-shadow] hover:bg-[#f7f7f8] hover:shadow-[0_0_0_1px_rgb(0_0_0/0.14)] active:bg-[#f0f0f2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
           >
-            <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#f3f3f5]">
-              <FileText className="size-4 text-text" strokeWidth={1.75} />
+            <span key={stage === "ordered" ? 1 : 0} className="a2a-load-in grid size-9 shrink-0 place-items-center rounded-lg bg-[#f3f3f5]">
+              {stage === "ordered" ? (
+                <Package className="size-4 text-text" strokeWidth={1.75} />
+              ) : (
+                <FileText className="size-4 text-text" strokeWidth={1.75} />
+              )}
             </span>
             <div className="mr-auto min-w-0">
               <p className="truncate text-[13.5px] font-semibold text-text">
@@ -92,7 +108,12 @@ export function ApprovalsCard({
               </p>
             </div>
             {/* A beat after the request lands, the seller agent picks it up, then the details come in. */}
-            <AgentPill name={needsYou ? r.heldOut.needsYou : row.agent} working={working} flagged={needsYou} workingLabel={r.working} />
+            <AgentPill
+              name={needsYou ? r.heldOut.needsYou : row.agent}
+              working={working}
+              tone={needsYou ? "flagged" : settled ? "done" : undefined}
+              workingLabel={r.working}
+            />
             <span className="w-16 shrink-0 text-right text-[12.5px] text-text-muted">{r.time}</span>
           </button>
         )}
@@ -125,13 +146,13 @@ const DOTS = ["#7f56d9", "#0176d3", "#0b827c"];
 function AgentPill({
   name,
   working,
-  flagged = false,
+  tone,
   workingLabel,
 }: {
   name: string;
   working: boolean;
-  /** When it's handed the request to Alex: a gold tint. */
-  flagged?: boolean;
+  /** When it's handed the request to Alex, a gold tint; once it's approved or ordered, a green one. */
+  tone?: "flagged" | "done";
   workingLabel: string;
 }) {
   return (
@@ -139,7 +160,7 @@ function AgentPill({
       key={name}
       style={{ animationDelay: `${PICKED_UP}ms` }}
       className={`a2a-load-in flex h-7 shrink-0 items-center gap-1.5 rounded-full pl-1 pr-2.5 text-[12.5px] font-medium text-text ${
-        flagged ? "bg-[#fdf0cc]" : "bg-[#f3f3f5]"
+        tone === "flagged" ? "bg-[#fdf0cc]" : tone === "done" ? "bg-[#e3f3e6]" : "bg-[#f3f3f5]"
       }`}
     >
       <span className="grid size-5 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.07)]">

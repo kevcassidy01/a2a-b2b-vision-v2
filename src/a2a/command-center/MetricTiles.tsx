@@ -1,8 +1,9 @@
 import { ArrowUp } from "lucide-react";
 import { copy } from "../../copy/copy";
+import { useStory } from "../story";
 
 const t = copy.a2a.commandCenter;
-type Metric = (typeof t.metrics)[number];
+type Metric = { label: string; value: string; delta?: string; compare?: string };
 
 /**
  * MetricTiles — the last 6 months in eight tiles, four to a row. Each tile is
@@ -10,21 +11,26 @@ type Metric = (typeof t.metrics)[number];
  * across a row even when a tile has no rise or comparison.
  */
 export function MetricTiles() {
+  // Once O-5531 is in, the tiles it moves take their new figures, each flashing as it changes.
+  const { ordered } = useStory();
   return (
     <div className="grid grid-cols-4 gap-3">
-      {t.metrics.map((m) => (
-        <Tile key={m.label} metric={m} />
-      ))}
+      {t.metrics.map((m) => {
+        const after = ordered ? t.afterOrder[m.label] : undefined;
+        return <Tile key={m.label} metric={after ? { ...m, ...after } : m} bumped={!!after} />;
+      })}
     </div>
   );
 }
 
-function Tile({ metric: m }: { metric: Metric }) {
+function Tile({ metric: m, bumped }: { metric: Metric; bumped: boolean }) {
   return (
     <div className="a2a-card row-span-4 grid grid-rows-subgrid gap-y-0 rounded-xl p-4">
       <p className="text-[13px] text-text-muted">{m.label}</p>
       <p className="a2a-title mt-1.5 text-[30px] font-semibold leading-none tracking-[-0.025em] tabular-nums text-text">
-        {m.value}
+        <span key={m.value} className={bumped ? "a2a-bump" : undefined}>
+          {m.value}
+        </span>
       </p>
       <div>
         {"delta" in m && (

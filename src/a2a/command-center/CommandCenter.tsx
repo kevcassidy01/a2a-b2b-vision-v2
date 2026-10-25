@@ -57,8 +57,8 @@ export function CommandCenter() {
     setAgentOpen(true);
   }, []);
   const closeAgent = useCallback(() => setAgentOpen(false), []);
-  const { quoteSent, counterSent, heldOut, askedAlex, v3Sent, setWorking } = useStory();
-  const stage = v3Sent ? "v3" : askedAlex ? "needsYou" : heldOut ? "heldOut" : counterSent ? "countered" : "request";
+  const { quoteSent, counterSent, heldOut, askedAlex, v3Sent, accepted, ordered, setWorking } = useStory();
+  const stage = ordered ? "ordered" : accepted ? "accepted" : v3Sent ? "v3" : askedAlex ? "needsYou" : heldOut ? "heldOut" : counterSent ? "countered" : "request";
   const today = useToday(phase === "ready", quoteSent);
   // The seller agent picks Q-1042 up as it lands, whether or not Alex has the Command Center open, and stays at it.
   useEffect(() => {

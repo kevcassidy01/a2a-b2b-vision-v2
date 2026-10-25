@@ -106,10 +106,10 @@ export function CardAction({
       disabled={disabled}
       title={title}
       onClick={onClick}
-      className={`flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2.5 text-[12.5px] font-medium transition-[background-color,box-shadow] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3] disabled:cursor-not-allowed ${BUTTON[kind]}`}
+      className={`flex h-9 shrink-0 items-center gap-2 rounded-md px-3.5 text-[13.5px] font-medium transition-[background-color,box-shadow] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3] disabled:cursor-not-allowed ${BUTTON[kind]}`}
     >
       {children}
-      {Icon && <Icon className={`size-3.5 ${kind === "primary" ? "" : "text-text-muted"}`} strokeWidth={2} />}
+      {Icon && <Icon className={`size-4 ${kind === "primary" ? "" : "text-text-muted"}`} strokeWidth={2} />}
     </button>
   );
 }

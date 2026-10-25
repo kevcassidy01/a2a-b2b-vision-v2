@@ -30,6 +30,15 @@ Entry format:
 
 ## Unreleased
 
+## 23.0.0 — 2026-10-25 12:49 IST · major (steps 12–14: the phone weighs v3a/v3b, John approves, O-5531 placed; the dashboard updates; the decision card gets Decline; bigger avatars and card buttons)
+- **Command Center: Alex's decision card has its own Decline button,** sitting beside Send. Send reads "Send both offers" when both are picked, "Send v3a" or "Send v3b" when one is, and "Send offer" (disabled) when neither is. With nothing picked, the note says "Pick an offer, or decline: v2 stands". Only "Send both offers" is scripted.
+- **Command Center: bigger avatars and card buttons.** Avatars and agent marks in the seller chat are now 40px (were 32px), with the logos inside at 22px. Card footer actions are now 36px tall with 13.5px text (were 28px and 12.5px).
+- **A2A steps 12–14 built** (uncommitted). New story beats `accepted` and `ordered`.
+- **Phone, step 12:** John's agent receives a "Two offers" card. v3a (15% at Net15, $69,615) and v3b (the Ginger Ale bundle, $73,185) are always **stacked**, one below the other, never side by side. The agent weighs both with tool calls: Isar's approved product list, an SAP IBP demand plan, the cost. It then hands John an approval card: "Approve v3a?", tagged Recommended, with "Was Net30" and **Why not the others** (the bundle; holding out at Net30). The button is dark and full width.
+- **Phone, steps 13–14:** John approves; his orange bubble reads "Approve v3a". The agent's plan has three write steps: accept v3a with Fizz, place order O-5531 on Fizz Partners, and log the PO in SAP S/4HANA. Then the order card shows (19,500 units · 15% · Net15, $69,615, due in 15 days), with turns 4–5 on the timeline and new suggestions.
+- **Command Center, steps 13–14:** the seller chat gets "Accepted v3a" (approved by John Müller), then the Order O-5531 knowledge card in green ("Placed"), and the agent says orders are up to 189 and Germany to 9. On the Task pipeline, Q-1042 goes to Approved, then to O-5531 · Order placed, with a green pill.
+- **Dashboard updates on the order:** Orders 189, Order value $1.03M, Avg order value $5,427, each with a pale blue wash. Germany reaches 9, with a ping ring on the map. O-5531 lands at the top of Recent activity, and the count goes up by 1. New CSS: `.a2a-bump` and `.a2a-map-ping`, both with reduced-motion fallbacks.
+
 ## 22.0.0 — 2026-10-25 12:24 IST · major (steps 9–11 on the seller side: hold-out, Alex's decision, v3a/v3b out; Task pipeline and Today transition; Margret; roomier drawer cards)
 - **A2A_INTENT:** §4 covers v2 on the phone, Salesforce tool calls and the turns timeline; §5 notes steps 1–11 are built.
 - **Phone: the agent button is centred** at the bottom, just above Safari's bar (was bottom right).

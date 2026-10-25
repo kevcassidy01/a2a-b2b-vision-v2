@@ -12,10 +12,12 @@ import {
   History,
   Lightbulb,
   ListChecks,
+  Package,
   PencilLine,
   Scale,
   Send,
   ShieldCheck,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
@@ -34,6 +36,8 @@ const STEPS = q.plan.steps;
 const H = q.heldOut;
 const D = q.decision;
 const V3 = q.v3;
+const A = q.accepted;
+const OR = q.order;
 
 type Musing = { kind: string; label: string; text: string; tool?: Tool };
 type Tool = { name: string; target: string };
@@ -105,6 +109,16 @@ const T3 = (() => {
   return { start, plan, step, sent, card: sent + 400, reply: sent + 900, turns: sent + 1300, end: sent + 1500 };
 })();
 
+/** Isar's agent accepts v3a (story step 13), in ms from it landing: the acceptance, then the agent's word on it. */
+const T4 = (() => {
+  const card = 300;
+  const start = 1300;
+  return { card, start, said: start + 400, end: start + 600 };
+})();
+
+/** O-5531 arrives (story step 14), in ms from it being placed: the order, the agent's word, the turns so far and the done mark. */
+const T5 = { start: 300, card: 400, said: 900, turns: 1300, end: 1500 };
+
 /** What a musing or a check did, as an icon: read, looked up, wrote, noticed, wondered. */
 const KIND: Record<string, LucideIcon> = { read: FileSearch, fetch: Database, write: PencilLine, notice: Eye, wonder: Lightbulb };
 
@@ -144,10 +158,11 @@ function useClock(started: boolean, end: number) {
  * When Isar's agent holds out for 15% (step 9), its reply lands and the agent
  * weighs it again, finds it can't get there, and hands Alex a decision card
  * (step 10). Alex picks; his turn, then the agent drafts and sends v3a and v3b
- * (step 11).
+ * (step 11). Once John approves v3a, Isar's acceptance lands (step 13), then
+ * order O-5531 (step 14).
  */
 export function QuoteThread() {
-  const { sendCounter, heldOut, askAlex, sendV3, setWorking } = useStory();
+  const { sendCounter, heldOut, askAlex, sendV3, accepted, ordered, setWorking } = useStory();
   const t = useClock(true, T.end) ?? 0;
   const t2 = useClock(heldOut && t >= T.end, T2.end);
   const [chosen, setChosen] = useState(false);
@@ -160,6 +175,8 @@ export function QuoteThread() {
   const asked = t2 !== null && t2 >= T2.decision;
   const done3 = t3 === null ? 0 : T3.step.filter((at) => t3 >= at).length;
   const sent3 = t3 !== null && t3 >= T3.sent;
+  const t4 = useClock(accepted && t3 !== null && t3 >= T3.end, T4.end);
+  const t5 = useClock(ordered && t4 !== null && t4 >= T4.end, T5.end);
 
   useEffect(() => {
     if (sent) sendCounter();
@@ -180,7 +197,9 @@ export function QuoteThread() {
   const beat =
     at(t, [T.start, T.folded, T.lead, T.plan, T.card, T.reply, T.turns, T.end]) +
     at(t2, [T2.reply, T2.start, T2.read.folded, T2.heard, T2.weighed.muse[0], T2.weighed.folded, T2.lead, T2.decision, T2.turns, T2.end]) +
-    at(t3, [0, T3.start, T3.plan, T3.card, T3.reply, T3.turns, T3.end]);
+    at(t3, [0, T3.start, T3.plan, T3.card, T3.reply, T3.turns, T3.end]) +
+    at(t4, [T4.card, T4.start, T4.said, T4.end]) +
+    at(t5, [T5.start, T5.card, T5.said, T5.turns, T5.end]);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const scroller = ref.current?.closest<HTMLElement>(".overflow-y-auto");
@@ -218,7 +237,7 @@ export function QuoteThread() {
       {t3 !== null && (
         <div className="a2a-load-in mt-8 flex flex-col items-end">
           <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] font-medium text-text">
-            <img src={alex} alt="" className="size-8 rounded-full bg-[#e3effc] object-cover" />
+            <img src={alex} alt="" className="size-10 rounded-full bg-[#e3effc] object-cover" />
             {V3.you}
           </p>
           <p className="max-w-[440px] rounded-2xl rounded-br-none bg-[#e3effc] px-4 py-3 text-[14px] leading-[1.55] text-text">
@@ -230,10 +249,21 @@ export function QuoteThread() {
         <div className="mt-7">
           <Mark />
           {t3 >= T3.plan && <Checks plan={V3.plan} done={done3} />}
-          {t3 >= T3.card && <Offers />}
+          {t3 >= T3.card && <Offers took={t4 !== null} />}
           {t3 >= T3.reply && <AgentSays className="mt-4"><Rich text={V3.reply} /></AgentSays>}
           {t3 >= T3.turns && <Turns n={4} />}
           {t3 >= T3.end && <Mark className="mt-4" />}
+        </div>
+      )}
+      {t4 !== null && t4 >= T4.card && <Request card={A.card} from={A.from} time={A.time} done className="mt-8" />}
+      {t4 !== null && t4 >= T4.start && (
+        <div className="mt-7">
+          <Mark />
+          {t4 >= T4.said && <AgentSays className="mt-3"><Rich text={A.said} /></AgentSays>}
+          {t5 !== null && t5 >= T5.card && <Order />}
+          {t5 !== null && t5 >= T5.said && <AgentSays className="mt-4"><Rich text={OR.said} /></AgentSays>}
+          {t5 !== null && t5 >= T5.turns && <Turns n={5} />}
+          {t5 !== null && t5 >= T5.end && <Mark className="mt-4" />}
         </div>
       )}
     </div>
@@ -243,8 +273,8 @@ export function QuoteThread() {
 /** The seller agent's logo in a circle: at the head of its turn, and on a line of its own when it's done. */
 function Mark({ className = "" }: { className?: string }) {
   return (
-    <span className={`a2a-load-in grid size-8 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.08)] ${className}`}>
-      <img src={agentLogo} alt="" className="size-[18px]" />
+    <span className={`a2a-load-in grid size-10 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.08)] ${className}`}>
+      <img src={agentLogo} alt="" className="size-[22px]" />
     </span>
   );
 }
@@ -473,18 +503,21 @@ function Request({
   card: r = q.request,
   from = q.from,
   time = q.time,
+  done = false,
   className = "",
 }: {
   card?: QuoteCard;
   from?: string;
   time?: string;
+  /** An acceptance rather than an ask: its status in green. */
+  done?: boolean;
   className?: string;
 }) {
   return (
     <div className={`a2a-load-in flex flex-col items-end ${className}`}>
       <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] font-medium text-text">
-        <span className="grid size-8 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.08)]">
-          <img src={buyerAgent} alt="" className="size-[18px]" />
+        <span className="grid size-10 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.08)]">
+          <img src={buyerAgent} alt="" className="size-[22px]" />
         </span>
         {from}
       </p>
@@ -493,7 +526,7 @@ function Request({
         title={r.title}
         id={r.id}
         subtitle={r.from}
-        status={<CardStatus color="#0176d3">{r.status}</CardStatus>}
+        status={<CardStatus color={done ? "#2e844a" : "#0176d3"}>{r.status}</CardStatus>}
         className="w-full max-w-[520px]"
         footer={<Via text={r.via} />}
       >
@@ -528,8 +561,8 @@ function Counter() {
  * Alex's call (story step 10), like picking between two answers: the two ways
  * to 15% side by side, each with what Isar gets and why, and both picked to
  * start. The bundle says what's in it and that Margret's agent set it up (Margret is Alex's sales director).
- * Send says what goes (both, one, or with neither picked, Decline). Only
- * "Send both" plays on in the demo. Once sent, the card keeps the picks.
+ * Send says what goes (Send both offers, or Send v3a or v3b); Decline sits beside it. Only
+ * "Send both offers" plays on in the demo. Once sent, the card keeps the picks.
  */
 function Decision({ chosen, onSend }: { chosen: boolean; onSend: () => void }) {
   const [picked, setPicked] = useState<ReadonlySet<string>>(new Set(D.options.map((o) => o.id)));
@@ -551,9 +584,12 @@ function Decision({ chosen, onSend }: { chosen: boolean; onSend: () => void }) {
         footer={
           <>
             {!chosen && (
-              <CardAction kind="primary" icon={Send} disabled={count !== "both"} title={count !== "both" ? D.notScripted : undefined} onClick={onSend}>
-                {label}
-              </CardAction>
+              <>
+                <CardAction kind="primary" icon={Send} disabled={count !== "both"} title={count === "one" ? D.notScripted : undefined} onClick={onSend}>
+                  {label}
+                </CardAction>
+                <CardAction icon={X} title={D.notScripted}>{D.decline}</CardAction>
+              </>
             )}
             <span className="truncate text-[12px] text-text-muted">{chosen ? D.sentNote : D.note[count]}</span>
           </>
@@ -638,16 +674,16 @@ function Decision({ chosen, onSend }: { chosen: boolean; onSend: () => void }) {
 function AgentOf({ photo }: { photo: string }) {
   return (
     <span aria-hidden className="flex shrink-0 items-center">
-      <img src={photo} alt="" className="size-8 rounded-full bg-[#fde7dc] object-cover" />
-      <span className="relative -ml-2.5 grid size-8 place-items-center rounded-full bg-white shadow-[0_0_0_2px_#fff,0_0_0_3px_rgb(0_0_0/0.08)]">
-        <img src={agentLogo} alt="" className="size-[18px]" />
+      <img src={photo} alt="" className="size-10 rounded-full bg-[#fde7dc] object-cover" />
+      <span className="relative -ml-3 grid size-10 place-items-center rounded-full bg-white shadow-[0_0_0_2px_#fff,0_0_0_3px_rgb(0_0_0/0.08)]">
+        <img src={agentLogo} alt="" className="size-[22px]" />
       </span>
     </span>
   );
 }
 
-/** The two offers the agent sent (story step 11), side by side as tiles in one card, waiting on Isar. */
-function Offers() {
+/** The two offers the agent sent (story step 11), side by side as tiles in one card, waiting on Isar; once Isar takes v3a, it says so. */
+function Offers({ took }: { took: boolean }) {
   const o = V3.offers;
   return (
     <div className={`a2a-load-in mt-4 flex ${AGENT_COL} flex-col`}>
@@ -656,7 +692,7 @@ function Offers() {
         title={o.title}
         id={o.id}
         subtitle={o.for}
-        status={<CardStatus color="#f5b500">{o.status}</CardStatus>}
+        status={<CardStatus color={took ? "#2e844a" : "#f5b500"}>{took ? A.took : o.status}</CardStatus>}
         footer={<Via text={o.via} />}
       >
         <div className="grid grid-cols-2 gap-3">
@@ -676,6 +712,25 @@ function Offers() {
             </div>
           ))}
         </div>
+      </KnowledgeCard>
+      <p className="mt-1.5 pl-1 text-[11px] text-text-muted">{q.time}</p>
+    </div>
+  );
+}
+
+/** O-5531 as it arrives (story step 14): what Isar ordered, from v3a, placed. */
+function Order() {
+  return (
+    <div className={`a2a-load-in mt-4 flex ${AGENT_COL} flex-col`}>
+      <KnowledgeCard
+        icon={Package}
+        title={OR.title}
+        id={OR.id}
+        subtitle={OR.for}
+        status={<CardStatus color="#2e844a">{OR.status}</CardStatus>}
+        footer={<Via text={OR.via} />}
+      >
+        <QuoteBody lines={OR.lines} terms={OR.terms} />
       </KnowledgeCard>
       <p className="mt-1.5 pl-1 text-[11px] text-text-muted">{q.time}</p>
     </div>

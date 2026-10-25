@@ -1,6 +1,6 @@
 import { geoNaturalEarth1, geoPath } from "d3-geo";
 import { Maximize2, Minus, Plus, RotateCcw, type LucideIcon } from "lucide-react";
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import world from "world-atlas/countries-110m.json";
@@ -8,7 +8,7 @@ import { copy } from "../../copy/copy";
 import { Tooltip } from "../Tooltip";
 
 const t = copy.a2a.commandCenter.ordersByCountry;
-export type Country = (typeof t.countries)[number];
+export type Country = { name: string; code: string; orders: number; at: readonly number[]; label: boolean };
 
 /** The map's own units (it scales to the card's width). */
 const W = 800;
@@ -28,14 +28,16 @@ const projection = geoNaturalEarth1().fitExtent(
 );
 const shapes = land.features.map((f) => geoPath(projection)(f) ?? "");
 
-const most = Math.max(...t.countries.map((c) => c.orders));
 /** Bubbles by area, smallest drawn last so they sit on top. */
-const bubbles = t.countries
-  .map((c) => {
-    const [x, y] = projection(c.at as [number, number]) ?? [0, 0];
-    return { ...c, x, y, r: 4 + 22 * Math.sqrt(c.orders / most) };
-  })
-  .sort((a, b) => b.r - a.r);
+function toBubbles(countries: readonly Country[]) {
+  const most = Math.max(...countries.map((c) => c.orders));
+  return countries
+    .map((c) => {
+      const [x, y] = projection(c.at as [number, number]) ?? [0, 0];
+      return { ...c, x, y, r: 4 + 22 * Math.sqrt(c.orders / most) };
+    })
+    .sort((a, b) => b.r - a.r);
+}
 
 type View = { k: number; x: number; y: number };
 const HOME: View = { k: 1, x: 0, y: 0 };
@@ -68,9 +70,15 @@ function clamp(v: View, oy: number): View {
  * its row in the list dims the other bubbles. Full screen is display only.
  */
 export function OrdersMap({
+  countries,
+  fresh,
   hovered,
   onHover,
 }: {
+  /** A country that's just had an order: a ring spreads from its bubble. */
+  fresh?: string;
+  /** The countries and their orders (Germany gains one once O-5531 is in; its bubble grows). */
+  countries: readonly Country[];
   hovered: string | null;
   onHover: (name: string | null) => void;
 }) {
@@ -78,6 +86,7 @@ export function OrdersMap({
   const svg = useRef<SVGSVGElement>(null);
   const [view, setView] = useState(HOME);
   const drag = useRef<{ id: number; x: number; y: number } | null>(null);
+  const bubbles = useMemo(() => toBubbles(countries), [countries]);
   const [dragging, setDragging] = useState(false);
   // The drawing's size: map units per screen pixel (so bubbles and labels keep
   // their size on screen), and how far the frame runs above and below the map.
@@ -188,6 +197,7 @@ export function OrdersMap({
               <circle cx={x} cy={y} r={b.r * unit} strokeWidth={1.5 * unit}>
                 <title>{`${b.name}: ${b.orders}`}</title>
               </circle>
+              {b.code === fresh && <circle className="a2a-map-ping" cx={x} cy={y} r={b.r * unit} strokeWidth={1.5 * unit} />}
               {(b.label || view.k >= 2.5 || hovered === b.name) && (
                 <text
                   // A big bubble's label sits to its left, clear of its neighbours.

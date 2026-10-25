@@ -312,8 +312,106 @@ export const copy = {
               { by: "buyer", text: "**John's agent** sent v1: 15,000 units at **15% off**, Net30" },
               { by: "seller", text: "**Fizz's agent** countered with v2: 19,500 units at **12% off**, Net30, $72,072" },
               { by: "buyer", text: "**John's agent** took v2's units and asked for **15% off**" },
+              { by: "seller", text: "**Fizz's agent** sent v3a, **15% at Net15**, and v3b, **15% with a Ginger Ale bundle**" },
+              { by: "buyer", text: "**You** approved v3a, and **John's agent** placed order **O-5531**" },
             ],
           },
+        },
+        /** Story step 12: Fizz sends two offers, v3a and v3b, stacked one under
+         *  the other (the phone's too narrow for side by side). The agent weighs
+         *  the bundle in its thinking, recommends v3a and says why not each of
+         *  the others. Net30 → Net15 changes the terms, so it asks John. */
+        v3: {
+          from: "Fizz's agent",
+          time: "Just now",
+          offers: {
+            title: "Two offers",
+            id: "Q-1042 v3a, v3b",
+            list: [
+              { id: "v3a", name: "15% at Net15", rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]] },
+              {
+                id: "v3b",
+                name: "15% with a bundle",
+                rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]],
+                note: "+1,000 Ginger Ale concentrate, new",
+              },
+            ],
+          },
+          mulling: "Weighing both offers",
+          thought: (s: number) => `Weighed them up for ${s}s`,
+          musings: [
+            { kind: "read", text: "Fizz sent two ways to 15%: v3a at Net15, or v3b with a Ginger Ale bundle at Net30" },
+            { kind: "fetch", text: "Checking Isar's approved product list" },
+            { kind: "notice", text: "Ginger Ale isn't on it, and a new concentrate needs quality sign-off first" },
+            { kind: "fetch", text: "Looking for a Ginger Ale demand plan in SAP IBP" },
+            { kind: "notice", text: "There isn't one: 1,000 units is about a million litres of a drink Isar has never sold" },
+            { kind: "wonder", text: "The bundle adds $3,570 of stock nobody planned. Paying in 15 days costs about $115" },
+            { kind: "notice", text: "Net15 isn't the Net30 John set, so this one's his call" },
+          ],
+          lead: "Fizz met us at **15% off**, two ways. I'd take **v3a, 15% at Net15**. Paying 15 days early costs about **$115**; the bundle adds **$3,570** of a drink we've never sold. The terms change from Net30, so I need your OK.",
+          approval: {
+            title: "Approve v3a?",
+            id: "Q-1042 v3a",
+            tag: "Recommended",
+            rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]],
+            /** What changed since the terms John set. */
+            changed: "Was Net30",
+            whyNot: {
+              title: "Why not the others",
+              list: [
+                { name: "v3b, the bundle", text: "Ginger Ale isn't on Isar's approved list and has no demand plan. It adds **$3,570** of unplanned stock." },
+                { name: "Holding out at Net30", text: "Fizz can't give 15% at Net30, and Oktoberfest is **three weeks** out." },
+              ],
+            },
+            approve: "Approve v3a",
+            approved: "Approved",
+          },
+          /** Story step 13: John's turn, once he taps Approve. */
+          you: { label: "You approved", time: "Just now", text: "Approve v3a" },
+        },
+        /** Story steps 13–14: the agent accepts v3a with Fizz and places O-5531. */
+        order: {
+          plan: {
+            title: "Place the order",
+            of: "of",
+            done: "done",
+            toggle: "Show or hide the plan",
+            steps: [
+              {
+                doing: "Accepting v3a with Fizz",
+                done: "Accepted v3a with Fizz",
+                detail: "**19,500 units** · **15% off** · Net15, approved by you",
+                kind: "write",
+                source: "Fizz seller agent · quote reply",
+              },
+              {
+                doing: "Placing order O-5531",
+                done: "Placed order O-5531",
+                detail: "**$69,615**, from the cart Mike started",
+                kind: "write",
+                source: "Fizz Partners · checkout",
+              },
+              {
+                doing: "Logging the purchase order",
+                done: "Logged the purchase order",
+                detail: "Due in **15 days**. Munich and Frankfurt can see their deliveries.",
+                kind: "write",
+                source: "SAP S/4HANA · purchase order",
+              },
+            ],
+          },
+          card: {
+            title: "Order O-5531",
+            meta: "19,500 units · 15% off · Net15",
+            status: "Placed",
+            lines: [
+              { name: "Orange concentrate", qty: "12,000 units", site: "Munich" },
+              { name: "Lemonade concentrate", qty: "7,500 units", site: "Frankfurt" },
+            ],
+            total: { label: "Total", value: "$69,615", note: "Due in 15 days" },
+          },
+          reply: "Done. **O-5531** is placed: **19,500 units at 15% off, Net15**, for **$69,615**. The purchase order is in SAP, and Mike can see it on his cart.",
+          suggestions: ["Show the order", "Save as a template"],
         },
         placeholder: "Ask your agent",
         add: "Add",
@@ -661,6 +759,8 @@ export const copy = {
          *  them, the total is the Orders tile's 188. `at` is where the bubble
          *  sits ([longitude, latitude]); `label` names it on the map. */
         total: 188,
+        /** Once O-5531 is in: one more order, from Germany. */
+        afterOrder: { code: "DE", orders: 9, total: 189 },
         none: "4 orders have no bill-to country.",
         countries: [
           { name: "United States", code: "US", orders: 116, at: [-98, 39], label: true },
@@ -738,6 +838,8 @@ export const copy = {
           pending: { label: "Pending approval", tone: "warning" },
           draft: { label: "Draft", tone: "neutral" },
         },
+        /** O-5531, once it's placed (story step 14): it joins the top of the list. */
+        newRow: { date: "Oct 23, 10:24", order: "O-5531", store: "Fizz Partners", account: "Isar Bottling", status: "created", total: "$69,615" },
         rows: [
           { date: "Oct 22, 11:01", order: "00001882", store: "Fizz Partners", account: "Boston Barista Co.", status: "activated", total: "$10,125" },
           { date: "Oct 22, 09:47", order: "00001881", store: "Fizz Partners", account: "Isar Getränke GmbH", status: "pending", total: "$24,600" },
@@ -779,6 +881,10 @@ export const copy = {
           heldOut: { id: "Q-1042 v2", meta: ["19,500 units", "asking 15% off", "Net30"], agent: "Agent responding", needsYou: "Needs you" },
           /** Alex sent both: v3a and v3b are out, waiting on the buyer. */
           v3: { id: "Q-1042 v3a, v3b", meta: ["19,500 units", "15% off", "Net15 or bundle"], agent: "Waiting on Isar" },
+          /** Isar took v3a: approved on both sides. */
+          accepted: { id: "Q-1042 v3a", meta: ["19,500 units", "15% off", "Net15"], agent: "Approved" },
+          /** The order's in: the row becomes O-5531, done. */
+          ordered: { id: "O-5531", meta: ["From Q-1042 v3a", "19,500 units", "$69,615"], agent: "Order placed" },
         },
       },
       /** The last 6 months at a glance. `delta` is the rise on the prior 6
@@ -793,6 +899,12 @@ export const copy = {
         { label: "Buying accounts", value: "30", delta: "7%", compare: "vs the prior 6 months (28)" },
         { label: "Open cases", value: "14" },
       ],
+      /** Once O-5531 is in (story step 14): the tiles it moves, by label, as they then read. */
+      afterOrder: {
+        Orders: { value: "189", delta: "4%", compare: "vs the prior 6 months (181)" },
+        "Order value": { value: "$1.03M", delta: "74%", compare: "vs the prior 6 months ($590.2K)" },
+        "Avg order value": { value: "$5,427", delta: "66%", compare: "vs the prior 6 months ($3,261)" },
+      } as Record<string, { value: string; delta: string; compare: string }>,
       /** Read out before a metric's rise, which is shown as an arrow. */
       up: "Up",
       refresh: "Refresh",
@@ -889,6 +1001,7 @@ export const copy = {
               { by: "seller", text: "**Fizz's agent** countered with v2: 19,500 units at **12% off**, Net30, $72,072" },
               { by: "buyer", text: "**Isar's agent** took v2's units and held out for **15% off**, Net30" },
               { by: "seller", text: "**Fizz's agent** sent v3a, **15% at Net15**, and v3b, **15% with a Ginger Ale bundle**" },
+              { by: "buyer", text: "**Isar's agent** took v3a, approved by John Müller, and placed order **O-5531**" },
             ],
           },
           /** Story step 9, Fizz's side: Isar's agent takes v2's units and holds out for 15%. Fizz's agent weighs it and finds only Alex can get there. */
@@ -956,9 +1069,10 @@ export const copy = {
               },
             ],
             pick: "Pick",
-            note: { both: "Isar's agent picks one", one: "Only Send both plays on in this demo", none: "Picking neither declines: v2 stands" },
-            send: { both: "Send both", one: (id: string) => `Send ${id}`, none: "Decline" },
-            notScripted: "Only Send both plays on in this demo",
+            note: { both: "Isar's agent picks one", one: "Only Send both offers plays on in this demo", none: "Pick an offer, or decline: v2 stands" },
+            send: { both: "Send both offers", one: (id: string) => `Send ${id}`, none: "Send offer" },
+            decline: "Decline",
+            notScripted: "Only Send both offers plays on in this demo",
             sent: "Sent",
             sentNote: "Sent both. I'm drafting the offers",
           },
@@ -989,6 +1103,48 @@ export const copy = {
               via: "Sent over A2A · signed by Fizz Drinks",
             },
             reply: "I've sent Isar's agent **both**: v3a, **15% at Net15**, and v3b, **15% at Net30 with 1,000 Ginger Ale** ($73,185). Either way, they get their 15%. I'll tell you which one they pick.",
+          },
+          /** Story step 13, Fizz's side: John approves v3a and Isar's agent accepts it. */
+          accepted: {
+            from: "Isar Bottling's agent",
+            time: "Just now",
+            card: {
+              title: "Accepted v3a",
+              id: "Q-1042 · v3a",
+              from: "Isar Bottling · approved by John Müller",
+              status: "Accepted",
+              lines: [
+                { name: "Orange concentrate", site: "Munich", qty: "12,000", amount: "$50,400" },
+                { name: "Lemonade concentrate", site: "Frankfurt", qty: "7,500", amount: "$31,500" },
+              ],
+              terms: [
+                { label: "Discount", value: "15%" },
+                { label: "Payment terms", value: "Net15", note: "Paid in 15 days" },
+                { label: "Total", value: "$69,615", note: "$81,900 list price" },
+              ],
+              via: "Received over A2A · signed by Isar Bottling",
+            },
+            said: "Isar's agent took **v3a, 15% at Net15**, and **John Müller** approved it on their side. Q-1042 is approved on both sides. The order should follow.",
+            /** The two offers' status, once Isar's picked. */
+            took: "Isar took v3a",
+          },
+          /** Story step 14, Fizz's side: the order arrives. */
+          order: {
+            title: "Order",
+            id: "O-5531",
+            for: "Isar Bottling · from Q-1042 v3a",
+            status: "Placed",
+            lines: [
+              { name: "Orange concentrate", site: "Munich", qty: "12,000", amount: "$50,400" },
+              { name: "Lemonade concentrate", site: "Frankfurt", qty: "7,500", amount: "$31,500" },
+            ],
+            terms: [
+              { label: "Discount", value: "15%" },
+              { label: "Payment terms", value: "Net15", note: "Due Nov 7" },
+              { label: "Total", value: "$69,615", note: "$81,900 list price" },
+            ],
+            via: "Placed on Fizz Partners B2B by Isar's agent",
+            said: "**O-5531** is in: **$69,615**, due in 15 days. It's on your dashboard: orders are up to **189**, and Germany to **9**.",
           },
         },
         empty: {

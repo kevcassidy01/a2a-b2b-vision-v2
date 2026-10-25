@@ -747,6 +747,19 @@
 .a2a-map-bubble[data-dim] circle {
   fill-opacity: 0.25;
 }
+/* A country that's just had an order: a ring spreads from its bubble, three times. */
+.a2a-map-ping {
+  fill: none;
+  stroke: var(--blue-500);
+  transform-box: fill-box;
+  transform-origin: center;
+  pointer-events: none;
+  animation: a2a-map-ping 1400ms cubic-bezier(0.2, 0, 0, 1) 3 both;
+}
+@keyframes a2a-map-ping {
+  from { opacity: 0.7; transform: scale(1); }
+  to { opacity: 0; transform: scale(2.6); }
+}
 .a2a-map-row {
   border-radius: 6px;
   transition: background-color 150ms ease;
@@ -873,6 +886,14 @@
    and the request rising in with a pale blue wash that settles. */
 .a2a-empty-fade { transition: opacity 260ms ease-out; }
 .a2a-empty-fade[data-gone] { opacity: 0; }
+/* A figure that's just changed (an order came in): a pale blue wash behind it that settles. */
+.a2a-bump {
+  border-radius: 6px;
+  animation: a2a-bump 2400ms cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+@keyframes a2a-bump {
+  0%, 35% { background-color: #dcebfb; box-shadow: 0 0 0 4px #dcebfb; }
+}
 .a2a-arrive {
   animation:
     a2a-load-in 500ms cubic-bezier(0.2, 0, 0, 1) 180ms backwards,
@@ -882,7 +903,7 @@
   0%, 30% { background-color: #eef5fd; box-shadow: 0 0 0 1px rgb(1 118 211 / 0.35); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .a2a-burst, .a2a-float, .a2a-load-in, .a2a-bone, .a2a-arrive { animation: none; }
+  .a2a-burst, .a2a-float, .a2a-load-in, .a2a-bone, .a2a-arrive, .a2a-bump, .a2a-map-ping { animation: none; }
   .a2a-swap, .a2a-today, .a2a-today-heading, .a2a-empty-fade { transition: none; }
   .a2a-load-swipe { animation-timing-function: linear; }
 }

@@ -1,6 +1,7 @@
 import {
   AlignLeft,
   ArrowUp,
+  Check,
   ChevronDown,
   Circle,
   CircleCheck,
@@ -11,6 +12,7 @@ import {
   FileText,
   History,
   Lightbulb,
+  Package,
   PencilLine,
   Plus,
   Route,
@@ -83,6 +85,34 @@ const T2 = (() => {
   const done = step(C.plan.steps.length - 1) + 500;
   return { offer, think, muse, thinkFor: thought - think, thought, plan, step, done, end: done + 1200 };
 })();
+const V = a.v3;
+/**
+ * The two offers' timeline (story step 12), in ms from v3a and v3b landing:
+ * Fizz's two offers come in; the agent weighs them (the bundle in its
+ * musings), folds; the lead line, then the approval it puts to John.
+ */
+const T3 = (() => {
+  const offers = 600;
+  const think = offers + 1600;
+  const muse = V.musings.map((_, i) => think + V.musings.slice(0, i).reduce((n, m) => n + museFor(m.kind), 0));
+  const thought = think + V.musings.reduce((n, m) => n + museFor(m.kind), 0) + 900;
+  const ask = thought + 900;
+  return { offers, think, muse, thinkFor: thought - think, thought, ask, end: ask + 400 };
+})();
+
+const O = a.order;
+/**
+ * The order's timeline (story steps 13–14), in ms from John's Approve: his
+ * turn; the agent's plan step by step (accept v3a, place O-5531, log the PO);
+ * then the order, the reply, the turns so far and the done mark.
+ */
+const T4 = (() => {
+  const start = 700;
+  const plan = start + 300;
+  const step = (i: number) => plan + 700 + i * 1400;
+  const done = step(O.plan.steps.length - 1) + 500;
+  return { start, plan, step, done, end: done + 1200 };
+})();
 const TICK = 50;
 
 /** Ms since a turn began (the handoff, or v2 landing), ticking until it's done; null before it. */
@@ -137,12 +167,19 @@ export function AgentChat({
   const [started, setStarted] = useState(false);
   const t = useClock(started, T.end);
   const thread = useRef<HTMLDivElement>(null);
-  const { sendQuote, counterSent, holdOut, setWorking } = useStory();
+  const { sendQuote, counterSent, holdOut, v3Sent, accept, placeOrder, setWorking } = useStory();
   // Fizz has the request the moment the reply says so, not once the quote card is drawn.
   const quoted = t !== null && t >= T.done + 300;
   // Fizz's v2 lands in the thread once its agent sends it.
   const t2 = useClock(counterSent, T2.end);
   const held = t2 !== null && t2 >= T2.done + 300;
+  // Fizz's v3a and v3b land once Alex sends both; John approves v3a from the card.
+  const t3 = useClock(v3Sent, T3.end);
+  const [approved, setApproved] = useState(false);
+  const t4 = useClock(approved, T4.end);
+  // Fizz has the acceptance once the first step's done, and the order once the second is.
+  const accepted = t4 !== null && t4 >= T4.step(0);
+  const ordered = t4 !== null && t4 >= T4.step(1);
 
   useEffect(() => {
     if (open && assign && signedIn) setStarted(true);
@@ -152,14 +189,20 @@ export function AgentChat({
   const done2 = C.plan.steps.filter((_, i) => t2 !== null && t2 >= T2.step(i)).length;
   const muse2 = t2 === null ? 0 : T2.muse.filter((x) => t2 >= x).length;
   const working2 = t2 !== null && t2 >= T2.think && t2 < T2.done;
-  const working = (t !== null && t < T.done) || working2;
+  const muse3 = t3 === null ? 0 : T3.muse.filter((x) => t3 >= x).length;
+  const done4 = O.plan.steps.filter((_, i) => t4 !== null && t4 >= T4.step(i)).length;
+  const working3 = t3 !== null && t3 >= T3.think && t3 < T3.ask;
+  const working4 = t4 !== null && t4 < T4.done;
+  const working = (t !== null && t < T.done) || working2 || working3 || working4;
   const words = t === null ? 0 : Math.max(0, Math.min(WORDS.length, Math.floor((t - T.para) / WORD)));
   // How many musings have started.
   const muse = t === null ? 0 : T.muse.filter((x) => t >= x).length;
   // What's on screen changes in beats, not every tick: scroll on those.
   const beat =
     (t === null ? -1 : [T.think, T.thought, T.plan, T.done, T.done + 300, T.done + 600, T.done + 900].filter((x) => t >= x).length) +
-    (t2 === null ? 0 : [T2.offer, T2.think, T2.thought, T2.plan, T2.done, T2.done + 300, T2.done + 600, T2.done + 900, T2.done + 1100].filter((x) => t2 >= x).length);
+    (t2 === null ? 0 : [T2.offer, T2.think, T2.thought, T2.plan, T2.done, T2.done + 300, T2.done + 600, T2.done + 900, T2.done + 1100].filter((x) => t2 >= x).length) +
+    (t3 === null ? 0 : [T3.offers, T3.think, T3.thought, T3.ask].filter((x) => t3 >= x).length) +
+    (t4 === null ? 0 : [0, T4.start, T4.plan, T4.done, T4.done + 300, T4.done + 600, T4.done + 900].filter((x) => t4 >= x).length);
 
   // The who's-acting bar lights John's agent while it works.
   useEffect(() => {
@@ -176,10 +219,24 @@ export function AgentChat({
     if (held) holdOut();
   }, [held, holdOut]);
 
+  // John's approved: Fizz's side sees v3a accepted, then the order.
+  useEffect(() => {
+    if (accepted) accept();
+  }, [accepted, accept]);
+  useEffect(() => {
+    if (ordered) placeOrder();
+  }, [ordered, placeOrder]);
+
   useEffect(() => {
     const el = thread.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  }, [beat, done, words, muse, done2, muse2]);
+  }, [beat, done, words, muse, done2, muse2, muse3, done4]);
+
+  // Suggestions once the agent's done and nothing's waiting on John: the order's, once it's placed.
+  const suggestions =
+    t4 !== null
+      ? t4 >= T4.done + 900 && O.suggestions
+      : t3 === null && t !== null && t >= T.done + 900 && (t2 === null || t2 >= T2.done + 1100) && a.suggestions;
 
   return (
     <div className="sf-sheet absolute inset-0 z-[5]" data-open={open || undefined} inert={!open}>
@@ -238,13 +295,15 @@ export function AgentChat({
             <>
               <Thread t={t} words={words} muse={muse} done={done} />
               {t2 !== null && <CounterTurn t={t2} muse={muse2} done={done2} />}
+              {t3 !== null && <OffersTurn t={t3} muse={muse3} approved={approved} onApprove={() => setApproved(true)} />}
+              {t4 !== null && <OrderTurn t={t4} done={done4} />}
             </>
           )}
         </div>
 
         <Composer
           working={working}
-          suggestions={t !== null && t >= T.done + 900 && (t2 === null || t2 >= T2.done + 1100)}
+          suggestions={suggestions || null}
           placeholder={signedIn ? a.placeholder : a.signedOut.placeholder}
         />
       </section>
@@ -331,7 +390,7 @@ function CounterTurn({ t, muse, done }: { t: number; muse: number; done: number 
           {t >= T2.plan && <Plan plan={C.plan} done={done} />}
           {t >= T2.done + 300 && <AgentSays className="mt-5"><Rich text={C.reply} /></AgentSays>}
           {t >= T2.done + 600 && <Quote q={C.quote} />}
-          {t >= T2.done + 900 && <Turns turns={C.turns} />}
+          {t >= T2.done + 900 && <Turns turns={C.turns} n={3} />}
           {t >= T2.done + 1100 && <AgentMark className="sf-rise mt-5 size-9" />}
         </div>
       )}
@@ -353,8 +412,9 @@ function FizzMark({ className = "" }: { className?: string }) {
  * turn: a clock, how many turns, a chevron, folded until tapped; open, a
  * timeline of who did what, each by its agent's mark. Sits before the done mark.
  */
-function Turns({ turns }: { turns: { title: (n: number) => string; list: readonly { by: string; text: string }[] } }) {
+function Turns({ turns: all, n }: { turns: { title: (n: number) => string; list: readonly { by: string; text: string }[] }; n: number }) {
   const [open, setOpen] = useState(false);
+  const turns = { ...all, list: all.list.slice(0, n) };
   return (
     <div className="sf-rise mt-5">
       <button
@@ -427,6 +487,199 @@ function Offer() {
         </dl>
       </div>
       <p className="mt-1.5 pr-1 text-[12px] text-text-muted">{C.time}</p>
+    </div>
+  );
+}
+
+/**
+ * Story step 12: Fizz's turn, its two offers in one card, v3a above v3b (the
+ * phone's too narrow for side by side); then the agent's: it weighs both,
+ * the bundle in its thinking, recommends v3a and asks John, since Net15
+ * changes the terms he set.
+ */
+function OffersTurn({ t, muse, approved, onApprove }: { t: number; muse: number; approved: boolean; onApprove: () => void }) {
+  return (
+    <>
+      {t >= T3.offers && <Offers />}
+      {t >= T3.think && (
+        <div className="mt-7">
+          <AgentMark className="sf-rise size-9" />
+          <Reasoning
+            thinking={t < T3.thought}
+            musings={V.musings}
+            muse={muse}
+            mulling={V.mulling}
+            thought={V.thought(Math.round(T3.thinkFor / 1000))}
+          />
+          {t >= T3.thought && <AgentSays className="mt-3"><Rich text={V.lead} /></AgentSays>}
+          {t >= T3.ask && <Approval approved={approved} onApprove={onApprove} />}
+        </div>
+      )}
+      {approved && (
+        <div className="sf-rise mt-8 flex flex-col items-end">
+          <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] text-text-muted">
+            <img src={john} alt="" className="size-9 rounded-full bg-white object-cover" />
+            {V.you.label} · {V.you.time}
+          </p>
+          <p className="rounded-[22px] rounded-br-none bg-[#fdebe1] px-4 py-3 text-[16px] font-semibold text-text">{V.you.text}</p>
+        </div>
+      )}
+    </>
+  );
+}
+
+/** Story steps 13–14: the agent accepts v3a, places O-5531 and logs the PO; then the order, the reply and the turns so far. */
+function OrderTurn({ t, done }: { t: number; done: number }) {
+  if (t < T4.start) return null;
+  return (
+    <div className="mt-7">
+      <AgentMark className="sf-rise size-9" />
+      {t >= T4.plan && <Plan plan={O.plan} done={done} />}
+      {t >= T4.done && <Order />}
+      {t >= T4.done + 300 && <AgentSays className="mt-5"><Rich text={O.reply} /></AgentSays>}
+      {t >= T4.done + 600 && <Turns turns={C.turns} n={5} />}
+      {t >= T4.done + 900 && <AgentMark className="sf-rise mt-5 size-9" />}
+    </div>
+  );
+}
+
+/** An offer's figures as four small columns, so a whole offer fits the phone's width. */
+function Figures({ rows, notes = {} }: { rows: readonly (readonly string[])[]; notes?: Record<string, string> }) {
+  return (
+    <dl className="mt-3 grid grid-cols-4 gap-2">
+      {rows.map(([k, val]) => (
+        <div key={k} className="min-w-0">
+          <dt className="text-[12px] text-text-muted">{k}</dt>
+          <dd className="mt-0.5 text-[15px] font-bold tabular-nums tracking-[-0.01em] text-text">{val}</dd>
+          {notes[k] && <dd className="text-[11.5px] font-semibold leading-snug text-[#a15c00]">{notes[k]}</dd>}
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/** Fizz's two offers as they land, from its agent: one card, v3a above v3b, each a tile of its own. */
+function Offers() {
+  const o = V.offers;
+  return (
+    <div className="sf-rise mt-8 flex flex-col items-end">
+      <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] text-text-muted">
+        <FizzMark className="size-9" />
+        {V.from}
+      </p>
+      <div className="w-[92%] rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+        <div className="flex items-center gap-3">
+          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+            <FileText className="size-5 text-text" strokeWidth={2} />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{o.title}</span>
+            <span className="block text-[13px] text-text-muted">{o.id}</span>
+          </span>
+        </div>
+        <ul className="mt-4 flex flex-col gap-2.5">
+          {o.list.map((v) => (
+            <li key={v.id} className="rounded-2xl bg-[#f6f6f8] px-3.5 py-3">
+              <p className="text-[12px] text-text-muted">{v.id}</p>
+              <p className="text-[15px] font-bold tracking-[-0.01em] text-text">{v.name}</p>
+              <Figures rows={v.rows} />
+              {"note" in v && <p className="mt-2.5 text-[13px] font-semibold text-[#1f7a3d]">{v.note}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p className="mt-1.5 pr-1 text-[12px] text-text-muted">{V.time}</p>
+    </div>
+  );
+}
+
+/**
+ * What the agent puts to John: v3a, recommended, with what changed from his
+ * terms; why not each of the others; and Approve. Once he taps it, the
+ * button gives way to the approval's status.
+ */
+function Approval({ approved, onApprove }: { approved: boolean; onApprove: () => void }) {
+  const p = V.approval;
+  return (
+    <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+      <div className="flex items-center gap-3">
+        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+          <FileText className="size-5 text-text" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{p.title}</span>
+          <span className="block text-[13px] text-text-muted">{p.id}</span>
+        </span>
+        <span className="rounded-full bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{p.tag}</span>
+      </div>
+      <Figures rows={p.rows} notes={{ Terms: p.changed }} />
+      <div className="mt-4 border-t border-black/[0.07] pt-3.5">
+        <p className="text-[13px] font-semibold text-text-muted">{p.whyNot.title}</p>
+        <ul className="mt-1">
+          {p.whyNot.list.map((w) => (
+            <li key={w.name} className="py-1.5">
+              <p className="text-[14.5px] font-semibold tracking-[-0.01em] text-text">{w.name}</p>
+              <p className="mt-0.5 text-[13.5px] leading-snug text-text-muted"><Rich text={w.text} /></p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {approved ? (
+        <span className="sf-rise mt-3 inline-flex h-7 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
+          <span aria-hidden className="size-2 rounded-full bg-[#1f9d55]" />
+          {p.approved}
+        </span>
+      ) : (
+        <button
+          type="button"
+          onClick={onApprove}
+          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+        >
+          <Check className="size-[18px]" strokeWidth={2.5} />
+          {p.approve}
+        </button>
+      )}
+    </div>
+  );
+}
+
+/** The order as placed: its id and status, the lines (photo, units, site), and the total. */
+function Order() {
+  const o = O.card;
+  return (
+    <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+      <div className="flex items-center gap-3">
+        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+          <Package className="size-5 text-text" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{o.title}</span>
+          <span className="block text-[13px] text-text-muted">{o.meta}</span>
+        </span>
+        <span className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
+          <span aria-hidden className="size-2 rounded-full bg-[#1f9d55]" />
+          {o.status}
+        </span>
+      </div>
+      <ul className="mt-3">
+        {o.lines.map((l, i) => (
+          <li key={l.name} className="flex items-center gap-3 border-t border-black/[0.07] py-3">
+            <ProductPhoto photo={i === 0 ? PHOTOS.orange : PHOTOS.lemonade} pad="3px" className="size-11 shrink-0 rounded-xl" />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-[15px] font-semibold tracking-[-0.01em] text-text">{l.name}</span>
+              <span className="block text-[13px] text-text-muted">
+                {l.qty} · {l.site}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <div className="flex items-baseline justify-between border-t border-black/[0.07] pt-3">
+        <span className="text-[13px] text-text-muted">
+          {o.total.label} · {o.total.note}
+        </span>
+        <span className="text-[17px] font-bold tabular-nums tracking-[-0.01em] text-text">{o.total.value}</span>
+      </div>
     </div>
   );
 }
@@ -684,14 +937,14 @@ function Composer({
   placeholder,
 }: {
   working: boolean;
-  suggestions: boolean;
+  suggestions: readonly string[] | null;
   placeholder: string;
 }) {
   return (
     <div className="shrink-0 px-4 pb-[60px] pt-2">
       {suggestions && (
         <div className="sf-rise sf-no-scrollbar -mx-4 mb-2.5 flex gap-2 overflow-x-auto px-4">
-          {a.suggestions.map((s) => (
+          {suggestions.map((s) => (
             <button
               key={s}
               type="button"
