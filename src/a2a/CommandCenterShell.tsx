@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { ReactNode } from "react";
+import alex from "../assets/a2a/alex.png";
 import { copy } from "../copy/copy";
 import { GlassPanel } from "./GlassPanel";
 import { Tooltip } from "./Tooltip";
@@ -115,9 +116,7 @@ function Sidenav() {
           className="a2a-nav-btn flex w-full items-center gap-2.5 rounded-md px-1.5 py-1.5 text-left"
           style={{ borderBottomLeftRadius: SHELL_RADIUS - INSET }}
         >
-          <span className="grid size-7 shrink-0 place-items-center rounded-full bg-white/15 text-[11px] font-semibold text-white/90">
-            {t.user.initials}
-          </span>
+          <img src={alex} alt="" className="size-7 shrink-0 rounded-full bg-[#e3effc] object-cover" />
           <span className="flex min-w-0 flex-col leading-tight">
             <span className="truncate text-[13px] text-white/90">
               {t.user.name}

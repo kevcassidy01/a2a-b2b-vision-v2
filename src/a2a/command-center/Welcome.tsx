@@ -83,7 +83,7 @@ export function Welcome({ onLoad }: { onLoad: () => void }) {
         <button
           type="button"
           onClick={onLoad}
-          className="mt-8 flex h-11 items-center gap-2 rounded-[10px] bg-[#1d1d1f] px-5 text-[14.5px] font-semibold text-white transition-colors hover:bg-[#333336] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
+          className="mt-8 flex h-11 items-center gap-2 rounded-[10px] bg-[#0176d3] px-5 text-[14.5px] font-semibold text-white transition-colors hover:bg-[#014486] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
         >
           {t.cta}
           <ArrowRight className="size-4" strokeWidth={2.25} />

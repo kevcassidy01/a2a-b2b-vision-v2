@@ -73,15 +73,43 @@ export function CardStatus({ color, children }: { color: string; children: React
   );
 }
 
-/** A quiet footer action: outlined, 6px corners like the Command Center's other buttons. */
-export function CardAction({ icon: Icon, children }: { icon?: LucideIcon; children: ReactNode }) {
+/** The Command Center's three kinds of action button: blue for the one thing to do, outlined for the rest, grey for the quietest. */
+export const BUTTON = {
+  primary: "bg-[#0176d3] text-white hover:bg-[#014486] disabled:bg-[#c9d7e6]",
+  secondary: "bg-white text-text shadow-[0_0_0_1px_rgb(0_0_0/0.1)] hover:bg-[#f7f7f8] hover:shadow-[0_0_0_1px_rgb(0_0_0/0.16)]",
+  tertiary: "bg-[#f0f0f2] text-text hover:bg-[#e6e6e9]",
+} as const;
+
+/**
+ * A footer action, 6px corners like the Command Center's other buttons:
+ * primary, secondary (the default) or tertiary. Footers lead with their
+ * actions, on the left.
+ */
+export function CardAction({
+  icon: Icon,
+  kind = "secondary",
+  disabled,
+  title,
+  onClick,
+  children,
+}: {
+  icon?: LucideIcon;
+  kind?: keyof typeof BUTTON;
+  disabled?: boolean;
+  title?: string;
+  onClick?: () => void;
+  children: ReactNode;
+}) {
   return (
     <button
       type="button"
-      className="flex h-7 shrink-0 items-center gap-1.5 rounded-md bg-white px-2.5 text-[12.5px] font-medium text-text shadow-[0_0_0_1px_rgb(0_0_0/0.1)] transition-[background-color,box-shadow] hover:bg-[#f7f7f8] hover:shadow-[0_0_0_1px_rgb(0_0_0/0.16)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
+      disabled={disabled}
+      title={title}
+      onClick={onClick}
+      className={`flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2.5 text-[12.5px] font-medium transition-[background-color,box-shadow] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3] disabled:cursor-not-allowed ${BUTTON[kind]}`}
     >
       {children}
-      {Icon && <Icon className="size-3.5 text-text-muted" strokeWidth={2} />}
+      {Icon && <Icon className={`size-3.5 ${kind === "primary" ? "" : "text-text-muted"}`} strokeWidth={2} />}
     </button>
   );
 }

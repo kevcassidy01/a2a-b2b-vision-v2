@@ -82,7 +82,7 @@ function AccountPill() {
   );
 }
 
-/** John's agent, floating bottom right over every page but the login, just
+/** John's agent, floating bottom centre over every page but the login, just
  *  above Safari's bar: a darker glass pill with the sparkle and "New task"
  *  ("Ask agent" before login, when it's Fizz's helpful agent), shrinking to
  *  the sparkle in a circle when the bar shrinks (Safari's `float`). */

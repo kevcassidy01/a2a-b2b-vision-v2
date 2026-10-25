@@ -48,6 +48,7 @@ The PDF's 7 steps, which our story walks through:
 | **John** | Procurement Director | **[Bottler]**, the buyer | Munich | Yes, the buyer side |
 | **Mike** | Procurement Manager | [Bottler] | Frankfurt | **No.** Only in what John sees: his notification, his cart lines and "Mike sees it" |
 | **Alex** | Sales Rep | **Fizz Drinks**, the seller ("Better Drinks. Brighter Tomorrow.") | New York | Yes, the seller side |
+| **Margret Reyes** | Sales Director, Alex's manager | Fizz Drinks | | **No.** Only her agent is credited, on the Ginger Ale bundle it set up ("Suggested by Margret's agent", her photo with the agent's logo) |
 | **Buyer agent** | John's agent | [Bottler] | | In a sheet on John's phone |
 | **Seller agent** | Fizz's agent | Fizz Drinks | | In Alex's sidebar |
 
@@ -81,9 +82,10 @@ sees each agent's move land on the other side.
   blue sparkle and "New task", shrinking to the sparkle when the bar shrinks) and a card at the top of the menu. Assign is a handoff (settled 2026-10-24): John types
   nothing; the agent (**"Your agent"** on screen; "buyer agent" is only its role in these docs) reasons, shows a plan with its progress, and ends on Q-1042 v1. Its reasoning is a timeline of musings (what it reads from SAP, notices, wonders), one row at a time, folding to a chevron when done, and its plan steps name the systems they read or wrote; what it makes shows up as **knowledge cards** (see DESIGN_DECISIONS). Its chat follows shadcn
   AI Elements' patterns, sized like Google's mobile AI; the prompt box is one field with Add and Send. See DESIGN_DECISIONS.
+- **v2 on the phone (added 2026-10-25, steps 8–9):** once Fizz sends v2, it lands in the same chat as a counter-offer card from **"Fizz's agent"** (its mark the same size as John's agent's), on the right like the other side's turns. John's agent weighs it (musings), says it'll take the quantities and hold out for 15%, runs a short plan, replies that there's nothing for John to do yet, and shows Q-1042 v2 "Waiting for Fizz to respond".
 
 **Right: Alex in the Fizz Command Center.**
-- A sales dashboard (accounts, orders, revenue by region, a **"Needs your approval"** panel).
+- A sales dashboard (accounts, orders, revenue by region, a **"Task pipeline"** panel; named "Needs your approval" until 2026-10-25).
 - In the story it lives inside Cowork. On screen it sits in **a shell of our own that reads as an AI chat
   based app**, not Cowork or ChatGPT specifically. Somnath will design that shell with Claude.
 - **The shell:** a glass sidenav, thinner than Claude's but not too thin, with light bending a little at
@@ -94,9 +96,13 @@ sees each agent's move land on the other side.
   part of the viewport, so we cut the side padding down, maybe to nothing, and the Command Center takes the
   whole width of the main content area.
 - **It opens on a welcome (added 2026-10-24):** "while you were away", not a login. App tiles and signal pills float around a headline and **Load Command Center**, which loads the dashboard (skeleton cards, a line sweeping along the bottom of the frame's bar). It follows the phone: on opening, the store loads as a skeleton under Safari's progress line, then the welcome's tiles and pills burst out.
-- **Today (added 2026-10-24):** once John's agent sends Q-1042 v1, a "Today" section opens above "Last 6 months", holding "Needs your approval" with the request, a short beat (0.6s) after the phone sends it. It shows who it's assigned to as a pill (the agent's avatar and "Agent responding"), with coloured typing dots while the agent works on it and none when it's idle.
-- The **seller agent** is a docked right chat sidebar (not floating). So far it has no chat, only what surrounds one (2026-10-24): a header, an empty state with its limits and suggestions, and a prompt box as wide as the chat column. Clicking Q-1042 (added 2026-10-24) opens it on a chat: Isar's agent's request, then the seller agent taking it in (reading, pulling up the account, checking the rules, weighing a counter), holding at "Weighing the options", then (2026-10-25) folding, saying why 15% is over its limit, running its checks one at a time (stock, price book, policy, credit, drafting and sending v2) and showing the v2 counter-offer card, waiting on Isar.
+- **Today (added 2026-10-24):** once John's agent sends Q-1042 v1, a "Today" section opens above "Last 6 months", holding the Task pipeline with the request, a short beat (0.6s) after the phone sends it. It arrives in place (2026-10-25): the card stays put, its heading turns into Today, Last 6 months opens beneath it, and the row lands with a pale blue wash. It shows who it's assigned to as a pill (the agent's avatar and "Agent responding"), with coloured typing dots while the agent works on it and none when it's idle.
+- The **seller agent** is a docked right chat sidebar (not floating). So far it has no chat, only what surrounds one (2026-10-24): a header, an empty state with its limits and suggestions, and a prompt box as wide as the chat column. Clicking Q-1042 (added 2026-10-24) opens it on a chat: Isar's agent's request, then the seller agent taking it in (reading, pulling up the account, checking the rules, weighing a counter), holding at "Weighing the options", then (2026-10-25) folding, saying why 15% is over its limit, running its checks one at a time (stock, price book, policy, credit, drafting and sending v2) and showing the v2 counter-offer card, waiting on Isar. Its work visibly runs on Salesforce (2026-10-25): any musing or check that goes to Salesforce shows the call under it, as Cowork does ("Called `dispatch_readonly` merchant-catalog-management").
 - **Shells come first:** the iPhone and the AI app shell get designed before anything inside them.
+
+**In both agents' chats: the turns so far (added 2026-10-25).** Once a quote has gone back and forth, each
+agent's turn ends, before its done mark, with a folded row: a clock, "N turns on Q-1042", a chevron. Opened,
+it's a timeline of who did what, one brief line per turn by that agent's mark. It grows with each turn.
 
 **Under both: the "who's acting" bar (added 2026-10-24).** A thin dark bar along the bottom of the stage,
 four equal parts: **John · John's agent · Alex's agent · Alex**. The acting part lights up; the rest stay
@@ -116,7 +122,7 @@ People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (s
 | 2 | John opens the cart **"Oktoberfest stock-up"**. It holds Mike's **5,000 lemonade concentrate** (Frankfurt), added by Mike's agent. | |
 | 3 | John taps **Assign to your agent** on Mike's cart. No prompt: the buyer agent works out that Mike's cart covers Frankfurt and Munich isn't stocked yet, and plans to top it up and get Fizz's best price. *(person 1 of 3)* | |
 | 4 | The agent reads the demand forecast (**Munich +40%**) and adds **10,000 orange concentrate** (Munich) to the **same cart**. Mike sees it. | |
-| 5 | The agent turns the cart into quote request **Q-1042 v1**: 15,000 units, asking **15%** off, **Net30**. | Q-1042 lands in **"Needs your approval"**, assigned to the **Fizz agent** (its avatar pill, dots while it works). |
+| 5 | The agent turns the cart into quote request **Q-1042 v1**: 15,000 units, asking **15%** off, **Net30**. | Q-1042 lands in the **"Task pipeline"**, assigned to the **Fizz agent** (its avatar pill, dots while it works). |
 | 6 | | Alex clicks it. The seller agent's sidebar opens with its work already done. |
 | 7 | | The seller agent checks stock, account pricing and discount policy: **up to 12% at Net30**. |
 | 8 | Counter-offer **v2** arrives. | The seller agent sends **v2**: **12,000 orange + 7,500 lemonade at 12%** (more volume, lower discount). |
@@ -127,6 +133,9 @@ People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (s
 | 13 | John approves. *(person 3 of 3)* The quote is approved on both sides. | Q-1042 shows approved. |
 | 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows. |
 | 15 | The order is saved as the template **"Oktoberfest stock-up"** for next year. | |
+
+**Built so far (2026-10-25): steps 1–11.** Fizz's agent receives the hold-out, hands Alex the decision card,
+and sends v3a and v3b once he picks "Send both" (the only option scripted). The phone doesn't receive v3 yet (step 12).
 
 **The cross-sell: a bundle (settled 2026-10-24).** Upsell is the seller agent's v2 (more volume, lower
 discount). Cross-sell is a **bundled offer: +1,000 Ginger Ale concentrate, keeping 15% at Net30**. It brings in
@@ -141,8 +150,9 @@ two parts of B2B commerce, bundles and cross-sell. Display only: nobody takes it
      sold, ordered just before Oktoberfest.
   3. The money: the bundle adds about $3,570 of unplanned stock. Net15 means paying 15 days early, which costs
      about $115 in cash (at 4% a year on $69,615).
-- **Alex's choices change (settled 2026-10-24):** "Send both: Net15 or the bundle" (recommended), "Net15 only",
-  or "Decline". Alex sends both, so the buyer gets v3a (15% · Net15) and v3b (the bundle). John's agent
+- **Alex's choices change (settled 2026-10-24; card redone 2026-10-25):** the two offers side by side, v3a
+  (15% · Net15) and v3b (the bundle), both picked to start; picking neither declines. The bundle was set up by
+  **Margret Reyes's agent** (Margret is the Sales Director, Alex's manager), and the card says so. Alex sends both, so the buyer gets v3a (15% · Net15) and v3b (the bundle). John's agent
   recommends v3a, **and says why not each of the others** (why not the bundle, why not hold out at Net30), and John
   approves v3a. People still step in 3 times; the final order stays 19,500 units · 15% · Net15. Prices are dummy
   ($4.20 a unit).

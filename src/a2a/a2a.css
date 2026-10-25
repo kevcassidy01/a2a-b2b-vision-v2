@@ -504,7 +504,8 @@
    with it when it shrinks. Under the page's drawer and sheet. */
 .a2a-safari-float {
   position: absolute;
-  right: 16px;
+  left: 50%;
+  translate: -50% 0;
   bottom: 86px;
   z-index: 4;
   transition: bottom 380ms cubic-bezier(0.32, 0.72, 0, 1);
@@ -845,8 +846,44 @@
 @keyframes a2a-load-in {
   from { opacity: 0; transform: translateY(8px); }
 }
+/* Today arriving in the Command Center. The heading above the pipeline card
+   swaps (the period's lifts away, Today's rises in); the period's heading opens
+   beneath the card on a grid row, easing the cards below down rather than
+   jumping; its text follows the space a beat later. */
+.a2a-swap {
+  transition: opacity 320ms cubic-bezier(0.2, 0, 0, 1), transform 500ms cubic-bezier(0.2, 0, 0, 1);
+}
+.a2a-swap[data-state="above"] { opacity: 0; transform: translateY(-10px); }
+.a2a-swap[data-state="below"] { opacity: 0; transform: translateY(10px); }
+.a2a-swap[data-state="shown"] { transition-delay: 120ms; }
+.a2a-today {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 600ms cubic-bezier(0.2, 0, 0, 1);
+}
+.a2a-today[data-open] { grid-template-rows: 1fr; }
+.a2a-today > * { overflow: hidden; }
+.a2a-today-heading {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 400ms cubic-bezier(0.2, 0, 0, 1), transform 600ms cubic-bezier(0.2, 0, 0, 1);
+}
+.a2a-today[data-open] .a2a-today-heading { opacity: 1; transform: none; transition-delay: 220ms; }
+/* The pipeline card's empty banner fading away as the request lands over it,
+   and the request rising in with a pale blue wash that settles. */
+.a2a-empty-fade { transition: opacity 260ms ease-out; }
+.a2a-empty-fade[data-gone] { opacity: 0; }
+.a2a-arrive {
+  animation:
+    a2a-load-in 500ms cubic-bezier(0.2, 0, 0, 1) 180ms backwards,
+    a2a-arrive 1800ms cubic-bezier(0.4, 0, 0.2, 1) 180ms backwards;
+}
+@keyframes a2a-arrive {
+  0%, 30% { background-color: #eef5fd; box-shadow: 0 0 0 1px rgb(1 118 211 / 0.35); }
+}
 @media (prefers-reduced-motion: reduce) {
-  .a2a-burst, .a2a-float, .a2a-load-in, .a2a-bone { animation: none; }
+  .a2a-burst, .a2a-float, .a2a-load-in, .a2a-bone, .a2a-arrive { animation: none; }
+  .a2a-swap, .a2a-today, .a2a-today-heading, .a2a-empty-fade { transition: none; }
   .a2a-load-swipe { animation-timing-function: linear; }
 }
 

@@ -21,6 +21,7 @@ import {
 import { Rich } from "../Rich";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
+import john from "../../assets/a2a/john.png";
 import agentLogo from "../../assets/a2a/agent-logo.png";
 import { copy } from "../../copy/copy";
 import { ProductPhoto } from "./Photo";
@@ -268,10 +269,11 @@ function Thread({ t, words, muse, done }: { t: number; words: number; muse: numb
   return (
     <>
       <div className="sf-rise flex flex-col items-end">
-        <p className="mb-2 pr-1 text-[13px] text-text-muted">
+        <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] text-text-muted">
+          <img src={john} alt="" className="size-9 rounded-full bg-white object-cover" />
           {a.handoff.label} · {a.handoff.time}
         </p>
-        <div className="flex items-center gap-3 rounded-[22px] bg-[#f2f2f4] p-3 pr-5">
+        <div className="flex items-center gap-3 rounded-[22px] rounded-br-none bg-[#fdebe1] p-3 pr-5">
           <span className="grid size-11 place-items-center rounded-2xl bg-white">
             <ShoppingCart className="size-5 text-text" strokeWidth={2} />
           </span>
@@ -284,7 +286,7 @@ function Thread({ t, words, muse, done }: { t: number; words: number; muse: numb
 
       {t >= T.think && (
         <div className="mt-7">
-          <AgentMark className="sf-rise size-7" />
+          <AgentMark className="sf-rise size-9" />
           <Reasoning
             thinking={t < T.thought}
             musings={MUSINGS}
@@ -298,7 +300,7 @@ function Thread({ t, words, muse, done }: { t: number; words: number; muse: numb
           {t >= T.done && <Result />}
           {t >= T.done + 300 && <AgentSays className="mt-5"><Rich text={a.reply} /></AgentSays>}
           {t >= T.done + 600 && <Quote q={a.quote} />}
-          {t >= T.done + 900 && <AgentMark className="sf-rise mt-5 size-7" />}
+          {t >= T.done + 900 && <AgentMark className="sf-rise mt-5 size-9" />}
         </div>
       )}
     </>
@@ -317,7 +319,7 @@ function CounterTurn({ t, muse, done }: { t: number; muse: number; done: number 
       {t >= T2.offer && <Offer />}
       {t >= T2.think && (
         <div className="mt-7">
-          <AgentMark className="sf-rise size-7" />
+          <AgentMark className="sf-rise size-9" />
           <Reasoning
             thinking={t < T2.thought}
             musings={C.musings}
@@ -330,7 +332,7 @@ function CounterTurn({ t, muse, done }: { t: number; muse: number; done: number 
           {t >= T2.done + 300 && <AgentSays className="mt-5"><Rich text={C.reply} /></AgentSays>}
           {t >= T2.done + 600 && <Quote q={C.quote} />}
           {t >= T2.done + 900 && <Turns turns={C.turns} />}
-          {t >= T2.done + 1100 && <AgentMark className="sf-rise mt-5 size-7" />}
+          {t >= T2.done + 1100 && <AgentMark className="sf-rise mt-5 size-9" />}
         </div>
       )}
     </>
@@ -386,8 +388,8 @@ function Offer() {
   const o = C.offer;
   return (
     <div className="sf-rise mt-8 flex flex-col items-end">
-      <p className="mb-2 flex items-center gap-1.5 pr-1 text-[13px] text-text-muted">
-        <FizzMark className="size-7" />
+      <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] text-text-muted">
+        <FizzMark className="size-9" />
         {C.from}
       </p>
       <div className="w-[92%] rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">

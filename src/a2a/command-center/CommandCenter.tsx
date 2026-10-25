@@ -6,7 +6,7 @@ import {
   Store,
   type LucideIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { copy } from "../../copy/copy";
 import { Segmented } from "../../shell/Segmented";
 import { ThemeSegmented } from "../../shell/ThemeSegmented";
@@ -25,6 +25,7 @@ import { MonthlyRevenueCard } from "./MonthlyRevenueCard";
 import { OrdersByCountryCard } from "./OrdersByCountryCard";
 import { SourceMenu } from "./SourceMenu";
 import { StoreMenu } from "./StoreMenu";
+import { useGlide } from "./glide";
 import { ViewPicker } from "./ViewPicker";
 import { Welcome } from "./Welcome";
 
@@ -56,7 +57,8 @@ export function CommandCenter() {
     setAgentOpen(true);
   }, []);
   const closeAgent = useCallback(() => setAgentOpen(false), []);
-  const { quoteSent, counterSent, setWorking } = useStory();
+  const { quoteSent, counterSent, heldOut, askedAlex, v3Sent, setWorking } = useStory();
+  const stage = v3Sent ? "v3" : askedAlex ? "needsYou" : heldOut ? "heldOut" : counterSent ? "countered" : "request";
   const today = useToday(phase === "ready", quoteSent);
   // The seller agent picks Q-1042 up as it lands, whether or not Alex has the Command Center open, and stays at it.
   useEffect(() => {
@@ -68,6 +70,16 @@ export function CommandCenter() {
   useEffect(() => {
     if (counterSent) setWorking("alexAgent", false);
   }, [counterSent, setWorking]);
+  // Isar's agent holds out: it's at it again, until it hands Q-1042 to Alex. (Alex's pick sets it working
+  // from the chat; v3 going out stops it.)
+  useEffect(() => {
+    if (!heldOut) return;
+    const id = window.setTimeout(() => setWorking("alexAgent", true), QUOTE_GAP);
+    return () => clearTimeout(id);
+  }, [heldOut, setWorking]);
+  useEffect(() => {
+    if (askedAlex || v3Sent) setWorking("alexAgent", false);
+  }, [askedAlex, v3Sent, setWorking]);
   useEffect(() => {
     if (phase !== "loading") return;
     const id = window.setTimeout(() => setPhase("ready"), LOAD);
@@ -85,23 +97,25 @@ export function CommandCenter() {
             <CommandCenterSkeleton />
           ) : (
             <div className="a2a-load-in flex flex-col gap-8">
-              {/* Once John's agent sends its quote, Today opens above the period, and the
-                  approvals card moves up into it with the request. */}
-              {today && (
-                <div className="a2a-load-in">
-                  <Section {...t.sections.today}>
-                    <ApprovalsCard request countered={counterSent} onOpen={openQuote} />
-                  </Section>
+              {/* Once John's agent sends its quote, the period's heading gives way to Today's
+                  above the pipeline card (which stays put), and the period's heading opens
+                  beneath it, easing everything below down. See .a2a-today. */}
+              <section className="flex flex-col gap-3">
+                <SwapHeading shown={today ? "today" : "last6Months"} />
+                <ApprovalsCard request={today} stage={stage} onOpen={openQuote} />
+                <div className="a2a-today -mt-3" data-open={today || undefined} aria-hidden={!today}>
+                  <div className="min-h-0">
+                    <div className="a2a-today-heading pt-8">
+                      <Heading {...t.sections.last6Months} />
+                    </div>
+                  </div>
                 </div>
-              )}
-              <Section {...t.sections.last6Months}>
-                {!today && <ApprovalsCard />}
                 <MetricTiles />
                 <OrdersByCountryCard />
                 <MonthlyRevenueCard />
                 <CheckoutFunnelCard />
                 <ActivityCard />
-              </Section>
+              </section>
             </div>
           )}
         </div>
@@ -243,33 +257,49 @@ function Header({
 }
 
 /**
- * A section of the Command Center: a heading, an optional line of grey context
- * under it, then its cards. Headings stay well under the store name (24px):
+ * A section heading of the Command Center, with an optional line of grey
+ * context under it. Headings stay well under the store name (24px):
  * 16px semibold.
  */
-function Section({
-  title,
-  subtitle,
-  children,
-}: {
-  title: string;
-  subtitle?: string;
-  children?: ReactNode;
-}) {
+function Heading({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
-    <section className="flex flex-col gap-3">
-      <div className="flex flex-col gap-1">
-        <h2 className="a2a-title text-[16px] font-semibold leading-snug tracking-[-0.01em] text-text">
-          {title}
-        </h2>
-        {subtitle && (
-          <p className="text-[13px] leading-normal text-text-muted">
-            {subtitle}
-          </p>
-        )}
-      </div>
-      {children}
-    </section>
+    <div className="flex flex-col gap-1">
+      <h2 className="a2a-title text-[16px] font-semibold leading-snug tracking-[-0.01em] text-text">
+        {title}
+      </h2>
+      {subtitle && (
+        <p className="text-[13px] leading-normal text-text-muted">
+          {subtitle}
+        </p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The heading above the pipeline card: the period's, until Today takes its
+ * place. The old one lifts away as the new one rises in, and the box glides
+ * to the new one's height (Today's subtitle is a line shorter).
+ */
+function SwapHeading({ shown }: { shown: "today" | "last6Months" }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useGlide(ref, shown);
+  return (
+    <div ref={ref} className="relative">
+      {(["last6Months", "today"] as const).map((key, i) => {
+        const state = key === shown ? "shown" : i === 0 ? "above" : "below";
+        return (
+          <div
+            key={key}
+            data-state={state}
+            aria-hidden={state !== "shown"}
+            className={`a2a-swap ${state === "shown" ? "relative" : "absolute inset-x-0 top-0"}`}
+          >
+            <Heading {...t.sections[key]} />
+          </div>
+        );
+      })}
+    </div>
   );
 }
 

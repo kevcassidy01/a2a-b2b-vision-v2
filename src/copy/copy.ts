@@ -74,7 +74,6 @@ export const copy = {
       ],
       user: {
         name: "Alex Rivera",
-        initials: "AR",
         email: "alex.rivera@fizzdrinks.com",
       },
     },
@@ -755,9 +754,9 @@ export const copy = {
         ],
       },
       approvals: {
-        title: "Needs your approval",
+        title: "Task pipeline",
         checked: "Checked Oct 23, 2026, 10:11; it checks every 15 s while this page is open.",
-        empty: "No storefront quote requests are waiting.",
+        empty: "No storefront quote requests yet.",
         /** The quote request from John's agent, once it's sent: the seller agent has already picked it up. */
         request: {
           id: "Q-1042 v1",
@@ -776,6 +775,10 @@ export const copy = {
             meta: ["19,500 units", "12% off", "Net30"],
             agent: "Waiting on Isar",
           },
+          /** Isar's agent has held out for 15%: the seller agent is at it again, then hands it to Alex. */
+          heldOut: { id: "Q-1042 v2", meta: ["19,500 units", "asking 15% off", "Net30"], agent: "Agent responding", needsYou: "Needs you" },
+          /** Alex sent both: v3a and v3b are out, waiting on the buyer. */
+          v3: { id: "Q-1042 v3a, v3b", meta: ["19,500 units", "15% off", "Net15 or bundle"], agent: "Waiting on Isar" },
         },
       },
       /** The last 6 months at a glance. `delta` is the rise on the prior 6
@@ -884,7 +887,108 @@ export const copy = {
             list: [
               { by: "buyer", text: "**Isar's agent** asked for v1: 15,000 units at **15% off**, Net30" },
               { by: "seller", text: "**Fizz's agent** countered with v2: 19,500 units at **12% off**, Net30, $72,072" },
+              { by: "buyer", text: "**Isar's agent** took v2's units and held out for **15% off**, Net30" },
+              { by: "seller", text: "**Fizz's agent** sent v3a, **15% at Net15**, and v3b, **15% with a Ginger Ale bundle**" },
             ],
+          },
+          /** Story step 9, Fizz's side: Isar's agent takes v2's units and holds out for 15%. Fizz's agent weighs it and finds only Alex can get there. */
+          heldOut: {
+            from: "Isar Bottling's agent",
+            time: "Just now",
+            reply: {
+              title: "Reply to v2",
+              id: "Q-1042 · v2",
+              from: "Isar Bottling · Oktoberfest stock-up",
+              status: "New",
+              lines: [
+                { name: "Orange concentrate", site: "Munich", qty: "12,000", amount: "$50,400" },
+                { name: "Lemonade concentrate", site: "Frankfurt", qty: "7,500", amount: "$31,500" },
+              ],
+              terms: [
+                { label: "Discount asked", value: "15%", note: "You offered 12%" },
+                { label: "Payment terms", value: "Net30" },
+                { label: "Total at ask", value: "$69,615", note: "$81,900 list price" },
+              ],
+              via: "Received over A2A · signed by Isar Bottling",
+            },
+            /** First, a short read of what came back, then what it heard, before it deliberates. */
+            understand: {
+              musings: [
+                { kind: "read", label: "Reading Isar's reply", text: "They'll take all 19,500 units from v2" },
+                { kind: "notice", label: "Comparing it with v2", text: "They've kept Net30 and gone back to 15% off, not the 12% I offered" },
+              ],
+              hold: "Taking it in",
+              done: (s: number) => `Read Isar's reply in ${s}s`,
+              said: "Isar's agent will take v2's **19,500 units**, but it's holding out for **15% off at Net30**, not the 12% I offered. Let me see what I can put together.",
+            },
+            musings: [
+              { kind: "fetch", label: "Checking the price book", text: "Checking Isar's volume tiers for 19,500 units", tool: { name: "dispatch_readonly", target: "promotion-management" } },
+              { kind: "notice", label: "Checking the price book", text: "19,500 clears the 18,000-unit tier, but that tier tops out at 12%" },
+              { kind: "fetch", label: "Checking our rules", text: "Checking what the policy allows past 12%", tool: { name: "get_sor_detail", target: "b2b-merchant-quote-management" } },
+              { kind: "notice", label: "Checking our rules", text: "15% is allowed at Net15, or with a bundle, and either needs a person to sign off" },
+              { kind: "fetch", label: "Looking for room", text: "Looking for a bundle Isar's account can get", tool: { name: "dispatch_readonly", target: "merchant-catalog-management" } },
+              { kind: "notice", label: "Looking for room", text: "Margret Reyes's agent set up a Ginger Ale launch bundle: 1,000 units of the new concentrate keeps 15% at Net30" },
+              { kind: "wonder", label: "Weighing it up", text: "Two ways to 15%, Net15 or the bundle. Alex should choose, and Isar can pick" },
+            ],
+            lead: "15% at Net30 is past the **12%** I can give, so this one's your call. There are two ways to get Isar to 15%: **Net15**, or the **Ginger Ale bundle** Margret's agent set up. I'd send both and let Isar's agent pick.",
+          },
+          /** Story step 10: Alex's call, as two offers side by side. Both are picked to start; only "Send both" plays on in the demo. Picking neither declines. */
+          decision: {
+            title: "Your call on Q-1042",
+            for: "15% is past my limit at Net30",
+            ask: "Which should Isar's agent get?",
+            status: "Needs you",
+            options: [
+              {
+                id: "v3a",
+                name: "15% at Net15",
+                rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]],
+                why: "Isar pays in **15 days** instead of 30",
+              },
+              {
+                id: "v3b",
+                name: "15% with the bundle",
+                tag: "Bundle",
+                bundle: { name: "Ginger Ale concentrate", qty: "+1,000", amount: "$4,200", note: "New, only sold in this bundle" },
+                rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]],
+                why: "Isar keeps **Net30** and takes the Ginger Ale bundle with its order",
+                suggested: { label: "Suggested by", name: "Margret's agent", role: "Sales Director" },
+              },
+            ],
+            pick: "Pick",
+            note: { both: "Isar's agent picks one", one: "Only Send both plays on in this demo", none: "Picking neither declines: v2 stands" },
+            send: { both: "Send both", one: (id: string) => `Send ${id}`, none: "Decline" },
+            notScripted: "Only Send both plays on in this demo",
+            sent: "Sent",
+            sentNote: "Sent both. I'm drafting the offers",
+          },
+          /** Story step 11: Alex sends both. His turn, then the agent drafts and sends v3a and v3b. */
+          v3: {
+            you: "Alex",
+            said: "Send both: v3a and v3b",
+            plan: {
+              title: "Sending both offers",
+              of: "of",
+              done: "done",
+              toggle: "Show or hide the steps",
+              steps: [
+                { doing: "Drafting v3a: 15% at Net15", done: "Drafted v3a: 15% at Net15", detail: "**19,500** units, **$69,615**, paid in 15 days", kind: "write", source: "Revenue Cloud", tool: { name: "dispatch_write", target: "b2b-merchant-quote-management" } },
+                { doing: "Drafting v3b: the Ginger Ale bundle", done: "Drafted v3b: the Ginger Ale bundle", detail: "**20,500** units with Ginger Ale, **$73,185**, Net30", kind: "write", source: "Revenue Cloud", tool: { name: "dispatch_write", target: "promotion-management" } },
+                { doing: "Sending both to Isar Bottling's agent", done: "Sent both to Isar Bottling's agent", detail: "Over A2A, signed by Fizz Drinks", kind: "write", source: "A2A" },
+              ],
+            },
+            offers: {
+              title: "Two offers",
+              id: "Q-1042 · v3a, v3b",
+              for: "To Isar Bottling · Oktoberfest stock-up",
+              status: "Waiting on Isar",
+              list: [
+                { id: "v3a", name: "15% at Net15", rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]] },
+                { id: "v3b", name: "15% with the bundle", rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]], note: "+1,000 Ginger Ale" },
+              ],
+              via: "Sent over A2A · signed by Fizz Drinks",
+            },
+            reply: "I've sent Isar's agent **both**: v3a, **15% at Net15**, and v3b, **15% at Net30 with 1,000 Ginger Ale** ($73,185). Either way, they get their 15%. I'll tell you which one they pick.",
           },
         },
         empty: {

@@ -15,7 +15,7 @@ const t = copy.a2a.phone.safari;
  * progress line runs along the foot of the address pill. `overlay` is the
  * page's own layers over it (a drawer, a sheet), still under the bar;
  * `compact` keeps the bar down to its capsule while one is up. `float` is a
- * page's floating button, bottom right, just above the bar: it rides down with
+ * page's floating button, bottom centre, just above the bar: it rides down with
  * the bar when it shrinks, and is told so by `data-collapsed`.
  */
 export function Safari({

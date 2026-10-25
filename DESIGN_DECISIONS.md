@@ -6,6 +6,30 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-25 A2A: the Task pipeline, and Today arriving in place
+**Decision:** The Command Center's request card is the **Task pipeline**, not "Needs your approval": the agent takes requests on itself, and only some need Alex. When Q-1042 lands, nothing remounts or jumps: the card stays where it is, the heading above it turns from "Last 6 months" into "Today", "Last 6 months" opens beneath it pushing the cards below down, the empty banner fades under the arriving row, and the row lands with a pale blue wash that settles.
+**Rationale:** The old version swapped two cards in two sections, so the page jumped by a section's height. Keeping one card fixed, and moving the space around it, reads as "this just came in today" without the eye losing its place.
+
+### 2026-10-25 A2A: what someone's agent did wears an avatar group
+**Decision:** When a person's agent did something (Margret's agent set up the bundle), it's shown as an avatar group: the person's photo with the agent's logo stacked over it, named "Margret's agent", with their role underneath. A person's own turn wears just their photo.
+**Rationale:** It credits both the person and the fact that their agent did the work, which is the point of the prototype: agents act on people's behalf.
+
+### 2026-10-25 A2A: a decision card when the agent hits its limit
+**Decision:** When the seller agent can't give what's asked (15% past its 12% limit), it says so in one line, recommends (send both), and hands Alex a decision card: the offers **side by side**, like picking between two answers, each with its numbers and what Isar gets. Both are picked to start; Alex can untick either. There's no Decline option: picking neither is declining, and Send says what will happen (Send both / Send v3a / Decline). A bundle shows what's in it, and who at Fizz set it up (**Margret's agent**: Margret Reyes, Sales Director, Alex's manager; named Dana until 2026-10-25). Once sent the card locks, keeps the picks and reads "Sent"; Alex's pick then shows as his own turn, with his avatar, and the agent carries on. Only "Send both" plays on in the demo.
+**Rationale:** Side by side makes the bundle one of the choices rather than a detached add-on, and crediting Margret's agent explains where it came from. Not picking as declining keeps the card to two things. The person decides; the agent does the legwork either side of it.
+*Supersedes the same day:* three radio rows (Send both · Net15 only · Decline) with the bundle as a detached line underneath.
+
+### 2026-10-25 A2A: Command Center buttons and card footers
+**Decision:** Three kinds of action button in the Command Center: **primary** solid Salesforce blue (#0176d3) with white text; **secondary** white with a grey outline and dark text; **tertiary** grey with no outline and dark text. A knowledge card's footer leads with its actions on the left; notes and provenance come after them. Selections (a picked offer) are blue too.
+**Rationale:** Blue marks the one thing to do, the way Salesforce does; actions on the left are where the eye starts reading the footer.
+
+### 2026-10-25 A2A: an agent says what it heard before it deliberates
+**Decision:** When the other side pushes back, the agent's turn has three beats: a short read of the reply (its own folded "Read … in Ns"), one line saying what came back and that it's looking for options, then, without a break, its deliberation and the outcome (here, the decision card).
+**Rationale:** It reads like a person: "here's what they're saying… let me see what I can put together… here's what I'd send."
+
+### 2026-10-25 A2A: a person's turn wears their avatar
+**Decision:** Whenever a person acts in an agent chat (John handing over the cart, Alex picking offers, John approving later), their turn shows their avatar by their name, like the agents' marks, and their bubble is tinted: **Alex light blue, John light orange**. Initials stand in until there's a photo.
+
 ### 2026-10-24 A2A: knowledge cards, and what an agent chat is made of
 
 **Decision: a knowledge card is a card the AI generates as a response.**
@@ -42,6 +66,7 @@ Use each where it's relevant. Don't force every kind into every scenario.
 **Decision:** In Alex's chat, knowledge cards are white and outlined, with three parts, as Copilot's and other agents' result cards are. They differ from the phone's cards on purpose.
 - **Header:** an icon tile; the title with the object's id as a mono chip; a subtitle (who it's for); a status chip at the right.
 - **Body:** what the object needs. For a quote: its lines as a table, then the terms as a strip of facts.
+- **Spacing (settled 2026-10-25):** spaced to be read, not scanned, on every card in the drawer: 20px card padding; tiles with 16px padding, 12px apart; label/value rows at 13.5px, 10px apart. Tables sit in a hairline box with 12px corners and a faint grey header band, cells inset 16px. *Supersedes:* the denser first pass (16px card padding, a joined terms strip, bare tables).
 - **Footer:** on a faint grey. Where it came from on the left (e.g. received over A2A, signed). Quiet outlined actions on the right.
 - **Another agent's turn:** the card is on the right, with that agent's mark and name above it and the time, small, under it.
 
