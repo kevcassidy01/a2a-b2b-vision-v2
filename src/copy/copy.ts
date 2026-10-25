@@ -388,7 +388,6 @@ export const copy = {
             },
             approve: (id: string) => `Approve ${id}`,
             approved: "Approved",
-            notScripted: "Only v3a plays on in this demo",
           },
           /** Story step 13: John's turn, once he taps Approve: what he approved, and what it was. */
           you: { label: "You approved", time: "Just now", text: "Approve v3a", detail: "15% at Net15 · 19,500 units · $69,615" },

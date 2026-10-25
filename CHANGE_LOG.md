@@ -30,6 +30,10 @@ Entry format:
 
 ## Unreleased
 
+## 24.3.2 — 2026-10-25 22:35 IST
+**Kind:** patch (fix): John's Approve is enabled for either offer.
+- **John's Approve works for either offer.** On "Which should I take?", Approve is enabled whichever of v3a or v3b is picked (it was greyed out for v3b, with "Only v3a plays on in this demo"). The story still plays on as v3a; the presenter picks v3a.
+
 ## 24.3.1 — 2026-10-25 22:03 IST
 **Kind:** patch (docs only): the harness brought up to date with the finished story.
 - **A2A_INTENT:** steps 10–12 describe Alex's two-offer card, Send both, and v3a/v3b; §8 lists v3a and v3b with real dummy prices; §10 is now "How it's built" (presenter keys, sounds); §12's look, numbers and shell design settled; the Bundles row dropped.

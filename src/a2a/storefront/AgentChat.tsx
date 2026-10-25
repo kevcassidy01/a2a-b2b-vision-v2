@@ -748,14 +748,13 @@ function Offers() {
 /**
  * What the agent puts to John: v3a and v3b stacked, to pick one, v3a picked to
  * start and tagged as the one it recommends, with what changed from his terms;
- * why not the others; and Approve, which names the pick. Only v3a plays on in
- * the demo. Once he taps it, the pick locks and the button gives way to the
+ * why not the others; and Approve, which names the pick. Approve works for
+ * either, but the story plays on as v3a (the presenter picks v3a). Once he taps it, the pick locks and the button gives way to the
  * approval's status.
  */
 function Approval({ approved, onApprove }: { approved: boolean; onApprove: () => void }) {
   const p = V.approval;
   const [pick, setPick] = useState<string>(p.options[0].id);
-  const scripted = pick === p.options[0].id;
   return (
     <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
       <div className="flex items-center gap-3">
@@ -816,18 +815,14 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
           {p.approved}
         </span>
       ) : (
-        <>
-          <button
-            type="button"
-            onClick={onApprove}
-            disabled={!scripted}
-            className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black disabled:bg-[#c7c7cc]"
-          >
-            <Check className="size-[18px]" strokeWidth={2.5} />
-            {p.approve(pick)}
-          </button>
-          {!scripted && <p className="mt-2 text-center text-[12.5px] text-text-muted">{p.notScripted}</p>}
-        </>
+        <button
+          type="button"
+          onClick={onApprove}
+          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+        >
+          <Check className="size-[18px]" strokeWidth={2.5} />
+          {p.approve(pick)}
+        </button>
       )}
     </div>
   );
