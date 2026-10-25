@@ -6,7 +6,7 @@ import {
   Store,
   type LucideIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { type RefObject, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { copy } from "../../copy/copy";
 import { Segmented } from "../../shell/Segmented";
 import { ThemeSegmented } from "../../shell/ThemeSegmented";
@@ -16,7 +16,6 @@ import { Tooltip } from "../Tooltip";
 import { AgentButton, type AgentStatus } from "./AgentButton";
 import { AgentDrawer } from "./AgentDrawer";
 import { ActivityCard } from "./ActivityCard";
-import { ApprovalsCard } from "./ApprovalsCard";
 import { CheckoutFunnelCard } from "./CheckoutFunnelCard";
 import { CommandCenterSkeleton } from "./CommandCenterSkeleton";
 import { CurrencyMenu } from "./CurrencyMenu";
@@ -25,14 +24,14 @@ import { MonthlyRevenueCard } from "./MonthlyRevenueCard";
 import { OrdersByCountryCard } from "./OrdersByCountryCard";
 import { SourceMenu } from "./SourceMenu";
 import { StoreMenu } from "./StoreMenu";
-import { useGlide } from "./glide";
+import { Today } from "./Today";
 import { ViewPicker } from "./ViewPicker";
 import { Welcome } from "./Welcome";
 
 const t = copy.a2a.commandCenter;
 /** How long the Command Center loads, in ms (skeleton cards, the frame's load line), before it's ready. Matches .a2a-load-swipe. */
 const LOAD = 1500;
-/** If the quote's already in when the Command Center loads, Today follows the cards this long after, in ms. */
+/** If the quote's already in when the Command Center loads, its task card follows the cards this long after, in ms. */
 const TODAY_AFTER = 700;
 /** How long after John's agent sends its quote it lands here, in ms: a short hop, so the send and the arrival read as two moments. */
 const QUOTE_GAP = 600;
@@ -59,7 +58,7 @@ export function CommandCenter() {
   const closeAgent = useCallback(() => setAgentOpen(false), []);
   const { quoteSent, counterSent, heldOut, askedAlex, v3Sent, accepted, ordered, setWorking } = useStory();
   const stage = ordered ? "ordered" : accepted ? "accepted" : v3Sent ? "v3" : askedAlex ? "needsYou" : heldOut ? "heldOut" : counterSent ? "countered" : "request";
-  const today = useToday(phase === "ready", quoteSent);
+  const task = useTaskIn(phase === "ready", quoteSent);
   // The seller agent picks Q-1042 up as it lands, whether or not Alex has the Command Center open, and stays at it.
   useEffect(() => {
     if (!quoteSent) return;
@@ -86,30 +85,25 @@ export function CommandCenter() {
     return () => clearTimeout(id);
   }, [phase]);
   useFrameLoading(phase === "loading");
+  const canvas = useRef<HTMLDivElement>(null);
+  const period = useRef<HTMLDivElement>(null);
+  useFadeTo(canvas, period, phase);
   if (phase === "away") return <Welcome onLoad={() => setPhase("loading")} />;
   const loading = phase === "loading";
   return (
     <div className="absolute inset-0 overflow-hidden" aria-busy={loading}>
-      <div className="a2a-canvas a2a-no-scrollbar absolute inset-0 overflow-y-auto">
+      <div ref={canvas} className="a2a-canvas a2a-no-scrollbar absolute inset-0 overflow-y-auto">
         <Header agentOpen={agentOpen} onAgent={() => setAgentOpen((o) => !o)} />
-        <div className="relative flex flex-col gap-8 px-8 pb-8 pt-2">
+        <div className="relative flex flex-col gap-8 px-8 pb-8 pt-6">
           {loading ? (
             <CommandCenterSkeleton />
           ) : (
             <div className="a2a-load-in flex flex-col gap-8">
-              {/* Once John's agent sends its quote, the period's heading gives way to Today's
-                  above the pipeline card (which stays put), and the period's heading opens
-                  beneath it, easing everything below down. See .a2a-today. */}
+              {/* Today first, in its dashed frame; the agent's task joins its row when John's agent sends the quote. Then the period, and the last 6 months. */}
+              <Today task={task} stage={stage} onOpen={openQuote} />
               <section className="flex flex-col gap-3">
-                <SwapHeading shown={today ? "today" : "last6Months"} />
-                <ApprovalsCard request={today} stage={stage} onOpen={openQuote} />
-                <div className="a2a-today -mt-3" data-open={today || undefined} aria-hidden={!today}>
-                  <div className="min-h-0">
-                    <div className="a2a-today-heading pt-8">
-                      <Heading {...t.sections.last6Months} />
-                    </div>
-                  </div>
-                </div>
+                <Period ref={period} />
+                <Heading {...t.sections.last6Months} />
                 <MetricTiles />
                 <OrdersByCountryCard />
                 <MonthlyRevenueCard />
@@ -135,11 +129,11 @@ export function CommandCenter() {
 }
 
 /**
- * Whether Today shows. The moment the quote's sent if the Command Center is
+ * Whether the agent's task is in Today. The moment the quote's sent if the Command Center is
  * already up; if it loads with the quote already in, a beat after its cards
- * (TODAY_AFTER), so the request lands on its own rather than with everything.
+ * (TODAY_AFTER), so the task lands on its own rather than with everything.
  */
-function useToday(ready: boolean, quoteSent: boolean) {
+function useTaskIn(ready: boolean, quoteSent: boolean) {
   const readyAt = useRef(0);
   const sentAt = useRef(0);
   const [today, setToday] = useState(false);
@@ -165,7 +159,6 @@ function useToday(ready: boolean, quoteSent: boolean) {
  * Notifications and the Agent (which opens its drawer). Under it: the view, and at the far right the
  * currency, data source and scope. All that, down to the hairline, stays put as
  * the page scrolls, with a light fade under it so the content slips behind it.
- * Then the period, which scrolls with the page.
  */
 function Header({
   agentOpen,
@@ -242,16 +235,6 @@ function Header({
         <div className="mt-5 h-px bg-border" aria-hidden />
         <div className="a2a-sticky-fade" aria-hidden />
       </header>
-      <div className="flex flex-wrap items-center gap-2 px-8 pb-6 pt-5">
-        <Segmented
-          options={t.period.options}
-          initial={4}
-          label={t.period.label}
-          icon={CalendarDays}
-          reserveCheck={false}
-        />
-        <StoreMenu />
-      </div>
     </>
   );
 }
@@ -277,28 +260,37 @@ function Heading({ title, subtitle }: { title: string; subtitle?: string }) {
 }
 
 /**
- * The heading above the pipeline card: the period's, until Today takes its
- * place. The old one lifts away as the new one rises in, and the box glides
- * to the new one's height (Today's subtitle is a line shorter).
+ * Where the canvas's white starts fading to grey: the bottom of the period
+ * control, so the control's grey sits on white, the fade running on below it. Kept up to date as Today's row changes height.
  */
-function SwapHeading({ shown }: { shown: "today" | "last6Months" }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useGlide(ref, shown);
+function useFadeTo(canvas: RefObject<HTMLDivElement | null>, mark: RefObject<HTMLDivElement | null>, dep: unknown) {
+  useLayoutEffect(() => {
+    const c = canvas.current;
+    const m = mark.current;
+    if (!c || !m) return;
+    const set = () => {
+      const at = m.getBoundingClientRect().top - c.getBoundingClientRect().top + c.scrollTop + m.offsetHeight;
+      c.style.setProperty("--fade-end", `${Math.round(at)}px`);
+    };
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(c.firstElementChild?.nextElementSibling ?? c);
+    return () => ro.disconnect();
+  }, [canvas, mark, dep]);
+}
+
+/** The period and store the figures below Today cover. It scrolls with the page. */
+function Period({ ref }: { ref: RefObject<HTMLDivElement | null> }) {
   return (
-    <div ref={ref} className="relative">
-      {(["last6Months", "today"] as const).map((key, i) => {
-        const state = key === shown ? "shown" : i === 0 ? "above" : "below";
-        return (
-          <div
-            key={key}
-            data-state={state}
-            aria-hidden={state !== "shown"}
-            className={`a2a-swap ${state === "shown" ? "relative" : "absolute inset-x-0 top-0"}`}
-          >
-            <Heading {...t.sections[key]} />
-          </div>
-        );
-      })}
+    <div ref={ref} className="mb-3 flex flex-wrap items-center gap-2">
+      <Segmented
+        options={t.period.options}
+        initial={4}
+        label={t.period.label}
+        icon={CalendarDays}
+        reserveCheck={false}
+      />
+      <StoreMenu />
     </div>
   );
 }

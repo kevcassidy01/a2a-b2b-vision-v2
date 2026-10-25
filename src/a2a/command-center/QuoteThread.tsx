@@ -600,8 +600,8 @@ function Counter() {
  * Alex's call (story step 10), like picking between two answers: the two ways
  * to 15% side by side, each with what Isar gets and why, and both picked to
  * start. The bundle says what's in it and that Margret's agent set it up (Margret is Alex's sales director).
- * Send says what goes (Send both offers, or Send v3a or v3b); Decline sits beside it. Only
- * "Send both offers" plays on in the demo. Once sent, the card keeps the picks.
+ * Send says what goes (Send both offers, or Send counter-offer with one picked); Decline sits
+ * beside it. Only "Send both offers" plays on in the demo; the others do nothing. Once sent, the card keeps the picks.
  * The card runs a little wider than the column, into its right padding, so the
  * credit under the bundle fits on one line.
  */
@@ -614,7 +614,6 @@ function Decision({ chosen, onSend }: { chosen: boolean; onSend: () => void }) {
       return next;
     });
   const count = picked.size === D.options.length ? "both" : picked.size ? "one" : "none";
-  const label = count === "one" ? D.send.one([...picked][0]) : D.send[count];
   return (
     <div className="a2a-load-in -mr-7 mt-4 flex w-[calc(100%+28px)] max-w-[600px] flex-col">
       <KnowledgeCard
@@ -626,10 +625,10 @@ function Decision({ chosen, onSend }: { chosen: boolean; onSend: () => void }) {
           <>
             {!chosen && (
               <>
-                <CardAction kind="primary" icon={Send} disabled={count !== "both"} title={count === "one" ? D.notScripted : undefined} onClick={onSend}>
-                  {label}
+                <CardAction kind="primary" icon={Send} disabled={count === "none"} onClick={count === "both" ? onSend : undefined}>
+                  {D.send[count]}
                 </CardAction>
-                <CardAction icon={X} title={D.notScripted}>{D.decline}</CardAction>
+                <CardAction icon={X}>{D.decline}</CardAction>
               </>
             )}
             <span className="truncate text-[12px] text-text-muted">{chosen ? D.sentNote : D.note[count]}</span>

@@ -1,4 +1,4 @@
-import { Copy, Ellipsis, RotateCw, Share, X, type LucideIcon } from "lucide-react";
+import { Cloud, Copy, Ellipsis, RotateCw, Share, X, type LucideIcon } from "lucide-react";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { copy } from "../copy/copy";
 import { Tooltip } from "./Tooltip";
@@ -34,7 +34,11 @@ export function ArtifactFrame({ children }: { children: ReactNode }) {
         <h2 className="mr-auto truncate text-[13.5px] font-medium text-text">
           {t.title}
         </h2>
-        <span className="mr-1.5 truncate text-[13px] text-text-muted">{t.updated}</span>
+        {/* Quiet, lighter than the buttons: it's a note, not a control. */}
+        <span className="mr-1.5 flex min-w-0 items-center gap-1.5 text-[12.5px] text-[#a1a1a6]">
+          <Cloud className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
+          <span className="truncate">{t.updated}</span>
+        </span>
         <BarAction icon={RotateCw} label={t.reload} />
         <BarAction icon={Share} label={t.share} />
         <BarAction icon={Copy} label={t.popOut} />

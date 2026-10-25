@@ -3,18 +3,26 @@ import { Bone } from "../Skeleton";
 
 /**
  * CommandCenterSkeleton — the cards under the header while the Command Center
- * loads, in their real shapes: the section heading, Needs your approval, the
- * four metric tiles, orders by country and monthly revenue.
+ * loads, in their real shapes: Today's heading and its framed row of cards, the
+ * period, the section heading, the four metric tiles, orders by country and monthly revenue.
  */
 export function CommandCenterSkeleton() {
   return (
     <div aria-hidden className="flex flex-col gap-3">
-      <Bone className="h-4 w-28 rounded" />
+      <Bone className="h-4 w-16 rounded" />
+      <Bone className="h-3 w-[36%] rounded" />
+      <div className="grid grid-cols-3 items-start gap-3 rounded-2xl border border-dashed border-[#c4c4ca] p-3">
+        {["h-[212px]", "h-[124px]"].map((h) => (
+          <Card key={h} className={h}>
+            <Bone className="h-3 w-28 rounded" />
+            <Bone className="mt-4 h-7 w-24 rounded-md" />
+            <Bone className="mt-auto h-3 w-32 rounded" />
+          </Card>
+        ))}
+      </div>
+      <Bone className="mt-5 h-8 w-[420px] rounded-md" />
+      <Bone className="mt-3 h-4 w-28 rounded" />
       <Bone className="h-3 w-[60%] rounded" />
-      <Card className="h-[148px]">
-        <Bone className="h-4 w-40 rounded" />
-        <Bone className="mt-5 h-12 w-full rounded-md" />
-      </Card>
       <div className="grid grid-cols-4 gap-3">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="a2a-card flex h-[118px] flex-col rounded-xl p-4">

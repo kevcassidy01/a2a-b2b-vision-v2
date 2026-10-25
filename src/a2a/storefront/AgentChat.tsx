@@ -1,6 +1,7 @@
 import {
   AlignLeft,
   ArrowUp,
+  BookmarkPlus,
   Check,
   ChevronDown,
   Circle,
@@ -114,6 +115,21 @@ const T4 = (() => {
   const done = step(O.plan.steps.length - 1) + 500;
   return { start, plan, step, done, end: done + 1200 };
 })();
+const M = a.template;
+/**
+ * Step 15's timeline, in ms from the order turn settling: the agent, still on
+ * its turn, thinks ahead (Oktoberfest's dates, looked up on oktoberfest.de),
+ * folds, says the festival comes round every year, and offers the template.
+ */
+const T5 = (() => {
+  const think = 600;
+  const muse = M.musings.map((_, i) => think + M.musings.slice(0, i).reduce((n, m) => n + museFor(m.kind), 0));
+  const thought = think + M.musings.reduce((n, m) => n + museFor(m.kind), 0) + 900;
+  const ask = thought + 900;
+  return { think, muse, thinkFor: thought - think, thought, ask, end: ask + 400 };
+})();
+/** Once John saves it, in ms from his tap: his turn, then the agent's reply and its done mark. */
+const T6 = { reply: 1400, done: 1800, end: 2000 };
 const TICK = 50;
 
 /** Ms since a turn began (the handoff, or v2 landing), ticking until it's done; null before it. */
@@ -181,6 +197,10 @@ export function AgentChat({
   // Fizz has the acceptance once the first step's done, and the order once the second is.
   const accepted = t4 !== null && t4 >= T4.step(0);
   const ordered = t4 !== null && t4 >= T4.step(1);
+  // Once the order turn's settled, the agent thinks ahead to next year's Oktoberfest; John saves the template.
+  const t5 = useClock(t4 !== null && t4 >= T4.end, T5.end);
+  const [saved, setSaved] = useState(false);
+  const t6 = useClock(saved, T6.end);
 
   useEffect(() => {
     if (open && assign && signedIn) setStarted(true);
@@ -194,7 +214,10 @@ export function AgentChat({
   const done4 = O.plan.steps.filter((_, i) => t4 !== null && t4 >= T4.step(i)).length;
   const working3 = t3 !== null && t3 >= T3.think && t3 < T3.ask;
   const working4 = t4 !== null && t4 < T4.done;
-  const working = (t !== null && t < T.done) || working2 || working3 || working4;
+  const muse5 = t5 === null ? 0 : T5.muse.filter((x) => t5 >= x).length;
+  const working5 = t5 !== null && t5 >= T5.think && t5 < T5.ask;
+  const working6 = t6 !== null && t6 < T6.reply;
+  const working = (t !== null && t < T.done) || working2 || working3 || working4 || working5 || working6;
   const words = t === null ? 0 : Math.max(0, Math.min(WORDS.length, Math.floor((t - T.para) / WORD)));
   // How many musings have started.
   const muse = t === null ? 0 : T.muse.filter((x) => t >= x).length;
@@ -203,7 +226,9 @@ export function AgentChat({
     (t === null ? -1 : [T.think, T.thought, T.plan, T.done, T.done + 300, T.done + 600, T.done + 900].filter((x) => t >= x).length) +
     (t2 === null ? 0 : [T2.offer, T2.think, T2.thought, T2.plan, T2.done, T2.done + 300, T2.done + 600, T2.done + 900, T2.done + 1100].filter((x) => t2 >= x).length) +
     (t3 === null ? 0 : [T3.offers, T3.think, T3.thought, T3.ask].filter((x) => t3 >= x).length) +
-    (t4 === null ? 0 : [0, T4.start, T4.plan, T4.done, T4.done + 300, T4.done + 600, T4.done + 900].filter((x) => t4 >= x).length);
+    (t4 === null ? 0 : [0, T4.start, T4.plan, T4.done, T4.done + 300, T4.done + 600].filter((x) => t4 >= x).length) +
+    (t5 === null ? 0 : [T5.think, T5.thought, T5.ask].filter((x) => t5 >= x).length) +
+    (t6 === null ? 0 : [0, T6.reply, T6.done].filter((x) => t6 >= x).length);
 
   // The who's-acting bar lights John's agent while it works.
   useEffect(() => {
@@ -231,12 +256,12 @@ export function AgentChat({
   useEffect(() => {
     const el = thread.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  }, [beat, done, words, muse, done2, muse2, muse3, done4]);
+  }, [beat, done, words, muse, done2, muse2, muse3, done4, muse5]);
 
-  // Suggestions once the agent's done and nothing's waiting on John: the order's, once it's placed.
+  // Suggestions once the agent's done and nothing's waiting on John: once the template's saved, the order's and the template's.
   const suggestions =
     t4 !== null
-      ? t4 >= T4.done + 900 && O.suggestions
+      ? t6 !== null && t6 >= T6.done && M.suggestions
       : t3 === null && t !== null && t >= T.done + 900 && (t2 === null || t2 >= T2.done + 1100) && a.suggestions;
 
   return (
@@ -297,7 +322,8 @@ export function AgentChat({
               <Thread t={t} words={words} muse={muse} done={done} />
               {t2 !== null && <CounterTurn t={t2} muse={muse2} done={done2} />}
               {t3 !== null && <OffersTurn t={t3} muse={muse3} approved={approved} onApprove={() => setApproved(true)} />}
-              {t4 !== null && <OrderTurn t={t4} done={done4} />}
+              {t4 !== null && <OrderTurn t={t4} done={done4} typing={t4 < T4.done + 600 || working5} />}
+              {t5 !== null && <TemplateTurn t={t5} muse={muse5} t6={t6} onSave={() => setSaved(true)} />}
             </>
           )}
         </div>
@@ -545,17 +571,121 @@ function OffersTurn({ t, muse, approved, onApprove }: { t: number; muse: number;
   );
 }
 
-/** Story steps 13–14: the agent accepts v3a, places O-5531 and logs the PO; then the order, the reply and the turns so far. */
-function OrderTurn({ t, done }: { t: number; done: number }) {
+/** Story steps 13–14: the agent accepts v3a, places O-5531 and logs the PO; then the order, the reply and the turns so far. Its turn runs on into step 15. */
+function OrderTurn({ t, done, typing }: { t: number; done: number; typing: boolean }) {
   if (t < T4.start) return null;
   return (
     <div className="mt-7">
-      <Head typing={t < T4.done + 900} />
+      <Head typing={typing} />
       {t >= T4.plan && <Plan plan={O.plan} done={done} />}
       {t >= T4.done && <Order />}
       {t >= T4.done + 300 && <AgentSays className="mt-5"><Rich text={O.reply} /></AgentSays>}
       {t >= T4.done + 600 && <Turns turns={C.turns} n={5} />}
-      {t >= T4.done + 900 && <AgentMark className="sf-rise mt-5 size-9" />}
+    </div>
+  );
+}
+
+/**
+ * Story step 15, on from the order in the same turn: the agent thinks ahead
+ * (Oktoberfest's dates, from oktoberfest.de; the page is only in its thinking),
+ * folds, says the festival comes round every year with the template attached,
+ * and John picks Save template or Not now. Once he saves, his turn, the
+ * agent's reply, and its mark to say it's done.
+ */
+function TemplateTurn({ t, muse, t6, onSave }: { t: number; muse: number; t6: number | null; onSave: () => void }) {
+  if (t < T5.think) return null;
+  const saved = t6 !== null;
+  return (
+    <>
+      <Reasoning
+        thinking={t < T5.thought}
+        musings={M.musings}
+        muse={muse}
+        mulling={M.mulling}
+        thought={M.thought(Math.round(T5.thinkFor / 1000))}
+      />
+      {t >= T5.thought && <AgentSays className="mt-3"><Rich text={M.said} /></AgentSays>}
+      {t >= T5.ask && <Template saved={saved} onSave={onSave} />}
+      {saved && (
+        <div className="sf-rise mt-8 flex flex-col items-end">
+          <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] text-text-muted">
+            <img src={john} alt="" className="size-9 rounded-full bg-white object-cover" />
+            {M.you.label} · {M.you.time}
+          </p>
+          <p className="rounded-[22px] rounded-br-none bg-[#fdebe1] px-4 py-3 text-[16px] font-semibold text-text">{M.you.text}</p>
+        </div>
+      )}
+      {t6 !== null && t6 >= T6.reply && (
+        <div className="mt-7">
+          <Head typing={false} />
+          <AgentSays className="mt-3"><Rich text={M.reply} /></AgentSays>
+        </div>
+      )}
+      {t6 !== null && t6 >= T6.done && <AgentMark className="sf-rise mt-5 size-9" />}
+    </>
+  );
+}
+
+/** The order template the agent offers: its name, what it's from, the lines, the last terms and the reminder, then Save template or Not now. */
+function Template({ saved, onSave }: { saved: boolean; onSave: () => void }) {
+  const c = M.card;
+  return (
+    <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+      <div className="flex items-center gap-3">
+        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+          <BookmarkPlus className="size-5 text-text" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{c.title}</span>
+          <span className="block text-[13px] text-text-muted">{c.meta}</span>
+        </span>
+        {saved && (
+          <span className="sf-rise inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
+            <span aria-hidden className="size-2 rounded-full bg-[#1f9d55]" />
+            {c.saved}
+          </span>
+        )}
+      </div>
+      <ul className="mt-3">
+        {c.lines.map((l, i) => (
+          <li key={l.name} className="flex items-center gap-3 border-t border-black/[0.07] py-3">
+            <ProductPhoto photo={i === 0 ? PHOTOS.orange : PHOTOS.lemonade} pad="3px" className="size-11 shrink-0 rounded-xl" />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-[15px] font-semibold tracking-[-0.01em] text-text">{l.name}</span>
+              <span className="block text-[13px] text-text-muted">
+                {l.qty} · {l.site}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <dl className="grid grid-cols-2 gap-3 border-t border-black/[0.07] pt-3">
+        {c.facts.map((f) => (
+          <div key={f.label}>
+            <dt className="text-[13px] text-text-muted">{f.label}</dt>
+            <dd className="text-[15px] font-semibold tracking-[-0.01em] text-text">{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-3 text-[13px] leading-snug text-text-muted">{c.note}</p>
+      {!saved && (
+        <div className="mt-4 flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={onSave}
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+          >
+            <Check className="size-[18px]" strokeWidth={2.5} />
+            {c.save}
+          </button>
+          <button
+            type="button"
+            className="flex h-12 w-full items-center justify-center rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+          >
+            {c.notNow}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

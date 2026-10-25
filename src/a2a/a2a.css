@@ -118,10 +118,12 @@
 
 /* The Command Center's canvas: pale grey, so white cards with soft shadows
    stand out on it. It is its own scroller, so its background stays put while
-   the page scrolls: white behind the header and the period row, fading to the
-   grey over 100px. The sticky header sits on white (.a2a-hero). */
+   the page scrolls: white behind the header, Today and the period control
+   under it (--fade-end, its bottom, set from where it sits), so the control's
+   grey reads against white; then a long, slow fade to the grey. The sticky header
+   sits on white (.a2a-hero). */
 .a2a-canvas {
-  background: linear-gradient(180deg, #fff 0, #fff 250px, #ededf0 350px) no-repeat, #ededf0;
+  background: linear-gradient(180deg, #fff 0, #fff var(--fade-end, 350px), #ededf0 calc(var(--fade-end, 350px) + 280px)) no-repeat, #ededf0;
 }
 .a2a-hero {
   background: #fff;
@@ -859,33 +861,20 @@
 @keyframes a2a-load-in {
   from { opacity: 0; transform: translateY(8px); }
 }
-/* Today arriving in the Command Center. The heading above the pipeline card
-   swaps (the period's lifts away, Today's rises in); the period's heading opens
-   beneath the card on a grid row, easing the cards below down rather than
-   jumping; its text follows the space a beat later. */
-.a2a-swap {
-  transition: opacity 320ms cubic-bezier(0.2, 0, 0, 1), transform 500ms cubic-bezier(0.2, 0, 0, 1);
-}
-.a2a-swap[data-state="above"] { opacity: 0; transform: translateY(-10px); }
-.a2a-swap[data-state="below"] { opacity: 0; transform: translateY(10px); }
-.a2a-swap[data-state="shown"] { transition-delay: 120ms; }
-.a2a-today {
+/* Today's row: three equal columns, top-aligned so each card keeps its height.
+   A fourth track holds the agent's task at the front, 0 wide until it's in.
+   Calm, the two cards fill the first two thirds and the last stays open; when
+   the task lands its track opens, the open third closes, and the two ease right.
+   Each card carries half the gap on either side, so the columns stay equal; the
+   opening track clips its card, with a little margin for ring and shadow. */
+.a2a-today-row {
   display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 600ms cubic-bezier(0.2, 0, 0, 1);
+  grid-template-columns: minmax(0, 0fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  transition: grid-template-columns 600ms cubic-bezier(0.2, 0, 0, 1);
 }
-.a2a-today[data-open] { grid-template-rows: 1fr; }
-.a2a-today > * { overflow: hidden; }
-.a2a-today-heading {
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 400ms cubic-bezier(0.2, 0, 0, 1), transform 600ms cubic-bezier(0.2, 0, 0, 1);
-}
-.a2a-today[data-open] .a2a-today-heading { opacity: 1; transform: none; transition-delay: 220ms; }
-/* The pipeline card's empty banner fading away as the request lands over it,
-   and the request rising in with a pale blue wash that settles. */
-.a2a-empty-fade { transition: opacity 260ms ease-out; }
-.a2a-empty-fade[data-gone] { opacity: 0; }
+.a2a-today-row[data-task] { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0fr); }
+/* The opening column clips only sideways, so the card's shadow isn't cut top and bottom. */
+.a2a-today-row > :first-child { overflow-x: clip; overflow-y: visible; overflow-clip-margin: 8px; }
 /* A figure that's just changed (an order came in): a pale blue wash behind it that settles. */
 .a2a-bump {
   border-radius: 6px;
@@ -904,7 +893,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .a2a-burst, .a2a-float, .a2a-load-in, .a2a-bone, .a2a-arrive, .a2a-bump, .a2a-map-ping { animation: none; }
-  .a2a-swap, .a2a-today, .a2a-today-heading, .a2a-empty-fade { transition: none; }
+  .a2a-today-row { transition: none; }
   .a2a-load-swipe { animation-timing-function: linear; }
 }
 

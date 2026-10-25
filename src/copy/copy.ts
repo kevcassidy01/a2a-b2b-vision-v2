@@ -428,7 +428,39 @@ export const copy = {
             total: { label: "Total", value: "$69,615", note: "Due in 15 days" },
           },
           reply: "Done. **O-5531** is placed: **19,500 units at 15% off, Net15**, for **$69,615**. The purchase order is in SAP, and Mike can see it on his cart.",
-          suggestions: ["Show the order", "Save as a template"],
+        },
+        /** Story step 15: once O-5531's in, the agent sees Oktoberfest comes round every year (it checks the dates on
+         *  oktoberfest.de, in its thinking only) and offers to save the order as a template. John saves it. */
+        template: {
+          mulling: "Thinking about next year",
+          thought: (s: number) => `Thought ahead for ${s}s`,
+          musings: [
+            { kind: "notice", text: "O-5531 is Isar's Oktoberfest stock-up, for Munich and Frankfurt" },
+            { kind: "fetch", text: "Looking up Oktoberfest's dates on oktoberfest.de" },
+            { kind: "read", text: "oktoberfest.de: Oktoberfest 2027 runs Sep 18 – Oct 3, the 192nd Wiesn" },
+            { kind: "notice", text: "It comes round every year, so Isar will want this order again" },
+            { kind: "wonder", text: "Save it as a template, with a reminder a month before?" },
+          ],
+          said: "Oktoberfest comes round every year: **2027 runs Sep 18 – Oct 3**. Want me to save this order as a template, so it's ready to go next year?",
+          card: {
+            title: "Oktoberfest stock-up",
+            meta: "Order template · from O-5531",
+            lines: [
+              { name: "Orange concentrate", qty: "12,000 units", site: "Munich" },
+              { name: "Lemonade concentrate", qty: "7,500 units", site: "Frankfurt" },
+            ],
+            facts: [
+              { label: "Last terms", value: "15% off · Net15" },
+              { label: "Reminder", value: "Aug 16, 2027" },
+            ],
+            note: "I'll ask Fizz for a fresh quote then. Prices aren't locked in.",
+            save: "Save template",
+            notNow: "Not now",
+            saved: "Saved",
+          },
+          you: { label: "You", time: "Just now", text: "Save template" },
+          reply: "Saved. **Oktoberfest stock-up** is in your templates. On **Aug 16, 2027** I'll bring it back and ask Fizz for a fresh quote.",
+          suggestions: ["Show the order", "Show my templates"],
         },
         placeholder: "Ask your agent",
         add: "Add",
@@ -735,7 +767,7 @@ export const copy = {
       },
       /** Section headings, top to bottom. */
       sections: {
-        /** Shown once John's agent has sent its quote request: what's come in today, above the period. */
+        /** The first section, over its frame: what's happening today. */
         today: {
           title: "Today",
           subtitle: "Oct 23, 2026, so far. Days are counted in UTC+1.",
@@ -744,6 +776,27 @@ export const copy = {
           title: "Last 6 months",
           subtitle:
             "Apr 23, 2026 - Oct 23, 2026, 10:11 • compared with Oct 23, 2025 - Apr 23, 2026, the same elapsed time. Days are counted in UTC+1.",
+        },
+      },
+      /** Today's cards, in one row inside the dashed frame. Calm at load, two; an agent's task joins them at the front. */
+      today: {
+        goingOut: {
+          title: "Going out today",
+          subtitle: "6 orders, 3 carriers",
+          /** The first few, then how many more. Status is where each one's got to at the dock. */
+          rows: [
+            { id: "O-5526", to: "Rheinland Bottling", site: "Cologne · DHL", status: "Picked up", tone: "done" },
+            { id: "O-5527", to: "Elbquell Getränke", site: "Hamburg · DB Schenker", status: "Packed", tone: "ready" },
+            { id: "O-5528", to: "Bodensee Drinks", site: "Lindau · DHL", status: "Packing", tone: "idle" },
+          ],
+          more: "3 more",
+        },
+        booked: {
+          title: "Booked today",
+          value: "$18,240",
+          note: "4 orders",
+          /** Once O-5531 is in (story step 14). $18,240 + $69,615. */
+          after: { value: "$87,855", note: "5 orders · O-5531 just in" },
         },
       },
       /** Quote requests from the storefront waiting on the seller (empty for now). */
@@ -878,11 +931,16 @@ export const copy = {
         empty: "No storefront quote requests yet.",
         /** The quote request from John's agent, once it's sent: the seller agent has already picked it up. */
         request: {
+          /** Over the task card's title: what kind of task it is. */
+          kind: "Quote request",
           id: "Q-1042 v1",
           from: "Isar Bottling",
           /** Read in one at a time by the seller agent. */
           meta: ["15,000 units", "asking 15% off", "Net30"],
-          /** Who it's assigned to, as an avatar pill; dots bounce while the agent works on it. */
+          /** Two facts at the foot of the card, over the pill: what it comes to (per stage, below), and where it ships. */
+          facts: { total: "Total", shipsTo: "Ships to", sites: "Munich, Frankfurt" },
+          total: "$53,550",
+          /** Who it's assigned to, as an avatar pill; the pulse runs while the agent works on it. */
           agent: "Agent responding",
           /** Read out before the id: the row opens the request in the agent's drawer. */
           open: "Open",
@@ -892,16 +950,17 @@ export const copy = {
           countered: {
             id: "Q-1042 v2",
             meta: ["19,500 units", "12% off", "Net30"],
+            total: "$72,072",
             agent: "Waiting on Isar",
           },
           /** Isar's agent has held out for 15%: the seller agent is at it again, then hands it to Alex. */
-          heldOut: { id: "Q-1042 v2", meta: ["19,500 units", "asking 15% off", "Net30"], agent: "Agent responding", needsYou: "Needs you" },
+          heldOut: { id: "Q-1042 v2", meta: ["19,500 units", "asking 15% off", "Net30"], total: "$69,615", agent: "Agent responding", needsYou: "Needs you" },
           /** Alex sent both: v3a and v3b are out, waiting on the buyer. */
-          v3: { id: "Q-1042 v3a, v3b", meta: ["19,500 units", "15% off", "Net15 or bundle"], agent: "Waiting on Isar" },
+          v3: { id: "Q-1042 v3a, v3b", meta: ["19,500 units", "15% off", "Net15 or bundle"], total: "From $69,615", agent: "Waiting on Isar" },
           /** Isar took v3a: approved on both sides. */
-          accepted: { id: "Q-1042 v3a", meta: ["19,500 units", "15% off", "Net15"], agent: "Approved" },
+          accepted: { id: "Q-1042 v3a", meta: ["19,500 units", "15% off", "Net15"], total: "$69,615", agent: "Approved" },
           /** The order's in: the row becomes O-5531, done. */
-          ordered: { id: "O-5531", meta: ["From Q-1042 v3a", "19,500 units", "$69,615"], agent: "Order placed" },
+          ordered: { kind: "Order", id: "O-5531", meta: ["From Q-1042 v3a", "19,500 units", "Net15"], total: "$69,615", agent: "Order placed" },
         },
       },
       /** The last 6 months at a glance. `delta` is the rise on the prior 6
@@ -1093,10 +1152,9 @@ export const copy = {
               },
             ],
             pick: "Pick",
-            note: { both: "Isar's agent picks one", one: "Only Send both offers plays on in this demo", none: "Pick an offer, or decline: v2 stands" },
-            send: { both: "Send both offers", one: (id: string) => `Send ${id}`, none: "Send offer" },
+            note: { both: "Isar's agent picks one", one: "", none: "Pick an offer, or decline: v2 stands" },
+            send: { both: "Send both offers", one: "Send counter-offer", none: "Send offer" },
             decline: "Decline",
-            notScripted: "Only Send both offers plays on in this demo",
             sent: "Sent",
             sentNote: "Sent both. I'm drafting the offers",
           },
