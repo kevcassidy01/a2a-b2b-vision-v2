@@ -9,6 +9,9 @@ import type { ReactNode } from "react";
  *   and its status at the right;
  * - a body, whatever the object needs (lines, facts), its own hierarchy;
  * - a footer on a faint grey: where it came from at the left, actions at the right.
+ * Whatever sits at an edge gets as much room above and below as beside it
+ * (20px all round), so the header's icon and status and the footer's
+ * actions have room to breathe.
  * The header and footer are optional; the body is the card.
  */
 export function KnowledgeCard({
@@ -57,7 +60,7 @@ export function KnowledgeCard({
       )}
       <div className="px-5 pb-5">{children}</div>
       {footer && (
-        <footer className="flex items-center gap-3 border-t border-black/[0.06] bg-[#fafafb] px-5 py-3">{footer}</footer>
+        <footer className="flex items-center gap-3 border-t border-black/[0.06] bg-[#fafafb] px-5 py-5">{footer}</footer>
       )}
     </article>
   );
@@ -81,7 +84,7 @@ export const BUTTON = {
 } as const;
 
 /**
- * A footer action, 6px corners like the Command Center's other buttons:
+ * A footer action, with 10px corners (rounder than the Command Center's other buttons):
  * primary, secondary (the default) or tertiary. Footers lead with their
  * actions, on the left.
  */
@@ -106,7 +109,7 @@ export function CardAction({
       disabled={disabled}
       title={title}
       onClick={onClick}
-      className={`flex h-9 shrink-0 items-center gap-2 rounded-md px-3.5 text-[13.5px] font-medium transition-[background-color,box-shadow] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3] disabled:cursor-not-allowed ${BUTTON[kind]}`}
+      className={`flex h-9 shrink-0 items-center gap-2 rounded-[10px] px-3.5 text-[13.5px] font-medium transition-[background-color,box-shadow] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3] disabled:cursor-not-allowed ${BUTTON[kind]}`}
     >
       {children}
       {Icon && <Icon className={`size-4 ${kind === "primary" ? "" : "text-text-muted"}`} strokeWidth={2} />}

@@ -935,19 +935,57 @@
   from { background-position: 100% 0; }
   to { background-position: 0 0; }
 }
-/* Typing dots in an agent's pill (ApprovalsCard): the Agent button's bounce, staggered. */
-.a2a-typing-dot {
-  animation: a2a-agent-bounce 1.4s ease-in-out infinite;
-  animation-delay: calc(var(--i) * 0.14s);
-}
 @keyframes a2a-pulse {
   50% {
     opacity: 0.35;
   }
 }
+/* An agent at work (Pulse.tsx), after CRED's neoPOP loader: four sharp bars on
+   a 36 by 16 grid (--u is one unit). Each bar's cycle is the kit's nine frames:
+   a square up top, stretching thin as it drops, squashed in its colour as it
+   lands, flat, then back up. Each runs a frame (120ms) behind the one before. */
+.a2a-bars {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: calc(36 * var(--u, 1px));
+  height: calc(16 * var(--u, 1px));
+}
+.a2a-bar {
+  position: absolute;
+  left: calc(var(--x) * var(--u, 1px));
+  bottom: calc(1 * var(--u, 1px));
+  width: calc(4 * var(--u, 1px));
+  height: calc(4 * var(--u, 1px));
+  background: #161616;
+  transform: translateX(-50%);
+  animation: a2a-bar 1080ms linear infinite;
+  animation-delay: calc(var(--p) * 120ms - 360ms);
+}
+@keyframes a2a-bar {
+  0%, 100% { width: calc(4 * var(--u, 1px)); height: calc(4 * var(--u, 1px)); bottom: calc(11 * var(--u, 1px)); background: #161616; }
+  11.1% { width: calc(4 * var(--u, 1px)); height: calc(5 * var(--u, 1px)); bottom: calc(10 * var(--u, 1px)); background: #161616; }
+  22.2% { width: calc(3.2 * var(--u, 1px)); height: calc(5.5 * var(--u, 1px)); bottom: calc(9.1 * var(--u, 1px)); background: #161616; }
+  33.3% { width: calc(1.5 * var(--u, 1px)); height: calc(11.6 * var(--u, 1px)); bottom: calc(3.4 * var(--u, 1px)); background: #161616; }
+  44.4% { width: calc(1.5 * var(--u, 1px)); height: calc(11.6 * var(--u, 1px)); bottom: calc(1 * var(--u, 1px)); background: #161616; }
+  50% { background: var(--c); }
+  55.6% { width: calc(5.8 * var(--u, 1px)); height: calc(3 * var(--u, 1px)); bottom: calc(1 * var(--u, 1px)); background: var(--c); }
+  66.7% { width: calc(6.6 * var(--u, 1px)); height: calc(0.5 * var(--u, 1px)); bottom: calc(1 * var(--u, 1px)); background: var(--c); }
+  77.8% { width: calc(4 * var(--u, 1px)); height: calc(1 * var(--u, 1px)); bottom: calc(1 * var(--u, 1px)); background: var(--c); }
+  83% { background: #161616; }
+  88.9% { width: calc(4 * var(--u, 1px)); height: calc(1.6 * var(--u, 1px)); bottom: calc(2 * var(--u, 1px)); background: #161616; }
+}
+/* What an agent's thinking through, row by row, in mono (the header stays sans). */
+.a2a-mono {
+  font-family: "Geist Mono Variable", ui-monospace, monospace;
+  font-size: 0.94em;
+  letter-spacing: -0.01em;
+}
 @media (prefers-reduced-motion: reduce) {
-  .a2a-pulse,
-  .a2a-typing-dot {
+  .a2a-bar {
+    animation: none;
+  }
+  .a2a-pulse {
     animation: none;
   }
   .a2a-shimmer {

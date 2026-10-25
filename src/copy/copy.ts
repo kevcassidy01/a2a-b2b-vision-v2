@@ -244,6 +244,8 @@ export const copy = {
         counter: {
           from: "Fizz's agent",
           time: "Just now",
+          /** What Fizz's agent says with its offer: a line of its own, never a card alone. */
+          said: "I can do **12%** at Net30 if you take **19,500 units**. That's as far as I can go at Net30.",
           offer: {
             title: "Counter-offer",
             id: "Q-1042 v2",
@@ -324,6 +326,7 @@ export const copy = {
         v3: {
           from: "Fizz's agent",
           time: "Just now",
+          said: "Two ways to **15%**: pay in **15 days**, or keep **Net30** and take our new Ginger Ale bundle.",
           offers: {
             title: "Two offers",
             id: "Q-1042 v3a, v3b",
@@ -349,13 +352,26 @@ export const copy = {
             { kind: "notice", text: "Net15 isn't the Net30 John set, so this one's his call" },
           ],
           lead: "Fizz met us at **15% off**, two ways. I'd take **v3a, 15% at Net15**. Paying 15 days early costs about **$115**; the bundle adds **$3,570** of a drink we've never sold. The terms change from Net30, so I need your OK.",
+          /** John picks one: v3a is picked to start, as the agent recommends it; only v3a plays on in the demo. */
           approval: {
-            title: "Approve v3a?",
-            id: "Q-1042 v3a",
+            title: "Which should I take?",
+            id: "Q-1042 · v3a or v3b",
             tag: "Recommended",
-            rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]],
-            /** What changed since the terms John set. */
-            changed: "Was Net30",
+            options: [
+              {
+                id: "v3a",
+                name: "15% at Net15",
+                rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]],
+                /** What changed since the terms John set. */
+                changed: "Was Net30",
+              },
+              {
+                id: "v3b",
+                name: "15% with a bundle",
+                rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]],
+                note: "+1,000 Ginger Ale concentrate, new",
+              },
+            ],
             whyNot: {
               title: "Why not the others",
               list: [
@@ -363,11 +379,12 @@ export const copy = {
                 { name: "Holding out at Net30", text: "Fizz can't give 15% at Net30, and Oktoberfest is **three weeks** out." },
               ],
             },
-            approve: "Approve v3a",
+            approve: (id: string) => `Approve ${id}`,
             approved: "Approved",
+            notScripted: "Only v3a plays on in this demo",
           },
-          /** Story step 13: John's turn, once he taps Approve. */
-          you: { label: "You approved", time: "Just now", text: "Approve v3a" },
+          /** Story step 13: John's turn, once he taps Approve: what he approved, and what it was. */
+          you: { label: "You approved", time: "Just now", text: "Approve v3a", detail: "15% at Net15 · 19,500 units · $69,615" },
         },
         /** Story steps 13–14: the agent accepts v3a with Fizz and places O-5531. */
         order: {
@@ -921,10 +938,14 @@ export const copy = {
         /** The chat about Q-1042, once Alex opens the request: what came in, then the agent taking it in. It doesn't conclude yet. */
         quote: {
           from: "Isar Bottling's agent",
+          /** Over what Fizz's agent says to Isar's agent, so it doesn't read as said to Alex. */
+          toIsar: "To Isar Bottling's agent",
           time: "Just now",
           request: {
             title: "Quote request",
             id: "Q-1042 · v1",
+            /** What Isar's agent said with it. An agent never sends a card alone. */
+            said: "We're stocking up for Oktoberfest: **15,000 units**. Can you do **15% off at Net30**?",
             from: "Isar Bottling · Oktoberfest stock-up",
             status: "New",
             /** Column heads for the lines. Prices are dummy, $4.20 a unit list price. */
@@ -979,6 +1000,8 @@ export const copy = {
           counter: {
             title: "Counter-offer",
             id: "Q-1042 · v2",
+            /** What it said to Isar's agent with it, as the phone shows it. */
+            said: "I can do **12%** at Net30 if you take **19,500 units**. That's as far as I can go at Net30.",
             for: "To Isar Bottling · Oktoberfest stock-up",
             status: "Waiting on Isar",
             lines: [
@@ -1011,6 +1034,7 @@ export const copy = {
             reply: {
               title: "Reply to v2",
               id: "Q-1042 · v2",
+              said: "We'll take v2's **19,500 units**, but we need **15% off at Net30**, not 12%.",
               from: "Isar Bottling · Oktoberfest stock-up",
               status: "New",
               lines: [
@@ -1065,7 +1089,7 @@ export const copy = {
                 bundle: { name: "Ginger Ale concentrate", qty: "+1,000", amount: "$4,200", note: "New, only sold in this bundle" },
                 rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]],
                 why: "Isar keeps **Net30** and takes the Ginger Ale bundle with its order",
-                suggested: { label: "Suggested by", name: "Margret's agent", role: "Sales Director" },
+                suggested: { label: "From", name: "Margret's agent", role: "Sales Director" },
               },
             ],
             pick: "Pick",
@@ -1094,6 +1118,7 @@ export const copy = {
             offers: {
               title: "Two offers",
               id: "Q-1042 · v3a, v3b",
+              said: "Two ways to **15%**: pay in **15 days**, or keep **Net30** and take our new Ginger Ale bundle.",
               for: "To Isar Bottling · Oktoberfest stock-up",
               status: "Waiting on Isar",
               list: [
@@ -1111,6 +1136,7 @@ export const copy = {
             card: {
               title: "Accepted v3a",
               id: "Q-1042 · v3a",
+              said: "We'll take **v3a, 15% at Net15**. John Müller approved it on our side; the order's coming.",
               from: "Isar Bottling · approved by John Müller",
               status: "Accepted",
               lines: [

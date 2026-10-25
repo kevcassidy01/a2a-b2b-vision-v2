@@ -30,6 +30,7 @@ import { ProductPhoto } from "./Photo";
 import { PHOTOS } from "./photos";
 import { useStory } from "../story";
 import { AgentMark } from "./parts";
+import { Pulse } from "../Pulse";
 
 const a = copy.a2a.storefront.agent;
 const STEPS = a.plan.steps;
@@ -345,7 +346,7 @@ function Thread({ t, words, muse, done }: { t: number; words: number; muse: numb
 
       {t >= T.think && (
         <div className="mt-7">
-          <AgentMark className="sf-rise size-9" />
+          <Head typing={t < T.done + 900} />
           <Reasoning
             thinking={t < T.thought}
             musings={MUSINGS}
@@ -378,7 +379,7 @@ function CounterTurn({ t, muse, done }: { t: number; muse: number; done: number 
       {t >= T2.offer && <Offer />}
       {t >= T2.think && (
         <div className="mt-7">
-          <AgentMark className="sf-rise size-9" />
+          <Head typing={t < T2.done + 1100} />
           <Reasoning
             thinking={t < T2.thought}
             musings={C.musings}
@@ -395,6 +396,16 @@ function CounterTurn({ t, muse, done }: { t: number; muse: number; done: number 
         </div>
       )}
     </>
+  );
+}
+
+/** John's agent's mark at the head of its turn; while the turn is at work, the pulse runs beside it, as if it's typing. */
+function Head({ typing }: { typing: boolean }) {
+  return (
+    <span className="sf-rise flex items-center gap-3">
+      <AgentMark className="size-9" />
+      {typing && <Pulse scale={1.25} className="sf-rise" />}
+    </span>
   );
 }
 
@@ -443,7 +454,7 @@ function Turns({ turns: all, n }: { turns: { title: (n: number) => string; list:
   );
 }
 
-/** Fizz's counter-offer as it lands: who sent it (Fizz's agent's mark and name), the offer as a card (what changed in green), and when. */
+/** Fizz's counter-offer as it lands: who sent it (Fizz's agent's mark and name), what it says, the offer as a card (what changed in green), and when. */
 function Offer() {
   const o = C.offer;
   return (
@@ -451,6 +462,9 @@ function Offer() {
       <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] text-text-muted">
         <FizzMark className="size-9" />
         {C.from}
+      </p>
+      <p className="mb-2 max-w-[92%] rounded-[22px] rounded-br-none bg-[#f2f2f4] px-4 py-3 text-[15px] leading-[1.45] text-text">
+        <Rich text={C.said} />
       </p>
       <div className="w-[92%] rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
         <div className="flex items-center gap-3">
@@ -503,7 +517,7 @@ function OffersTurn({ t, muse, approved, onApprove }: { t: number; muse: number;
       {t >= T3.offers && <Offers />}
       {t >= T3.think && (
         <div className="mt-7">
-          <AgentMark className="sf-rise size-9" />
+          <Head typing={t < T3.ask} />
           <Reasoning
             thinking={t < T3.thought}
             musings={V.musings}
@@ -521,7 +535,10 @@ function OffersTurn({ t, muse, approved, onApprove }: { t: number; muse: number;
             <img src={john} alt="" className="size-9 rounded-full bg-white object-cover" />
             {V.you.label} · {V.you.time}
           </p>
-          <p className="rounded-[22px] rounded-br-none bg-[#fdebe1] px-4 py-3 text-[16px] font-semibold text-text">{V.you.text}</p>
+          <p className="rounded-[22px] rounded-br-none bg-[#fdebe1] px-4 py-3 text-text">
+            <span className="block text-[16px] font-semibold">{V.you.text}</span>
+            <span className="block text-[14px] text-text/70">{V.you.detail}</span>
+          </p>
         </div>
       )}
     </>
@@ -533,7 +550,7 @@ function OrderTurn({ t, done }: { t: number; done: number }) {
   if (t < T4.start) return null;
   return (
     <div className="mt-7">
-      <AgentMark className="sf-rise size-9" />
+      <Head typing={t < T4.done + 900} />
       {t >= T4.plan && <Plan plan={O.plan} done={done} />}
       {t >= T4.done && <Order />}
       {t >= T4.done + 300 && <AgentSays className="mt-5"><Rich text={O.reply} /></AgentSays>}
@@ -558,7 +575,7 @@ function Figures({ rows, notes = {} }: { rows: readonly (readonly string[])[]; n
   );
 }
 
-/** Fizz's two offers as they land, from its agent: one card, v3a above v3b, each a tile of its own. */
+/** Fizz's two offers as they land, from its agent: a line on what they are, then one card, v3a above v3b, each a tile of its own. */
 function Offers() {
   const o = V.offers;
   return (
@@ -566,6 +583,9 @@ function Offers() {
       <p className="mb-2 flex items-center gap-2 pr-1 text-[13px] text-text-muted">
         <FizzMark className="size-9" />
         {V.from}
+      </p>
+      <p className="mb-2 max-w-[92%] rounded-[22px] rounded-br-none bg-[#f2f2f4] px-4 py-3 text-[15px] leading-[1.45] text-text">
+        <Rich text={V.said} />
       </p>
       <div className="w-[92%] rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
         <div className="flex items-center gap-3">
@@ -594,12 +614,16 @@ function Offers() {
 }
 
 /**
- * What the agent puts to John: v3a, recommended, with what changed from his
- * terms; why not each of the others; and Approve. Once he taps it, the
- * button gives way to the approval's status.
+ * What the agent puts to John: v3a and v3b stacked, to pick one, v3a picked to
+ * start and tagged as the one it recommends, with what changed from his terms;
+ * why not the others; and Approve, which names the pick. Only v3a plays on in
+ * the demo. Once he taps it, the pick locks and the button gives way to the
+ * approval's status.
  */
 function Approval({ approved, onApprove }: { approved: boolean; onApprove: () => void }) {
   const p = V.approval;
+  const [pick, setPick] = useState<string>(p.options[0].id);
+  const scripted = pick === p.options[0].id;
   return (
     <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
       <div className="flex items-center gap-3">
@@ -610,9 +634,39 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
           <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{p.title}</span>
           <span className="block text-[13px] text-text-muted">{p.id}</span>
         </span>
-        <span className="rounded-full bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{p.tag}</span>
       </div>
-      <Figures rows={p.rows} notes={{ Terms: p.changed }} />
+      <div role="radiogroup" aria-label={p.title} className="mt-4 flex flex-col gap-2.5">
+        {p.options.map((o, i) => {
+          const on = pick === o.id;
+          return (
+            <button
+              key={o.id}
+              type="button"
+              role="radio"
+              aria-checked={on}
+              disabled={approved}
+              onClick={() => setPick(o.id)}
+              className={`rounded-2xl px-3.5 py-3 text-left transition-[background-color,box-shadow] ${
+                on ? "bg-white shadow-[0_0_0_2px_#1d1d1f]" : "bg-[#f6f6f8] shadow-[0_0_0_1px_rgb(0_0_0/0.04)]"
+              } ${approved && !on ? "opacity-50" : ""}`}
+            >
+              <span className="flex items-center gap-2">
+                <span
+                  aria-hidden
+                  className={`grid size-[18px] shrink-0 place-items-center rounded-full ${on ? "bg-[#1d1d1f]" : "bg-white shadow-[inset_0_0_0_1.5px_rgb(0_0_0/0.25)]"}`}
+                >
+                  {on && <span className="size-1.5 rounded-full bg-white" />}
+                </span>
+                <span className="text-[12px] text-text-muted">{o.id}</span>
+                {i === 0 && <span className="ml-auto rounded-full bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{p.tag}</span>}
+              </span>
+              <span className="mt-1 block text-[15px] font-bold tracking-[-0.01em] text-text">{o.name}</span>
+              <Figures rows={o.rows} notes={"changed" in o ? { Terms: o.changed } : {}} />
+              {"note" in o && <span className="mt-2.5 block text-[13px] font-semibold text-[#1f7a3d]">{o.note}</span>}
+            </button>
+          );
+        })}
+      </div>
       <div className="mt-4 border-t border-black/[0.07] pt-3.5">
         <p className="text-[13px] font-semibold text-text-muted">{p.whyNot.title}</p>
         <ul className="mt-1">
@@ -630,14 +684,18 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
           {p.approved}
         </span>
       ) : (
-        <button
-          type="button"
-          onClick={onApprove}
-          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
-        >
-          <Check className="size-[18px]" strokeWidth={2.5} />
-          {p.approve}
-        </button>
+        <>
+          <button
+            type="button"
+            onClick={onApprove}
+            disabled={!scripted}
+            className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black disabled:bg-[#c7c7cc]"
+          >
+            <Check className="size-[18px]" strokeWidth={2.5} />
+            {p.approve(pick)}
+          </button>
+          {!scripted && <p className="mt-2 text-center text-[12.5px] text-text-muted">{p.notScripted}</p>}
+        </>
       )}
     </div>
   );
@@ -748,6 +806,7 @@ function Reasoning({
             <TimelineRow
               key={m.text}
               icon={KIND[m.kind]}
+              mono
               current={last && i === muse - 1}
             >
               {m.text}
@@ -769,11 +828,14 @@ function TimelineRow({
   icon: Icon,
   mark,
   current = false,
+  mono = false,
   children,
 }: {
   icon?: LucideIcon;
   mark?: ReactNode;
   current?: boolean;
+  /** A musing (what it's thinking through) rather than prose or a turn: set in mono. */
+  mono?: boolean;
   children: ReactNode;
 }) {
   // The line runs from the row above (or the header) to this icon, and on below it to the foot of the row,
@@ -785,7 +847,7 @@ function TimelineRow({
       <span className="grid h-[17px] w-4 shrink-0 place-items-center">
         {mark ?? (Icon && <Icon className={`size-3.5 ${current ? "text-text" : ""}`} strokeWidth={2} />)}
       </span>
-      <span className={current ? "sf-shimmer" : undefined}>{children}</span>
+      <span className={`${mono ? "a2a-mono" : ""} ${current ? "sf-shimmer" : ""}`}>{children}</span>
     </li>
   );
 }

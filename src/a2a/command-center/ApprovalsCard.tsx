@@ -1,8 +1,9 @@
 import { FileText, Inbox, Package } from "lucide-react";
-import { useRef, type CSSProperties, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import agentLogo from "../../assets/a2a/agent-logo.png";
 import { copy } from "../../copy/copy";
 import { useGlide } from "./glide";
+import { Pulse } from "../Pulse";
 
 const t = copy.a2a.commandCenter.approvals;
 
@@ -14,7 +15,7 @@ const t = copy.a2a.commandCenter.approvals;
  * rises in with a pale blue wash that settles (.a2a-arrive). Once John's agent sends
  * Q-1042 it lists that: who it's from, what's asked, and who it's assigned to
  * (the seller agent, as an avatar pill). Clicking it opens the agent's chat about it.
- * Once the agent sends v2, the row shows v2 and the pill waits on Isar, without dots.
+ * Once the agent sends v2, the row shows v2 and the pill waits on Isar, without the pulse.
  */
 export function ApprovalsCard({
   request = false,
@@ -22,8 +23,8 @@ export function ApprovalsCard({
   onOpen,
 }: {
   request?: boolean;
-  /** Where Q-1042 has got to: v1 in, the agent on it; v2 out, waiting on the buyer (no dots); the buyer held
-   *  out, the agent on it again; it needs Alex (no dots, flagged); v3a and v3b out, waiting on the buyer;
+  /** Where Q-1042 has got to: v1 in, the agent on it; v2 out, waiting on the buyer (no pulse); the buyer held
+   *  out, the agent on it again; it needs Alex (no pulse, flagged); v3a and v3b out, waiting on the buyer;
    *  Isar took v3a (approved, green); the order's in (the row becomes O-5531, green). */
   stage?: "request" | "countered" | "heldOut" | "needsYou" | "v3" | "accepted" | "ordered";
   /** Opens the request in the agent's drawer. */
@@ -122,7 +123,6 @@ export function ApprovalsCard({
   );
 }
 
-/** Colours of the three typing dots: the agent's violet, then blue and teal. */
 /** When the seller agent picks the request up, and when each detail comes in as it reads them (who it's from, then units, discount, terms), in ms after the row lands. */
 const PICKED_UP = 400;
 const META_AT = [900, 1300, 1700, 2100];
@@ -136,12 +136,10 @@ function Fetched({ at, className = "", children }: { at: number; className?: str
   );
 }
 
-const DOTS = ["#7f56d9", "#0176d3", "#0b827c"];
-
 /**
  * Who a request is assigned to: the agent's avatar and name in a pill. While
- * it works on the request, three coloured dots bounce at the right, as in a
- * typing indicator; with nothing to do, there are no dots.
+ * it works on the request, the pulse runs at the right, as if it's typing;
+ * with nothing to do, there's no pulse.
  */
 function AgentPill({
   name,
@@ -168,15 +166,7 @@ function AgentPill({
       </span>
       {name}
       {working && (
-        <span aria-hidden className="ml-0.5 flex items-center gap-[3px]">
-          {DOTS.map((c, i) => (
-            <span
-              key={c}
-              className="a2a-typing-dot size-[5px] rounded-full"
-              style={{ background: c, "--i": i } as CSSProperties}
-            />
-          ))}
-        </span>
+        <Pulse scale={0.9} className="ml-1" />
       )}
       {working && <span className="sr-only">, {workingLabel}</span>}
     </span>

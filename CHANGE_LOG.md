@@ -30,6 +30,21 @@ Entry format:
 
 ## Unreleased
 
+## 23.1.0 — 2026-10-25 14:24 IST
+**Kind:** small addition — CRED-style pulse loader, mono thinking states, Decline on the decision card, John picks v3a or v3b, every agent message carries a line of text
+- **Phone: John picks between v3a and v3b** (step 12). The approval card is now "Which should I take?" with v3a and v3b stacked as radio tiles. v3a is picked to start and tagged Recommended, with "Was Net30" under its terms. v3b shows its Ginger Ale bundle. "Why not the others" stays below, and the button names the pick: Approve v3a or Approve v3b. Only v3a is scripted; picking v3b greys the button and notes it. Once John approves, the pick locks.
+- **Phone: John's turn says what he approved:** "Approve v3a", then "15% at Net15 · 19,500 units · $69,615".
+- **Phone: Fizz's agent always says something with its offers** (never a card on its own). With v2: "I can do 12% at Net30 if you take 19,500 units…" With v3a/v3b: "Two ways to 15%: pay in 15 days, or keep Net30 and take our new Ginger Ale bundle." Each is a grey bubble above the card.
+- **Command Center: every agent-to-agent message has a line of text** (message + attachment). Isar's agent now says something with its request ("We're stocking up for Oktoberfest: 15,000 units. Can you do 15% off at Net30?"), its reply to v2 and its acceptance of v3a, in a grey bubble above the card. Fizz's counter (v2) and two offers (v3a/v3b) show the line it sent with them, the same as on the phone, under a small "To Isar Bottling's agent" so it doesn't read as said to Alex. A new `Message` wrapper in QuoteThread takes the line and whatever's attached, so a file could take the card's slot later.
+- **The pulse is a little bigger:** 1.25× in the chats (45 by 20) and 0.9× in the Task pipeline pill.
+- **Knowledge card footers get 20px all round** (were 12px above and below, 20px at the sides), so the actions at the left edge have as much room above and below as beside them.
+- **Agents at work get a pulse, after CRED's neoPOP loader** (light mode, from the community Figma kit). It's four sharp bars, each a ball that rises as a dark square, stretches thin as it drops, lands squashed in its colour (yellow, lime, purple, pink) and flattens. Each bar runs one frame (120ms) behind the one before, so the pulse travels left to right; the kit's runs right to left. New `src/a2a/Pulse.tsx`, plus `.a2a-bars` and `.a2a-bar` in `a2a.css`; with reduced motion the bars hold still. Where it shows:
+  - **beside the agent's mark at the head of a turn, while that turn is working**, in both chats;
+  - **in the Task pipeline's agent pill**, at 0.75 scale, replacing the three bouncing dots. `.a2a-typing-dot` is gone. The Agent button keeps its dots.
+- **Musings are set in Geist Mono** (`@fontsource-variable/geist-mono`, `.a2a-mono`). This covers only the rows under the thinking header, in both chats; the header, the paragraph, plans and checks stay in Inter.
+- **Decision card: "From Margret's agent"** (was "Suggested by"). It's 12.5px on one line over her role at 11.5px. The card runs 28px into the column's right padding so that line fits.
+- **Card footer buttons have rounder corners**: 10px, up from 6px.
+
 ## 23.0.0 — 2026-10-25 12:49 IST · major (steps 12–14: the phone weighs v3a/v3b, John approves, O-5531 placed; the dashboard updates; the decision card gets Decline; bigger avatars and card buttons)
 - **Command Center: Alex's decision card has its own Decline button,** sitting beside Send. Send reads "Send both offers" when both are picked, "Send v3a" or "Send v3b" when one is, and "Send offer" (disabled) when neither is. With nothing picked, the note says "Pick an offer, or decline: v2 stands". Only "Send both offers" is scripted.
 - **Command Center: bigger avatars and card buttons.** Avatars and agent marks in the seller chat are now 40px (were 32px), with the logos inside at 22px. Card footer actions are now 36px tall with 13.5px text (were 28px and 12.5px).
