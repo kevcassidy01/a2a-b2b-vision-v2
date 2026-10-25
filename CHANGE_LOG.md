@@ -30,6 +30,14 @@ Entry format:
 
 ## Unreleased
 
+## 24.1.0 — 2026-10-25 20:29 IST
+**Kind:** minor (small additions plus a fix): success cards on both sides, a "Recurring order saved" card ending step 15, a hover state on Today's task card, and the who's-acting bar lighting the right party at every beat.
+
+- **Success cards look like successes, on both sides.** A card that confirms something done swaps its object icon for a **pale green tile with a green check**, next to a green status dot. On the seller side: Isar's acceptance of v3a and O-5531 arriving (`KnowledgeCard` `success`). On the phone: O-5531 placed, and the new saved card. John's approval card stays a choice card with its "Approved" chip.
+- **Step 15 ends on a "Recurring order saved" card.** After the agent's reply, it attaches the success: "Oktoberfest stock-up · in your recurring orders", **Repeats** Every year, **Next reminder** Aug 16, 2027, and an "Open recurring order" button. The template offer loses its buttons once John saves, with no Saved chip, so the new card is the only success.
+- **Who's-acting bar lights the right party at every beat.** A person now lights while a decision waits on them: **John** while the v3a/v3b approval is up (step 12) and while the template card waits (step 15); **Alex** while the decision card waits (step 10). Before, people lit only for 1.5s when they tapped their side. Each agent now lights from when something lands for it until its pulse stops, driven by its own chat's clock: the seller agent through its reply and turns (it used to go dark at the moment v2 was sent, and didn't light for Isar's acceptance or O-5531 at all); John's agent from when Fizz's v2 or v3 lands (it used to wait for its thinking to start) through its reply. Before Alex opens Q-1042, the seller agent stays lit as it picks the request up (`alexAgent:inbox`). Story `working` keys can now carry a source (`alexAgent:inbox`), so two parts of the app can light one party without turning each other off.
+- **Today's task card has a hover state that works:** its ring darkens a little (grey, not black) and its shadow lifts (`.a2a-card-link`). The old `hover:` utility never showed: `.a2a-card`'s unlayered shadow beat it.
+
 ## 24.0.1 — 2026-10-25 18:40 IST
 **Kind:** copy fix — "recurring order" in step 15
 - **Step 15 says "recurring order":** the agent offers the template "for a **recurring order**"; the card reads "Recurring order · yearly · from O-5531"; its last musing, reply ("in your recurring orders") and suggestion ("Show my recurring orders") use it too.

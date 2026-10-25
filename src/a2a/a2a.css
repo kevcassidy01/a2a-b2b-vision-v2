@@ -182,6 +182,18 @@
     0 1px 2px rgb(0 0 0 / 0.04),
     0 4px 12px -2px rgb(0 0 0 / 0.04);
 }
+/* A card that opens something (Today's task card): on hover, its ring darkens a
+   little (still grey, never black) and its shadow lifts. Here, not as a hover:
+   utility, since .a2a-card's shadow sits outside Tailwind's layers and wins. */
+.a2a-card-link {
+  transition: box-shadow var(--dur-fast, 150ms) ease-out;
+}
+.a2a-card-link:hover {
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.11),
+    0 1px 2px rgb(0 0 0 / 0.05),
+    0 6px 16px -4px rgb(0 0 0 / 0.1);
+}
 /* Fades its contents out downward, off the bottom of the page. */
 .a2a-fade-out {
   -webkit-mask-image: linear-gradient(180deg, #000, rgb(0 0 0 / 0));

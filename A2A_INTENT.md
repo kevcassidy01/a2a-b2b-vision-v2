@@ -132,7 +132,7 @@ People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (s
 | 12 | The terms changed (Net30 → Net15), so the buyer agent **asks John to approve v3**. It recommends v3a, but John can pick v3a or v3b (2026-10-25). | |
 | 13 | John approves. *(person 3 of 3)* The quote is approved on both sides. | Q-1042 shows approved. |
 | 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows. |
-| 15 | The order is saved as the template **"Oktoberfest stock-up"** for next year. John's agent sees Oktoberfest is yearly (it checks 2027's dates on oktoberfest.de, in its thinking only), offers the template with a reminder on Aug 16, 2027, and **John taps Save template** (2026-10-25). | |
+| 15 | The order is saved as the template **"Oktoberfest stock-up"** for next year. John's agent sees Oktoberfest is yearly (it checks 2027's dates on oktoberfest.de, in its thinking only), offers the template with a reminder on Aug 16, 2027, and **John taps Save template** (2026-10-25). The agent confirms with a "Recurring order saved" card. | |
 
 **Built so far (2026-10-25): steps 1–15.** Fizz's agent receives the hold-out, hands Alex the decision card,
 and sends v3a and v3b once he picks "Send both" (the only option scripted). On the phone, John's agent weighs the

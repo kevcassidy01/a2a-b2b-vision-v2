@@ -59,26 +59,13 @@ export function CommandCenter() {
   const { quoteSent, counterSent, heldOut, askedAlex, v3Sent, accepted, ordered, setWorking } = useStory();
   const stage = ordered ? "ordered" : accepted ? "accepted" : v3Sent ? "v3" : askedAlex ? "needsYou" : heldOut ? "heldOut" : counterSent ? "countered" : "request";
   const task = useTaskIn(phase === "ready", quoteSent);
-  // The seller agent picks Q-1042 up as it lands, whether or not Alex has the Command Center open, and stays at it.
+  // The seller agent picks Q-1042 up as it lands, whether or not Alex has the Command Center open, and
+  // stays at it until Alex opens it; from then on, its chat (QuoteThread) says when it's at work.
   useEffect(() => {
-    if (!quoteSent) return;
-    const id = window.setTimeout(() => setWorking("alexAgent", true), QUOTE_GAP);
+    if (!quoteSent || quoteOpen) return setWorking("alexAgent:inbox", false);
+    const id = window.setTimeout(() => setWorking("alexAgent:inbox", true), QUOTE_GAP);
     return () => clearTimeout(id);
-  }, [quoteSent, setWorking]);
-  // Once v2 is out, it waits on the buyer: no longer at work.
-  useEffect(() => {
-    if (counterSent) setWorking("alexAgent", false);
-  }, [counterSent, setWorking]);
-  // Isar's agent holds out: it's at it again, until it hands Q-1042 to Alex. (Alex's pick sets it working
-  // from the chat; v3 going out stops it.)
-  useEffect(() => {
-    if (!heldOut) return;
-    const id = window.setTimeout(() => setWorking("alexAgent", true), QUOTE_GAP);
-    return () => clearTimeout(id);
-  }, [heldOut, setWorking]);
-  useEffect(() => {
-    if (askedAlex || v3Sent) setWorking("alexAgent", false);
-  }, [askedAlex, v3Sent, setWorking]);
+  }, [quoteSent, quoteOpen, setWorking]);
   useEffect(() => {
     if (phase !== "loading") return;
     const id = window.setTimeout(() => setPhase("ready"), LOAD);

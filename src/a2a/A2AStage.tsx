@@ -25,7 +25,8 @@ export function A2AStage() {
 
 /**
  * The stage itself. The bar lights whoever's acting: an agent while it works
- * (each reports itself), a person for a moment whenever their side is touched
+ * and a person while a decision waits on them (each side reports these), a
+ * person for a moment whenever their side is touched
  * (John on the phone, Alex in the Command Center), and the demo hotkeys on top.
  */
 function Stage() {
@@ -33,7 +34,7 @@ function Stage() {
   const { working } = useStory();
   const john = useTouched();
   const alex = useTouched();
-  const active = new Set<Actor>([...hotkeys, ...working]);
+  const active = new Set<Actor>([...hotkeys, ...[...working].map((w) => w.split(":")[0] as Actor)]);
   if (john.on) active.add("john");
   if (alex.on) active.add("alex");
   return (

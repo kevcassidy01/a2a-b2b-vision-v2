@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import { Check, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 /**
@@ -13,6 +13,9 @@ import type { ReactNode } from "react";
  * (20px all round), so the header's icon and status and the footer's
  * actions have room to breathe.
  * The header and footer are optional; the body is the card.
+ * A success (`success`: an order placed, an offer accepted) says so in its
+ * header: the icon tile goes pale green with a green check in place of the
+ * object's icon, beside a green status.
  */
 export function KnowledgeCard({
   icon: Icon,
@@ -21,6 +24,7 @@ export function KnowledgeCard({
   subtitle,
   status,
   footer,
+  success = false,
   className = "",
   children,
 }: {
@@ -30,18 +34,20 @@ export function KnowledgeCard({
   subtitle?: string;
   status?: ReactNode;
   footer?: ReactNode;
+  success?: boolean;
   className?: string;
   children: ReactNode;
 }) {
+  const Shown = success ? Check : Icon;
   return (
     <article
       className={`overflow-hidden rounded-xl bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.09),0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-12px_rgb(0_0_0/0.12)] ${className}`}
     >
       {title && (
         <header className="flex items-start gap-3.5 px-5 pb-4 pt-5">
-          {Icon && (
-            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#f3f3f5]">
-              <Icon className="size-4 text-text" strokeWidth={1.75} />
+          {Shown && (
+            <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${success ? "bg-[#e3f3e6]" : "bg-[#f3f3f5]"}`}>
+              <Shown className={success ? "size-[18px] text-[#2e844a]" : "size-4 text-text"} strokeWidth={success ? 2.5 : 1.75} />
             </span>
           )}
           <div className="mr-auto min-w-0">

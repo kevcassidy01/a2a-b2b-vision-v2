@@ -456,7 +456,17 @@ export const copy = {
             note: "I'll ask Fizz for a fresh quote then. Prices aren't locked in.",
             save: "Save template",
             notNow: "Not now",
-            saved: "Saved",
+          },
+          /** What the agent attaches to its reply once John saves: the success. */
+          savedCard: {
+            title: "Recurring order saved",
+            meta: "Oktoberfest stock-up · in your recurring orders",
+            status: "Saved",
+            facts: [
+              { label: "Repeats", value: "Every year" },
+              { label: "Next reminder", value: "Aug 16, 2027" },
+            ],
+            open: "Open recurring order",
           },
           you: { label: "You", time: "Just now", text: "Save template" },
           reply: "Saved. **Oktoberfest stock-up** is in your recurring orders. On **Aug 16, 2027** I'll bring it back and ask Fizz for a fresh quote.",

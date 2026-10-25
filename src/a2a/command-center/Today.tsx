@@ -146,7 +146,7 @@ function TaskCard({ stage, onOpen }: { stage: TaskStage; onOpen: () => void }) {
       onClick={onOpen}
       aria-label={`${r.open} ${row.id}`}
       style={{ animationDelay: `${LANDS}ms, ${LANDS}ms` }}
-      className="a2a-card a2a-arrive mx-1.5 flex w-[calc(100%-12px)] flex-col rounded-xl px-5 pb-1.5 pt-5 text-left transition-shadow hover:shadow-[0_0_0_1px_rgb(0_0_0/0.14),0_4px_12px_-2px_rgb(0_0_0/0.06)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
+      className="a2a-card a2a-card-link a2a-arrive mx-1.5 flex w-[calc(100%-12px)] flex-col rounded-xl px-5 pb-1.5 pt-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0176d3]"
     >
       <span className="flex items-center gap-2 text-[13px] font-medium text-text-muted">
         <Icon key={ordered ? 1 : 0} className="a2a-load-in size-4" strokeWidth={1.75} />

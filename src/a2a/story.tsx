@@ -1,7 +1,12 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
-/** The two agents, by their place in the who's-acting bar. */
-export type AgentActor = "johnAgent" | "alexAgent";
+/**
+ * Who's at it, for the who's-acting bar: an agent while it works, a person
+ * while it's their turn (a decision waits on them). One of the bar's four, or
+ * one of them and what it's for ("alexAgent:inbox"), so two parts of the app
+ * can each light the same one without turning the other's off.
+ */
+export type Doing = `${"john" | "johnAgent" | "alexAgent" | "alex"}${"" | `:${string}`}`;
 
 /**
  * What one side of the stage has done that the other side sees, and which
@@ -13,7 +18,8 @@ export type AgentActor = "johnAgent" | "alexAgent";
  * limit); Alex chose to send both, and v3a and v3b are out (both set from the
  * seller agent's chat); John approved v3a and his agent has accepted it with
  * Fizz; and his agent has placed order O-5531 (both set from the phone). Each
- * agent reports itself working while it is.
+ * agent reports itself working while it is, and each side reports its person
+ * while a decision waits on them.
  */
 type Story = {
   quoteSent: boolean;
@@ -30,8 +36,8 @@ type Story = {
   accept: () => void;
   ordered: boolean;
   placeOrder: () => void;
-  working: ReadonlySet<AgentActor>;
-  setWorking: (agent: AgentActor, on: boolean) => void;
+  working: ReadonlySet<Doing>;
+  setWorking: (who: Doing, on: boolean) => void;
 };
 
 const StoryContext = createContext<Story>({
@@ -61,8 +67,8 @@ export function StoryProvider({ children }: { children: ReactNode }) {
   const [v3Sent, setV3Sent] = useState(false);
   const [accepted, setAccepted] = useState(false);
   const [ordered, setOrdered] = useState(false);
-  const [working, setWorkingSet] = useState<ReadonlySet<AgentActor>>(new Set());
-  const setWorking = useCallback((agent: AgentActor, on: boolean) => {
+  const [working, setWorkingSet] = useState<ReadonlySet<Doing>>(new Set());
+  const setWorking = useCallback((agent: Doing, on: boolean) => {
     setWorkingSet((s) => {
       if (s.has(agent) === on) return s;
       const next = new Set(s);

@@ -6,6 +6,14 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-25 A2A: a success card wears a green check tile
+**Decision:** On both sides, a card that confirms something done (an acceptance, an order placed or arrived, a recurring order saved) shows a pale green tile with a green check in place of its object's icon, and its status dot is green. Cards that ask for a choice keep their object icon, even once the choice is made (John's approval keeps its "Approved" chip). When an ask is answered with a success, the ask's buttons go and a separate success card follows; the ask doesn't also get a chip.
+**Rationale:** The audience should be able to tell at a glance which cards are outcomes. A single success per outcome keeps it from being said twice.
+
+### 2026-10-25 A2A: the who's-acting bar lights whoever the story is waiting on
+**Decision:** An agent is lit from when something lands for it until its pulse stops. A person is lit while a decision waits on them (John: approve v3a or v3b, save the template; Alex: the decision card), and for a moment whenever they touch their side. Ctrl+1–4 still toggle on top.
+**Rationale:** The bar tells the audience whose move it is. A pending decision is that person's move, even before they touch anything.
+
 ### 2026-10-25 A2A: step 15, the agent offers the template, John saves it
 **Decision:** After O-5531, John's agent, in the same turn, notices Oktoberfest comes round every year (it looks up 2027's dates on oktoberfest.de; the page appears only in its thinking, never as a link or a page) and offers to save the order as the template "Oktoberfest stock-up", with a reminder a month before (Aug 16, 2027). John picks Save template or Not now; only Save plays on.
 **Rationale:** The agent earning more autonomy over time starts with it spotting the pattern, but saving is still John's call: the person picks from options. Grounding the offer in the festival's dates makes "yearly" a fact, not a guess.

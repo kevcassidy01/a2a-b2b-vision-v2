@@ -188,10 +188,22 @@ export function QuoteThread() {
   useEffect(() => {
     if (sent3) sendV3();
   }, [sent3, sendV3]);
-  const choose = () => {
-    setChosen(true);
-    setWorking("alexAgent", true);
-  };
+  const choose = () => setChosen(true);
+  // The who's-acting bar: the seller agent from when something lands for it until its pulse stops, each
+  // turn; Alex while the decision card waits on him (step 10).
+  const working =
+    t < T.end ||
+    (t2 !== null && t2 >= T2.reply && t2 < T2.decision) ||
+    (t3 !== null && t3 < T3.end) ||
+    (t4 !== null && t4 >= T4.card && t4 < T4.said) ||
+    (t5 !== null && t5 < T5.end);
+  const alexsTurn = asked && !chosen;
+  useEffect(() => {
+    setWorking("alexAgent", working);
+  }, [working, setWorking]);
+  useEffect(() => {
+    setWorking("alex", alexsTurn);
+  }, [alexsTurn, setWorking]);
 
   // Keep the newest thing in view, above the prompt box, as each one comes in.
   const at = (clock: number | null, xs: number[]) => (clock === null ? 0 : xs.filter((x) => clock >= x).length);
@@ -543,7 +555,7 @@ function Request({
   card?: QuoteCard;
   from?: string;
   time?: string;
-  /** An acceptance rather than an ask: its status in green. */
+  /** An acceptance rather than an ask: a success (green check tile, green status). */
   done?: boolean;
   className?: string;
 }) {
@@ -562,6 +574,7 @@ function Request({
           id={r.id}
           subtitle={r.from}
           status={<CardStatus color={done ? "#2e844a" : "#0176d3"}>{r.status}</CardStatus>}
+          success={done}
           className="w-full max-w-[520px]"
           footer={<Via text={r.via} />}
         >
@@ -767,6 +780,7 @@ function Order() {
     <div className={`a2a-load-in mt-4 flex ${AGENT_COL} flex-col`}>
       <KnowledgeCard
         icon={Package}
+        success
         title={OR.title}
         id={OR.id}
         subtitle={OR.for}

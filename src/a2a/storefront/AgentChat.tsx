@@ -13,7 +13,6 @@ import {
   FileText,
   History,
   Lightbulb,
-  Package,
   PencilLine,
   Plus,
   Route,
@@ -128,8 +127,8 @@ const T5 = (() => {
   const ask = thought + 900;
   return { think, muse, thinkFor: thought - think, thought, ask, end: ask + 400 };
 })();
-/** Once John saves it, in ms from his tap: his turn, then the agent's reply and its done mark. */
-const T6 = { reply: 1400, done: 1800, end: 2000 };
+/** Once John saves it, in ms from his tap: his turn, then the agent's reply with the saved card, and its done mark. */
+const T6 = { reply: 1400, card: 1800, done: 2200, end: 2400 };
 const TICK = 50;
 
 /** Ms since a turn began (the handoff, or v2 landing), ticking until it's done; null before it. */
@@ -209,15 +208,16 @@ export function AgentChat({
   const done = STEPS.filter((_, i) => t !== null && t >= T.step(i)).length;
   const done2 = C.plan.steps.filter((_, i) => t2 !== null && t2 >= T2.step(i)).length;
   const muse2 = t2 === null ? 0 : T2.muse.filter((x) => t2 >= x).length;
-  const working2 = t2 !== null && t2 >= T2.think && t2 < T2.done;
+  // Each turn lights John's agent from when something lands for it until its pulse stops.
+  const working2 = t2 !== null && t2 >= T2.offer && t2 < T2.done + 1100;
   const muse3 = t3 === null ? 0 : T3.muse.filter((x) => t3 >= x).length;
   const done4 = O.plan.steps.filter((_, i) => t4 !== null && t4 >= T4.step(i)).length;
-  const working3 = t3 !== null && t3 >= T3.think && t3 < T3.ask;
-  const working4 = t4 !== null && t4 < T4.done;
+  const working3 = t3 !== null && t3 >= T3.offers && t3 < T3.ask;
+  const working4 = t4 !== null && t4 < T4.done + 600;
   const muse5 = t5 === null ? 0 : T5.muse.filter((x) => t5 >= x).length;
   const working5 = t5 !== null && t5 >= T5.think && t5 < T5.ask;
-  const working6 = t6 !== null && t6 < T6.reply;
-  const working = (t !== null && t < T.done) || working2 || working3 || working4 || working5 || working6;
+  const working6 = t6 !== null && t6 < T6.done;
+  const working = (t !== null && t < T.done + 900) || working2 || working3 || working4 || working5 || working6;
   const words = t === null ? 0 : Math.max(0, Math.min(WORDS.length, Math.floor((t - T.para) / WORD)));
   // How many musings have started.
   const muse = t === null ? 0 : T.muse.filter((x) => t >= x).length;
@@ -228,12 +228,17 @@ export function AgentChat({
     (t3 === null ? 0 : [T3.offers, T3.think, T3.thought, T3.ask].filter((x) => t3 >= x).length) +
     (t4 === null ? 0 : [0, T4.start, T4.plan, T4.done, T4.done + 300, T4.done + 600].filter((x) => t4 >= x).length) +
     (t5 === null ? 0 : [T5.think, T5.thought, T5.ask].filter((x) => t5 >= x).length) +
-    (t6 === null ? 0 : [0, T6.reply, T6.done].filter((x) => t6 >= x).length);
+    (t6 === null ? 0 : [0, T6.reply, T6.card, T6.done].filter((x) => t6 >= x).length);
 
-  // The who's-acting bar lights John's agent while it works.
+  // The who's-acting bar lights John's agent while it works, and John while a decision waits on him:
+  // which offer to approve (step 12), then whether to save the template (step 15).
+  const johnsTurn = (t3 !== null && t3 >= T3.ask && !approved) || (t5 !== null && t5 >= T5.ask && t6 === null);
   useEffect(() => {
     setWorking("johnAgent", working);
   }, [working, setWorking]);
+  useEffect(() => {
+    setWorking("john", johnsTurn);
+  }, [johnsTurn, setWorking]);
 
   // The quote's out: Fizz's side sees it land.
   useEffect(() => {
@@ -590,7 +595,8 @@ function OrderTurn({ t, done, typing }: { t: number; done: number; typing: boole
  * (Oktoberfest's dates, from oktoberfest.de; the page is only in its thinking),
  * folds, says the festival comes round every year with the template attached,
  * and John picks Save template or Not now. Once he saves, his turn, the
- * agent's reply, and its mark to say it's done.
+ * agent's reply with the success card (the recurring order, saved), and its
+ * mark to say it's done.
  */
 function TemplateTurn({ t, muse, t6, onSave }: { t: number; muse: number; t6: number | null; onSave: () => void }) {
   if (t < T5.think) return null;
@@ -619,6 +625,7 @@ function TemplateTurn({ t, muse, t6, onSave }: { t: number; muse: number; t6: nu
         <div className="mt-7">
           <Head typing={false} />
           <AgentSays className="mt-3"><Rich text={M.reply} /></AgentSays>
+          {t6 >= T6.card && <Saved />}
         </div>
       )}
       {t6 !== null && t6 >= T6.done && <AgentMark className="sf-rise mt-5 size-9" />}
@@ -626,7 +633,7 @@ function TemplateTurn({ t, muse, t6, onSave }: { t: number; muse: number; t6: nu
   );
 }
 
-/** The order template the agent offers: its name, what it's from, the lines, the last terms and the reminder, then Save template or Not now. */
+/** The order template the agent offers: its name, what it's from, the lines, the last terms and the reminder, then Save template or Not now (gone once he's saved; the saved card below says so). */
 function Template({ saved, onSave }: { saved: boolean; onSave: () => void }) {
   const c = M.card;
   return (
@@ -639,12 +646,6 @@ function Template({ saved, onSave }: { saved: boolean; onSave: () => void }) {
           <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{c.title}</span>
           <span className="block text-[13px] text-text-muted">{c.meta}</span>
         </span>
-        {saved && (
-          <span className="sf-rise inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
-            <span aria-hidden className="size-2 rounded-full bg-[#1f9d55]" />
-            {c.saved}
-          </span>
-        )}
       </div>
       <ul className="mt-3">
         {c.lines.map((l, i) => (
@@ -837,17 +838,12 @@ function Order() {
   return (
     <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
       <div className="flex items-center gap-3">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
-          <Package className="size-5 text-text" strokeWidth={2} />
-        </span>
+        <SuccessTile />
         <span className="min-w-0 flex-1">
           <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{o.title}</span>
           <span className="block text-[13px] text-text-muted">{o.meta}</span>
         </span>
-        <span className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
-          <span aria-hidden className="size-2 rounded-full bg-[#1f9d55]" />
-          {o.status}
-        </span>
+        <Status>{o.status}</Status>
       </div>
       <ul className="mt-3">
         {o.lines.map((l, i) => (
@@ -868,6 +864,56 @@ function Order() {
         </span>
         <span className="text-[17px] font-bold tabular-nums tracking-[-0.01em] text-text">{o.total.value}</span>
       </div>
+    </div>
+  );
+}
+
+/** A success card's tile (an order placed, a recurring order saved): pale green, with a green check in place of the object's icon. */
+function SuccessTile() {
+  return (
+    <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#e3f3e6]">
+      <Check className="size-[22px] text-[#1f7a3d]" strokeWidth={2.75} />
+    </span>
+  );
+}
+
+/** A status chip at a phone card's right: a dot (green, a success) and a word. */
+function Status({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
+      <span aria-hidden className="size-2 rounded-full bg-[#1f9d55]" />
+      {children}
+    </span>
+  );
+}
+
+/** The recurring order, saved (story step 15's success): what it is and where it lives, how often it repeats and the next reminder, and a way to open it. */
+function Saved() {
+  const c = M.savedCard;
+  return (
+    <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+      <div className="flex items-center gap-3">
+        <SuccessTile />
+        <span className="min-w-0 flex-1">
+          <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{c.title}</span>
+          <span className="block text-[13px] text-text-muted">{c.meta}</span>
+        </span>
+        <Status>{c.status}</Status>
+      </div>
+      <dl className="mt-3 grid grid-cols-2 gap-3 border-t border-black/[0.07] pt-3">
+        {c.facts.map((f) => (
+          <div key={f.label}>
+            <dt className="text-[13px] text-text-muted">{f.label}</dt>
+            <dd className="text-[15px] font-semibold tracking-[-0.01em] text-text">{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <button
+        type="button"
+        className="mt-4 flex h-12 w-full items-center justify-center rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+      >
+        {c.open}
+      </button>
     </div>
   );
 }
