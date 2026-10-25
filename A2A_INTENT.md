@@ -113,12 +113,12 @@ feeds side by side).
 
 ## 5. The story: 15 steps
 
-People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (step 11), **John approves**
+People step in **3 times**: **John starts it** (step 3), **Alex sends both offers** (step 11), **John approves**
 (step 13). Agents do everything else.
 
 | # | Buyer side (John) | Seller side (Alex) |
 |---|---|---|
-| 1 | John logs in. A moment later a notification arrives: **"Mike started a cart."** (the bell's dot, a ding, and Mike's cart card with Open cart and Assign). | Alex goes about his day in the Command Center. |
+| 1 | John logs in. A moment later a notification arrives: **"Mike started a cart."** (the bell's dot, a notification tone, and Mike's cart card with Open cart and Assign). | Alex goes about his day in the Command Center. |
 | 2 | John opens the cart **"Oktoberfest stock-up"**. It holds Mike's **5,000 lemonade concentrate** (Frankfurt), added by Mike's agent. | |
 | 3 | John taps **Assign to your agent** on Mike's cart. No prompt: the buyer agent works out that Mike's cart covers Frankfurt and Munich isn't stocked yet, and plans to top it up and get Fizz's best price. *(person 1 of 3)* | |
 | 4 | The agent reads the demand forecast (**Munich +40%**) and adds **10,000 orange concentrate** (Munich) to the **same cart**. Mike sees it. | |
@@ -127,9 +127,9 @@ People step in **3 times**: **John starts it** (step 3), **Alex picks Net15** (s
 | 7 | | The seller agent checks stock, account pricing and discount policy: **up to 12% at Net30**. |
 | 8 | Counter-offer **v2** arrives. | The seller agent sends **v2**: **12,000 orange + 7,500 lemonade at 12%** (more volume, lower discount). |
 | 9 | The buyer agent accepts the quantities and holds out for 15%. That's within John's limits, so **John isn't asked**. | |
-| 10 | | The seller agent is out of room and hands Alex two choices: **"Offer 15% · Net15 (recommended)"** or **"Decline"**. |
-| 11 | | Alex picks **Net15**. *(person 2 of 3)* **v3** (15%, Net15) goes back. |
-| 12 | The terms changed (Net30 → Net15), so the buyer agent **asks John to approve v3**. It recommends v3a, but John can pick v3a or v3b (2026-10-25). | |
+| 10 | | The seller agent is out of room (15% is over its 12%) and hands Alex a decision card: two offers side by side, **v3a (15% · Net15)** and **v3b (15% with the Ginger Ale bundle, Net30)**, both picked to start; picking neither declines. |
+| 11 | | Alex taps **Send both**. *(person 2 of 3)* **v3a** and **v3b** go to the buyer agent. |
+| 12 | The buyer agent weighs v3a against v3b (the bundle, in its thinking), recommends **v3a**, says why not each of the others, and **asks John** (the terms change from Net30). John can pick v3a or v3b. | |
 | 13 | John approves. *(person 3 of 3)* The quote is approved on both sides. | Q-1042 shows approved. |
 | 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows. A beat later, a macOS notification from **Gmail**: "Order confirmation sent", O-5531 to John Müller, Isar Bottling (2026-10-25). |
 | 15 | The order is saved as the template **"Oktoberfest stock-up"** for next year. John's agent sees Oktoberfest is yearly (it checks 2027's dates on oktoberfest.de, in its thinking only), offers the template with a reminder on Aug 16, 2027, and **John taps Save template** (2026-10-25). The agent confirms with a "Recurring order saved" card. | |
@@ -144,7 +144,7 @@ order, and the dashboard updates (Orders 189, Germany 9, O-5531 in Recent activi
 discount). Cross-sell is a **bundled offer: +1,000 Ginger Ale concentrate, keeping 15% at Net30**. It brings in
 two parts of B2B commerce, bundles and cross-sell. Display only: nobody takes it and the order doesn't change.
 - **Ginger Ale is new.** It isn't sold on its own in the store, and appears only inside the bundle.
-- **The storefront gets a Bundles row.** The Ginger Ale bundle is one of the bundles in it.
+- ~~**The storefront gets a Bundles row.**~~ Dropped 2026-10-25 (not needed): the bundle shows only in the offers.
 - **John's agent sees the bundle and weighs it**, then recommends Net15 to John. It shows this in its thinking.
   Its reasons:
   1. Ginger Ale isn't on Isar's approved product list, so taking it is outside the agent's limits (§7). A new
@@ -172,7 +172,7 @@ price."
 - **Step 9 (no ask):** the buyer agent is inside John's spend and discount limits, so it doesn't bother him.
 - **Step 10 (ask Alex):** 15% is over the seller agent's 12% limit. Only a person can trade Net30 for Net15
   to make 15% work.
-- **Step 12 (ask John):** v3 is a new version with new terms. An approval belongs to one version, so a change
+- **Step 12 (ask John):** v3a is a new version with new terms. An approval belongs to one version, so a change
   means a new check.
 
 ## 6. Settled story changes (2026-10-23)
@@ -225,11 +225,12 @@ All numbers are dummy.
 |---|---|---|---|---|---|---|---|
 | **v1** | Buyer agent | 10,000 | 5,000 | 15,000 | 15% | Net30 | Over the seller's 12% limit |
 | **v2** | Seller agent | 12,000 | 7,500 | 19,500 | 12% | Net30 | Buyer takes the quantities, holds out for 15% |
-| **v3** | Alex (via seller agent) | 12,000 | 7,500 | 19,500 | 15% | **Net15** | John approves |
+| **v3a** | Alex (via seller agent) | 12,000 | 7,500 | 19,500 | 15% | **Net15** | John approves |
+| **v3b** | Alex (via seller agent) | 12,000 | 7,500 | 19,500 (+1,000 Ginger Ale) | 15% | Net30 | Shown, not taken |
 
 - Quote: **Q-1042**. Order: **O-5531**. Template: **"Oktoberfest stock-up"**.
 - Forecast: **Munich +40%** for Oktoberfest.
-- Unit prices, totals in currency and the dashboard figures are still to be set (§12).
+- Prices are dummy, in US dollars: $4.20 a unit, v3a from $69,615. The dashboard figures are as built.
 
 ## 9. Screens
 
@@ -267,19 +268,15 @@ shown but not taken. The older frames below are kept as they were.
 | S5 | `6:876` | v3 sent, waiting on the buyer | 11–12 |
 | S6 | `6:994` | Approved on both sides, order received, dashboard updated | 13–14 |
 
-## 10. How we'd build it (proposed, not agreed)
+## 10. How it's built (2026-10-25)
 
-- **Code:** a new `src/a2a/` folder, apart from `src/chat` and `src/desktop`.
-- **One screen:** a phone frame with the storefront on the left, the Command Center on the right (§4).
-- **Scripted, no live LLM.** One shared state machine drives both sides, so a move on one side shows up on
-  the other. A reset key starts over.
-- **Borrowed pieces:**
-  - From `src/chat`: ToolTimeline, ThinkingIndicator, MessageBubble, PermissionCard, the script pattern and
-    the `viz` charts (the dashboard).
-  - From `src/shell`: the composer, dictation, PromptEditor.
-  - From `src/desktop/cowork`: maybe parts of the chat chrome for the seller shell (it isn't Cowork, so only
-    what fits).
-- **Nothing is built until this doc is agreed.**
+- **Code:** `src/a2a/`, apart from `src/chat` and `src/desktop`. Page: `/#a2a`. Copy in `src/copy/copy.ts` (`copy.a2a`).
+- **One screen:** John's iPhone with the storefront and his agent on the left, Alex's Command Center and
+  the seller agent's drawer on the right, the "who's acting" bar below (§4).
+- **Scripted, no live LLM.** One shared story state drives both sides, so a move on one side shows up on the other.
+- **Presenter keys:** ` pauses and plays the whole demo (story clock, timers, animations); Shift+` restarts it.
+- **Sounds** (`src/a2a/sounds.ts`, Mixkit, free): a tone when Mike's notification reaches John after login,
+  and a woosh with Gmail's "Order confirmation sent" notification on Alex's Mac after O-5531.
 
 ## 11. Out of scope
 
@@ -294,12 +291,11 @@ shown but not taken. The older frames below are kept as they were.
 1. ~~**Surfaces**~~ Settled 2026-10-23: one split screen, the storefront on a phone on the left and the
    Command Center on the right (§4). Still open: how John's agent opens on the phone, and how wide each side is.
 2. ~~**Branch**~~ Settled: built on `master`; features that need one get their own branch on Somnath's say (e.g. `a2a-pause-restart`).
-3. **Look:** start from the wireframe, or go straight to a styled storefront and Command Center?
+3. ~~**Look:**~~ Settled: straight to a styled storefront and Command Center (built).
 4. ~~**The bottler's name**~~ Settled: **Isar Bottling** (Munich and Frankfurt).
 5. ~~**Does Mike approve anything?**~~ Settled 2026-10-25: no. John approves alone.
-6. **Real-feeling numbers:** unit prices, currency (settled 2026-10-24: US dollars on both sides), order total, and the dashboard's figures.
-7. ~~**Cowork frame**~~ Settled 2026-10-23: a generic AI chat app shell, not Cowork. Still open: its design
-   (Somnath to design it with Claude).
+6. ~~**Real-feeling numbers:**~~ Settled: US dollars on both sides, $4.20 a unit, and the dashboard figures as built (§8).
+7. ~~**Cowork frame**~~ Settled 2026-10-23: a generic AI chat app shell, not Cowork. Its design is as built.
 8. ~~**Step 15**~~ Settled 2026-10-25: the agent offers the template; John saves it.
 9. ~~**The cross-sell step**~~ Settled 2026-10-25: the cross-sell is the bundle (v3b, +1,000 Ginger Ale concentrate), §5.
 10. ~~**The Figma wireframes**~~ Settled 2026-10-25: no need to redo them as phone frames.

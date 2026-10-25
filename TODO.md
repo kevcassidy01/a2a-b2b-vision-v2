@@ -18,7 +18,7 @@ Legend: `[ ]` open · `[~]` in progress · `[x]` done · **(S)** needs Somnath �
 
 ## 🔴 Urgent & Important
 
-- [~] **(S/C, on instruction)** **Agent-to-agent B2B commerce prototype (Fizz Drinks).** Intent doc drafted 2026-10-23 (`A2A_INTENT.md`); wireframes in Figma. **Built through v24.3.0 (2026-10-25, `/#a2a`): all 15 story steps, success cards, the Gmail notification at the end (with sound), and the presenter keys (` pause/play, Shift+` restart, on branch `a2a-pause-restart`).** The shell and "who's acting" bar; John's phone (login, Mike's cart, Assign, the agent's reasoning and plan, Q-1042 v1, then v2 landing and the hold-out for 15%); the Command Center (welcome, dashboard, "Needs your approval", the seller agent's chat: Salesforce tool calls, checks, v2 sent); the turns timeline in both chats. **Next:** the storefront's Bundles row; the run sheet.
+- [~] **(S/C, on instruction)** **Agent-to-agent B2B commerce prototype (Fizz Drinks).** Intent doc drafted 2026-10-23 (`A2A_INTENT.md`); wireframes in Figma. **Built through v24.3.0 (2026-10-25, `/#a2a`): all 15 story steps, success cards, the Gmail notification at the end (with sound), and the presenter keys (` pause/play, Shift+` restart). On `master` and pushed.** The shell and "who's acting" bar; John's phone (login, Mike's cart, Assign, the agent's reasoning and plan, Q-1042 v1, then v2 landing and the hold-out for 15%); the Command Center (welcome, dashboard, "Needs your approval", the seller agent's chat: Salesforce tool calls, checks, v2 sent); the turns timeline in both chats. **Story complete.** Next: Somnath records a video for teammates, then the demo script / run sheet.
   - [x] **(C)** A2A step 9, seller side: Fizz's agent receives the hold-out (v2's units at 15%), weighs it with Salesforce tool calls, finds 15% over its limit; Q-1042 shows it needs Alex; the timeline gets turn 3.
   - [x] **(C)** A2A step 10: Alex's decision card (Send both: Net15 or the bundle · Net15 only · Decline), the bundle shown.
   - [x] **(C)** A2A step 11: Alex sends both; v3a (15% · Net15) and v3b (the Ginger Ale bundle) go out.
@@ -38,8 +38,8 @@ Legend: `[ ]` open · `[~]` in progress · `[x]` done · **(S)** needs Somnath �
 ## 🟡 Important
 
 - [x] **(C)** A2A step 15: the agent offers "Oktoberfest stock-up" as a template (Oktoberfest is yearly; dates from oktoberfest.de in its thinking), John saves it (2026-10-25).
-- [x] **(C)** A2A: pause/play (`) and restart (Shift+`) keys (2026-10-25, branch `a2a-pause-restart`). A full story state machine (jump to a step) is still open if wanted.
-- [ ] **(C)** A2A: the storefront's Bundles row, with the Ginger Ale bundle.
+- [x] **(C)** A2A: pause/play (`) and restart (Shift+`) keys (2026-10-25, merged to `master`). Jump-to-step: not needed (Somnath, 2026-10-25).
+- [x] **(S)** A2A: the storefront's Bundles row: not needed (Somnath, 2026-10-25).
 - [~] **(C, on instruction)** **Lead-designer feedback** (branch `design-feedback`). **Done 2026-10-08:** quote approval recommends the free sample and checks margin at both steps, the confirm card is dropped, and the copy is renamed to "free sample". Also done: the `/entitlement-check Free sample` prompt, the why-recommended popover, the green Approved stage, and distinct margin copy at the two steps (v11.3.0). Checkout anywhere steps 1–7 reworked and flavor photos added (v11.4.0). Merchant insights segments: "How are buyers doing" prompt, See trends on every row (v11.5.0, merged to master). **Next:** card bookmark for "remember this" (proposed, deferred); checkout reorder-section feedback later. **Remaining:** more feedback as Somnath shares it; Figma re-capture dropped (Somnath, 2026-10-08: the eng team has the gist).
 - [~] **(C, on instruction)** **Component reference images for engineering.** **Done 2026-10-07:** all three journeys in Figma ([Ref Images](https://www.figma.com/design/NtIhT8YZXbP1JRBVlDiTAx/Claudeforce-Commerce---Ref-Images): quote `0:1`, checkout `1:2`, insights `1:3`), flat images, no captions (Somnath annotates). **Remaining (last priority, on instruction):** a PNG folder in the repo (maybe a gallery page).
 - [ ] **(C, on instruction)** **Buyer segments card is cramped at chat width:** segment names truncate ("OEM Part…") and the New Buyers note wraps into a tall narrow column (`viz/InsightView.tsx` ranked table, ~788px card). Found while capturing reference images 2026-10-07.
@@ -54,7 +54,7 @@ Legend: `[ ]` open · `[~]` in progress · `[x]` done · **(S)** needs Somnath �
 
 - [x] **(S)** A2A: roomier knowledge-card spacing on the other drawer cards (yes 2026-10-25; done: option and offer tiles, the quote table boxed).
 - [x] **(S)** A2A: Figma updates to match what's built: not needed (Somnath, 2026-10-25).
-- [ ] **(C)** A2A: demo script and run sheet in `docs/demo-scripts/`.
+- [ ] **(S/C)** A2A: demo script and run sheet in `docs/demo-scripts/`, after Somnath sends teammates a video (incl. the ` and Shift+` keys, where the sounds play).
 - [x] **(S)** Fill in the "My standing instructions" slot in `CLAUDE.md` with durable rules (5 hard rules + change-log versioning). — 2026-10-01
 - [x] **(S/C)** First commit + push to origin done; `mcp-apps-slots` branched and merged to `master`. — 2026-10-01
 - [ ] **(C, optional polish)** Entrance animation for the full-screen overlay (currently appears instantly); use the motion tokens.

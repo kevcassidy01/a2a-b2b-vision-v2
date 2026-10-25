@@ -30,6 +30,12 @@ Entry format:
 
 ## Unreleased
 
+## 24.3.1 — 2026-10-25 22:03 IST
+**Kind:** patch (docs only): the harness brought up to date with the finished story.
+- **A2A_INTENT:** steps 10–12 describe Alex's two-offer card, Send both, and v3a/v3b; §8 lists v3a and v3b with real dummy prices; §10 is now "How it's built" (presenter keys, sounds); §12's look, numbers and shell design settled; the Bundles row dropped.
+- **SESSION_CONTEXT:** build state at v24.3.0, story complete; next is Somnath's video, then the run sheet.
+- **TODO:** Bundles row and jump-to-step marked not needed; the run sheet waits on the video.
+
 ## 24.3.0 — 2026-10-25 21:58 IST
 **Kind:** minor (small addition): Gmail's order-confirmation notification on Alex's Mac, and real notification sounds.
 - **Gmail tells Alex the order confirmation went out.** About 2s after O-5531 is placed, once the seller agent has said it's in, a macOS notification slides in at the top right of the screen: the Gmail icon, "Order confirmation sent", "O-5531 · to John Müller, Isar Bottling". It's dark glass, like the rest of the OS chrome, and arrives with Mixkit's "Air woosh" (`public/a2a/sounds/mail.wav`). It stays 6s and slides back out (`MailNotification.tsx`, on the demo clock, so it pauses too).
