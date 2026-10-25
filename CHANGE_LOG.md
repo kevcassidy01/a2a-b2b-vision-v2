@@ -30,6 +30,10 @@ Entry format:
 
 ## Unreleased
 
+## 24.0.1 — 2026-10-25 18:40 IST
+**Kind:** copy fix — "recurring order" in step 15
+- **Step 15 says "recurring order":** the agent offers the template "for a **recurring order**"; the card reads "Recurring order · yearly · from O-5531"; its last musing, reply ("in your recurring orders") and suggestion ("Show my recurring orders") use it too.
+
 ## 24.0.0 — 2026-10-25 18:38 IST
 **Kind:** large feature — story step 15 (the Oktoberfest order template), the Today section on the Command Center, decision-card labels, quieter frame bar
 - **Command Center: Today is the first section, from load** (new `Today.tsx`). Its heading sits outside a dashed frame holding one row of three equal columns, cards top-aligned so each keeps its height. At load, two cards fill the first two thirds: **Going out today** (3 of 6 orders, with dock status chips) and **Booked today** ($18,240, 4 orders; it moves to $87,855 with a wash when O-5531 comes in). When John's agent sends Q-1042, the agent's **task card** opens the first column and the two ease right into the last two thirds. The card shows the kind and time, the quote (Q-1042 v1), who it's from and what's asked, and the agent's pill with the pulse at the bottom left. The card follows Q-1042 through to O-5531 and opens the agent's chat. It replaces the full-width Task pipeline card (`ApprovalsCard.tsx` removed) and the heading swap. The period control and store menu now sit below Today, over Last 6 months. The loading skeleton matches. The canvas's white now runs down to halfway through the period control (worked out from where it sits), so the control's grey shows against white.
