@@ -100,7 +100,6 @@ export function CheckoutFunnelCard() {
         <ActionButton icon={MessageSquareText} label={t.ask} />
         <ActionButton icon={Download} label={t.export} />
       </div>
-      <p className="mt-1.5 text-[13.5px] text-text-muted">{t.description}</p>
 
       <div ref={wrap} className="relative mt-5">
         {width > 0 && (

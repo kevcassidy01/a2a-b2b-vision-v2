@@ -6,14 +6,14 @@ import { ActionButton } from "./ActionButton";
 const t = copy.a2a.commandCenter.monthlyRevenue;
 
 /** The y scale's top, in thousands, and its gridlines. */
-const TOP = 400;
-const TICKS = [400, 200, 0];
-const money = (k: number) => (k === 0 ? "$0" : `$${k}k`);
+const TOP = 1200;
+const TICKS = [1200, 600, 0];
+const money = (k: number) => (k === 0 ? "$0" : k >= 1000 ? `$${(k / 1000).toFixed(2).replace(/\.?0+$/, "")}M` : `$${k}k`);
 
 /**
  * MonthlyRevenueCard — a plain bar chart of revenue by order month over the
- * last 24 months: its title and scope, with Ask about this and Export CSV at
- * the right; a line on what it sums; then the bars on a $0–$400k scale, every
+ * last 24 months: its title, with Ask about this and Export CSV at
+ * the right; then the bars on a $0–$1.2M scale, every
  * third month named under them. The last bar, the month so far, is a paler
  * blue. Hovering a bar names its month and figure and dims the others.
  */
@@ -23,12 +23,10 @@ export function MonthlyRevenueCard() {
   return (
     <section className="a2a-card rounded-xl p-5">
       <div className="flex items-center gap-2">
-        <h3 className="a2a-title text-[14px] font-semibold text-text">{t.title}</h3>
-        <span className="mr-auto pl-1 text-[13.5px] text-text-muted">{t.scope}</span>
+        <h3 className="a2a-title mr-auto text-[14px] font-semibold text-text">{t.title}</h3>
         <ActionButton icon={MessageSquareText} label={t.ask} />
         <ActionButton icon={Download} label={t.export} />
       </div>
-      <p className="mt-1.5 text-[13.5px] text-text-muted">{t.description}</p>
 
       <div className="mt-6 flex gap-3" role="img" aria-label={t.title}>
         {/* The y labels, each centred on its gridline. */}

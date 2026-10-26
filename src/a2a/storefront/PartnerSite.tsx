@@ -41,6 +41,8 @@ export function PartnerSite() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [agent, setAgent] = useState<{ assign: boolean } | null>(null);
   const [notified, setNotified] = useState(false);
+  const [assigned, setAssigned] = useState(false);
+  const markAssigned = useCallback(() => setAssigned(true), []);
   const timers = useRef<(() => void)[]>([]);
 
   /** Loads `to`, logged in or out as `signed`, once the old page has had its moment. */
@@ -84,10 +86,12 @@ export function PartnerSite() {
     () => ({
       menuOpen,
       notified,
+      assigned,
+      markAssigned,
       openMenu: () => setMenuOpen(true),
       openAgent: (assign = false) => setAgent({ assign }),
     }),
-    [menuOpen, notified],
+    [menuOpen, notified, assigned, markAssigned],
   );
 
   return (

@@ -30,6 +30,61 @@ Entry format:
 
 ## Unreleased
 
+## 25.0.0 — 2026-10-26 21:46 IST
+**Kind:** large feature — the A2A feedback round (branch `a2a-feedback`, merged to `master`): the Oktoberfest campaign plotline and Campaigns section, realistic data, the iPhone task bar and story-following store, the order checklist, confetti and the conversion card.
+- **A2A Command Center: the confetti plays three bursts**, 1.4s apart, each its own scatter (about 7.4s in all).
+- **A2A iPhone task bar: the turn count uses the swap icon** (ArrowLeftRight, a back-and-forth between agents) in place of History.
+- **A2A Campaigns: the stage names head the path column**, like Account heads its column, each over its chevron; the chevrons carry no text (done green with a check, current blue, not yet grey).
+- **A2A Campaigns: the stage stepper is now a Lightning path.** Each account's Seen → Quote → Converted is a row of chevrons with thin white gaps between them: done is green with a check (its name on hover), the current stage is blue with its name, and not yet is grey with its name. A converted account is all green. The column no longer has stage names above it.
+- **A2A Campaigns at scale.** The offer is 12% off **1,000+** units, sent to **1,860 accounts**.
+  - Live figures: Seen 1,214, Quotes 96 → 97, Converted 61 → 62, Attributed $412,300 → $481,915. "1,856 more accounts".
+  - Recently ended: Fizz Zero Lime (2,140 accounts, 168 converted, $742,600) and Summer heat restock (2,980 accounts, 241 converted, $1.12M).
+  - Isar is now the campaign's **62nd conversion and its biggest order yet**, in the seller agent's last line and in the conversion card ("Isar Bottling converted").
+- **A2A iPhone: Mike's cart card becomes the order once O-5531 is placed.** It shows a green check tile, "Order placed", "Your agent placed O-5531 from Mike's Oktoberfest cart: 19,500 units for Munich and Frankfurt", $69,615 order total, a "Confirmed by Fizz" chip, the same tiny checklist as the chat's order card (now the shared `OrderChecklist` in `parts.tsx`), and View order details / View purchase order. The red unread dot goes once the cart's assigned.
+- **A2A Command Center: a conversion notification that stays.** When O-5531 is placed, a white card with a hairline border and soft shadow comes in from the bottom right, a beat into the confetti, and stays as the end state (`Converted.tsx`). It shows a thumbs-up mascot (`assets/a2a/thumbs-up.png`, cut from the Gemini image's baked-in checkerboard and flipped to face left), the title "Oktoberfest stock-up converted", and "Isar Bottling placed O-5531 for $69,615, from a cart that started with the campaign."
+- **A2A Command Center: confetti when the campaign converts.** When O-5531 is placed, about 90 pieces fall from the top over everything (`Confetti.tsx`, CSS only, about 4.5s). They don't catch clicks, they pause with the demo, and they're off with reduced motion. "See all campaign details" stays inert on purpose.
+- **A2A iPhone: the store behind the agent sheet follows the story,** the way Alex's dashboard does, with the wash on each change.
+  - Mike's cart card gets a status chip: With your agent → Q-1042 · with Fizz → Q-1042 · needs you → Ordered · O-5531. Assign becomes "Open your agent", and Open cart becomes "View order".
+  - The Oktoberfest cart grows to 15,000, then 19,500 units, and leaves Your carts once it's ordered.
+  - Open quotes shows Q-1042 while it's open. Credit available drops to $14,585 once O-5531 is placed.
+  - O-5531 heads Recent orders as "Confirmed".
+- **A2A iPhone: the order card now has what follows it.** A tiny checklist (✓ Purchase order, PO 4500018231 in SAP; ○ Delivery schedule, from Fizz by Oct 26; ○ Invoice, when it ships), then **View order details** and **View purchase order**.
+- **A2A Campaigns:** once Isar converts, its whole stepper turns green (checks and lines).
+- **A2A seller agent's v2 reply** is now two paragraphs. `Rich` treats a blank line (`\n\n`) as a new paragraph.
+- **A2A iPhone: a task bar under the agent sheet's header.** It shows who's in on the task as an avatar stack (John, Mike, John's agent, plus Fizz's agent once the quote's out) and the turns on Q-1042 in a pill (History icon and number, from 1 to 5, with a wash on each new turn). It stays put while the thread scrolls.
+- **A2A: the campaign runs through the story's copy.**
+  - John's handoff says Mike's agent started the cart from Fizz's Oktoberfest offer.
+  - John's agent says the offer is 12% but asks for more on a cart this size.
+  - The seller agent puts its 12% down to the Oktoberfest offer, in v2's message, its lead, its reply and the step 11 lead.
+  - Its line on O-5531 calls the order the campaign's first conversion.
+  - Today's task card has an "Oktoberfest stock-up" campaign chip.
+- **Campaigns card:** "34 more accounts" is now a grey tertiary button, and the footer note is gone. The template card's "fresh quote" note is gone too.
+- **A2A Command Center: realistic data, less copy.**
+  - Orders by country is Germany-led and global (DE 58 → 59 on O-5531, US 28, GB 17 …, 188 total). The "no bill-to country" line is gone.
+  - Recent activity lists Fizz's own orders (O-5519 to O-5530) to European bottlers on the Fizz Partners store. Today's four add up to Booked today's $18,240.
+  - Monthly revenue runs from about $455K to $1.18M a month, with Oct at $956K so far (it matches the Sales tile). The scale is $0–$1.2M.
+  - The checkout funnel is 318 → 176 → 152 orders. Checkout success is 86.4%, and Buying accounts is 71.
+  - Tiles read "from $590.2K" instead of "vs Q3 to date (…)". The section heading says what they're compared with.
+  - Less is more: the cards' descriptions and scope labels are gone, and so are the Campaigns and Recently ended subtitles. The Today subtitle is "Friday, Oct 23", and the QTD subtitle is "Oct 1 – 23, 2026, compared with the same point in Q3".
+- **A2A: a Campaigns section on the Command Center** (`src/a2a/command-center/Campaigns.tsx`), between Today and Last 6 months. It holds one card. The top part is the live **"Oktoberfest stock-up"** campaign, run by Fizz's promotions agent (started by a flow): its offer (12% off 10,000+ units, Net30), its figures (Seen, Quotes, Converted, Attributed), and four accounts, each with a **Seen → Quote → Converted** stepper and the agent's next step. Below it, **Recently ended** shows two past campaigns. Isar's row follows the story: Quote starts when Q-1042 lands, checks once Isar takes v3a, and **Converted** turns green when O-5531 is placed. At those moments Quotes, Converted and Attributed move with the wash.
+- **A2A storefront: Mike's agent started the cart from the promotion.** Mike's cart card shows his photo with his agent's sparkle stacked over it, and reads "Mike's agent started it from Fizz's Oktoberfest offer". The cart's meta is now "Started by Mike's agent today", and the hero slide "Autumn stock-up" is now "Oktoberfest stock-up".
+- **A2A step 7: the 12% limit is the Oktoberfest offer's.** The seller agent's check reads the offer the cart came from (`promotion-management`), not a generic discount policy.
+- **Campaigns polish:**
+  - "Negotiating" and "Approved" are capitalised.
+  - No account on the live campaign has converted before Isar. Rheinland is at the quote stage, Converted starts at 0 and Attributed at $0, and O-5531 makes them 1 and $69,615.
+  - The header's mark is a stack: the agent's logo with Gmail's.
+  - The subtext is one line: "12% off 10,000+ units, Net30 · Oct 2 – 31 · 38 bottlers".
+  - "· Campaign" is dropped from the title.
+  - Recently ended is headed like the live campaign: a megaphone in the same circle, a title and a subtitle.
+  - A footer adds **See all campaign details** (not wired yet), with the flow that started the campaign at the right.
+- **Fix: the monthly revenue chart works again.** Its bars and the agent pulse's bars shared the `.a2a-bar` class, so since 23.1.0 the chart's bars ran the pulse animation. The pulse's bars are now `.a2a-pulse-bar`. The chart's "Orders: all stores" scope is gone.
+- **"Last 6 months" is now "Quarter to date"**, and the period control defaults to QTD.
+  - Sales-forward tiles come first: **Sales**, Open pipeline, Quote win rate, Avg order value. Then Orders, Buying accounts, Checkout success, Open cases. Carts with errors and Abandoned cart value are gone.
+  - Comparisons are against Q3 to date. Sales goes from $956K to $1.03M when O-5531 is placed.
+  - The agent's composer context reads "Quarter to date".
+- **John's agent, after O-5531:** "Mike can see it in his orders" (was "on his cart").
+- **Docs:** A2A_INTENT §1, §4 and §5 (steps 1, 5, 7, 14) and DESIGN_DECISIONS entries for the campaign and the quarter-to-date tiles.
+
 ## 24.3.2 — 2026-10-25 22:35 IST
 **Kind:** patch (fix): John's Approve is enabled for either offer.
 - **John's Approve works for either offer.** On "Which should I take?", Approve is enabled whichever of v3a or v3b is picked (it was greyed out for v3b, with "Only v3a plays on in this demo"). The story still plays on as v3a; the presenter picks v3a.

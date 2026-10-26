@@ -31,9 +31,8 @@ function onRowKey(e: KeyboardEvent<HTMLTableRowElement>) {
 }
 
 /**
- * ActivityCard — the newest orders, as a plain table (shadcn's): its title and
- * scope, with Ask about this and Export CSV at the right; a line on what it
- * lists; what to list (Orders, Carts, Quotes, Cases); then the table in its own
+ * ActivityCard — the newest orders, as a plain table (shadcn's): its title,
+ * with Ask about this and Export CSV at the right; what to list (Orders, Carts, Quotes, Cases); then the table in its own
  * hairline box, a quiet header row over hairline-divided rows that light up on
  * hover or focus. Dates and totals in tabular figures, totals right-aligned;
  * the status as a small outlined badge with a coloured dot. Twelve rows, then
@@ -49,12 +48,10 @@ export function ActivityCard() {
   return (
     <section className="a2a-card @container rounded-xl p-5">
       <div className="flex items-center gap-2">
-        <h3 className="a2a-title text-[14px] font-semibold text-text">{t.title}</h3>
-        <span className="mr-auto pl-1 text-[13.5px] text-text-muted">{t.scope}</span>
+        <h3 className="a2a-title mr-auto text-[14px] font-semibold text-text">{t.title}</h3>
         <ActionButton icon={MessageSquareText} label={t.ask} />
         <ActionButton icon={Download} label={t.export} />
       </div>
-      <p className="mt-1.5 text-[13.5px] text-text-muted">{t.description}</p>
 
       <div className="a2a-no-scrollbar -mx-5 mt-4 flex overflow-x-auto px-5">
         <Segmented options={t.kind.options} label={t.kind.label} reserveCheck={false} />

@@ -10,9 +10,8 @@ const t = copy.a2a.commandCenter.ordersByCountry;
 const after = t.afterOrder;
 
 /**
- * OrdersByCountryCard — the wide card under the metrics: its title and scope,
- * with Ask about this and Export CSV at the right; a line on what it counts;
- * the metric to break down by (a segmented control that scrolls sideways if
+ * OrdersByCountryCard — the wide card under the metrics: its title,
+ * with Ask about this and Export CSV at the right; the metric to break down by (a segmented control that scrolls sideways if
  * the card is narrow); then the map, in its own box, beside the list by
  * country. Hovering a bubble or a row picks out that country in both: the
  * other bubbles dim and the row gets a light blue box. Only Orders has figures so far. On a
@@ -31,12 +30,10 @@ export function OrdersByCountryCard() {
   return (
     <section className="a2a-card @container rounded-xl p-5">
       <div className="flex items-center gap-2">
-        <h3 className="a2a-title text-[14px] font-semibold text-text">{t.title}</h3>
-        <span className="mr-auto pl-1 text-[13.5px] text-text-muted">{t.scope}</span>
+        <h3 className="a2a-title mr-auto text-[14px] font-semibold text-text">{t.title}</h3>
         <ActionButton icon={MessageSquareText} label={t.ask} />
         <ActionButton icon={Download} label={t.export} />
       </div>
-      <p className="mt-1.5 text-[13.5px] text-text-muted">{t.description}</p>
 
       <div className="a2a-no-scrollbar -mx-5 mt-4 flex overflow-x-auto px-5">
         <Segmented options={t.metric.options} label={t.metric.label} reserveCheck={false} />
@@ -67,7 +64,6 @@ export function OrdersByCountryCard() {
               </li>
             ))}
           </ul>
-          <p className="mt-3 text-[13px] text-text-muted">{t.none}</p>
         </div>
       </div>
     </section>

@@ -155,6 +155,11 @@ export const copy = {
         fab: "New task",
         card: { title: "Your agent", status: "3 tasks in motion" },
         working: "Working…",
+        /** Under the header once the task's under way: who's in on it (Fizz's agent once the quote's out), and the turns on Q-1042. */
+        task: {
+          people: { john: "You", mike: "Mike", agent: "your agent", fizz: "Fizz's agent" },
+          turns: (n: number) => `${n} ${n === 1 ? "turn" : "turns"} on Q-1042`,
+        },
         intro: {
           title: "What should I work on?",
           body: "I buy for Isar Bottling, inside the spend limits and approval rules you set.",
@@ -186,7 +191,7 @@ export const copy = {
         ],
         thought: (s: number) => `Mulled it over for ${s}s`,
         reasoning:
-          "Mike started this cart for Frankfurt's Oktoberfest stock. Munich runs the same three weeks and nothing is ordered for it yet. Check Munich's forecast, add what it needs to this cart so it stays one order, then ask Fizz for its best price on the lot.",
+          "Mike's agent started this cart from Fizz's Oktoberfest offer, for Frankfurt's stock. Munich runs the same three weeks and nothing is ordered for it yet. Check Munich's forecast, add what it needs to this cart so it stays one order, then ask Fizz for its best price on the lot.",
         lead: "Mike's cart covers **Frankfurt** for Oktoberfest, but **Munich isn't stocked yet**. I'll top it up for Munich and get Fizz's best price on the whole order.",
         plan: {
           title: "Stock up for Oktoberfest",
@@ -241,7 +246,7 @@ export const copy = {
             { name: "Orange concentrate", qty: "10,000 units", site: "Munich", by: "Your agent", added: true },
           ],
         },
-        reply: "Fizz has our quote request: **15,000 units at 15% off, Net30**. I'll negotiate within your limits and only come back to you if the terms change.",
+        reply: "Fizz has our quote request: **15,000 units at 15% off, Net30**. Their offer is 12%, but a cart this size can ask for more. I'll negotiate within your limits and only come back to you if the terms change.",
         quote: { id: "Q-1042 v1", status: "Waiting for Fizz to respond", meta: "15,000 units · asking 15% off · Net30" },
         suggestions: ["What are my limits?", "Show the quote"],
         /** Story steps 8–9: Fizz's counter-offer, v2, lands in the thread (on
@@ -252,7 +257,7 @@ export const copy = {
           from: "Fizz's agent",
           time: "Just now",
           /** What Fizz's agent says with its offer: a line of its own, never a card alone. */
-          said: "I can do **12%** at Net30 if you take **19,500 units**. That's as far as I can go at Net30.",
+          said: "Our Oktoberfest offer is **12%** at Net30. I can do that if you take **19,500 units**.",
           offer: {
             title: "Counter-offer",
             id: "Q-1042 v2",
@@ -432,8 +437,18 @@ export const copy = {
               { name: "Lemonade concentrate", qty: "7,500 units", site: "Frankfurt" },
             ],
             total: { label: "Total", value: "$69,615", note: "Due in 15 days" },
+            /** What follows the order: what's in (a check), what's still to come. */
+            checklist: [
+              { label: "Purchase order", detail: "PO 4500018231 in SAP", done: true },
+              { label: "Delivery schedule", detail: "From Fizz by Oct 26", done: false },
+              { label: "Invoice", detail: "When it ships", done: false },
+            ],
+            /** Read out for each item's mark. */
+            state: { done: "Done", todo: "To come" },
+            details: "View order details",
+            po: "View purchase order",
           },
-          reply: "Done. **O-5531** is placed: **19,500 units at 15% off, Net15**, for **$69,615**. The purchase order is in SAP, and Mike can see it on his cart.",
+          reply: "Done. **O-5531** is placed: **19,500 units at 15% off, Net15**, for **$69,615**. The purchase order is in SAP, and Mike can see it in his orders.",
         },
         /** Story step 15: once O-5531's in, the agent sees Oktoberfest comes round every year (it checks the dates on
          *  oktoberfest.de, in its thinking only) and offers to save the order as a template. John saves it. */
@@ -459,7 +474,6 @@ export const copy = {
               { label: "Last terms", value: "15% off · Net15" },
               { label: "Reminder", value: "Aug 16, 2027" },
             ],
-            note: "I'll ask Fizz for a fresh quote then. Prices aren't locked in.",
             save: "Save template",
             notNow: "Not now",
           },
@@ -556,14 +570,26 @@ export const copy = {
         company: "Isar Bottling · 2 delivery sites",
         notice: {
           from: "Mike",
+          /** Mike's photo with his agent's mark over it: the two of them started it. */
+          agent: "Mike's agent",
           title: "Mike started a cart",
-          body: "Oktoberfest stock-up: 5,000 lemonade concentrate for Frankfurt.",
+          body: "Mike's agent started it from Fizz's Oktoberfest offer: 5,000 lemonade concentrate for Frankfurt.",
           /** What the cart's worth, on a line of its own (dummy: $4.20 a unit). */
           value: "$21,000",
           valueLabel: "Cart value",
           time: "now",
           cta: "Open cart",
           assign: "Assign to your agent",
+          /** Once it's handed over, where it's got to, as a chip; the agent button replaces Assign. */
+          status: { assigned: "With your agent", quoted: "Q-1042 · with Fizz", needsYou: "Q-1042 · needs you", ordered: "Confirmed by Fizz" },
+          openAgent: "Open your agent",
+          /** Once O-5531 is placed the card becomes the order: what it is, its total, what's in and what's to come, and the way into the order and the PO. */
+          placed: {
+            title: "Order placed",
+            body: "Your agent placed **O-5531** from Mike's Oktoberfest cart: 19,500 units for Munich and Frankfurt.",
+            value: "$69,615",
+            valueLabel: "Order total",
+          },
         },
         quick: [
           { label: "Quick order", icon: "quick" },
@@ -575,9 +601,11 @@ export const copy = {
           title: "Your carts",
           all: "All carts",
           items: [
-            { name: "Oktoberfest stock-up", meta: "Started by Mike today", lines: "1 line · 5,000 units", shared: "Shared" },
+            { name: "Oktoberfest stock-up", meta: "Started by Mike's agent today", lines: "1 line · 5,000 units", shared: "Shared" },
             { name: "Weekly restock, Munich", meta: "Saved Oct 16", lines: "4 lines · 1,240 units" },
           ],
+          /** The Oktoberfest cart's lines as John's agent tops it up for Munich (the quote's out), then takes v2's units; it leaves the list once it's ordered. */
+          lines: { quoted: "2 lines · 15,000 units", countered: "2 lines · 19,500 units" },
         },
         account: {
           title: "Your account",
@@ -587,6 +615,9 @@ export const copy = {
             { label: "Next delivery", value: "Tue, Oct 27 · Munich" },
             { label: "Open quotes", value: "None" },
           ],
+          /** While Q-1042 is open, and the credit once O-5531 holds $69,615 of it. */
+          openQuote: "Q-1042",
+          creditAfter: { value: "$14,585", share: 0.097 },
         },
         buyAgain: {
           title: "Buy again",
@@ -605,6 +636,8 @@ export const copy = {
             { id: "O-5498", date: "Sep 30", total: "$18,420", status: "Delivered" },
             { id: "O-5476", date: "Sep 12", total: "$34,075", status: "Delivered" },
           ],
+          /** O-5531, on top once John's agent places it. */
+          placed: { id: "O-5531", date: "Today", total: "$69,615", status: "Confirmed" },
         },
       },
       hero: {
@@ -622,8 +655,8 @@ export const copy = {
             cta: "Apply now",
           },
           {
-            eyebrow: "Autumn stock-up",
-            title: "12% off concentrate orders over 10,000 units",
+            eyebrow: "Oktoberfest stock-up",
+            title: "12% off concentrate orders over 1,000 units",
             cta: "Log in to order",
           },
         ],
@@ -762,7 +795,7 @@ export const copy = {
       scope: { label: "Data scope", options: ["CRM", "Data 360", "Both"] },
       /** The view (a mode of the Command Center), Console by default. */
       view: { label: "View", options: ["Console", "Dashboard", "Service"] },
-      /** The period the figures cover, 6 months by default. */
+      /** The period the figures cover, the quarter to date by default. */
       period: {
         label: "Period",
         options: [
@@ -786,12 +819,15 @@ export const copy = {
         /** The first section, over its frame: what's happening today. */
         today: {
           title: "Today",
-          subtitle: "Oct 23, 2026, so far. Days are counted in UTC+1.",
+          subtitle: "Friday, Oct 23",
+        },
+        /** Between Today and the quarter to date: the campaigns Fizz's promotions agent runs. */
+        campaigns: {
+          title: "Campaigns",
         },
         last6Months: {
-          title: "Last 6 months",
-          subtitle:
-            "Apr 23, 2026 - Oct 23, 2026, 10:11 • compared with Oct 23, 2025 - Apr 23, 2026, the same elapsed time. Days are counted in UTC+1.",
+          title: "Quarter to date",
+          subtitle: "Oct 1 – 23, 2026, compared with the same point in Q3",
         },
       },
       /** Today's cards, in one row inside the dashed frame. Calm at load, two; an agent's task joins them at the front. */
@@ -801,9 +837,9 @@ export const copy = {
           subtitle: "6 orders, 3 carriers",
           /** The first few, then how many more. Status is where each one's got to at the dock. */
           rows: [
-            { id: "O-5526", to: "Rheinland Bottling", site: "Cologne · DHL", status: "Picked up", tone: "done" },
-            { id: "O-5527", to: "Elbquell Getränke", site: "Hamburg · DB Schenker", status: "Packed", tone: "ready" },
-            { id: "O-5528", to: "Bodensee Drinks", site: "Lindau · DHL", status: "Packing", tone: "idle" },
+            { id: "O-5519", to: "Rheinland Bottling", site: "Cologne · DHL", status: "Picked up", tone: "done" },
+            { id: "O-5521", to: "Elbquell Getränke", site: "Hamburg · DB Schenker", status: "Packed", tone: "ready" },
+            { id: "O-5522", to: "Bodensee Drinks", site: "Lindau · DHL", status: "Packing", tone: "idle" },
           ],
           more: "3 more",
         },
@@ -813,6 +849,60 @@ export const copy = {
           note: "4 orders",
           /** Once O-5531 is in (story step 14). $18,240 + $69,615. */
           after: { value: "$87,855", note: "5 orders · O-5531 just in" },
+        },
+      },
+      /** The Campaigns card: the live campaign (the offer Mike's agent started Isar's cart from), then the ones that ended. */
+      /** Bottom right once O-5531 is placed, with the confetti, and it stays: the campaign's biggest conversion yet. */
+      converted: {
+        title: "Isar Bottling converted",
+        body: "**O-5531**, **$69,615**, from Oktoberfest stock-up: the campaign's biggest order yet, and its **62nd**.",
+      },
+      campaigns: {
+        live: {
+          title: "Oktoberfest stock-up",
+          /** Read out for the header's stack: the agent's logo with Gmail's. */
+          by: "Fizz's promotions agent, sending with Gmail",
+          /** The offer is the same 12% at Net30 that's the seller agent's limit on Q-1042 (story step 7). */
+          subtitle: "12% off 1,000+ units, Net30 · Oct 2 – 31 · 1,860 accounts",
+          status: "Live",
+          /** `after`: once Q-1042 lands (a quote), and once O-5531 is placed (the campaign's 62nd conversion, and its biggest). */
+          stats: {
+            seen: { label: "Seen", value: "1,214" },
+            quotes: { label: "Quotes", value: "96", after: "97" },
+            converted: { label: "Converted", value: "61", after: "62" },
+            attributed: { label: "Attributed", value: "$412,300", after: "$481,915" },
+          },
+          accountsLabel: "Account",
+          steps: ["Seen", "Quote", "Converted"],
+          /** How each stage reads to a screen reader. */
+          stepState: { done: "done", now: "in progress", todo: "not yet" },
+          working: "the agent's working on it",
+          /** Isar's row follows the story: at load, once Q-1042 lands, once Isar takes v3a, once O-5531 is placed. */
+          isar: {
+            name: "Isar Bottling",
+            note: "Seen Oct 21 · Mike's agent started a cart",
+            quote: { note: "Q-1042 · Negotiating" },
+            accepted: { note: "Q-1042 · Approved" },
+            ordered: { note: "Converted · O-5531 · $69,615" },
+          },
+          /** The other accounts shown, each with its three stages and what the agent's doing next. None has converted yet: Isar is the first. */
+          accounts: [
+            { name: "Rheinland Bottling", steps: ["done", "done", "todo"], note: "Q-1038 · Sent, waiting on them" },
+            { name: "Spree Getränke", steps: ["done", "todo", "todo"], note: "Seen Oct 20 · agent nudges Oct 27" },
+            { name: "Main Quelle", steps: ["todo", "todo", "todo"], note: "Not seen yet · agent resends Oct 26" },
+          ],
+          more: "1,856 more accounts",
+        },
+        footer: {
+          all: "See all campaign details",
+        },
+        ended: {
+          title: "Recently ended",
+          status: "Ended",
+          items: [
+            { title: "Fizz Zero Lime launch", ran: "Sep 15 – Oct 10 · 2,140 accounts", results: "1,530 seen · 168 converted", attributed: "$742,600" },
+            { title: "Summer heat restock", ran: "Jul 1 – Aug 31 · 2,980 accounts", results: "2,310 seen · 241 converted", attributed: "$1.12M" },
+          ],
         },
       },
       /** Quote requests from the storefront waiting on the seller (empty for now). */
@@ -833,83 +923,73 @@ export const copy = {
         },
         ask: "Ask about this",
         export: "Export CSV",
-        scope: "Orders: all stores",
-        description:
-          "Orders in the period, by the bill-to address on the order. The bill-to address stands in for ship-to, which the org does not record.",
         zoomIn: "Zoom in",
         zoomOut: "Zoom out",
         reset: "Reset",
         fullScreen: "Full screen",
         byCountry: "By country",
-        /** Orders in the last 6 months; `none` have no bill-to country. With
-         *  them, the total is the Orders tile's 188. `at` is where the bubble
+        /** Orders in the quarter to date, adding up to the Orders tile's 188. `at` is where the bubble
          *  sits ([longitude, latitude]); `label` names it on the map. */
         total: 188,
         /** Once O-5531 is in: one more order, from Germany. */
-        afterOrder: { code: "DE", orders: 9, total: 189 },
-        none: "4 orders have no bill-to country.",
+        afterOrder: { code: "DE", orders: 59, total: 189 },
         countries: [
-          { name: "United States", code: "US", orders: 116, at: [-98, 39], label: true },
-          { name: "Canada", code: "CA", orders: 14, at: [-106, 58], label: true },
-          { name: "Brazil", code: "BR", orders: 11, at: [-52, -10], label: true },
-          { name: "Germany", code: "DE", orders: 8, at: [10.4, 51.2], label: true },
-          { name: "India", code: "IN", orders: 8, at: [79, 22], label: true },
-          { name: "Japan", code: "JP", orders: 6, at: [138.5, 36.5], label: true },
-          { name: "United Arab Emirates", code: "AE", orders: 6, at: [54, 24], label: false },
-          { name: "United Kingdom", code: "GB", orders: 4, at: [-2, 53], label: false },
-          { name: "Australia", code: "AU", orders: 3, at: [134, -25], label: false },
-          { name: "France", code: "FR", orders: 3, at: [2.5, 46.5], label: false },
-          { name: "Mexico", code: "MX", orders: 3, at: [-102, 23.5], label: false },
-          { name: "Netherlands", code: "NL", orders: 2, at: [5.3, 52.2], label: false },
+          { name: "Germany", code: "DE", orders: 58, at: [10.4, 51.2], label: true },
+          { name: "United States", code: "US", orders: 28, at: [-98, 39], label: true },
+          { name: "United Kingdom", code: "GB", orders: 17, at: [-2, 53], label: false },
+          { name: "France", code: "FR", orders: 14, at: [2.5, 46.5], label: false },
+          { name: "Netherlands", code: "NL", orders: 11, at: [5.3, 52.2], label: false },
+          { name: "Austria", code: "AT", orders: 10, at: [14.5, 47.5], label: false },
+          { name: "Poland", code: "PL", orders: 9, at: [19.4, 52], label: false },
+          { name: "Italy", code: "IT", orders: 8, at: [12.5, 42.8], label: false },
+          { name: "Switzerland", code: "CH", orders: 8, at: [8.2, 46.8], label: false },
+          { name: "Spain", code: "ES", orders: 7, at: [-3.7, 40.2], label: false },
+          { name: "Brazil", code: "BR", orders: 6, at: [-52, -10], label: true },
+          { name: "United Arab Emirates", code: "AE", orders: 5, at: [54, 24], label: true },
+          { name: "Japan", code: "JP", orders: 4, at: [138.5, 36.5], label: true },
+          { name: "India", code: "IN", orders: 3, at: [79, 22], label: true },
         ],
       },
       monthlyRevenue: {
         title: "Monthly revenue (USD), last 24 months",
-        scope: "Orders: all stores",
         ask: "Ask about this",
         export: "Export CSV",
-        description: "Sum of order totals by order month; the last bar is month to date.",
         monthToDate: "month to date",
         /** Revenue by order month, oldest first, in thousands of USD; the last
          *  is October 2026 so far. Every third month is labelled on the axis. */
         months: [
-          { label: "Nov 24", k: 40 }, { label: "Dec 24", k: 56 }, { label: "Jan 25", k: 44 },
-          { label: "Feb 25", k: 19 }, { label: "Mar 25", k: 38 }, { label: "Apr 25", k: 45 },
-          { label: "May 25", k: 44 }, { label: "Jun 25", k: 59 }, { label: "Jul 25", k: 43 },
-          { label: "Aug 25", k: 82 }, { label: "Sep 25", k: 36 }, { label: "Oct 25", k: 84 },
-          { label: "Nov 25", k: 38 }, { label: "Dec 25", k: 67 }, { label: "Jan 26", k: 41 },
-          { label: "Feb 26", k: 46 }, { label: "Mar 26", k: 61 }, { label: "Apr 26", k: 73 },
-          { label: "May 26", k: 76 }, { label: "Jun 26", k: 31 }, { label: "Jul 26", k: 62 },
-          { label: "Aug 26", k: 63 }, { label: "Sep 26", k: 37 }, { label: "Oct 26", k: 332 },
+          { label: "Nov 24", k: 610 }, { label: "Dec 24", k: 540 }, { label: "Jan 25", k: 470 },
+          { label: "Feb 25", k: 455 }, { label: "Mar 25", k: 560 }, { label: "Apr 25", k: 640 },
+          { label: "May 25", k: 735 }, { label: "Jun 25", k: 820 }, { label: "Jul 25", k: 860 },
+          { label: "Aug 25", k: 845 }, { label: "Sep 25", k: 905 }, { label: "Oct 25", k: 870 },
+          { label: "Nov 25", k: 690 }, { label: "Dec 25", k: 620 }, { label: "Jan 26", k: 545 },
+          { label: "Feb 26", k: 530 }, { label: "Mar 26", k: 650 }, { label: "Apr 26", k: 745 },
+          { label: "May 26", k: 860 }, { label: "Jun 26", k: 955 }, { label: "Jul 26", k: 795 },
+          { label: "Aug 26", k: 1010 }, { label: "Sep 26", k: 1180 }, { label: "Oct 26", k: 956 },
         ],
       },
       checkoutFunnel: {
         title: "Checkout funnel",
         ask: "Ask about this",
         export: "Export CSV",
-        description:
-          "Carts created in the period, followed to checkout and an order. Each share is of the step before; pending and activated split the orders placed by their CRM status.",
         /** The steps, each with the step it comes `from` and what its share is
          *  `of`. `drop` marks where carts leave the funnel; `waiting`, orders waiting on
          *  someone (yellow). Checkout started to
-         *  Order placed (20 of 36) is the Checkout success tile's 55.6%. */
+         *  Order placed (152 of 176) is the Checkout success tile's 86.4%. */
         nodes: [
-          { id: "carts", label: "Carts created", n: 109 },
-          { id: "checkout", label: "Checkout started", n: 36, from: "carts", of: "of carts created" },
-          { id: "noCheckout", label: "No checkout", n: 73, from: "carts", of: "of carts created", drop: true },
-          { id: "ordered", label: "Order placed", n: 20, from: "checkout", of: "of checkouts" },
-          { id: "noOrder", label: "No order", n: 16, from: "checkout", of: "of checkouts", drop: true },
-          { id: "pending", label: "Pending approval", n: 6, from: "ordered", of: "of orders placed", waiting: true },
-          { id: "activated", label: "Activated", n: 14, from: "ordered", of: "of orders placed" },
+          { id: "carts", label: "Carts created", n: 318 },
+          { id: "checkout", label: "Checkout started", n: 176, from: "carts", of: "of carts created" },
+          { id: "noCheckout", label: "No checkout", n: 142, from: "carts", of: "of carts created", drop: true },
+          { id: "ordered", label: "Order placed", n: 152, from: "checkout", of: "of checkouts" },
+          { id: "noOrder", label: "No order", n: 24, from: "checkout", of: "of checkouts", drop: true },
+          { id: "pending", label: "Pending approval", n: 19, from: "ordered", of: "of orders placed", waiting: true },
+          { id: "activated", label: "Activated", n: 133, from: "ordered", of: "of orders placed" },
         ],
       },
       activity: {
         title: "Activity",
-        scope: "Orders: all stores",
         ask: "Ask about this",
         export: "Export CSV",
-        description:
-          "The newest orders in the period. J and K move through the list and Enter opens the row; quotes and cases open their account.",
         kind: { label: "Activity", options: ["Orders", "Carts", "Quotes", "Cases"] },
         columns: { date: "Date", order: "Order", account: "Account", status: "Status", total: "Total" },
         /** The Orders tile's 188, of which the newest 12 show. All in 2026, so dates drop the year. */
@@ -927,18 +1007,18 @@ export const copy = {
         /** O-5531, once it's placed (story step 14): it joins the top of the list. */
         newRow: { date: "Oct 23, 10:24", order: "O-5531", store: "Fizz Partners", account: "Isar Bottling", status: "created", total: "$69,615" },
         rows: [
-          { date: "Oct 22, 11:01", order: "00001882", store: "Fizz Partners", account: "Boston Barista Co.", status: "activated", total: "$10,125" },
-          { date: "Oct 22, 09:47", order: "00001881", store: "Fizz Partners", account: "Isar Getränke GmbH", status: "pending", total: "$24,600" },
-          { date: "Oct 21, 16:12", order: "00001880", store: "Alpine B2B", account: "Alpenhof Hotels", status: "created", total: "$1,500" },
-          { date: "Oct 21, 08:30", order: "00001879", store: "Fizz Partners", account: "Lakeshore Grocers", status: "activated", total: "$3,840" },
-          { date: "Oct 20, 20:39", order: "00001878", store: "Fizz Partners", account: "Maple Leaf Vending", status: "activated", total: "$2,105" },
-          { date: "Oct 20, 14:05", order: "00001877", store: "Alpine B2B", account: "Rheinland Bottling", status: "pending", total: "$18,250" },
-          { date: "Oct 19, 19:36", order: "00001876", store: "Fizz Partners", account: "Harbor Café Group", status: "activated", total: "$500" },
-          { date: "Oct 19, 05:30", order: "00001875", store: "Fizz Partners", account: "São Paulo Bebidas", status: "created", total: "$6,720" },
-          { date: "Oct 18, 19:04", order: "00001874", store: "Alpine B2B", account: "Tokyo Kissa Co.", status: "activated", total: "$304" },
-          { date: "Oct 18, 18:29", order: "00001873", store: "Fizz Partners", account: "Northwind Foodservice", status: "pending", total: "$9,410" },
-          { date: "Oct 14, 06:10", order: "00001872", store: "Fizz Partners", account: "Prairie Wind Markets", status: "activated", total: "$1,290" },
-          { date: "Oct 12, 03:26", order: "00001871", store: "Alpine B2B", account: "Midwest Campus Dining", status: "draft", total: "$52,009" },
+          { date: "Oct 23, 09:58", order: "O-5530", store: "Fizz Partners", account: "Hanse Getränke Logistik", status: "created", total: "$6,300" },
+          { date: "Oct 23, 09:12", order: "O-5529", store: "Fizz Partners", account: "Brabant Dranken", status: "created", total: "$3,780" },
+          { date: "Oct 23, 08:40", order: "O-5528", store: "Fizz Partners", account: "Weser Bottlers", status: "activated", total: "$5,460" },
+          { date: "Oct 23, 07:05", order: "O-5527", store: "Fizz Partners", account: "Ruhr Getränke Service", status: "activated", total: "$2,700" },
+          { date: "Oct 22, 16:20", order: "O-5526", store: "Fizz Partners", account: "Lombardia Bevande", status: "activated", total: "$9,240" },
+          { date: "Oct 22, 11:01", order: "O-5525", store: "Fizz Partners", account: "Thames Valley Bottling", status: "pending", total: "$24,600" },
+          { date: "Oct 22, 08:47", order: "O-5524", store: "Fizz Partners", account: "Alpenquell Abfüllung", status: "activated", total: "$4,830" },
+          { date: "Oct 21, 15:33", order: "O-5523", store: "Fizz Partners", account: "Wisła Napoje", status: "activated", total: "$3,150" },
+          { date: "Oct 21, 09:14", order: "O-5522", store: "Fizz Partners", account: "Bodensee Drinks", status: "activated", total: "$5,880" },
+          { date: "Oct 21, 07:50", order: "O-5521", store: "Fizz Partners", account: "Elbquell Getränke", status: "activated", total: "$7,140" },
+          { date: "Oct 20, 14:05", order: "O-5520", store: "Fizz Partners", account: "Lyon Boissons", status: "pending", total: "$12,600" },
+          { date: "Oct 20, 10:30", order: "O-5519", store: "Fizz Partners", account: "Rheinland Bottling", status: "activated", total: "$8,400" },
         ],
       },
       approvals: {
@@ -962,6 +1042,8 @@ export const copy = {
           open: "Open",
           working: "working on it",
           time: "Just now",
+          /** The campaign the cart came from, as a chip under the figures; `label` is read out before it. */
+          campaign: { label: "Campaign", name: "Oktoberfest stock-up" },
           /** Once the seller agent has sent v2: the row shows it, and the agent waits on the buyer (no dots). */
           countered: {
             id: "Q-1042 v2",
@@ -979,23 +1061,23 @@ export const copy = {
           ordered: { kind: "Order", id: "O-5531", meta: ["From Q-1042 v3a", "19,500 units", "Net15"], total: "$69,615", agent: "Order placed" },
         },
       },
-      /** The last 6 months at a glance. `delta` is the rise on the prior 6
-       *  months; `compare` names that prior figure. */
+      /** The quarter to date at a glance, sales first. `delta` is the rise on Q3
+       *  at the same point; `compare` gives Q3's figure (the heading says what it's compared with). */
       metrics: [
-        { label: "Orders", value: "188", delta: "4%", compare: "vs the prior 6 months (181)" },
-        { label: "Order value", value: "$956K", delta: "62%", compare: "vs the prior 6 months ($590.2K)" },
-        { label: "Avg order value", value: "$5,085", delta: "56%", compare: "vs the prior 6 months ($3,261)" },
-        { label: "Checkout success", value: "55.6%", compare: "vs the prior 6 months (no checkouts)" },
-        { label: "Carts with errors", value: "13" },
-        { label: "Abandoned cart value", value: "$97" },
-        { label: "Buying accounts", value: "30", delta: "7%", compare: "vs the prior 6 months (28)" },
+        { label: "Sales", value: "$956K", delta: "62%", compare: "from $590.2K" },
+        { label: "Open pipeline", value: "$412K", compare: "23 open quotes" },
+        { label: "Quote win rate", value: "38%", delta: "6 pts", compare: "from 32%" },
+        { label: "Avg order value", value: "$5,085", delta: "56%", compare: "from $3,261" },
+        { label: "Orders", value: "188", delta: "4%", compare: "from 181" },
+        { label: "Buying accounts", value: "71", delta: "11%", compare: "from 64" },
+        { label: "Checkout success", value: "86.4%", delta: "4.3 pts", compare: "from 82.1%" },
         { label: "Open cases", value: "14" },
       ],
       /** Once O-5531 is in (story step 14): the tiles it moves, by label, as they then read. */
       afterOrder: {
-        Orders: { value: "189", delta: "4%", compare: "vs the prior 6 months (181)" },
-        "Order value": { value: "$1.03M", delta: "74%", compare: "vs the prior 6 months ($590.2K)" },
-        "Avg order value": { value: "$5,427", delta: "66%", compare: "vs the prior 6 months ($3,261)" },
+        Sales: { value: "$1.03M", delta: "74%", compare: "from $590.2K" },
+        Orders: { value: "189", delta: "4%", compare: "from 181" },
+        "Avg order value": { value: "$5,427", delta: "66%", compare: "from $3,261" },
       } as Record<string, { value: string; delta: string; compare: string }>,
       /** Read out before a metric's rise, which is shown as an arrow. */
       up: "Up",
@@ -1044,8 +1126,8 @@ export const copy = {
             { kind: "read", label: "Reading the request", text: "They're asking for 15% off at Net30, ahead of Oktoberfest" },
             { kind: "fetch", label: "Pulling up the account", text: "Looking up Isar Bottling's account and price book in Salesforce", tool: { name: "dispatch_readonly", target: "buyer-profile-management" } },
             { kind: "notice", label: "Pulling up the account", text: "A steady account: 3 orders this year, all paid on time" },
-            { kind: "fetch", label: "Checking our rules", text: "Checking the discount policy for this account", tool: { name: "get_sor_detail", target: "b2b-merchant-quote-management" } },
-            { kind: "notice", label: "Checking our rules", text: "Policy allows up to 12% at Net30, so 15% is over the line" },
+            { kind: "fetch", label: "Checking our rules", text: "Checking the offer Isar's cart came from", tool: { name: "dispatch_readonly", target: "promotion-management" } },
+            { kind: "notice", label: "Checking our rules", text: "Mike's agent started the cart from our Oktoberfest offer: up to 12% at Net30, so 15% is over the line" },
             { kind: "wonder", label: "Weighing it up", text: "Munich's demand is up for Oktoberfest. Could they take more volume?" },
             { kind: "wonder", label: "Considering a counter", text: "A bigger order at a smaller discount might work for both sides" },
           ],
@@ -1055,7 +1137,7 @@ export const copy = {
           hold: "Weighing the options",
           weighed: (s: number) => `Weighed it up for ${s}s`,
           /** What it'll do, once it's weighed it up. */
-          lead: "Isar wants **15% at Net30**, but the most I can give is **12%**. Before I counter, I'll check stock, their price book and their credit.",
+          lead: "Isar wants **15% at Net30**, but the Oktoberfest offer stops at **12%**. Before I counter, I'll check stock, their price book and their credit.",
           /** Fizz's checks before an offer goes out, then the counter. Present tense while running, past once done. */
           plan: {
             title: "Checks before countering",
@@ -1065,7 +1147,7 @@ export const copy = {
             steps: [
               { doing: "Checking stock in Munich and Frankfurt", done: "Checked stock in Munich and Frankfurt", detail: "**14,000** orange in Munich, **9,000** lemonade in Frankfurt: room for more", kind: "fetch", source: "Omnichannel Inventory", tool: { name: "dispatch_readonly", target: "merchant-catalog-management" } },
               { doing: "Pulling Isar's price book", done: "Pulled Isar's price book", detail: "**$4.20** a unit list price, with a volume tier from **18,000 units**", kind: "fetch", source: "Revenue Cloud", tool: { name: "dispatch_readonly", target: "promotion-management" } },
-              { doing: "Checking the discount policy", done: "Checked the discount policy", detail: "Up to **12% at Net30**. More, or Net15, needs a person", kind: "read", source: "Pricing policy", tool: { name: "get_sor_detail", target: "b2b-merchant-quote-management" } },
+              { doing: "Checking the Oktoberfest offer", done: "Checked the Oktoberfest offer", detail: "Up to **12% at Net30**. More, or Net15, needs a person", kind: "read", source: "Promotions", tool: { name: "get_sor_detail", target: "b2b-merchant-quote-management" } },
               { doing: "Checking Isar's credit", done: "Checked Isar's credit", detail: "**$250,000** limit, **$38,000** open: room for this order", kind: "fetch", source: "Billing", tool: { name: "dispatch_readonly", target: "merchant-payment-management" } },
               { doing: "Drafting counter-offer v2", done: "Drafted counter-offer v2", detail: "More volume at 12%: **12,000** orange and **7,500** lemonade", kind: "write", source: "Revenue Cloud", tool: { name: "dispatch_write", target: "b2b-merchant-quote-management" } },
               { doing: "Sending v2 to Isar Bottling's agent", done: "Sent v2 to Isar Bottling's agent", detail: "Over A2A, signed by Fizz Drinks", kind: "write", source: "A2A" },
@@ -1076,7 +1158,7 @@ export const copy = {
             title: "Counter-offer",
             id: "Q-1042 · v2",
             /** What it said to Isar's agent with it, as the phone shows it. */
-            said: "I can do **12%** at Net30 if you take **19,500 units**. That's as far as I can go at Net30.",
+            said: "Our Oktoberfest offer is **12%** at Net30. I can do that if you take **19,500 units**.",
             for: "To Isar Bottling · Oktoberfest stock-up",
             status: "Waiting on Isar",
             lines: [
@@ -1090,7 +1172,7 @@ export const copy = {
             ],
             via: "Sent over A2A · signed by Fizz Drinks",
           },
-          reply: "I've countered with **v2: 12% off, not the 15% they asked**, the most I can give at Net30. Munich's Oktoberfest demand can take more, so I offered **2,000 more orange** and **2,500 more lemonade**. That takes the order to **$72,072**, up from $53,550. I'll tell you when Isar's agent replies.",
+          reply: "I've countered with **v2: 12% off**, not the 15% they asked. That's the Oktoberfest offer's limit at Net30.\n\nMunich's demand can take more, so I added **2,000 orange** and **2,500 lemonade**. The order's now **$72,072**, up from $53,550. I'll tell you when Isar's agent replies.",
           /** The back and forth on Q-1042 so far, folded under a chevron before the done mark. `by` picks the avatar. */
           turns: {
             title: (n: number) => `${n} turns on Q-1042`,
@@ -1142,7 +1224,7 @@ export const copy = {
               { kind: "notice", label: "Looking for room", text: "Margret Reyes's agent set up a Ginger Ale launch bundle: 1,000 units of the new concentrate keeps 15% at Net30" },
               { kind: "wonder", label: "Weighing it up", text: "Two ways to 15%, Net15 or the bundle. Alex should choose, and Isar can pick" },
             ],
-            lead: "15% at Net30 is past the **12%** I can give, so this one's your call. There are two ways to get Isar to 15%: **Net15**, or the **Ginger Ale bundle** Margret's agent set up. I'd send both and let Isar's agent pick.",
+            lead: "15% at Net30 is past the Oktoberfest offer's **12%**, so this one's your call. There are two ways to get Isar to 15%: **Net15**, or the **Ginger Ale bundle** Margret's agent set up. I'd send both and let Isar's agent pick.",
           },
           /** Story step 10: Alex's call, as two offers side by side. Both are picked to start; only "Send both" plays on in the demo. Picking neither declines. */
           decision: {
@@ -1244,7 +1326,7 @@ export const copy = {
               { label: "Total", value: "$69,615", note: "$81,900 list price" },
             ],
             via: "Placed on Fizz Partners B2B by Isar's agent",
-            said: "**O-5531** is in: **$69,615**, due in 15 days. It's on your dashboard: orders are up to **189**, and Germany to **9**.",
+            said: "**O-5531** is in: **$69,615**, due in 15 days, and the **Oktoberfest campaign's biggest order yet**, its 62nd. It's on your dashboard: orders are up to **189**, and Germany to **59**.",
           },
         },
         empty: {
@@ -1260,7 +1342,7 @@ export const copy = {
         },
         composer: {
           placeholder: "Ask anything, or type @ to add an account or quote",
-          context: "Fizz Partners B2B · Last 6 months",
+          context: "Fizz Partners B2B · Quarter to date",
           removeContext: "Remove context",
           add: "Add files or records",
           mention: "Mention an account or quote",

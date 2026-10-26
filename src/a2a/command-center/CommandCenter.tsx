@@ -16,8 +16,11 @@ import { Tooltip } from "../Tooltip";
 import { AgentButton, type AgentStatus } from "./AgentButton";
 import { AgentDrawer } from "./AgentDrawer";
 import { ActivityCard } from "./ActivityCard";
+import { Campaigns } from "./Campaigns";
 import { CheckoutFunnelCard } from "./CheckoutFunnelCard";
 import { CommandCenterSkeleton } from "./CommandCenterSkeleton";
+import { Confetti } from "./Confetti";
+import { Converted } from "./Converted";
 import { CurrencyMenu } from "./CurrencyMenu";
 import { MetricTiles } from "./MetricTiles";
 import { MonthlyRevenueCard } from "./MonthlyRevenueCard";
@@ -85,8 +88,9 @@ export function CommandCenter() {
             <CommandCenterSkeleton />
           ) : (
             <div className="a2a-load-in flex flex-col gap-8">
-              {/* Today first, in its dashed frame; the agent's task joins its row when John's agent sends the quote. Then the period, and the last 6 months. */}
+              {/* Today first, in its dashed frame; the agent's task joins its row when John's agent sends the quote. Then the campaigns, Isar's row following the quote; then the period, and the last 6 months. */}
               <Today task={task} stage={stage} onOpen={openQuote} />
+              <Campaigns task={task} stage={stage} />
               <section className="flex flex-col gap-3">
                 <Period ref={period} />
                 <Heading {...t.sections.last6Months} />
@@ -110,6 +114,9 @@ export function CommandCenter() {
         className="a2a-scrim absolute inset-0 z-[25]"
       />
       <AgentDrawer open={agentOpen} quote={quoteOpen} onClose={closeAgent} />
+      {/* The campaign's first conversion: confetti from the top, over everything, and the notification that stays. */}
+      <Converted on={ordered && phase === "ready"} />
+      <Confetti on={ordered && phase === "ready"} />
     </div>
   );
 }
@@ -269,7 +276,7 @@ function Period({ ref }: { ref: RefObject<HTMLDivElement | null> }) {
     <div ref={ref} className="mb-3 flex flex-wrap items-center gap-2">
       <Segmented
         options={t.period.options}
-        initial={4}
+        initial={2}
         label={t.period.label}
         icon={CalendarDays}
         reserveCheck={false}

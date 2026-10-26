@@ -6,6 +6,23 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-26 Less is more (applies everywhere)
+**Decision:**
+- No subtext when the title is enough.
+- No copy repeated across a heading, subtitle, chip or note.
+- Follow Nielsen's usability heuristics, especially aesthetic and minimalist design, recognition over recall, and consistency.
+- Don't over-explain. State, motion, icons and layout should carry the meaning, not words.
+- Text never floats in a tight space off the spacing and type scale used around it.
+**Rationale:** Somnath: extra words compete with the content and slow people down. A well-made UI explains itself.
+
+### 2026-10-26 A2A: the dashboard's figures are the quarter to date, sales first (supersedes "Last 6 months")
+**Decision:** The section under Campaigns is **Quarter to date**, and the period control defaults to QTD. Figures compare with Q3 at the same point. The first row of tiles is sales-forward: **Sales** (it grows when O-5531 converts), Open pipeline, Quote win rate, Avg order value. The second row is Orders, Buying accounts, Checkout success, Open cases.
+**Rationale:** Somnath: Alex is a seller, and a quarter is how sales is measured. The figures should lead with what's being sold and what's in the pipeline.
+
+### 2026-10-26 A2A: the order comes from an agent-run campaign, shown in a Campaigns section
+**Decision:** The story's reason for a big one-off order is Fizz's **Oktoberfest stock-up** campaign. **Fizz's promotions agent** runs it, started by a flow; no person sends it. Mike's agent starts Isar's cart from the offer, and the storefront shows Mike's photo with his agent's mark stacked over it. The offer, **12% off 1,000+ units at Net30**, is the seller agent's 12% limit, which is why 15% goes to Alex. In the Command Center, **Campaigns** is a section between Today and Last 6 months, with one card: the live campaign (its offer, figures, and a few accounts, each with a **Seen → Quote → Converted** stepper and the agent's next step), then **Recently ended**. Sent isn't a stage, because everything shown has already gone out. A stage that's done gets a check, a solid line joins two done stages, and once an account converts its whole stepper turns green. *(Superseded 2026-10-26: the stepper is now a **Lightning path**, chevrons in a row: done is green with a check, the current stage blue with its name, not yet grey with its name; converted is all green. The stage names head the column, each over its chevron, like a table header; the chevrons carry no text.)* **The campaign runs at scale** (1,860 accounts, 1,214 seen, 61 converted before Isar), to show what an agent-run campaign can reach. The threshold is 1,000+ units so campaign orders stay near the store's average and the figures fit inside the quarter's sales. Isar is the 62nd conversion and the biggest order yet, not the first. **Converted means the order was placed**, so Isar converts when O-5531 is placed, and it's the campaign's first conversion: no other account shown is past Quote. The live campaign's mark is the agent's logo stacked with Gmail's. Recently ended has the same heading treatment with a campaign icon. A footer offers "See all campaign details".
+**Rationale:** Somnath: a big buyer's prices are mostly negotiated for the year, so a one-off order needs a trigger, and campaigns should be AI-run. One stepper row per account fits the space, and Isar's row ties the end of the story back to the campaign.
+
 ### 2026-10-25 A2A: the finale ends with Gmail's "Order confirmation sent" on Alex's Mac
 **Decision:** After O-5531, a macOS notification (dark glass, top right, with an air-woosh sound) says Gmail sent the bottler the order confirmation. It shows on Alex's side only, not on John's phone.
 **Rationale:** Fizz's side sends the confirmation, so it reads as Salesforce carrying the order through to the tools Alex already uses. One notification keeps the finale calm.

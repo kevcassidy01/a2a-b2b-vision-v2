@@ -15,6 +15,10 @@ to end**, with people stepping in only where policy says they must.
 
 - **Source:** the "B2B Story Line" PDF (Fizz Drinks), plus the brainstorm in
   [b2b-agentic-commerce-vision-discussion.md](./b2b-agentic-commerce-vision-discussion.md).
+- **Why the order happens at all (added 2026-10-26):** most of a big buyer's items and prices are negotiated
+  for the year, so a large one-off order needs a reason. Here it's a **campaign**: Fizz's promotions agent
+  emailed bottlers an Oktoberfest offer, Mike's agent started Isar's cart from it, and the order that closes
+  the story is the campaign's conversion.
 - **The point it makes:** B2B buying isn't one person clicking Buy. There's a buying team with approvals, a
   selling team with per-customer pricing and discount rules, big quantities and stock in several regions.
   Agents can do the back and forth on both sides, inside limits each company sets, and hand the people the
@@ -85,6 +89,17 @@ sees each agent's move land on the other side.
 - **v2 on the phone (added 2026-10-25, steps 8–9):** once Fizz sends v2, it lands in the same chat as a counter-offer card from **"Fizz's agent"** (its mark the same size as John's agent's), on the right like the other side's turns. John's agent weighs it (musings), says it'll take the quantities and hold out for 15%, runs a short plan, replies that there's nothing for John to do yet, and shows Q-1042 v2 "Waiting for Fizz to respond".
 
 **Right: Alex in the Fizz Command Center.**
+- **Quarter to date (2026-10-26, was "Last 6 months"):** the figures below Campaigns cover the quarter to date, compared with Q3 at the same point. The tiles lead with sales: Sales, Open pipeline, Quote win rate, Avg order value.
+- **Campaigns (added 2026-10-26):** a section between Today and Quarter to date, with one card. The top part is the
+  live campaign, **"Oktoberfest stock-up"**, run by **Fizz's promotions agent** and sent with Gmail (its mark
+  is the agent's logo stacked with Gmail's; started Oct 2 by a flow, from last year's Oktoberfest orders). It
+  shows the offer, which is **12% off 1,000+ units at Net30**, sent to 1,860 accounts, and the campaign's figures (Seen, Quotes,
+  Converted, Attributed). Then four accounts, each with a **Seen → Quote → Converted** Lightning path
+  (chevrons: done green with a check, current blue, not yet grey; the stage names head the column) and what the agent does next. None has
+  converted before Isar; the furthest any other gets is Quote. Below that, **Recently ended**: two campaigns
+  that have stopped, headed the same way. A footer offers **See all campaign details**. Isar's row follows the story
+  (§5): seen at load, the quote in progress once Q-1042 lands, quoted once Isar takes v3a, and converted (green)
+  once O-5531 is placed. The conversion event is the order placed.
 - A sales dashboard (accounts, orders, revenue by region, a **"Task pipeline"** panel; named "Needs your approval" until 2026-10-25).
 - In the story it lives inside Cowork. On screen it sits in **a shell of our own that reads as an AI chat
   based app**, not Cowork or ChatGPT specifically. Somnath will design that shell with Claude.
@@ -118,27 +133,27 @@ People step in **3 times**: **John starts it** (step 3), **Alex sends both offer
 
 | # | Buyer side (John) | Seller side (Alex) |
 |---|---|---|
-| 1 | John logs in. A moment later a notification arrives: **"Mike started a cart."** (the bell's dot, a notification tone, and Mike's cart card with Open cart and Assign). | Alex goes about his day in the Command Center. |
+| 1 | John logs in. A moment later a notification arrives: **"Mike started a cart."** (the bell's dot, a notification tone, and Mike's cart card with Open cart and Assign). The card shows Mike's photo with his agent's mark stacked over it: **Mike's agent started it from Fizz's Oktoberfest offer**. | Alex goes about his day in the Command Center. Under Campaigns, Isar has **seen** the Oktoberfest offer. |
 | 2 | John opens the cart **"Oktoberfest stock-up"**. It holds Mike's **5,000 lemonade concentrate** (Frankfurt), added by Mike's agent. | |
 | 3 | John taps **Assign to your agent** on Mike's cart. No prompt: the buyer agent works out that Mike's cart covers Frankfurt and Munich isn't stocked yet, and plans to top it up and get Fizz's best price. *(person 1 of 3)* | |
 | 4 | The agent reads the demand forecast (**Munich +40%**) and adds **10,000 orange concentrate** (Munich) to the **same cart**. Mike sees it. | |
-| 5 | The agent turns the cart into quote request **Q-1042 v1**: 15,000 units, asking **15%** off, **Net30**. | Q-1042 lands in the **"Task pipeline"**, assigned to the **Fizz agent** (its avatar pill, dots while it works). |
+| 5 | The agent turns the cart into quote request **Q-1042 v1**: 15,000 units, asking **15%** off, **Net30**. | Q-1042 lands in the **"Task pipeline"**, assigned to the **Fizz agent** (its avatar pill, dots while it works). On the campaign card, Isar's **Quote** stage starts: "Q-1042 · negotiating", and Quotes goes from 6 to 7. |
 | 6 | | Alex clicks it. The seller agent's sidebar opens with its work already done. |
-| 7 | | The seller agent checks stock, account pricing and discount policy: **up to 12% at Net30**. |
+| 7 | | The seller agent checks stock, account pricing and the **Oktoberfest offer** the cart came from: **up to 12% at Net30**. |
 | 8 | Counter-offer **v2** arrives. | The seller agent sends **v2**: **12,000 orange + 7,500 lemonade at 12%** (more volume, lower discount). |
 | 9 | The buyer agent accepts the quantities and holds out for 15%. That's within John's limits, so **John isn't asked**. | |
 | 10 | | The seller agent is out of room (15% is over its 12%) and hands Alex a decision card: two offers side by side, **v3a (15% · Net15)** and **v3b (15% with the Ginger Ale bundle, Net30)**, both picked to start; picking neither declines. |
 | 11 | | Alex taps **Send both**. *(person 2 of 3)* **v3a** and **v3b** go to the buyer agent. |
 | 12 | The buyer agent weighs v3a against v3b (the bundle, in its thinking), recommends **v3a**, says why not each of the others, and **asks John** (the terms change from Net30). John can pick v3a or v3b. | |
 | 13 | John approves. *(person 3 of 3)* The quote is approved on both sides. | Q-1042 shows approved. |
-| 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows. A beat later, a macOS notification from **Gmail**: "Order confirmation sent", O-5531 to John Müller, Isar Bottling (2026-10-25). |
+| 14 | Order **O-5531** is placed: **19,500 units, 15%, Net15**. | The order arrives. The dashboard updates: the approval clears, **Orders +1**, the **Germany** bar grows, and on the campaign card Isar **converts**, its biggest order yet and the campaign's 62nd conversion (Converted 61 → 62, Attributed $412,300 → $481,915); confetti falls in three bursts and a conversion card comes in at the bottom right and stays. The Sales tile goes from $956K to $1.03M. A beat later, a macOS notification from **Gmail**: "Order confirmation sent", O-5531 to John Müller, Isar Bottling (2026-10-25). |
 | 15 | The order is saved as the template **"Oktoberfest stock-up"** for next year. John's agent sees Oktoberfest is yearly (it checks 2027's dates on oktoberfest.de, in its thinking only), offers the template with a reminder on Aug 16, 2027, and **John taps Save template** (2026-10-25). The agent confirms with a "Recurring order saved" card. | |
 
 **Built so far (2026-10-25): steps 1–15.** Fizz's agent receives the hold-out, hands Alex the decision card,
 and sends v3a and v3b once he picks "Send both" (the only option scripted). On the phone, John's agent weighs the
 two offers (always stacked on the phone, never side by side), recommends v3a and says why not the others, and John
 approves it. The agent accepts v3a, places O-5531 and logs the PO; the Command Center gets the acceptance and the
-order, and the dashboard updates (Orders 189, Germany 9, O-5531 in Recent activity). Step 15: on from the order, John's agent thinks ahead (Oktoberfest's 2027 dates, from oktoberfest.de), offers "Oktoberfest stock-up" as a template card (lines, last terms, reminder Aug 16, 2027; Save template or Not now), and John saves it. Only Save template plays on.
+order, and the dashboard updates (Orders 189, Germany 59, O-5531 in Recent activity). Step 15: on from the order, John's agent thinks ahead (Oktoberfest's 2027 dates, from oktoberfest.de), offers "Oktoberfest stock-up" as a template card (lines, last terms, reminder Aug 16, 2027; Save template or Not now), and John saves it. Only Save template plays on.
 
 **The cross-sell: a bundle (settled 2026-10-24).** Upsell is the seller agent's v2 (more volume, lower
 discount). Cross-sell is a **bundled offer: +1,000 Ginger Ale concentrate, keeping 15% at Net30**. It brings in

@@ -1,4 +1,4 @@
-import { FileText, Package, Truck } from "lucide-react";
+import { FileText, Megaphone, Package, Truck } from "lucide-react";
 import { Fragment, type ReactNode } from "react";
 import agentLogo from "../../assets/a2a/agent-logo.png";
 import { copy } from "../../copy/copy";
@@ -164,6 +164,14 @@ function TaskCard({ stage, onOpen }: { stage: TaskStage; onOpen: () => void }) {
             <Fetched at={changed ? i * 120 : META_AT[i + 1]}>{m}</Fetched>
           </Fragment>
         ))}
+      </span>
+      {/* The campaign the cart came from. */}
+      <span style={{ animationDelay: `${META_AT[3] + 200}ms` }} className="a2a-load-in mt-3 flex">
+        <span className="flex h-6 min-w-0 items-center gap-1.5 rounded-lg bg-[#f3f3f5] px-2 text-[12px] font-medium text-text-muted">
+          <Megaphone aria-hidden className="size-3.5 shrink-0" strokeWidth={1.75} />
+          <span className="sr-only">{r.campaign.label}: </span>
+          <span className="truncate">{r.campaign.name}</span>
+        </span>
       </span>
       {/* What it comes to, and where it ships, over a hairline. */}
       <span className="mt-4 grid grid-cols-2 gap-3 border-t border-black/[0.06] pt-3">

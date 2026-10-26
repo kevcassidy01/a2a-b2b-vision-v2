@@ -1,10 +1,33 @@
-import { Bell, Menu as MenuIcon } from "lucide-react";
+import { Bell, Check, Menu as MenuIcon } from "lucide-react";
 import sparkle from "../../assets/a2a/agent-sparkle.png";
 import john from "../../assets/a2a/john.png";
 import { copy } from "../../copy/copy";
 import { useSite } from "./site";
 
 const t = copy.a2a.storefront;
+
+/** What follows O-5531, as a tiny checklist: what's in (a green check), what's still to come (an empty ring).
+ *  On the order card in John's agent chat, and on the order card the store's home shows behind it. */
+export function OrderChecklist({ className = "" }: { className?: string }) {
+  const o = t.agent.order.card;
+  return (
+    <ul className={`flex flex-col gap-2 ${className}`}>
+      {o.checklist.map((c) => (
+        <li key={c.label} className="flex items-center gap-2 text-[13px]">
+          {c.done ? (
+            <span role="img" aria-label={o.state.done} className="grid size-4 shrink-0 place-items-center rounded-full bg-[#1f7a3d] text-white">
+              <Check className="size-2.5" strokeWidth={3.5} />
+            </span>
+          ) : (
+            <span role="img" aria-label={o.state.todo} className="size-4 shrink-0 rounded-full shadow-[inset_0_0_0_1.5px_#c9c9ce]" />
+          )}
+          <span className="font-semibold text-text">{c.label}</span>
+          <span className="truncate text-text-muted">{c.detail}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 /* The site's frame, shared by every page of Fizz Partners. */
 

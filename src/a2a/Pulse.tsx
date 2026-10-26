@@ -17,7 +17,7 @@ export function Pulse({ scale = 1, className = "" }: { scale?: number; className
   return (
     <span aria-hidden className={`a2a-bars ${className}`} style={{ "--u": `${scale}px` } as CSSProperties}>
       {BARS.map((b, i) => (
-        <span key={b.color} className="a2a-bar" style={{ "--x": b.x, "--c": b.color, "--p": i } as CSSProperties} />
+        <span key={b.color} className="a2a-pulse-bar" style={{ "--x": b.x, "--c": b.color, "--p": i } as CSSProperties} />
       ))}
     </span>
   );

@@ -1,5 +1,6 @@
 import {
   AlignLeft,
+  ArrowLeftRight,
   ArrowUp,
   BookmarkPlus,
   Check,
@@ -24,12 +25,14 @@ import { Rich } from "../Rich";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import john from "../../assets/a2a/john.png";
+import mike from "../../assets/a2a/mike.png";
 import agentLogo from "../../assets/a2a/agent-logo.png";
 import { copy } from "../../copy/copy";
 import { ProductPhoto } from "./Photo";
 import { PHOTOS } from "./photos";
 import { useStory } from "../story";
-import { AgentMark } from "./parts";
+import { useSite } from "./site";
+import { AgentMark, OrderChecklist } from "./parts";
 import { Pulse } from "../Pulse";
 import { demoNow } from "../demoClock";
 
@@ -205,6 +208,11 @@ export function AgentChat({
   useEffect(() => {
     if (open && assign && signedIn) setStarted(true);
   }, [open, assign, signedIn]);
+  // The store behind the sheet shows Mike's cart as with the agent from here on.
+  const { markAssigned } = useSite();
+  useEffect(() => {
+    if (started) markAssigned();
+  }, [started, markAssigned]);
 
   const done = STEPS.filter((_, i) => t !== null && t >= T.step(i)).length;
   const done2 = C.plan.steps.filter((_, i) => t2 !== null && t2 >= T2.step(i)).length;
@@ -264,6 +272,9 @@ export function AgentChat({
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [beat, done, words, muse, done2, muse2, muse3, done4, muse5]);
 
+  // The turns on Q-1042 so far, as each side's lands: v1, v2, the hold-out, v3a and v3b, the order.
+  const turns = [quoted, t2 !== null && t2 >= T2.offer, held, t3 !== null && t3 >= T3.offers, ordered].filter(Boolean).length;
+
   // Suggestions once the agent's done and nothing's waiting on John: once the template's saved, the order's and the template's.
   const suggestions =
     t4 !== null
@@ -296,6 +307,7 @@ export function AgentChat({
             <X className="size-5" strokeWidth={2.25} />
           </button>
         </header>
+        {signedIn && t !== null && <TaskBar fizz={quoted} turns={turns} />}
 
         <div ref={thread} className="sf-no-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-6 pt-3">
           {!signedIn ? (
@@ -340,6 +352,38 @@ export function AgentChat({
           placeholder={signedIn ? a.placeholder : a.signedOut.placeholder}
         />
       </section>
+    </div>
+  );
+}
+
+/**
+ * Under the header once the task's under way, stuck there while the thread
+ * scrolls: who's in on it, as a stack (John, Mike, John's agent, then Fizz's
+ * agent once the quote's out), and the turns on Q-1042 in a pill, from the first.
+ */
+function TaskBar({ fizz, turns }: { fizz: boolean; turns: number }) {
+  const p = a.task.people;
+  const people = [p.john, p.mike, p.agent, ...(fizz ? [p.fizz] : [])];
+  const ring = "size-7 rounded-full shadow-[0_0_0_2px_#fff,0_0_0_3px_rgb(0_0_0/0.08)]!";
+  return (
+    <div className="sf-rise flex shrink-0 items-center justify-between border-b border-black/[0.06] px-5 pb-3">
+      <span role="img" aria-label={`${people.slice(0, -1).join(", ")} and ${people.at(-1)}`} className="flex items-center">
+        <img src={john} alt="" className={`${ring} bg-white object-cover`} />
+        <img src={mike} alt="" className={`${ring} -ml-2 bg-[#f2f2f4] object-cover`} />
+        <AgentMark className={`${ring} -ml-2 bg-white!`} />
+        {fizz && <FizzMark className={`${ring} sf-rise -ml-2`} />}
+      </span>
+      {turns > 0 && (
+        <span
+          key={turns}
+          role="img"
+          aria-label={a.task.turns(turns)}
+          className="a2a-bump flex h-7 items-center gap-1.5 rounded-full! bg-black/[0.05] px-2.5 text-[13px] font-semibold tabular-nums text-text"
+        >
+          <ArrowLeftRight aria-hidden className="size-3.5 text-text-muted" strokeWidth={2.25} />
+          {turns}
+        </span>
+      )}
     </div>
   );
 }
@@ -669,7 +713,6 @@ function Template({ saved, onSave }: { saved: boolean; onSave: () => void }) {
           </div>
         ))}
       </dl>
-      <p className="mt-3 text-[13px] leading-snug text-text-muted">{c.note}</p>
       {!saved && (
         <div className="mt-4 flex flex-col gap-2">
           <button
@@ -859,6 +902,23 @@ function Order() {
           {o.total.label} · {o.total.note}
         </span>
         <span className="text-[17px] font-bold tabular-nums tracking-[-0.01em] text-text">{o.total.value}</span>
+      </div>
+      {/* What follows the order: what's in, what's still to come. */}
+      <OrderChecklist className="mt-3 border-t border-black/[0.07] pt-3" />
+      <div className="mt-4 flex flex-col gap-2">
+        <button
+          type="button"
+          className="flex h-12 w-full items-center justify-center rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+        >
+          {o.details}
+        </button>
+        <button
+          type="button"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+        >
+          <FileText className="size-[18px]" strokeWidth={2.25} />
+          {o.po}
+        </button>
       </div>
     </div>
   );

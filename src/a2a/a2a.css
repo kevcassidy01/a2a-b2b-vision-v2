@@ -952,7 +952,7 @@
   width: calc(36 * var(--u, 1px));
   height: calc(16 * var(--u, 1px));
 }
-.a2a-bar {
+.a2a-pulse-bar {
   position: absolute;
   left: calc(var(--x) * var(--u, 1px));
   bottom: calc(1 * var(--u, 1px));
@@ -960,10 +960,10 @@
   height: calc(4 * var(--u, 1px));
   background: #161616;
   transform: translateX(-50%);
-  animation: a2a-bar 1080ms linear infinite;
+  animation: a2a-pulse-bar 1080ms linear infinite;
   animation-delay: calc(var(--p) * 120ms - 360ms);
 }
-@keyframes a2a-bar {
+@keyframes a2a-pulse-bar {
   0%, 100% { width: calc(4 * var(--u, 1px)); height: calc(4 * var(--u, 1px)); bottom: calc(11 * var(--u, 1px)); background: #161616; }
   11.1% { width: calc(4 * var(--u, 1px)); height: calc(5 * var(--u, 1px)); bottom: calc(10 * var(--u, 1px)); background: #161616; }
   22.2% { width: calc(3.2 * var(--u, 1px)); height: calc(5.5 * var(--u, 1px)); bottom: calc(9.1 * var(--u, 1px)); background: #161616; }
@@ -983,7 +983,7 @@
   letter-spacing: -0.01em;
 }
 @media (prefers-reduced-motion: reduce) {
-  .a2a-bar {
+  .a2a-pulse-bar {
     animation: none;
   }
   .a2a-pulse {
@@ -1038,4 +1038,32 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .a2a-mail, .a2a-mail[data-out] { animation-duration: 1ms; }
+}
+
+/* Confetti once the Oktoberfest campaign converts: pieces fall from above the top edge, drifting and spinning, fading at the end. */
+.a2a-confetti-piece {
+  transform: translate3d(0, -20px, 0);
+  animation-name: a2a-confetti;
+  animation-timing-function: cubic-bezier(0.25, 0.6, 0.5, 1);
+  animation-fill-mode: both;
+}
+@keyframes a2a-confetti {
+  0% { transform: translate3d(0, -20px, 0) rotate(0deg); opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate3d(var(--drift), 110cqh, 0) rotate(var(--spin)); opacity: 0; }
+}
+.a2a-confetti { container-type: size; }
+@media (prefers-reduced-motion: reduce) {
+  .a2a-confetti { display: none; }
+}
+
+/* The conversion notification: in from the bottom right, a beat into the confetti, then it stays. */
+.a2a-converted {
+  animation: a2a-converted 700ms cubic-bezier(0.32, 0.72, 0, 1) 500ms backwards;
+}
+@keyframes a2a-converted {
+  from { opacity: 0; transform: translate(40px, 40px) scale(0.96); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .a2a-converted { animation: a2a-load-in 300ms ease-out backwards; }
 }
