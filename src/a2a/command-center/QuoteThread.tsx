@@ -27,7 +27,7 @@ import margret from "../../assets/a2a/margret.png";
 import buyerAgent from "../../assets/a2a/agent-sparkle.png";
 import { copy } from "../../copy/copy";
 import { Rich } from "../Rich";
-import { useStory } from "../story";
+import { skipTo, useStory } from "../story";
 import { CardAction, CardStatus, KnowledgeCard } from "./KnowledgeCard";
 import { Pulse } from "../Pulse";
 import { demoNow } from "../demoClock";
@@ -125,19 +125,19 @@ const T5 = { start: 300, card: 400, said: 900, turns: 1300, end: 1500 };
 const KIND: Record<string, LucideIcon> = { read: FileSearch, fetch: Database, write: PencilLine, notice: Eye, wonder: Lightbulb };
 
 /** Ms since a turn began (the thread opening, Isar's reply landing, Alex's pick), ticking until it's over; null before it. */
-function useClock(started: boolean, end: number) {
+function useClock(started: boolean, end: number, from = 0) {
   const [t, setT] = useState<number | null>(null);
   useEffect(() => {
     if (!started) return;
-    const t0 = demoNow();
-    setT(0);
+    const t0 = demoNow() - from;
+    setT(from);
     const id = window.setInterval(() => {
       const now = demoNow() - t0;
       setT(now);
       if (now > end) clearInterval(id);
     }, 100);
     return () => clearInterval(id);
-  }, [started, end]);
+  }, [started, end, from]);
   return t;
 }
 
@@ -164,11 +164,12 @@ function useClock(started: boolean, end: number) {
  * order O-5531 (step 14).
  */
 export function QuoteThread() {
-  const { sendCounter, heldOut, askAlex, sendV3, accepted, ordered, setWorking } = useStory();
-  const t = useClock(true, T.end) ?? 0;
-  const t2 = useClock(heldOut && t >= T.end, T2.end);
-  const [chosen, setChosen] = useState(false);
-  const t3 = useClock(chosen, T3.end);
+  const { from, sendCounter, heldOut, askAlex, sendV3, accepted, ordered, setWorking } = useStory();
+  // On a jump, each turn starts where the step begins: the checks at step 7, sending v2 at 8, the weighing at 10.
+  const t = useClock(true, T.end, skipTo(from, T.end, 9, { 7: T.plan, 8: T.step[T.step.length - 2] })) ?? 0;
+  const t2 = useClock(heldOut && t >= T.end, T2.end, skipTo(from, T2.end, 11, { 10: T2.start }));
+  const [chosen, setChosen] = useState(from >= 12);
+  const t3 = useClock(chosen, T3.end, skipTo(from, T3.end, 12));
   const shown = T.muse.filter((at) => t >= at).length;
   const done = T.step.filter((at) => t >= at).length;
   const sent = t >= T.sent;
@@ -177,8 +178,8 @@ export function QuoteThread() {
   const asked = t2 !== null && t2 >= T2.decision;
   const done3 = t3 === null ? 0 : T3.step.filter((at) => t3 >= at).length;
   const sent3 = t3 !== null && t3 >= T3.sent;
-  const t4 = useClock(accepted && t3 !== null && t3 >= T3.end, T4.end);
-  const t5 = useClock(ordered && t4 !== null && t4 >= T4.end, T5.end);
+  const t4 = useClock(accepted && t3 !== null && t3 >= T3.end, T4.end, skipTo(from, T4.end, 15));
+  const t5 = useClock(ordered && t4 !== null && t4 >= T4.end, T5.end, skipTo(from, T5.end, 15));
 
   useEffect(() => {
     if (sent) sendCounter();

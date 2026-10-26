@@ -22,6 +22,8 @@ export type Doing = `${"john" | "johnAgent" | "alexAgent" | "alex"}${"" | `:${st
  * while a decision waits on them.
  */
 type Story = {
+  /** The story step this run started from (1, the top, unless the presenter jumped), so each part can start where that step begins. */
+  from: number;
   quoteSent: boolean;
   sendQuote: () => void;
   counterSent: boolean;
@@ -41,6 +43,7 @@ type Story = {
 };
 
 const StoryContext = createContext<Story>({
+  from: 1,
   quoteSent: false,
   sendQuote: () => {},
   counterSent: false,
@@ -59,14 +62,15 @@ const StoryContext = createContext<Story>({
   setWorking: () => {},
 });
 
-export function StoryProvider({ children }: { children: ReactNode }) {
-  const [quoteSent, setQuoteSent] = useState(false);
-  const [counterSent, setCounterSent] = useState(false);
-  const [heldOut, setHeldOut] = useState(false);
-  const [askedAlex, setAskedAlex] = useState(false);
-  const [v3Sent, setV3Sent] = useState(false);
-  const [accepted, setAccepted] = useState(false);
-  const [ordered, setOrdered] = useState(false);
+/** Starting `from` a later step (a jump), the beats before it have already happened. */
+export function StoryProvider({ from = 1, children }: { from?: number; children: ReactNode }) {
+  const [quoteSent, setQuoteSent] = useState(from >= 6);
+  const [counterSent, setCounterSent] = useState(from >= 9);
+  const [heldOut, setHeldOut] = useState(from >= 10);
+  const [askedAlex, setAskedAlex] = useState(from >= 11);
+  const [v3Sent, setV3Sent] = useState(from >= 12);
+  const [accepted, setAccepted] = useState(from >= 14);
+  const [ordered, setOrdered] = useState(from >= 15);
   const [working, setWorkingSet] = useState<ReadonlySet<Doing>>(new Set());
   const setWorking = useCallback((agent: Doing, on: boolean) => {
     setWorkingSet((s) => {
@@ -85,10 +89,19 @@ export function StoryProvider({ children }: { children: ReactNode }) {
   const accept = useCallback(() => setAccepted(true), []);
   const placeOrder = useCallback(() => setOrdered(true), []);
   const story = useMemo(
-    () => ({ quoteSent, sendQuote, counterSent, sendCounter, heldOut, holdOut, askedAlex, askAlex, v3Sent, sendV3, accepted, accept, ordered, placeOrder, working, setWorking }),
-    [quoteSent, sendQuote, counterSent, sendCounter, heldOut, holdOut, askedAlex, askAlex, v3Sent, sendV3, accepted, accept, ordered, placeOrder, working, setWorking],
+    () => ({ from, quoteSent, sendQuote, counterSent, sendCounter, heldOut, holdOut, askedAlex, askAlex, v3Sent, sendV3, accepted, accept, ordered, placeOrder, working, setWorking }),
+    [from, quoteSent, sendQuote, counterSent, sendCounter, heldOut, holdOut, askedAlex, askAlex, v3Sent, sendV3, accepted, accept, ordered, placeOrder, working, setWorking],
   );
   return <StoryContext.Provider value={story}>{children}</StoryContext.Provider>;
 }
 
 export const useStory = () => useContext(StoryContext);
+
+/**
+ * How far into its turn a clock starts, in ms, on a run that jumped `from` a
+ * step: from step `over` on, the turn's already over (past `end`); at a step
+ * in `at`, that far in; otherwise from its start.
+ */
+export function skipTo(from: number, end: number, over: number, at: Partial<Record<number, number>> = {}) {
+  return from >= over ? end + 1 : (at[from] ?? 0);
+}

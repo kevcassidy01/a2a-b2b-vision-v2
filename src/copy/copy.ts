@@ -101,6 +101,28 @@ export const copy = {
       alexAgent: "Alex's agent",
       alex: "Alex",
     },
+    /** The presenter's contents (the C key): the story's 15 steps, to jump to any one. */
+    contents: {
+      title: "Jump to a step",
+      key: "C",
+      steps: [
+        "John logs in",
+        "John opens Mike's cart",
+        "John assigns the cart to his agent",
+        "John's agent tops up the cart",
+        "John's agent asks Fizz for a quote",
+        "Alex opens the quote request",
+        "Fizz's agent checks the request",
+        "Fizz's agent counters at 12%",
+        "John's agent holds out for 15%",
+        "Fizz's agent asks Alex to decide",
+        "Alex sends two offers",
+        "John's agent recommends an offer",
+        "John approves the offer",
+        "John's agent places the order",
+        "John saves an order template",
+      ],
+    },
     /** The macOS notification on Alex's side once O-5531 is placed: Gmail sent the bottler its confirmation. */
     mail: {
       app: "Gmail",

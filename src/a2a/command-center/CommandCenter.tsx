@@ -51,18 +51,19 @@ const QUOTE_GAP = 600;
  * along the bottom of its bar, edge to edge; then the real cards fade up.
  */
 export function CommandCenter() {
-  const [phase, setPhase] = useState<"away" | "loading" | "ready">("away");
-  const [agentOpen, setAgentOpen] = useState(false);
+  // On a jump: from step 5 the dashboard's up; from step 7 Alex has Q-1042 open in the drawer.
+  const { from, quoteSent, counterSent, heldOut, askedAlex, v3Sent, accepted, ordered, setWorking } = useStory();
+  const [phase, setPhase] = useState<"away" | "loading" | "ready">(from >= 5 ? "ready" : "away");
+  const [agentOpen, setAgentOpen] = useState(from >= 7);
   // Once Alex opens Q-1042, the drawer holds the agent's chat about it from then on.
-  const [quoteOpen, setQuoteOpen] = useState(false);
+  const [quoteOpen, setQuoteOpen] = useState(from >= 7);
   const openQuote = useCallback(() => {
     setQuoteOpen(true);
     setAgentOpen(true);
   }, []);
   const closeAgent = useCallback(() => setAgentOpen(false), []);
-  const { quoteSent, counterSent, heldOut, askedAlex, v3Sent, accepted, ordered, setWorking } = useStory();
   const stage = ordered ? "ordered" : accepted ? "accepted" : v3Sent ? "v3" : askedAlex ? "needsYou" : heldOut ? "heldOut" : counterSent ? "countered" : "request";
-  const task = useTaskIn(phase === "ready", quoteSent);
+  const task = useTaskIn(phase === "ready", quoteSent, from >= 6);
   // The seller agent picks Q-1042 up as it lands, whether or not Alex has the Command Center open, and
   // stays at it until Alex opens it; from then on, its chat (QuoteThread) says when it's at work.
   useEffect(() => {
@@ -114,9 +115,9 @@ export function CommandCenter() {
         className="a2a-scrim absolute inset-0 z-[25]"
       />
       <AgentDrawer open={agentOpen} quote={quoteOpen} onClose={closeAgent} />
-      {/* The campaign's first conversion: confetti from the top, over everything, and the notification that stays. */}
+      {/* The campaign's conversion: confetti from the top, over everything, and the notification that stays. Not again on a jump past it. */}
       <Converted on={ordered && phase === "ready"} />
-      <Confetti on={ordered && phase === "ready"} />
+      <Confetti on={ordered && phase === "ready" && from < 15} />
     </div>
   );
 }
@@ -125,11 +126,12 @@ export function CommandCenter() {
  * Whether the agent's task is in Today. The moment the quote's sent if the Command Center is
  * already up; if it loads with the quote already in, a beat after its cards
  * (TODAY_AFTER), so the task lands on its own rather than with everything.
+ * `already`: on a jump past it, it's in from the start.
  */
-function useTaskIn(ready: boolean, quoteSent: boolean) {
+function useTaskIn(ready: boolean, quoteSent: boolean, already: boolean) {
   const readyAt = useRef(0);
   const sentAt = useRef(0);
-  const [today, setToday] = useState(false);
+  const [today, setToday] = useState(already);
   useEffect(() => {
     if (ready) readyAt.current = demoNow();
   }, [ready]);

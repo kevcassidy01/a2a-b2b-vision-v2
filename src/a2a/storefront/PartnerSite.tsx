@@ -10,6 +10,7 @@ import { AgentFab } from "./parts";
 import { SiteContext, type Site } from "./site";
 import { Storefront } from "./Storefront";
 import { demoTimeout } from "../demoClock";
+import { useStory } from "../story";
 
 type Page = "home" | "login";
 
@@ -34,14 +35,16 @@ const NOTIFY = 1600;
  * Fizz's helpful agent instead).
  */
 export function PartnerSite() {
+  // On a jump past step 1, John's already logged in with Mike's cart in; past step 3, his agent has it, its sheet up.
+  const { from } = useStory();
   const [page, setPage] = useState<Page>("home");
-  const [signedIn, setSignedIn] = useState(false);
-  const [booted, setBooted] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [signedIn, setSignedIn] = useState(from >= 2);
+  const [booted, setBooted] = useState(from >= 2);
+  const [loading, setLoading] = useState(from < 2);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [agent, setAgent] = useState<{ assign: boolean } | null>(null);
-  const [notified, setNotified] = useState(false);
-  const [assigned, setAssigned] = useState(false);
+  const [agent, setAgent] = useState<{ assign: boolean } | null>(from >= 4 ? { assign: true } : null);
+  const [notified, setNotified] = useState(from >= 2);
+  const [assigned, setAssigned] = useState(from >= 4);
   const markAssigned = useCallback(() => setAssigned(true), []);
   const timers = useRef<(() => void)[]>([]);
 

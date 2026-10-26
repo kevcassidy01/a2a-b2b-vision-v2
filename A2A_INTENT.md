@@ -289,7 +289,7 @@ shown but not taken. The older frames below are kept as they were.
 - **One screen:** John's iPhone with the storefront and his agent on the left, Alex's Command Center and
   the seller agent's drawer on the right, the "who's acting" bar below (§4).
 - **Scripted, no live LLM.** One shared story state drives both sides, so a move on one side shows up on the other.
-- **Presenter keys:** ` pauses and plays the whole demo (story clock, timers, animations); Shift+` restarts it.
+- **Presenter keys:** ` pauses and plays the whole demo (story clock, timers, animations); Shift+` restarts it; **C** opens a secret contents menu (top left, dark glass) to jump to any of the 15 steps, which restarts the story from where that step begins.
 - **Sounds** (`src/a2a/sounds.ts`, Mixkit, free): a tone when Mike's notification reaches John after login,
   and a woosh with Gmail's "Order confirmation sent" notification on Alex's Mac after O-5531.
 

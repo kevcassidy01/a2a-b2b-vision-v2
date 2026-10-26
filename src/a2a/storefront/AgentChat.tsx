@@ -30,7 +30,7 @@ import agentLogo from "../../assets/a2a/agent-logo.png";
 import { copy } from "../../copy/copy";
 import { ProductPhoto } from "./Photo";
 import { PHOTOS } from "./photos";
-import { useStory } from "../story";
+import { skipTo, useStory } from "../story";
 import { useSite } from "./site";
 import { AgentMark, OrderChecklist } from "./parts";
 import { Pulse } from "../Pulse";
@@ -135,20 +135,20 @@ const T5 = (() => {
 const T6 = { reply: 1400, card: 1800, done: 2200, end: 2400 };
 const TICK = 50;
 
-/** Ms since a turn began (the handoff, or v2 landing), ticking until it's done; null before it. */
-function useClock(started: boolean, end: number) {
+/** Ms since a turn began (the handoff, or v2 landing), ticking until it's done; null before it. On a jump, it can start `from` partway in. */
+function useClock(started: boolean, end: number, from = 0) {
   const [t, setT] = useState<number | null>(null);
   useEffect(() => {
     if (!started) return;
-    const t0 = demoNow();
-    setT(0);
+    const t0 = demoNow() - from;
+    setT(from);
     const id = window.setInterval(() => {
       const now = demoNow() - t0;
       setT(now);
       if (now > end) clearInterval(id);
     }, TICK);
     return () => clearInterval(id);
-  }, [started, end]);
+  }, [started, end, from]);
   return t;
 }
 
@@ -184,19 +184,20 @@ export function AgentChat({
   signedIn: boolean;
   onClose: () => void;
 }) {
-  const [started, setStarted] = useState(false);
-  const t = useClock(started, T.end);
+  const { from, sendQuote, counterSent, holdOut, v3Sent, accept, placeOrder, setWorking } = useStory();
+  // On a jump, each turn starts where the step begins: the handoff at step 4 (or its last steps at 5), v2 at 9, the order at 14.
+  const [started, setStarted] = useState(from >= 4);
+  const t = useClock(started, T.end, skipTo(from, T.end, 6, { 5: T.step(STEPS.length - 2) }));
   const thread = useRef<HTMLDivElement>(null);
-  const { sendQuote, counterSent, holdOut, v3Sent, accept, placeOrder, setWorking } = useStory();
   // Fizz has the request the moment the reply says so, not once the quote card is drawn.
   const quoted = t !== null && t >= T.done + 300;
   // Fizz's v2 lands in the thread once its agent sends it.
-  const t2 = useClock(counterSent, T2.end);
+  const t2 = useClock(counterSent, T2.end, skipTo(from, T2.end, 10, { 9: T2.think }));
   const held = t2 !== null && t2 >= T2.done + 300;
   // Fizz's v3a and v3b land once Alex sends both; John approves v3a from the card.
-  const t3 = useClock(v3Sent, T3.end);
-  const [approved, setApproved] = useState(false);
-  const t4 = useClock(approved, T4.end);
+  const t3 = useClock(v3Sent, T3.end, skipTo(from, T3.end, 13));
+  const [approved, setApproved] = useState(from >= 14);
+  const t4 = useClock(approved, T4.end, skipTo(from, T4.end, 15, { 14: T4.step(0) }));
   // Fizz has the acceptance once the first step's done, and the order once the second is.
   const accepted = t4 !== null && t4 >= T4.step(0);
   const ordered = t4 !== null && t4 >= T4.step(1);

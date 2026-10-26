@@ -30,6 +30,11 @@ Entry format:
 
 ## Unreleased
 
+## 25.1.0 — 2026-10-26 22:05 IST
+**Kind:** small addition — the presenter's secret contents menu (C) to jump to any of the 15 steps.
+- **A2A contents menu: each step says what happens in plain words**, with no quote, order or offer numbers ("John's agent asks Fizz for a quote", "Alex sends two offers", "John saves an order template"). The menu is 272px wide to fit them.
+- **A2A: a secret contents menu to jump to any step (C).** C opens a thin dark-glass menu at the top left of the stage with the 15 steps in one column (no scroll); C, Escape or a click elsewhere closes it. Picking a step restarts the story from where that step begins, playing: the story's flags start set (`StoryProvider from`), and the phone's and the seller agent's chat clocks start partway in (`skipTo`). The phone starts logged in from step 2, with the agent's sheet up from 4; the dashboard is up from 5, with Q-1042 open in the drawer from 7. Jumping to 15 skips the confetti and the Gmail notification. `isTyping` moved to `demoClock.ts`. New `src/a2a/Contents.tsx`.
+
 ## 25.0.0 — 2026-10-26 21:46 IST
 **Kind:** large feature — the A2A feedback round (branch `a2a-feedback`, merged to `master`): the Oktoberfest campaign plotline and Campaigns section, realistic data, the iPhone task bar and story-following store, the order checklist, confetti and the conversion card.
 - **A2A Command Center: the confetti plays three bursts**, 1.4s apart, each its own scatter (about 7.4s in all).

@@ -56,3 +56,9 @@ export function demoTimeout(fn: () => void, ms: number) {
     off();
   };
 }
+
+/** Whether a key press is typing in a field (a prompt box), so not the presenter's. */
+export function isTyping(e: KeyboardEvent) {
+  const el = e.target as HTMLElement | null;
+  return !!el && (el.isContentEditable || el.tagName === "INPUT" || el.tagName === "TEXTAREA");
+}

@@ -1057,6 +1057,24 @@
   .a2a-confetti { display: none; }
 }
 
+/* The presenter's contents (C): dark glass like the macOS notification, in from the left. */
+.a2a-contents {
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  background: rgb(28 28 31 / 0.74);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 0 0 1px rgb(0 0 0 / 0.5),
+    0 20px 48px -12px rgb(0 0 0 / 0.6);
+  animation: a2a-contents-in 180ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+@keyframes a2a-contents-in {
+  from { opacity: 0; translate: -8px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .a2a-contents { animation-duration: 1ms; }
+}
+
 /* The conversion notification: in from the bottom right, a beat into the confetti, then it stays. */
 .a2a-converted {
   animation: a2a-converted 700ms cubic-bezier(0.32, 0.72, 0, 1) 500ms backwards;
