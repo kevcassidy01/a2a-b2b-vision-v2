@@ -1,8 +1,9 @@
 # Claudeforce Commerce
 
-Two scripted, clickable demos of Claude working with Salesforce B2B Commerce, in one repo:
+A scripted, clickable vision of agent-to-agent B2B commerce, plus the two earlier demos it borrows from:
 
-- **Browser chat** (`/`): Claude in the browser (claude.ai), with Salesforce MCP apps inline in the chat. Three journeys for **Alpine**, a B2B merchant.
+- **A2A vision** (`/`): John's buying agent and Fizz Drinks' selling agent negotiate an order, with John and Alex in the loop. See [A2A_INTENT.md](./A2A_INTENT.md).
+- **Browser chat** (`/#chat`): Claude in the browser (claude.ai), with Salesforce MCP apps inline in the chat. Three journeys for **Alpine**, a B2B merchant.
 - **Cowork desktop** (`/#desktop`): a Mac desktop with the Claude Cowork app, where Claude works across Salesforce, Gmail, Slack, Gong and Calendar. Four flows for **Ohana Networks**.
 
 Everything plays from authored scripts, so a demo never depends on the network, a live org or a model's mood. Anyone can run either demo, and each has its own presenter guide.
@@ -30,10 +31,11 @@ npm run dev
 
 | Open | What you get |
 |---|---|
-| **http://localhost:5173/** | The browser chat |
+| **http://localhost:5173/** | The A2A vision prototype |
+| **http://localhost:5173/#chat** | The browser chat |
 | **http://localhost:5173/#desktop** | The Cowork desktop |
 
-The **Browser | Desktop** toggle at the bottom right switches between the two. If port 5173 is busy, Vite picks the next free port and prints it in the terminal. Hard-reload (⌘⇧R) to start every flow fresh.
+In the browser chat and the desktop, the **Browser | Desktop** toggle at the bottom right switches between them. If port 5173 is busy, Vite picks the next free port and prints it in the terminal. Hard-reload (⌘⇧R) to start every flow fresh.
 
 With Claude Code, just ask: *"Run the dev server and open the browser chat"* (or *"the desktop demo"*). [CLAUDE.md](./CLAUDE.md) tells it how.
 
@@ -41,6 +43,7 @@ Other scripts:
 
 - `npm run build` type-checks (`tsc -b`) and builds for production.
 - `npm run preview` serves the production build.
+- `npm run build:share` builds the A2A prototype alone into **one HTML file**, `dist-share/share.html` (about 8 MB). Send it round; it opens from a double-click, no server or network needed.
 
 ---
 

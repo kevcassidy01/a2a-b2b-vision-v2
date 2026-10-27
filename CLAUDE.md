@@ -5,9 +5,10 @@ Instructions for Claude Code working in this repo.
 ## Running the prototype
 
 If asked to run the server or show the prototype: `npm install` (first time), then `npm run dev`
-(run it in the background; it doesn't exit). The Cowork desktop demo is at
-**http://localhost:5173/#desktop** (Vite moves to the next port if 5173 is busy and prints it);
-`http://localhost:5173/` alone is the browser chat. Needs Node 20.19+ or 22.12+. The demo's run
+(run it in the background; it doesn't exit). The A2A vision prototype is at
+**http://localhost:5173/** (Vite moves to the next port if 5173 is busy and prints it); the earlier
+demos are at `/#chat` (browser chat) and `/#desktop` (Cowork desktop). `npm run build:share` builds
+the A2A prototype into one shareable HTML file, `dist-share/share.html`. Needs Node 20.19+ or 22.12+. The demo's run
 sheet is [docs/cowork-demo-run-sheet.md](./docs/cowork-demo-run-sheet.md).
 
 ## The harness — read these first, every session

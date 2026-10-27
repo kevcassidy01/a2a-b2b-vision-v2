@@ -1,22 +1,31 @@
 import { ArrowRight } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import agentforce from "../../assets/desktop/menubar/agentforce.png";
+import asana from "../../assets/a2a/logos/asana.svg";
+import gmail from "../../assets/a2a/logos/gmail.svg";
+import googleCalendar from "../../assets/a2a/logos/google-calendar.svg";
+import googleDrive from "../../assets/a2a/logos/google-drive.svg";
+import momentum from "../../assets/a2a/logos/momentum.png";
+import notion from "../../assets/a2a/logos/notion.svg";
+import salesforce from "../../assets/a2a/logos/salesforce.svg";
+import slack from "../../assets/a2a/logos/slack.svg";
+import tableau from "../../assets/a2a/logos/tableau.svg";
 import { copy } from "../../copy/copy";
 
 const t = copy.a2a.commandCenter.welcome;
 
 /** The apps floating around the edges: where each sits (% of the area), its size and tilt. Visuals, not copy. */
 const TILES: { src: string; x: number; y: number; size: number; tilt: number }[] = [
-  { src: "/salesforce.svg", x: 22, y: 22, size: 76, tilt: -8 },
-  { src: "/connectors/slack.svg", x: 40, y: 14, size: 52, tilt: 6 },
-  { src: "/connectors/gmail.svg", x: 8, y: 41, size: 52, tilt: 5 },
-  { src: "/connectors/tableau.svg", x: 18, y: 67, size: 64, tilt: -5 },
-  { src: "/connectors/google-drive.svg", x: 35, y: 82, size: 50, tilt: 9 },
+  { src: salesforce, x: 22, y: 22, size: 76, tilt: -8 },
+  { src: slack, x: 40, y: 14, size: 52, tilt: 6 },
+  { src: gmail, x: 8, y: 41, size: 52, tilt: 5 },
+  { src: tableau, x: 18, y: 67, size: 64, tilt: -5 },
+  { src: googleDrive, x: 35, y: 82, size: 50, tilt: 9 },
   { src: agentforce, x: 77, y: 17, size: 62, tilt: 7 },
-  { src: "/connectors/asana.svg", x: 94, y: 40, size: 48, tilt: -9 },
-  { src: "/connectors/notion.svg", x: 86, y: 52, size: 58, tilt: 6 },
-  { src: "/connectors/momentum.png", x: 91, y: 85, size: 46, tilt: -4 },
-  { src: "/connectors/google-calendar.svg", x: 64, y: 80, size: 54, tilt: -8 },
+  { src: asana, x: 94, y: 40, size: 48, tilt: -9 },
+  { src: notion, x: 86, y: 52, size: 58, tilt: 6 },
+  { src: momentum, x: 91, y: 85, size: 46, tilt: -4 },
+  { src: googleCalendar, x: 64, y: 80, size: 54, tilt: -8 },
 ];
 
 /** The signals' pills: where each sits and its dot's colour, in the order of `t.signals`. */

@@ -1,6 +1,7 @@
 import { ArrowRight, Check, Megaphone } from "lucide-react";
 import type { ReactNode } from "react";
 import agentLogo from "../../assets/a2a/agent-logo.png";
+import gmail from "../../assets/a2a/logos/gmail.svg";
 import { copy } from "../../copy/copy";
 import { Pulse } from "../Pulse";
 import { CardAction } from "./KnowledgeCard";
@@ -63,7 +64,7 @@ export function Campaigns({ task, stage }: { task: boolean; stage: TaskStage }) 
                   <img src={agentLogo} alt="" className="size-[18px]" />
                 </Circle>
                 <Circle className="-ml-2.5">
-                  <img src="/connectors/gmail.svg" alt="" className="size-4" />
+                  <img src={gmail} alt="" className="size-4" />
                 </Circle>
               </span>
             }

@@ -30,6 +30,15 @@ Entry format:
 
 ## Unreleased
 
+## 25.3.0 — 2026-10-27 21:33 IST
+**Kind:** small addition — the sidenav is an icon rail on 13"/14" laptops; `/` opens the A2A prototype; a one-file shareable build.
+- **`/` opens the A2A vision prototype.** A fresh clone lands on it. The earlier demos move behind the hash: `#chat` (browser chat) and `#desktop` (Cowork). `#a2a` still works. (`src/Root.tsx`)
+- **One-file shareable build:** `npm run build:share` → `dist-share/share.html` (~8 MB, everything inlined; opens from a double-click, offline). Via `vite-plugin-singlefile` (new dev dependency), `--mode share`, `share.html` + `src/share.tsx` (A2A only). `dist-share/` is gitignored.
+- The A2A demo's logos and sounds are now imported rather than served from `public/`, so they can be inlined: the sounds moved to `src/assets/a2a/sounds/`; the logos it uses are copied to `src/assets/a2a/logos/` (the browser chat keeps its `public/` copies).
+- `main.tsx`'s fonts, styles and tab title moved into `src/setup.ts`, shared by both entries.
+- README and CLAUDE.md run instructions updated.
+- **The sidenav is an icon rail below 1536px wide** (13" and 14" laptops), from the start, with no toggle. It keeps the mark, search, the nav icons (Artifacts current), Projects and Alex's avatar; each icon is named in a tooltip at its right. The chats and recents drop. Wider windows are unchanged. (`CommandCenterShell.tsx`; the A2A `Tooltip` gains `side="right"`.)
+
 ## 25.2.0 — 2026-10-27 20:50 IST
 **Kind:** small addition — step 12's case against the Ginger Ale bundle sits on the offer (what each costs, the checks it failed), plus review polish (filled crosses, larger decision-card text, the conversion card's mascot on the right).
 - **A2A polish from review.**

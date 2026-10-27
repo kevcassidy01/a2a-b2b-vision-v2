@@ -1,3 +1,6 @@
+import mailWav from "../assets/a2a/sounds/mail.wav";
+import notifyWav from "../assets/a2a/sounds/notify.wav";
+
 /**
  * The demo's two sounds, both from Mixkit (free to use): the tone when Mike's
  * notification reaches John on the storefront, and the woosh of Gmail's
@@ -16,5 +19,5 @@ function sound(src: string, volume: number) {
   };
 }
 
-export const ding = sound("/a2a/sounds/notify.wav", 0.6);
-export const woosh = sound("/a2a/sounds/mail.wav", 0.6);
+export const ding = sound(notifyWav, 0.6);
+export const woosh = sound(mailWav, 0.6);

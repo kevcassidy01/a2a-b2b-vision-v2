@@ -19,6 +19,7 @@ The living context for this project. What it is, why it exists, and where we are
 
 ## Current state
 
+- **2026-10-27, sharing with the GM:** `/` opens the A2A prototype. Kevin (PM Director) sends it to the GM as one HTML file built with `npm run build:share`. The GM gets click-through only, with no hotkeys. Hosting must be internal only: git.soma Pages is SSO-gated and needs a `base` path. Vercel and Netlify aren't approved.
 - **App scaffolded and running** (Vite + React 19 + TS + Tailwind v4). Dev server: `npm run dev` → http://localhost:5173/.
 - Foundations in place: `src/styles/tokens.css` (two-layer tokens, light only, **palette retuned to neutral near-white — exact values measured from claude.ai**), `src/copy/copy.ts` (typed single-source copy), **Hanken Grotesk** UI sans + **Anthropic Serif → EB Garamond** serif, **Lucide** icons (`lucide-react`).
 - **Sidenav largely built:** collapse toggle (+ "Hide sidebar" tooltip) · `Claude` wordmark @18px/medium · Chat/Code **segmented control** (sliding, no-op) → **search bar** → **nav group** (New[active, always-washed, shows Ctrl+O on hover] · Projects · Artifacts · Code · Customize, each with hover shortcut hints except Customize; 0px gap) → **"Chats and tasks"** caption + prefs sliders + 3 dummy **recents** → edge-to-edge separator + **account footer** (24px avatar #E3E3E1 · email @15px · chevron [one button] · 32px download button). Reusable shell: `Separator`, `Tooltip`, `NavItem`, `SearchBar`, `RecentItem`, `ChatCodeToggle`, `icons/IncognitoIcon`.

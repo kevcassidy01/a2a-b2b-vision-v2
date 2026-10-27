@@ -10,7 +10,7 @@ import {
   Waypoints,
   type LucideIcon,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import alex from "../assets/a2a/alex.png";
 import { copy } from "../copy/copy";
 import { GlassPanel } from "./GlassPanel";
@@ -27,6 +27,26 @@ const lead = t.projects.slice(0, -2);
 const tail = t.projects.slice(-2);
 
 /**
+ * Below this window width (13" and 14" laptops) the sidenav is an icon rail
+ * from the start, leaving the room to the Command Center. There's no toggle:
+ * nobody should have to collapse it before the layout holds.
+ */
+const RAIL_BELOW = 1536;
+const RAIL_QUERY = `(max-width: ${RAIL_BELOW - 1}px)`;
+
+/** Whether the window's narrow enough for the rail, kept up to date as it's resized. */
+function useRail() {
+  const [rail, setRail] = useState(() => matchMedia(RAIL_QUERY).matches);
+  useEffect(() => {
+    const mq = matchMedia(RAIL_QUERY);
+    const onChange = () => setRail(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return rail;
+}
+
+/**
  * CommandCenterShell — the right half: a generic AI chat app (not Claude,
  * Cowork or ChatGPT), shaped like Dia: one dark-mode glass window whose own
  * surface is the sidenav, with a white layer inset on the right. The white
@@ -34,10 +54,11 @@ const tail = t.projects.slice(-2);
  * the white layer edge to edge (A2A_INTENT §4).
  */
 export function CommandCenterShell({ children }: { children?: ReactNode }) {
+  const rail = useRail();
   return (
     <GlassPanel radius={SHELL_RADIUS} className="h-full min-w-0 flex-1">
       <div className="flex h-full">
-        <Sidenav />
+        {rail ? <Rail /> : <Sidenav />}
         <main
           className="a2a-white-layer a2a-content min-w-0 flex-1 overflow-hidden bg-surface"
           style={{
@@ -131,15 +152,70 @@ function Sidenav() {
   );
 }
 
+/**
+ * The sidenav on smaller screens: its icons only, each named in a tooltip at
+ * its right. The app mark and search; the nav, with Artifacts current (the
+ * Command Center's pinned there); Projects; Alex at the foot. The chats and
+ * recents are set dressing, so they go.
+ */
+function Rail() {
+  return (
+    <nav className="flex w-[56px] shrink-0 flex-col items-center pb-2 pt-3 text-white/55">
+      <span className="a2a-orb size-[28px]" aria-hidden />
+      <div className="mt-2">
+        <IconButton icon={Search} label={t.search} side="right" />
+      </div>
+      <div className="mt-3 flex flex-col gap-px">
+        <RailItem icon={Plus} label={t.nav.newChat} />
+        <RailItem icon={Shapes} label={t.nav.artifacts} active />
+        <RailItem icon={Waypoints} label={t.nav.agents} />
+        <RailItem icon={Clock} label={t.nav.scheduled} />
+      </div>
+      <div className="mt-3 w-6 border-t border-white/[0.07] pt-3" aria-hidden />
+      <RailItem icon={Folder} label={t.projectsLabel} />
+      <div className="mt-auto w-10 border-t border-white/[0.07] pt-2">
+        <Tooltip label={t.user.name} side="right">
+          <button
+            type="button"
+            aria-label={t.user.name}
+            className="a2a-nav-btn grid size-10 place-items-center rounded-md"
+            style={{ borderBottomLeftRadius: SHELL_RADIUS - INSET }}
+          >
+            <img src={alex} alt="" className="size-7 rounded-full bg-[#e3effc] object-cover" />
+          </button>
+        </Tooltip>
+      </div>
+    </nav>
+  );
+}
+
+/** A rail icon: 36px, the nav row's look, named in its tooltip. */
+function RailItem({ icon: Icon, label, active }: { icon: LucideIcon; label: string; active?: boolean }) {
+  return (
+    <Tooltip label={label} side="right">
+      <button
+        type="button"
+        aria-label={label}
+        aria-current={active ? "page" : undefined}
+        className={`a2a-nav-btn grid size-9 place-items-center rounded-md ${active ? "a2a-nav-active text-white" : "hover:text-white/90"}`}
+      >
+        <Icon className="size-4" strokeWidth={2} />
+      </button>
+    </Tooltip>
+  );
+}
+
 function IconButton({
   icon: Icon,
   label,
+  side,
 }: {
   icon: LucideIcon;
   label: string;
+  side?: "bottom" | "right";
 }) {
   return (
-    <Tooltip label={label}>
+    <Tooltip label={label} side={side}>
       <button
         type="button"
         aria-label={label}

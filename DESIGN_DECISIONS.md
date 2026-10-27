@@ -6,6 +6,14 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-27 A2A: on smaller screens the sidenav is an icon rail, always
+Decision: below 1536px wide, the Command Center shell's sidenav is a 56px rail of icons with tooltips at their right, from the first frame. There's no collapse or expand control at any size.
+Rationale: on a small laptop the full sidenav squeezes the Command Center. Nobody watching should have to fix the layout before it holds.
+
+### 2026-10-27 A2A: `/` opens the vision prototype; it's shared as one HTML file
+Decision: the root route is the A2A prototype; the browser chat (`#chat`) and Cowork desktop (`#desktop`) stay reachable but are context only. To share, `npm run build:share` makes one self-contained HTML file. Hosting, if any, is internal only (git.soma Pages, SSO-gated); no Vercel/Netlify. The GM path is click-through only: no hotkey hints on screen.
+Rationale: whoever clones or opens it lands on the thing we're showing; a single file needs no server, approval or VPN, and a busy exec shouldn't have to learn presenter keys.
+
 ### 2026-10-26 Less is more (applies everywhere)
 **Decision:**
 - No subtext when the title is enough.

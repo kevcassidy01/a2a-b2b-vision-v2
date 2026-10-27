@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import gmail from "../assets/a2a/logos/gmail.svg";
 import { copy } from "../copy/copy";
 import { demoTimeout } from "./demoClock";
 import { woosh } from "./sounds";
@@ -34,7 +35,7 @@ export function MailNotification({ ordered }: { ordered: boolean }) {
   return (
     <div role="status" className="a2a-mail" data-out={phase === "out" || undefined}>
       <span className="grid size-9 shrink-0 place-items-center rounded-[9px] bg-white shadow-[0_0_0_0.5px_rgb(0_0_0/0.2)]">
-        <img src="/connectors/gmail.svg" alt="" className="size-[22px]" />
+        <img src={gmail} alt="" className="size-[22px]" />
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex items-baseline gap-2 text-[12px] text-white/50">

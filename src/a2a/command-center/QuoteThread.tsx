@@ -25,6 +25,7 @@ import agentLogo from "../../assets/a2a/agent-logo.png";
 import alex from "../../assets/a2a/alex.png";
 import margret from "../../assets/a2a/margret.png";
 import buyerAgent from "../../assets/a2a/agent-sparkle.png";
+import salesforce from "../../assets/a2a/logos/salesforce.svg";
 import { copy } from "../../copy/copy";
 import { Rich } from "../Rich";
 import { skipTo, useStory } from "../story";
@@ -489,7 +490,7 @@ function Checks({ plan: p, done }: { plan: PlanCopy; done: number }) {
 function ToolCall({ tool, logo = true }: { tool: Tool; logo?: boolean }) {
   return (
     <p className="a2a-load-in mt-1 flex flex-wrap items-center gap-1.5 text-[12px] text-text-muted">
-      {logo && <img src="/salesforce.svg" alt="Salesforce" className="h-3 w-[18px] shrink-0 object-contain" />}
+      {logo && <img src={salesforce} alt="Salesforce" className="h-3 w-[18px] shrink-0 object-contain" />}
       {q.called}
       <code className="rounded bg-black/[0.05] px-1 py-px font-mono text-[11px] text-text">{tool.name}</code>
       <span className="font-mono text-[11px]">{tool.target}</span>
@@ -884,7 +885,7 @@ function Row({
       <span className="grid h-[18px] w-4 shrink-0 place-items-center">
         {mark ??
           (tool ? (
-            <img src="/salesforce.svg" alt="Salesforce" className="h-3 w-4 object-contain" />
+            <img src={salesforce} alt="Salesforce" className="h-3 w-4 object-contain" />
           ) : (
             Icon && <Icon className={`size-3.5 ${current ? "text-text" : ""}`} strokeWidth={2} />
           ))}
