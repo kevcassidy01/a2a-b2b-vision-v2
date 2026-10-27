@@ -30,6 +30,10 @@ Entry format:
 
 ## Unreleased
 
+## 25.1.1 — 2026-10-27 07:58 IST
+**Kind:** copy fix — the who's-acting bar names each person's side (John, Buyer; Alex, Seller).
+- **A2A who's-acting bar: the people say their side.** "John, Buyer" and "Alex, Seller" (the role a touch dimmer than the name); the agents stay as they are.
+
 ## 25.1.0 — 2026-10-26 22:05 IST
 **Kind:** small addition — the presenter's secret contents menu (C) to jump to any of the 15 steps.
 - **A2A contents menu: each step says what happens in plain words**, with no quote, order or offer numbers ("John's agent asks Fizz for a quote", "Alex sends two offers", "John saves an order template"). The menu is 272px wide to fit them.

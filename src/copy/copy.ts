@@ -100,6 +100,8 @@ export const copy = {
       johnAgent: "John's agent",
       alexAgent: "Alex's agent",
       alex: "Alex",
+      /** What each person is, after their name: the people's side of the deal. */
+      roles: { john: "Buyer", alex: "Seller" } as Partial<Record<"john" | "johnAgent" | "alexAgent" | "alex", string>>,
     },
     /** The presenter's contents (the C key): the story's 15 steps, to jump to any one. */
     contents: {

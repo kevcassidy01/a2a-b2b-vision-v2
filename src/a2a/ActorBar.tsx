@@ -10,6 +10,7 @@ export type Actor = (typeof ACTORS)[number];
  * ActorBar — a thin dark bar under the stage, in four equal parts, so the
  * audience sees who is acting at each point of the story. All parts stay dull;
  * the acting one lights up. Two can be lit at once (a handoff between agents).
+ * The people carry their side after their name (John, Buyer; Alex, Seller).
  */
 export function ActorBar({ active }: { active: ReadonlySet<Actor> }) {
   return (
@@ -28,7 +29,10 @@ export function ActorBar({ active }: { active: ReadonlySet<Actor> }) {
             data-on={on || undefined}
           >
             <span aria-hidden className="a2a-actor-dot size-1.5 rounded-full" />
-            {t[a]}
+            <span>
+              {t[a]}
+              {t.roles[a] && <span className="opacity-70">, {t.roles[a]}</span>}
+            </span>
             {on && <span className="sr-only">, {t.active}</span>}
           </div>
         );
