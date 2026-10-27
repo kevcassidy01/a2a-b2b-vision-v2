@@ -387,7 +387,7 @@ export const copy = {
             { kind: "wonder", text: "The bundle adds $3,570 of stock nobody planned. Paying in 15 days costs about $115" },
             { kind: "notice", text: "Net15 isn't the Net30 John set, so this one's his call" },
           ],
-          lead: "Fizz met us at **15% off**, two ways. I'd take **v3a, 15% at Net15**. Paying 15 days early costs about **$115**; the bundle adds **$3,570** of a drink we've never sold. The terms change from Net30, so I need your OK.",
+          lead: "Fizz met us at **15%**, two ways. The bundle looks like a free way to keep Net30. It isn't: it's **$3,570** of a drink Isar has never sold.\n\nI'd take **v3a**. Paying 15 days early costs about **$115**. It changes your Net30, so I need your OK.",
           /** John picks one: v3a is picked to start, as the agent recommends it; only v3a plays on in the demo. */
           approval: {
             title: "Which should I take?",
@@ -400,21 +400,26 @@ export const copy = {
                 rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]],
                 /** What changed since the terms John set. */
                 changed: "Was Net30",
+                /** What the option really costs Isar, beyond the price. */
+                cost: { value: "≈ $115", why: "paying 15 days early" },
               },
               {
                 id: "v3b",
                 name: "15% with a bundle",
                 rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]],
                 note: "+1,000 Ginger Ale concentrate, new",
+                cost: { value: "$3,570", why: "of stock nobody planned" },
+                /** The checks the bundle failed, each with the system the agent checked. */
+                failed: [
+                  { label: "Not on Isar's approved list", source: "SAP" },
+                  { label: "No demand plan", source: "SAP IBP" },
+                  { label: "Needs quality sign-off first", source: "SAP QM" },
+                ],
               },
             ],
-            whyNot: {
-              title: "Why not the others",
-              list: [
-                { name: "v3b, the bundle", text: "Ginger Ale isn't on Isar's approved list and has no demand plan. It adds **$3,570** of unplanned stock." },
-                { name: "Holding out at Net30", text: "Fizz can't give 15% at Net30, and Oktoberfest is **three weeks** out." },
-              ],
-            },
+            costLabel: "Costs you",
+            failedLabel: "Failed checks",
+            whyNot: { title: "Why not hold out at Net30", text: "Fizz can't give 15% at Net30, and Oktoberfest is **three weeks** out." },
             approve: (id: string) => `Approve ${id}`,
             approved: "Approved",
           },

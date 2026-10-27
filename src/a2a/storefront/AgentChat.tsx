@@ -543,7 +543,7 @@ function Offer() {
       <p className="mb-2 max-w-[92%] rounded-[22px] rounded-br-none bg-[#f2f2f4] px-4 py-3 text-[15px] leading-[1.45] text-text">
         <Rich text={C.said} />
       </p>
-      <div className="w-[92%] rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+      <div className="w-full rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
         <div className="flex items-center gap-3">
           <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
             <FileText className="size-5 text-text" strokeWidth={2} />
@@ -763,7 +763,7 @@ function Offers() {
       <p className="mb-2 max-w-[92%] rounded-[22px] rounded-br-none bg-[#f2f2f4] px-4 py-3 text-[15px] leading-[1.45] text-text">
         <Rich text={V.said} />
       </p>
-      <div className="w-[92%] rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+      <div className="w-full rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
         <div className="flex items-center gap-3">
           <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
             <FileText className="size-5 text-text" strokeWidth={2} />
@@ -792,7 +792,8 @@ function Offers() {
 /**
  * What the agent puts to John: v3a and v3b stacked, to pick one, v3a picked to
  * start and tagged as the one it recommends, with what changed from his terms;
- * why not the others; and Approve, which names the pick. Approve works for
+ * what each really costs (the line that decides it), and the checks the bundle
+ * failed, each with the system checked; why not hold out; and Approve, which names the pick. Approve works for
  * either, but the story plays on as v3a (the presenter picks v3a). Once he taps it, the pick locks and the button gives way to the
  * approval's status.
  */
@@ -800,7 +801,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
   const p = V.approval;
   const [pick, setPick] = useState<string>(p.options[0].id);
   return (
-    <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
+    <div className="sf-rise -mx-2 mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
       <div className="flex items-center gap-3">
         <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
           <FileText className="size-5 text-text" strokeWidth={2} />
@@ -837,21 +838,34 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
               </span>
               <span className="mt-1 block text-[15px] font-bold tracking-[-0.01em] text-text">{o.name}</span>
               <Figures rows={o.rows} notes={"changed" in o ? { Terms: o.changed } : {}} />
-              {"note" in o && <span className="mt-2.5 block text-[13px] font-semibold text-[#1f7a3d]">{o.note}</span>}
+              {"note" in o && <span className="mt-2 block text-[13px] text-text-muted">{o.note}</span>}
+              {/* What it really costs: the line that decides it. */}
+              <span className="mt-3 flex items-baseline gap-1.5 border-t border-black/[0.07] pt-2.5 text-[13px] text-text-muted">
+                {p.costLabel}
+                <span className="text-[15px] font-bold tabular-nums tracking-[-0.01em] text-text">{o.cost.value}</span>
+                {o.cost.why}
+              </span>
+              {"failed" in o && (
+                <span className="mt-2 flex flex-col gap-1.5">
+                  <span className="sr-only">{p.failedLabel}</span>
+                  {o.failed.map((f) => (
+                    <span key={f.label} className="flex items-center gap-2 text-[13px]">
+                      <span aria-hidden className="grid size-4 shrink-0 place-items-center rounded-full bg-[#e8695f] text-white">
+                        <X className="size-2.5" strokeWidth={3.5} />
+                      </span>
+                      <span className="min-w-0 flex-1 font-semibold text-text">{f.label}</span>
+                      <span className="shrink-0 text-[12px] text-text-muted">{f.source}</span>
+                    </span>
+                  ))}
+                </span>
+              )}
             </button>
           );
         })}
       </div>
       <div className="mt-4 border-t border-black/[0.07] pt-3.5">
-        <p className="text-[13px] font-semibold text-text-muted">{p.whyNot.title}</p>
-        <ul className="mt-1">
-          {p.whyNot.list.map((w) => (
-            <li key={w.name} className="py-1.5">
-              <p className="text-[14.5px] font-semibold tracking-[-0.01em] text-text">{w.name}</p>
-              <p className="mt-0.5 text-[13.5px] leading-snug text-text-muted"><Rich text={w.text} /></p>
-            </li>
-          ))}
-        </ul>
+        <p className="text-[14.5px] font-semibold tracking-[-0.01em] text-text">{p.whyNot.title}</p>
+        <p className="mt-0.5 text-[13.5px] leading-snug text-text-muted"><Rich text={p.whyNot.text} /></p>
       </div>
       {approved ? (
         <span className="sf-rise mt-3 inline-flex h-7 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">

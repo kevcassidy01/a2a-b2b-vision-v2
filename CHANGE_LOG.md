@@ -30,6 +30,19 @@ Entry format:
 
 ## Unreleased
 
+## 25.2.0 — 2026-10-27 20:50 IST
+**Kind:** small addition — step 12's case against the Ginger Ale bundle sits on the offer (what each costs, the checks it failed), plus review polish (filled crosses, larger decision-card text, the conversion card's mascot on the right).
+- **A2A polish from review.**
+  - John's approval card: the bundle's failed checks use small **filled** coral crosses (white ✕ on #e8695f), and $3,570 is no longer red.
+  - Alex's decision card: why each offer, the Ginger Ale bundle box and the "suggested by" line are larger (12.5 → 14px; 11.5/12.5 → 12.5/13.5px).
+  - The conversion card: the copy is on the left, the mascot on the right (it faces the copy).
+- **A2A step 12: why John's agent turns down the Ginger Ale bundle, made prominent.**
+  - Each option on "Which should I take?" ends with what it **costs you**: v3a ≈ $115 (paying 15 days early), v3b **$3,570** in red (of stock nobody planned).
+  - v3b lists the checks it failed, each with a red ✕ and the system checked: not on Isar's approved list (SAP), no demand plan (SAP IBP), needs quality sign-off first (SAP QM).
+  - The "+1,000 Ginger Ale" note on the option is grey, not green, so it no longer reads as a perk. "Why not the others" is now just "Why not hold out at Net30".
+  - The agent's lead names the catch first: "The bundle looks like a free way to keep Net30. It isn't…", then recommends v3a, in two paragraphs.
+  - The approval card runs 8px wider each side; Fizz's incoming offer cards (v2, and v3a/v3b) are full width (were 92%).
+
 ## 25.1.1 — 2026-10-27 07:58 IST
 **Kind:** copy fix — the who's-acting bar names each person's side (John, Buyer; Alex, Seller).
 - **A2A who's-acting bar: the people say their side.** "John, Buyer" and "Alex, Seller" (the role a touch dimmer than the name); the agents stay as they are.

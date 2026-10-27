@@ -688,11 +688,11 @@ function Decision({ chosen, onSend }: { chosen: boolean; onSend: () => void }) {
                     </div>
                   ))}
                 </dl>
-                <span className="mt-4 text-[12.5px] leading-normal text-text-muted">
+                <span className="mt-4 text-[14px] leading-normal text-text-muted">
                   <Rich text={o.why} />
                 </span>
                 {"bundle" in o && (
-                  <span className="mt-3 block rounded-lg bg-black/[0.04] px-3 py-3 text-[12.5px] leading-snug tabular-nums">
+                  <span className="mt-3 block rounded-lg bg-black/[0.04] px-3 py-3 text-[14px] leading-snug tabular-nums">
                     <span className="flex items-baseline justify-between gap-3">
                       <span className="font-medium text-text">
                         <span className="text-[#1f7a3d]">{o.bundle.qty}</span> {o.bundle.name}
@@ -706,10 +706,10 @@ function Decision({ chosen, onSend }: { chosen: boolean; onSend: () => void }) {
                   <span className="mt-4 flex items-center gap-2 border-t border-black/[0.06] pt-4 leading-snug">
                     <AgentOf photo={margret} />
                     <span className="min-w-0">
-                      <span className="block whitespace-nowrap text-[12.5px] text-text">
+                      <span className="block whitespace-nowrap text-[13.5px] text-text">
                         {o.suggested.label} <span className="font-semibold">{o.suggested.name}</span>
                       </span>
-                      <span className="mt-0.5 block text-[11.5px] text-text-muted">{o.suggested.role}</span>
+                      <span className="mt-0.5 block text-[12.5px] text-text-muted">{o.suggested.role}</span>
                     </span>
                   </span>
                 )}
