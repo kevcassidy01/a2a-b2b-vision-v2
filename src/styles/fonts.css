@@ -81,8 +81,8 @@
 
 /* ── Avant Garde for Salesforce (Demi) ────────────────────────────── */
 /* Being tried on the Command Center's titles and store name. One weight, so
-   it answers every weight (no faux bold). Gitignored; absent, titles fall back
-   to Inter. */
+   it answers every weight (no faux bold). In the repo (internal only, on
+   Salesforce laptops), so every clone gets it; Inter is the fallback. */
 @font-face {
   font-family: "Avant Garde for Salesforce";
   font-style: normal;

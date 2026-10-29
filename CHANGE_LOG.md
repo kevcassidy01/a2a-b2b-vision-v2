@@ -30,6 +30,10 @@ Entry format:
 
 ## Unreleased
 
+## 26.0.1 — 2026-10-29 23:29 IST
+**Kind:** fix — fresh clones now get the Command Center's title font.
+- **Avant Garde for Salesforce is in the repo** (was gitignored), so a fresh clone shows it on the Command Center's titles, store name and big numbers instead of falling back to Inter. The repo is internal, used on Salesforce laptops. The Anthropic Serif files stay gitignored.
+
 ## 26.0.0 — 2026-10-29 23:12 IST
 **Kind:** large feature — the Command Center and phone made less dev-centric: one-line thinking states paced by how hard each turn is, business language and source chips in place of tool calls, Alex as the decision-maker, and the agent on your own side renamed Coworker.
 - **GM feedback, "less dev-centric", on branch `new-scope`** (copy and components only; same story, same turns):
