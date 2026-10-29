@@ -54,7 +54,7 @@ export function KnowledgeCard({
             <h4 className="flex items-center gap-2 text-[15px] font-semibold leading-snug text-text">
               {title}
               {id && (
-                <span className="rounded-md bg-[#f3f3f5] px-1.5 py-px font-mono text-[11px] font-medium tracking-[0.02em] text-text-muted">
+                <span className="rounded-md bg-[#f3f3f5] px-1.5 py-px text-[11.5px] font-medium text-text-muted">
                   {id}
                 </span>
               )}

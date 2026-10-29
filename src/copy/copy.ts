@@ -43,7 +43,6 @@ export const copy = {
       nav: {
         newChat: "New chat",
         artifacts: "Artifacts",
-        agents: "Agents",
         scheduled: "Scheduled",
       },
       /** The Command Center is an artifact Alex has pinned: it sits open under Artifacts, and it's the page on screen. */
@@ -97,8 +96,8 @@ export const copy = {
       label: "Who's acting",
       active: "acting",
       john: "John",
-      johnAgent: "John's agent",
-      alexAgent: "Alex's agent",
+      johnAgent: "John's Coworker",
+      alexAgent: "Alex's Coworker",
       alex: "Alex",
       /** What each person is, after their name: the people's side of the deal. */
       roles: { john: "Buyer", alex: "Seller" } as Partial<Record<"john" | "johnAgent" | "alexAgent" | "alex", string>>,
@@ -130,7 +129,7 @@ export const copy = {
       app: "Gmail",
       time: "now",
       title: "Order confirmation sent",
-      body: "O-5531 · to John Müller, Isar Bottling",
+      body: "Oktoberfest order, $69,615 · to John Müller, Isar Bottling",
     },
     /** John's view: Fizz Drinks' B2B store on the phone, before he logs in. */
     storefront: {
@@ -172,16 +171,16 @@ export const copy = {
        *  steps 3–5) and shows its thinking, its plan, the cart it built and
        *  where it's left the quote. Plan steps have a running and a done form. */
       agent: {
-        name: "Your agent",
+        name: "Your Coworker",
         owner: "Isar Bottling",
-        open: "Open your agent",
-        close: "Close your agent",
+        open: "Open your Coworker",
+        close: "Close your Coworker",
         fab: "New task",
-        card: { title: "Your agent", status: "3 tasks in motion" },
+        card: { title: "Your Coworker", status: "3 tasks in motion" },
         working: "Working…",
         /** Under the header once the task's under way: who's in on it (Fizz's agent once the quote's out), and the turns on Q-1042. */
         task: {
-          people: { john: "You", mike: "Mike", agent: "your agent", fizz: "Fizz's agent" },
+          people: { john: "You", mike: "Mike", agent: "your Coworker", fizz: "Fizz's agent" },
           turns: (n: number) => `${n} ${n === 1 ? "turn" : "turns"} on Q-1042`,
         },
         intro: {
@@ -192,9 +191,9 @@ export const copy = {
         /** Before login, no wall: Fizz's helpful agent for the store's questions.
          *  Delegating tasks is for John's own buyer agent, once he's logged in. */
         signedOut: {
-          name: "Fizz agent",
+          name: "Fizz",
           owner: "Fizz Partners",
-          fab: "Ask agent",
+          fab: "Ask Fizz",
           title: "How can I help?",
           body: "Ask about our concentrates, syrups, delivery areas or opening a business account.",
           suggestions: ["Which concentrates do you sell?", "Do you deliver to Munich?", "How do I open an account?"],
@@ -202,21 +201,18 @@ export const copy = {
         },
         handoff: { label: "You assigned this cart", time: "Just now" },
         cart: { name: "Oktoberfest stock-up", meta: "1 line · 5,000 units · Shared with Mike" },
-        /** While it reasons, a timeline of what it's doing in its head, one row after another (no "Thinking"):
-         *  what it reads and fetches, what it notices, what it wonders. `kind` picks the icon. Folded, they stay in the timeline. */
-        mulling: "Working through the cart",
+        /** Its thinking, as one line that changes: the opener, then each musing, then each plan step, a line at a time
+         *  (6–10 words, to read in the two seconds it shows). Then it folds to `summary`; opened, every step. `kind` picks the icon. */
+        opener: "Thinking…",
         musings: [
-          { kind: "read", text: "Reading Mike's cart and who it's meant for" },
-          { kind: "fetch", text: "Pulling Isar's open orders from SAP S/4HANA" },
-          { kind: "notice", text: "Noticing Munich has nothing on order for Oktoberfest" },
-          { kind: "wonder", text: "Wondering if Mike's 5,000 was meant to cover both plants" },
-          { kind: "fetch", text: "Checking plant stock in SAP: Munich has 9 days of cover" },
-          { kind: "wonder", text: "Weighing one combined order against two smaller ones" },
+          { kind: "fetch", text: "Pulling Isar's open orders from SAP" },
+          { kind: "notice", text: "Munich has nothing on order for Oktoberfest" },
+          { kind: "wonder", text: "Was Mike's 5,000 meant for both plants?" },
         ],
-        thought: (s: number) => `Mulled it over for ${s}s`,
+        summary: "Topped up the cart for Munich and asked Fizz",
         reasoning:
           "Mike's agent started this cart from Fizz's Oktoberfest offer, for Frankfurt's stock. Munich runs the same three weeks and nothing is ordered for it yet. Check Munich's forecast, add what it needs to this cart so it stays one order, then ask Fizz for its best price on the lot.",
-        lead: "Mike's cart covers **Frankfurt** for Oktoberfest, but **Munich isn't stocked yet**. I'll top it up for Munich and get Fizz's best price on the whole order.",
+        lead: "Mike's cart covered **Frankfurt** for Oktoberfest, but **Munich wasn't stocked yet**, so I've topped it up for Munich.",
         plan: {
           title: "Stock up for Oktoberfest",
           of: "of",
@@ -267,11 +263,11 @@ export const copy = {
           isNew: "New",
           lines: [
             { name: "Lemonade concentrate", qty: "5,000 units", site: "Frankfurt", by: "Mike's agent" },
-            { name: "Orange concentrate", qty: "10,000 units", site: "Munich", by: "Your agent", added: true },
+            { name: "Orange concentrate", qty: "10,000 units", site: "Munich", by: "Your Coworker", added: true },
           ],
         },
         reply: "Fizz has our quote request: **15,000 units at 15% off, Net30**. Their offer is 12%, but a cart this size can ask for more. I'll negotiate within your limits and only come back to you if the terms change.",
-        quote: { id: "Q-1042 v1", status: "Waiting for Fizz to respond", meta: "15,000 units · asking 15% off · Net30" },
+        quote: { id: "Oktoberfest quote", status: "Waiting for Fizz to respond", meta: "15,000 units · asking 15% off · Net30" },
         suggestions: ["What are my limits?", "Show the quote"],
         /** Story steps 8–9: Fizz's counter-offer, v2, lands in the thread (on
          *  the right, as the other side's turn), and the agent weighs it. It takes
@@ -284,7 +280,7 @@ export const copy = {
           said: "Our Oktoberfest offer is **12%** at Net30. I can do that if you take **19,500 units**.",
           offer: {
             title: "Counter-offer",
-            id: "Q-1042 v2",
+            id: "Q-1042",
             lines: [
               { name: "Orange concentrate", site: "Munich", qty: "12,000", change: "+2,000" },
               { name: "Lemonade concentrate", site: "Frankfurt", qty: "7,500", change: "+2,500" },
@@ -295,16 +291,12 @@ export const copy = {
               { label: "Total", value: "$72,072" },
             ],
           },
-          mulling: "Weighing Fizz's counter",
-          thought: (s: number) => `Weighed it up for ${s}s`,
+          opener: "Looking into it…",
+          summary: "Took Fizz's units and held out for 15%",
           musings: [
-            { kind: "read", text: "Fizz came back with v2: 12% off at Net30, and more of both" },
-            { kind: "fetch", text: "Checking the extra units against the forecast in SAP IBP" },
-            { kind: "notice", text: "Both plants can sell 19,500 units over Oktoberfest" },
-            { kind: "notice", text: "$72,072 is inside John's $100,000 limit for an order" },
-            { kind: "wonder", text: "12% is short of our 15%. Can we keep the volume and push on price?" },
+            { kind: "read", text: "Fizz countered: 12% off, and more of both" },
+            { kind: "wonder", text: "12% is short of 15%. Push on price?" },
           ],
-          lead: "v2 gives us **more volume** but only **12% off**. The extra units fit Oktoberfest demand, so I'll **take the quantities** and **hold out for 15%**.",
           plan: {
             title: "Reply to Fizz",
             of: "of",
@@ -326,8 +318,8 @@ export const copy = {
                 source: "Isar buying policy",
               },
               {
-                doing: "Taking v2's quantities",
-                done: "Took v2's quantities",
+                doing: "Taking Fizz's quantities",
+                done: "Took Fizz's quantities",
                 detail: "**12,000** orange and **7,500** lemonade, in the same cart",
                 kind: "write",
                 source: "Fizz Partners · cart",
@@ -342,16 +334,16 @@ export const copy = {
             ],
           },
           reply: "I've told Fizz we'll take **19,500 units** if they meet us at **15% off, Net30**. That's inside your limits, so there's nothing for you to do yet. I'll come back to you if the terms change.",
-          quote: { id: "Q-1042 v2", status: "Waiting for Fizz to respond", meta: "19,500 units · asking 15% off · Net30" },
+          quote: { id: "Oktoberfest quote", status: "Waiting for Fizz to respond", meta: "19,500 units · asking 15% off · Net30" },
           /** The back and forth on Q-1042 so far, folded under a chevron before the done mark. `by` picks the avatar. */
           turns: {
             title: (n: number) => `${n} turns on Q-1042`,
             list: [
-              { by: "buyer", text: "**John's agent** sent v1: 15,000 units at **15% off**, Net30" },
-              { by: "seller", text: "**Fizz's agent** countered with v2: 19,500 units at **12% off**, Net30, $72,072" },
-              { by: "buyer", text: "**John's agent** took v2's units and asked for **15% off**" },
-              { by: "seller", text: "**Fizz's agent** sent v3a, **15% at Net15**, and v3b, **15% with a Ginger Ale bundle**" },
-              { by: "buyer", text: "**You** approved v3a, and **John's agent** placed order **O-5531**" },
+              { by: "buyer", text: "**Your Coworker** asked for 15,000 units at **15% off**, Net30" },
+              { by: "seller", text: "**Fizz's agent** countered: 19,500 units at **12% off**, Net30, $72,072" },
+              { by: "buyer", text: "**Your Coworker** took the units and asked for **15% off**" },
+              { by: "seller", text: "**Fizz's agent** offered two ways to 15%: **pay in 15 days**, or a **Ginger Ale bundle**" },
+              { by: "buyer", text: "**You** approved paying in 15 days, and **your Coworker** placed the order" },
             ],
           },
         },
@@ -365,38 +357,38 @@ export const copy = {
           said: "Two ways to **15%**: pay in **15 days**, or keep **Net30** and take our new Ginger Ale bundle.",
           offers: {
             title: "Two offers",
-            id: "Q-1042 v3a, v3b",
+            id: "Q-1042",
             list: [
-              { id: "v3a", name: "15% at Net15", rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]] },
+              { id: "v3a", name: "Pay in 15 days", rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]] },
               {
                 id: "v3b",
-                name: "15% with a bundle",
+                name: "Ginger Ale bundle",
                 rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]],
                 note: "+1,000 Ginger Ale concentrate, new",
               },
             ],
           },
-          mulling: "Weighing both offers",
-          thought: (s: number) => `Weighed them up for ${s}s`,
+          opener: "Thinking…",
+          summary: "Weighed both offers: paying in 15 days wins",
           musings: [
-            { kind: "read", text: "Fizz sent two ways to 15%: v3a at Net15, or v3b with a Ginger Ale bundle at Net30" },
+            { kind: "read", text: "Fizz sent two ways to get to 15%" },
             { kind: "fetch", text: "Checking Isar's approved product list" },
-            { kind: "notice", text: "Ginger Ale isn't on it, and a new concentrate needs quality sign-off first" },
-            { kind: "fetch", text: "Looking for a Ginger Ale demand plan in SAP IBP" },
-            { kind: "notice", text: "There isn't one: 1,000 units is about a million litres of a drink Isar has never sold" },
-            { kind: "wonder", text: "The bundle adds $3,570 of stock nobody planned. Paying in 15 days costs about $115" },
-            { kind: "notice", text: "Net15 isn't the Net30 John set, so this one's his call" },
+            { kind: "notice", text: "Ginger Ale isn't approved for Isar yet" },
+            { kind: "fetch", text: "Looking for a Ginger Ale demand plan" },
+            { kind: "notice", text: "There's none: a million litres nobody planned" },
+            { kind: "wonder", text: "Bundle adds $3,570. Paying early costs $115" },
+            { kind: "notice", text: "Net15 changes John's terms, so it's his call" },
           ],
-          lead: "Fizz met us at **15%**, two ways. The bundle looks like a free way to keep Net30. It isn't: it's **$3,570** of a drink Isar has never sold.\n\nI'd take **v3a**. Paying 15 days early costs about **$115**. It changes your Net30, so I need your OK.",
+          lead: "Fizz met us at **15%**, two ways. The bundle looks like a free way to keep Net30. It isn't: it's **$3,570** of a drink Isar has never sold.\n\nI'd **pay in 15 days**. Paying early costs about **$115**. It changes your Net30, so I need your OK.",
           /** John picks one: v3a is picked to start, as the agent recommends it; only v3a plays on in the demo. */
           approval: {
             title: "Which should I take?",
-            id: "Q-1042 · v3a or v3b",
+            id: "Q-1042",
             tag: "Recommended",
             options: [
               {
                 id: "v3a",
-                name: "15% at Net15",
+                name: "Pay in 15 days",
                 rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]],
                 /** What changed since the terms John set. */
                 changed: "Was Net30",
@@ -405,7 +397,7 @@ export const copy = {
               },
               {
                 id: "v3b",
-                name: "15% with a bundle",
+                name: "Ginger Ale bundle",
                 rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]],
                 note: "+1,000 Ginger Ale concentrate, new",
                 cost: { value: "$3,570", why: "of stock nobody planned" },
@@ -420,14 +412,16 @@ export const copy = {
             costLabel: "Costs you",
             failedLabel: "Failed checks",
             whyNot: { title: "Why not hold out at Net30", text: "Fizz can't give 15% at Net30, and Oktoberfest is **three weeks** out." },
-            approve: (id: string) => `Approve ${id}`,
+            approve: "Approve this offer",
             approved: "Approved",
           },
           /** Story step 13: John's turn, once he taps Approve: what he approved, and what it was. */
-          you: { label: "You approved", time: "Just now", text: "Approve v3a", detail: "15% at Net15 · 19,500 units · $69,615" },
+          you: { label: "You approved", time: "Just now", text: "Pay in 15 days", detail: "15% at Net15 · 19,500 units · $69,615" },
         },
         /** Story steps 13–14: the agent accepts v3a with Fizz and places O-5531. */
         order: {
+          opener: "On it…",
+          summary: "Accepted Fizz's offer and placed the order",
           plan: {
             title: "Place the order",
             of: "of",
@@ -435,15 +429,15 @@ export const copy = {
             toggle: "Show or hide the plan",
             steps: [
               {
-                doing: "Accepting v3a with Fizz",
-                done: "Accepted v3a with Fizz",
+                doing: "Accepting the offer with Fizz",
+                done: "Accepted the offer with Fizz",
                 detail: "**19,500 units** · **15% off** · Net15, approved by you",
                 kind: "write",
                 source: "Fizz seller agent · quote reply",
               },
               {
-                doing: "Placing order O-5531",
-                done: "Placed order O-5531",
+                doing: "Placing the order",
+                done: "Placed the order",
                 detail: "**$69,615**, from the cart Mike started",
                 kind: "write",
                 source: "Fizz Partners · checkout",
@@ -458,8 +452,8 @@ export const copy = {
             ],
           },
           card: {
-            title: "Order O-5531",
-            meta: "19,500 units · 15% off · Net15",
+            title: "Oktoberfest order",
+            meta: "O-5531 · 19,500 units · 15% off · Net15",
             status: "Placed",
             lines: [
               { name: "Orange concentrate", qty: "12,000 units", site: "Munich" },
@@ -477,24 +471,24 @@ export const copy = {
             details: "View order details",
             po: "View purchase order",
           },
-          reply: "Done. **O-5531** is placed: **19,500 units at 15% off, Net15**, for **$69,615**. The purchase order is in SAP, and Mike can see it in his orders.",
+          reply: "Done. Your **Oktoberfest order** is placed: **19,500 units at 15% off, Net15**, for **$69,615**. The purchase order is in SAP, and Mike can see it in his orders.",
         },
         /** Story step 15: once O-5531's in, the agent sees Oktoberfest comes round every year (it checks the dates on
          *  oktoberfest.de, in its thinking only) and offers to save the order as a template. John saves it. */
         template: {
-          mulling: "Thinking about next year",
-          thought: (s: number) => `Thought ahead for ${s}s`,
+          opener: "Thinking…",
+          summary: "Thought ahead to next Oktoberfest",
           musings: [
-            { kind: "notice", text: "O-5531 is Isar's Oktoberfest stock-up, for Munich and Frankfurt" },
-            { kind: "fetch", text: "Looking up Oktoberfest's dates on oktoberfest.de" },
-            { kind: "read", text: "oktoberfest.de: Oktoberfest 2027 runs Sep 18 – Oct 3, the 192nd Wiesn" },
-            { kind: "notice", text: "It comes round every year, so Isar will want this order again" },
-            { kind: "wonder", text: "Make it a recurring order: a template, with a reminder a month before?" },
+            { kind: "notice", text: "This is Isar's yearly Oktoberfest stock-up" },
+            { kind: "fetch", text: "Looking up next year's Oktoberfest dates" },
+            { kind: "read", text: "Oktoberfest 2027 runs Sep 18 – Oct 3" },
+            { kind: "notice", text: "It comes round every year, so it'll recur" },
+            { kind: "wonder", text: "Save it as a template, with a reminder?" },
           ],
           said: "Oktoberfest comes round every year: **2027 runs Sep 18 – Oct 3**. Want me to save this order as a template for a **recurring order**, so it's ready to go next year?",
           card: {
             title: "Oktoberfest stock-up",
-            meta: "Recurring order · yearly · from O-5531",
+            meta: "Recurring order · yearly · from today's order",
             lines: [
               { name: "Orange concentrate", qty: "12,000 units", site: "Munich" },
               { name: "Lemonade concentrate", qty: "7,500 units", site: "Frankfurt" },
@@ -521,7 +515,7 @@ export const copy = {
           reply: "Saved. **Oktoberfest stock-up** is in your recurring orders. On **Aug 16, 2027** I'll bring it back and ask Fizz for a fresh quote.",
           suggestions: ["Show the order", "Show my recurring orders"],
         },
-        placeholder: "Ask your agent",
+        placeholder: "Ask your Coworker",
         add: "Add",
         send: "Send",
         stop: "Stop",
@@ -557,7 +551,7 @@ export const copy = {
             items: [
               { label: "Delivery sites", icon: "site", detail: "Munich, Frankfurt" },
               { label: "Team and permissions", icon: "team" },
-              { label: "Agent and limits", icon: "agent" },
+              { label: "Coworker and limits", icon: "agent" },
             ],
           },
           {
@@ -608,14 +602,14 @@ export const copy = {
           valueLabel: "Cart value",
           time: "now",
           cta: "Open cart",
-          assign: "Assign to your agent",
+          assign: "Assign to your Coworker",
           /** Once it's handed over, where it's got to, as a chip; the agent button replaces Assign. */
-          status: { assigned: "With your agent", quoted: "Q-1042 · with Fizz", needsYou: "Q-1042 · needs you", ordered: "Confirmed by Fizz" },
-          openAgent: "Open your agent",
+          status: { assigned: "With your Coworker", quoted: "Quote with Fizz", needsYou: "Needs your OK", ordered: "Confirmed by Fizz" },
+          openAgent: "Open your Coworker",
           /** Once O-5531 is placed the card becomes the order: what it is, its total, what's in and what's to come, and the way into the order and the PO. */
           placed: {
             title: "Order placed",
-            body: "Your agent placed **O-5531** from Mike's Oktoberfest cart: 19,500 units for Munich and Frankfurt.",
+            body: "Your Coworker placed the order from Mike's Oktoberfest cart: 19,500 units for Munich and Frankfurt.",
             value: "$69,615",
             valueLabel: "Order total",
           },
@@ -645,7 +639,7 @@ export const copy = {
             { label: "Open quotes", value: "None" },
           ],
           /** While Q-1042 is open, and the credit once O-5531 holds $69,615 of it. */
-          openQuote: "Q-1042",
+          openQuote: "1 · Oktoberfest",
           creditAfter: { value: "$14,585", share: 0.097 },
         },
         buyAgain: {
@@ -801,9 +795,9 @@ export const copy = {
         /** Two lines, broken here. */
         title: ["Every store, every market,", "at your fingertips"],
         body: "Orders, revenue and approvals from all your storefronts, pulled together from Salesforce, Slack and the tools your team already uses.",
-        cta: "Load Command Center",
+        cta: "See Command Center",
         /** Floating around the edges: what the Command Center tracks, each with its colour dot. */
-        signals: ["Orders", "Revenue", "Approvals", "Germany +18%", "Checkout", "Agent handling"],
+        signals: ["Orders", "Revenue", "Approvals", "Germany +18%", "Checkout", "Coworker handling"],
       },
       greeting: "Good morning, Alex",
       store: "Fizz Partners B2B",
@@ -877,14 +871,14 @@ export const copy = {
           value: "$18,240",
           note: "4 orders",
           /** Once O-5531 is in (story step 14). $18,240 + $69,615. */
-          after: { value: "$87,855", note: "5 orders · O-5531 just in" },
+          after: { value: "$87,855", note: "5 orders · Isar's just in" },
         },
       },
       /** The Campaigns card: the live campaign (the offer Mike's agent started Isar's cart from), then the ones that ended. */
-      /** Bottom right once O-5531 is placed, with the confetti, and it stays: the campaign's biggest conversion yet. */
+      /** Bottom right once O-5531 is placed, with the confetti, for 5 seconds: the campaign's biggest conversion yet. */
       converted: {
         title: "Isar Bottling converted",
-        body: "**O-5531**, **$69,615**, from Oktoberfest stock-up: the campaign's biggest order yet, and its **62nd**.",
+        body: "A **$69,615** Oktoberfest order: the campaign's biggest yet, and its **62nd**.",
       },
       campaigns: {
         live: {
@@ -905,20 +899,20 @@ export const copy = {
           steps: ["Seen", "Quote", "Converted"],
           /** How each stage reads to a screen reader. */
           stepState: { done: "done", now: "in progress", todo: "not yet" },
-          working: "the agent's working on it",
+          working: "your Coworker's working on it",
           /** Isar's row follows the story: at load, once Q-1042 lands, once Isar takes v3a, once O-5531 is placed. */
           isar: {
             name: "Isar Bottling",
             note: "Seen Oct 21 · Mike's agent started a cart",
-            quote: { note: "Q-1042 · Negotiating" },
-            accepted: { note: "Q-1042 · Approved" },
-            ordered: { note: "Converted · O-5531 · $69,615" },
+            quote: { note: "Quote · negotiating" },
+            accepted: { note: "Quote · approved" },
+            ordered: { note: "Converted · $69,615 order" },
           },
           /** The other accounts shown, each with its three stages and what the agent's doing next. None has converted yet: Isar is the first. */
           accounts: [
             { name: "Rheinland Bottling", steps: ["done", "done", "todo"], note: "Q-1038 · Sent, waiting on them" },
-            { name: "Spree Getränke", steps: ["done", "todo", "todo"], note: "Seen Oct 20 · agent nudges Oct 27" },
-            { name: "Main Quelle", steps: ["todo", "todo", "todo"], note: "Not seen yet · agent resends Oct 26" },
+            { name: "Spree Getränke", steps: ["done", "todo", "todo"], note: "Seen Oct 20 · Coworker nudges Oct 27" },
+            { name: "Main Quelle", steps: ["todo", "todo", "todo"], note: "Not seen yet · Coworker resends Oct 26" },
           ],
           more: "1,856 more accounts",
         },
@@ -1058,7 +1052,7 @@ export const copy = {
         request: {
           /** Over the task card's title: what kind of task it is. */
           kind: "Quote request",
-          id: "Q-1042 v1",
+          id: "Isar's Oktoberfest quote",
           from: "Isar Bottling",
           /** Read in one at a time by the seller agent. */
           meta: ["15,000 units", "asking 15% off", "Net30"],
@@ -1066,7 +1060,7 @@ export const copy = {
           facts: { total: "Total", shipsTo: "Ships to", sites: "Munich, Frankfurt" },
           total: "$53,550",
           /** Who it's assigned to, as an avatar pill; the pulse runs while the agent works on it. */
-          agent: "Agent responding",
+          agent: "Coworker responding",
           /** Read out before the id: the row opens the request in the agent's drawer. */
           open: "Open",
           working: "working on it",
@@ -1075,19 +1069,19 @@ export const copy = {
           campaign: { label: "Campaign", name: "Oktoberfest stock-up" },
           /** Once the seller agent has sent v2: the row shows it, and the agent waits on the buyer (no dots). */
           countered: {
-            id: "Q-1042 v2",
+            id: "Isar's Oktoberfest quote",
             meta: ["19,500 units", "12% off", "Net30"],
             total: "$72,072",
             agent: "Waiting on Isar",
           },
           /** Isar's agent has held out for 15%: the seller agent is at it again, then hands it to Alex. */
-          heldOut: { id: "Q-1042 v2", meta: ["19,500 units", "asking 15% off", "Net30"], total: "$69,615", agent: "Agent responding", needsYou: "Needs you" },
+          heldOut: { id: "Isar's Oktoberfest quote", meta: ["19,500 units", "asking 15% off", "Net30"], total: "$69,615", agent: "Coworker responding", needsYou: "Needs you" },
           /** Alex sent both: v3a and v3b are out, waiting on the buyer. */
-          v3: { id: "Q-1042 v3a, v3b", meta: ["19,500 units", "15% off", "Net15 or bundle"], total: "From $69,615", agent: "Waiting on Isar" },
+          v3: { id: "Isar's Oktoberfest quote", meta: ["19,500 units", "15% off", "Net15 or bundle"], total: "From $69,615", agent: "Waiting on Isar" },
           /** Isar took v3a: approved on both sides. */
-          accepted: { id: "Q-1042 v3a", meta: ["19,500 units", "15% off", "Net15"], total: "$69,615", agent: "Approved" },
+          accepted: { id: "Isar's Oktoberfest quote", meta: ["19,500 units", "15% off", "Net15"], total: "$69,615", agent: "Approved" },
           /** The order's in: the row becomes O-5531, done. */
-          ordered: { kind: "Order", id: "O-5531", meta: ["From Q-1042 v3a", "19,500 units", "Net15"], total: "$69,615", agent: "Order placed" },
+          ordered: { kind: "Order", id: "Isar's Oktoberfest order", meta: ["19,500 units", "15% off", "Net15"], total: "$69,615", agent: "Order placed" },
         },
       },
       /** The quarter to date at a glance, sales first. `delta` is the rise on Q3
@@ -1112,24 +1106,25 @@ export const copy = {
       up: "Up",
       refresh: "Refresh",
       notifications: "Notifications",
-      /** The seller agent. Its status is read out to screen readers; the dots show it visually. */
+      /** The seller agent, called Alex's Coworker. Its status is read out to screen readers; the dots show it visually. */
       agent: {
-        label: "Agent",
-        /** The drawer the Agent button opens: no chat yet, just what's around it. */
-        close: "Close Agent",
-        status: "Fizz's seller agent",
+        label: "Coworker",
+        /** The drawer the Coworker button opens: no chat yet, just what's around it. */
+        close: "Close Coworker",
+        status: "Fizz's seller Coworker",
         newChat: "New chat",
         history: "Chat history",
         more: "More",
         /** The chat about Q-1042, once Alex opens the request: what came in, then the agent taking it in. It doesn't conclude yet. */
         quote: {
-          from: "Isar Bottling's agent",
+          /** Isar's messages come from John's agent: his photo, with the agent's mark on it. */
+          from: "John Müller's agent · Isar Bottling",
           /** Over what Fizz's agent says to Isar's agent, so it doesn't read as said to Alex. */
           toIsar: "To Isar Bottling's agent",
           time: "Just now",
           request: {
             title: "Quote request",
-            id: "Q-1042 · v1",
+            id: "Q-1042",
             /** What Isar's agent said with it. An agent never sends a card alone. */
             said: "We're stocking up for Oktoberfest: **15,000 units**. Can you do **15% off at Net30**?",
             from: "Isar Bottling · Oktoberfest stock-up",
@@ -1146,27 +1141,19 @@ export const copy = {
               { label: "Payment terms", value: "Net30" },
               { label: "Total at ask", value: "$53,550", note: "$63,000 list price" },
             ],
-            via: "Received over A2A · signed by Isar Bottling",
+            via: "From Isar Bottling's agent · verified",
             open: "Open in Salesforce",
           },
-          /** One at a time; `label` heads the timeline while that musing is the one at work. Varied on purpose: not "thinking" throughout. */
+          /** Its thinking, as one line that changes: the opener, then each musing, then each check, a line at a time
+           *  (6–10 words, to read in the two seconds it shows). Then it folds to `summary`; opened, every step, with its source. */
+          opener: "Thinking…",
           musings: [
-            { kind: "read", label: "Reading the request", text: "15,000 units across two sites, Munich and Frankfurt" },
-            { kind: "read", label: "Reading the request", text: "They're asking for 15% off at Net30, ahead of Oktoberfest" },
-            { kind: "fetch", label: "Pulling up the account", text: "Looking up Isar Bottling's account and price book in Salesforce", tool: { name: "dispatch_readonly", target: "buyer-profile-management" } },
-            { kind: "notice", label: "Pulling up the account", text: "A steady account: 3 orders this year, all paid on time" },
-            { kind: "fetch", label: "Checking our rules", text: "Checking the offer Isar's cart came from", tool: { name: "dispatch_readonly", target: "promotion-management" } },
-            { kind: "notice", label: "Checking our rules", text: "Mike's agent started the cart from our Oktoberfest offer: up to 12% at Net30, so 15% is over the line" },
-            { kind: "wonder", label: "Weighing it up", text: "Munich's demand is up for Oktoberfest. Could they take more volume?" },
-            { kind: "wonder", label: "Considering a counter", text: "A bigger order at a smaller discount might work for both sides" },
+            { kind: "read", text: "Reading Isar's request: 15,000 units at 15% off" },
+            { kind: "fetch", text: "Looking up Isar Bottling's account", source: "Accounts" },
+            { kind: "notice", text: "A steady account: 3 orders, all paid on time" },
+            { kind: "wonder", text: "Could Munich take more volume for Oktoberfest?" },
           ],
-          /** Ahead of a Salesforce tool call (a musing's or a check's `tool`): "Called `dispatch_readonly` <SOR>", as on Cowork. */
-          called: "Called",
-          /** Where it stays once it's run through them, still at work, before it folds. */
-          hold: "Weighing the options",
-          weighed: (s: number) => `Weighed it up for ${s}s`,
-          /** What it'll do, once it's weighed it up. */
-          lead: "Isar wants **15% at Net30**, but the Oktoberfest offer stops at **12%**. Before I counter, I'll check stock, their price book and their credit.",
+          summary: "Checked stock, price and credit, then countered",
           /** Fizz's checks before an offer goes out, then the counter. Present tense while running, past once done. */
           plan: {
             title: "Checks before countering",
@@ -1174,18 +1161,18 @@ export const copy = {
             done: "done",
             toggle: "Show or hide the checks",
             steps: [
-              { doing: "Checking stock in Munich and Frankfurt", done: "Checked stock in Munich and Frankfurt", detail: "**14,000** orange in Munich, **9,000** lemonade in Frankfurt: room for more", kind: "fetch", source: "Omnichannel Inventory", tool: { name: "dispatch_readonly", target: "merchant-catalog-management" } },
-              { doing: "Pulling Isar's price book", done: "Pulled Isar's price book", detail: "**$4.20** a unit list price, with a volume tier from **18,000 units**", kind: "fetch", source: "Revenue Cloud", tool: { name: "dispatch_readonly", target: "promotion-management" } },
-              { doing: "Checking the Oktoberfest offer", done: "Checked the Oktoberfest offer", detail: "Up to **12% at Net30**. More, or Net15, needs a person", kind: "read", source: "Promotions", tool: { name: "get_sor_detail", target: "b2b-merchant-quote-management" } },
-              { doing: "Checking Isar's credit", done: "Checked Isar's credit", detail: "**$250,000** limit, **$38,000** open: room for this order", kind: "fetch", source: "Billing", tool: { name: "dispatch_readonly", target: "merchant-payment-management" } },
-              { doing: "Drafting counter-offer v2", done: "Drafted counter-offer v2", detail: "More volume at 12%: **12,000** orange and **7,500** lemonade", kind: "write", source: "Revenue Cloud", tool: { name: "dispatch_write", target: "b2b-merchant-quote-management" } },
-              { doing: "Sending v2 to Isar Bottling's agent", done: "Sent v2 to Isar Bottling's agent", detail: "Over A2A, signed by Fizz Drinks", kind: "write", source: "A2A" },
+              { doing: "Checking stock in Munich and Frankfurt", done: "Checked stock in Munich and Frankfurt", detail: "**14,000** orange in Munich, **9,000** lemonade in Frankfurt: room for more", kind: "fetch", source: "Inventory", sf: true },
+              { doing: "Pulling Isar's price book", done: "Pulled Isar's price book", detail: "**$4.20** a unit list price, with a volume tier from **18,000 units**", kind: "fetch", source: "Price books", sf: true },
+              { doing: "Checking the Oktoberfest offer", done: "Checked the Oktoberfest offer", detail: "Up to **12% at Net30**. More, or Net15, needs a person", kind: "read", source: "Promotions", sf: true },
+              { doing: "Checking Isar's credit", done: "Checked Isar's credit", detail: "**$250,000** limit, **$38,000** open: room for this order", kind: "fetch", source: "Billing", sf: true },
+              { doing: "Drafting the counter-offer", done: "Drafted the counter-offer", detail: "More volume at 12%: **12,000** orange and **7,500** lemonade", kind: "write", source: "Quotes", sf: true },
+              { doing: "Sending our counter to Isar's agent", done: "Sent our counter to Isar's agent", detail: "Signed as Fizz Drinks, so their agent knows it's us", kind: "write", source: "Isar's agent" },
             ],
           },
           /** The counter-offer it sent, as a knowledge card. */
           counter: {
             title: "Counter-offer",
-            id: "Q-1042 · v2",
+            id: "Q-1042",
             /** What it said to Isar's agent with it, as the phone shows it. */
             said: "Our Oktoberfest offer is **12%** at Net30. I can do that if you take **19,500 units**.",
             for: "To Isar Bottling · Oktoberfest stock-up",
@@ -1199,28 +1186,34 @@ export const copy = {
               { label: "Payment terms", value: "Net30" },
               { label: "Total", value: "$72,072", note: "$81,900 list price" },
             ],
-            via: "Sent over A2A · signed by Fizz Drinks",
+            via: "Sent as Fizz Drinks · verified",
           },
-          reply: "I've countered with **v2: 12% off**, not the 15% they asked. That's the Oktoberfest offer's limit at Net30.\n\nMunich's demand can take more, so I added **2,000 orange** and **2,500 lemonade**. The order's now **$72,072**, up from $53,550. I'll tell you when Isar's agent replies.",
+          /** What the turn did for the business, in a line: it heads the turn once the turn is done. */
+          outcome: "Countered at 12% and grew the order to $72,072",
+          /** Where the reply's facts came from, as chips under it. */
+          sources: ["Inventory", "Price books", "Promotions", "Billing"],
+          /** Under the turn once it's done: what Alex might ask next, as prompt chips (display only). */
+          followUps: ["Why counter at 12%?", "Show Isar's order history", "What if Isar says no?"],
+          reply: "I've countered at **12% off**, not the 15% they asked. That's the Oktoberfest offer's limit at Net30.\n\nMunich's demand can take more, so I added **2,000 orange** and **2,500 lemonade**. The order's now **$72,072**, up from $53,550. I'll tell you when Isar's agent replies.",
           /** The back and forth on Q-1042 so far, folded under a chevron before the done mark. `by` picks the avatar. */
           turns: {
             title: (n: number) => `${n} turns on Q-1042`,
             list: [
-              { by: "buyer", text: "**Isar's agent** asked for v1: 15,000 units at **15% off**, Net30" },
-              { by: "seller", text: "**Fizz's agent** countered with v2: 19,500 units at **12% off**, Net30, $72,072" },
-              { by: "buyer", text: "**Isar's agent** took v2's units and held out for **15% off**, Net30" },
-              { by: "seller", text: "**Fizz's agent** sent v3a, **15% at Net15**, and v3b, **15% with a Ginger Ale bundle**" },
-              { by: "buyer", text: "**Isar's agent** took v3a, approved by John Müller, and placed order **O-5531**" },
+              { by: "buyer", text: "**Isar's agent** asked for 15,000 units at **15% off**, Net30" },
+              { by: "seller", text: "**Fizz's agent** countered: 19,500 units at **12% off**, Net30, $72,072" },
+              { by: "buyer", text: "**Isar's agent** took the units and held out for **15% off**, Net30" },
+              { by: "seller", text: "**Fizz's agent** offered two ways to 15%: **pay in 15 days**, or a **Ginger Ale bundle**" },
+              { by: "buyer", text: "**Isar's agent** took paying in 15 days, approved by John Müller, and placed the order" },
             ],
           },
           /** Story step 9, Fizz's side: Isar's agent takes v2's units and holds out for 15%. Fizz's agent weighs it and finds only Alex can get there. */
           heldOut: {
-            from: "Isar Bottling's agent",
+            from: "John Müller's agent · Isar Bottling",
             time: "Just now",
             reply: {
-              title: "Reply to v2",
-              id: "Q-1042 · v2",
-              said: "We'll take v2's **19,500 units**, but we need **15% off at Net30**, not 12%.",
+              title: "Reply to our counter",
+              id: "Q-1042",
+              said: "We'll take your **19,500 units**, but we need **15% off at Net30**, not 12%.",
               from: "Isar Bottling · Oktoberfest stock-up",
               status: "New",
               lines: [
@@ -1232,54 +1225,62 @@ export const copy = {
                 { label: "Payment terms", value: "Net30" },
                 { label: "Total at ask", value: "$69,615", note: "$81,900 list price" },
               ],
-              via: "Received over A2A · signed by Isar Bottling",
+              via: "From Isar Bottling's agent · verified",
             },
-            /** First, a short read of what came back, then what it heard, before it deliberates. */
-            understand: {
-              musings: [
-                { kind: "read", label: "Reading Isar's reply", text: "They'll take all 19,500 units from v2" },
-                { kind: "notice", label: "Comparing it with v2", text: "They've kept Net30 and gone back to 15% off, not the 12% I offered" },
-              ],
-              hold: "Taking it in",
-              done: (s: number) => `Read Isar's reply in ${s}s`,
-              said: "Isar's agent will take v2's **19,500 units**, but it's holding out for **15% off at Net30**, not the 12% I offered. Let me see what I can put together.",
-            },
+            opener: "Looking into it…",
             musings: [
-              { kind: "fetch", label: "Checking the price book", text: "Checking Isar's volume tiers for 19,500 units", tool: { name: "dispatch_readonly", target: "promotion-management" } },
-              { kind: "notice", label: "Checking the price book", text: "19,500 clears the 18,000-unit tier, but that tier tops out at 12%" },
-              { kind: "fetch", label: "Checking our rules", text: "Checking what the policy allows past 12%", tool: { name: "get_sor_detail", target: "b2b-merchant-quote-management" } },
-              { kind: "notice", label: "Checking our rules", text: "15% is allowed at Net15, or with a bundle, and either needs a person to sign off" },
-              { kind: "fetch", label: "Looking for room", text: "Looking for a bundle Isar's account can get", tool: { name: "dispatch_readonly", target: "merchant-catalog-management" } },
-              { kind: "notice", label: "Looking for room", text: "Margret Reyes's agent set up a Ginger Ale launch bundle: 1,000 units of the new concentrate keeps 15% at Net30" },
-              { kind: "wonder", label: "Weighing it up", text: "Two ways to 15%, Net15 or the bundle. Alex should choose, and Isar can pick" },
+              { kind: "read", text: "Reading Isar's reply to our counter" },
+              { kind: "notice", text: "They'll take 19,500 units, but want 15% off" },
+              { kind: "fetch", text: "Checking Isar's volume tiers for 19,500 units", source: "Price books" },
+              { kind: "notice", text: "That tier tops out at 12% off" },
+              { kind: "fetch", text: "Checking what's allowed past 12%", source: "Discount rules" },
+              { kind: "notice", text: "15% needs Net15 or a bundle, and your OK" },
+              { kind: "fetch", text: "Looking for a bundle Isar can get", source: "Catalog" },
+              { kind: "notice", text: "Margret's agent set up a Ginger Ale launch bundle" },
             ],
-            lead: "15% at Net30 is past the Oktoberfest offer's **12%**, so this one's your call. There are two ways to get Isar to 15%: **Net15**, or the **Ginger Ale bundle** Margret's agent set up. I'd send both and let Isar's agent pick.",
+            summary: "Found two ways to get Isar to 15%",
+            outcome: "Isar wants 15%. That's your call, and I've found two ways to get there",
+            sources: ["Price books", "Discount rules", "Catalog"],
+            lead: "Isar's agent will take all **19,500 units**, but wants **15% at Net30**, past the Oktoberfest offer's **12%**. I've found two ways to get there and still win the deal.",
+            /** Before the decision card: the agent turns to Alex, as a colleague would. */
+            handoff: { to: "@Alex", text: "I need your call on this one" },
+            followUps: ["Compare the two offers", "What does Net15 cost us?"],
           },
           /** Story step 10: Alex's call, as two offers side by side. Both are picked to start; only "Send both" plays on in the demo. Picking neither declines. */
           decision: {
-            title: "Your call on Q-1042",
-            for: "15% is past my limit at Net30",
-            ask: "Which should Isar's agent get?",
+            title: "Isar wants 15%. Your call",
+            for: "Isar's Oktoberfest quote · past my 12% limit at Net30",
+            /** The agent's pick, with what it means for Fizz; its reasons fold under Why. */
+            recommend: { tag: "Recommended", text: "Send both and let Isar's agent pick. Either way we win a **$69K+** order at 15% off." },
+            why: {
+              label: "Why",
+              reasons: [
+                "15% at Net30 is past the **12%** the Oktoberfest offer allows",
+                "Isar is a steady account: **3 orders** this year, all paid on time",
+                "Two choices make it likelier Isar says yes before Oktoberfest, **three weeks** out",
+              ],
+            },
+            /** What each offer means for Fizz, over its figures. */
+            impactLabel: "What Fizz gets",
             status: "Needs you",
             options: [
               {
                 id: "v3a",
-                name: "15% at Net15",
-                rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]],
-                why: "Isar pays in **15 days** instead of 30",
+                name: "Pay in 15 days",
+                impact: { value: "$69,615", note: "Cash in 15 days, not 30" },
+                rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"]],
               },
               {
                 id: "v3b",
-                name: "15% with the bundle",
-                tag: "Bundle",
+                name: "Ginger Ale bundle",
+                impact: { value: "$73,185", note: "**+$3,570**, and Ginger Ale's first bottler" },
                 bundle: { name: "Ginger Ale concentrate", qty: "+1,000", amount: "$4,200", note: "New, only sold in this bundle" },
-                rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]],
-                why: "Isar keeps **Net30** and takes the Ginger Ale bundle with its order",
+                rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"]],
                 suggested: { label: "From", name: "Margret's agent", role: "Sales Director" },
               },
             ],
             pick: "Pick",
-            note: { both: "Isar's agent picks one", one: "", none: "Pick an offer, or decline: v2 stands" },
+            note: { both: "Isar's agent picks one", one: "", none: "Pick an offer, or decline: our counter stands" },
             send: { both: "Send both offers", one: "Send counter-offer", none: "Send offer" },
             decline: "Decline",
             sent: "Sent",
@@ -1288,40 +1289,45 @@ export const copy = {
           /** Story step 11: Alex sends both. His turn, then the agent drafts and sends v3a and v3b. */
           v3: {
             you: "Alex",
-            said: "Send both: v3a and v3b",
+            said: "Send both offers",
+            opener: "On it…",
+            summary: "Drafted both offers and sent them to Isar",
+            followUps: ["Remind me if Isar doesn't reply", "Draft a note to John"],
             plan: {
               title: "Sending both offers",
               of: "of",
               done: "done",
               toggle: "Show or hide the steps",
               steps: [
-                { doing: "Drafting v3a: 15% at Net15", done: "Drafted v3a: 15% at Net15", detail: "**19,500** units, **$69,615**, paid in 15 days", kind: "write", source: "Revenue Cloud", tool: { name: "dispatch_write", target: "b2b-merchant-quote-management" } },
-                { doing: "Drafting v3b: the Ginger Ale bundle", done: "Drafted v3b: the Ginger Ale bundle", detail: "**20,500** units with Ginger Ale, **$73,185**, Net30", kind: "write", source: "Revenue Cloud", tool: { name: "dispatch_write", target: "promotion-management" } },
-                { doing: "Sending both to Isar Bottling's agent", done: "Sent both to Isar Bottling's agent", detail: "Over A2A, signed by Fizz Drinks", kind: "write", source: "A2A" },
+                { doing: "Drafting the 15-day offer", done: "Drafted the 15-day offer", detail: "**19,500** units, **$69,615**, paid in 15 days", kind: "write", source: "Quotes", sf: true },
+                { doing: "Drafting the Ginger Ale bundle", done: "Drafted the Ginger Ale bundle", detail: "**20,500** units with Ginger Ale, **$73,185**, Net30", kind: "write", source: "Promotions", sf: true },
+                { doing: "Sending both to Isar Bottling's agent", done: "Sent both to Isar Bottling's agent", detail: "Signed as Fizz Drinks, so their agent knows it's us", kind: "write", source: "Isar's agent" },
               ],
             },
             offers: {
               title: "Two offers",
-              id: "Q-1042 · v3a, v3b",
+              id: "Q-1042",
               said: "Two ways to **15%**: pay in **15 days**, or keep **Net30** and take our new Ginger Ale bundle.",
               for: "To Isar Bottling · Oktoberfest stock-up",
               status: "Waiting on Isar",
               list: [
-                { id: "v3a", name: "15% at Net15", rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]] },
-                { id: "v3b", name: "15% with the bundle", rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]], note: "+1,000 Ginger Ale" },
+                { id: "v3a", name: "Pay in 15 days", rows: [["Units", "19,500"], ["Discount", "15%"], ["Terms", "Net15"], ["Total", "$69,615"]] },
+                { id: "v3b", name: "Ginger Ale bundle", rows: [["Units", "20,500"], ["Discount", "15%"], ["Terms", "Net30"], ["Total", "$73,185"]], note: "+1,000 Ginger Ale" },
               ],
-              via: "Sent over A2A · signed by Fizz Drinks",
+              via: "Sent as Fizz Drinks · verified",
             },
-            reply: "I've sent Isar's agent **both**: v3a, **15% at Net15**, and v3b, **15% at Net30 with 1,000 Ginger Ale** ($73,185). Either way, they get their 15%. I'll tell you which one they pick.",
+            outcome: "Both offers are with Isar. Either way, it's at least $69,615",
+            sources: ["Quotes", "Promotions"],
+            reply: "I've sent Isar's agent **both**: **pay in 15 days** at $69,615, or keep Net30 with the **Ginger Ale bundle** at $73,185. Either way, they get their 15%. I'll tell you which one they pick.",
           },
           /** Story step 13, Fizz's side: John approves v3a and Isar's agent accepts it. */
           accepted: {
-            from: "Isar Bottling's agent",
+            from: "John Müller's agent · Isar Bottling",
             time: "Just now",
             card: {
-              title: "Accepted v3a",
-              id: "Q-1042 · v3a",
-              said: "We'll take **v3a, 15% at Net15**. John Müller approved it on our side; the order's coming.",
+              title: "Accepted: pay in 15 days",
+              id: "Q-1042",
+              said: "We'll take **15% at Net15**. John Müller approved it on our side; the order's coming.",
               from: "Isar Bottling · approved by John Müller",
               status: "Accepted",
               lines: [
@@ -1333,17 +1339,17 @@ export const copy = {
                 { label: "Payment terms", value: "Net15", note: "Paid in 15 days" },
                 { label: "Total", value: "$69,615", note: "$81,900 list price" },
               ],
-              via: "Received over A2A · signed by Isar Bottling",
+              via: "From Isar Bottling's agent · verified",
             },
-            said: "Isar's agent took **v3a, 15% at Net15**, and **John Müller** approved it on their side. Q-1042 is approved on both sides. The order should follow.",
+            said: "Isar took **pay in 15 days, 15% at Net15**, and **John Müller** approved it on their side. The quote's approved on both sides. The order should follow.",
             /** The two offers' status, once Isar's picked. */
-            took: "Isar took v3a",
+            took: "Isar took the 15-day offer",
           },
           /** Story step 14, Fizz's side: the order arrives. */
           order: {
-            title: "Order",
+            title: "Oktoberfest order",
             id: "O-5531",
-            for: "Isar Bottling · from Q-1042 v3a",
+            for: "Isar Bottling · from their Oktoberfest quote",
             status: "Placed",
             lines: [
               { name: "Orange concentrate", site: "Munich", qty: "12,000", amount: "$50,400" },
@@ -1355,7 +1361,10 @@ export const copy = {
               { label: "Total", value: "$69,615", note: "$81,900 list price" },
             ],
             via: "Placed on Fizz Partners B2B by Isar's agent",
-            said: "**O-5531** is in: **$69,615**, due in 15 days, and the **Oktoberfest campaign's biggest order yet**, its 62nd. It's on your dashboard: orders are up to **189**, and Germany to **59**.",
+            outcome: "Isar ordered: $69,615, the campaign's biggest order yet",
+            followUps: ["Summarise this deal", "Show the campaign's results", "Plan next year's Oktoberfest"],
+            sources: ["Orders", "Campaigns"],
+            said: "Isar's order is in: **$69,615**, due in 15 days, and the **Oktoberfest campaign's biggest order yet**, its 62nd. It's on your dashboard: orders are up to **189**, and Germany to **59**.",
           },
         },
         empty: {
@@ -1377,10 +1386,10 @@ export const copy = {
           mention: "Mention an account or quote",
           dictate: "Dictate",
           send: "Send",
-          note: "Your agent can make mistakes. Check quotes and terms before they go out.",
+          note: "Your Coworker can make mistakes. Check quotes and terms before they go out.",
         },
-        working: "Agent is working",
-        done: "Agent has finished",
+        working: "Coworker is working",
+        done: "Coworker has finished",
         asking: (n: number) =>
           `Agent has ${n} ${n === 1 ? "question" : "questions"} for you`,
       },

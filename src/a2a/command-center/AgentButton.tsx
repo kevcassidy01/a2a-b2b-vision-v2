@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import agentLogo from "../../assets/a2a/agent-logo.png";
+import alex from "../../assets/a2a/alex.png";
 import { copy } from "../../copy/copy";
 
 const t = copy.a2a.commandCenter.agent;
@@ -14,7 +15,8 @@ export type AgentStatus = "idle" | "working" | "done" | "asking";
  * AgentButton — opens the seller agent. While the agent works, the button
  * widens for three bouncing dots (typing); when it finishes, the outer dots
  * fold into the middle one, which turns red: something to look at. The mark
- * is the agent logo (a violet speech bubble with a sparkle).
+ * is Alex and the Coworker: Alex's photo, overlapped by the agent logo (a violet
+ * speech bubble with a sparkle), ringed in the button's white.
  */
 export function AgentButton({
   status = "idle",
@@ -42,7 +44,10 @@ export function AgentButton({
         busy ? "pr-[18px]" : "pr-5"
       }`}
     >
-      <img src={agentLogo} alt="" className="size-4 shrink-0" />
+      <span aria-hidden className="flex shrink-0 items-center">
+        <img src={alex} alt="" className="size-[18px] rounded-full object-cover" />
+        <img src={agentLogo} alt="" className="-ml-1.5 size-[18px] rounded-full bg-white ring-2 ring-white" />
+      </span>
       <span className="ml-1.5">{t.label}</span>
       <span
         className="a2a-agent-dots"

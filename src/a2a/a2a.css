@@ -838,7 +838,7 @@
 /* The Command Center's welcome (Alex has been away): 2.2s in, once the phone's
    site has loaded, the tiles and pills burst out to their places from part-way
    toward the centre, fading in as one motion; then they bob, slowly and out of
-   step. Then Load Command Center: a line sweeps along the bottom of the
+   step. Then See Command Center: a line sweeps along the bottom of the
    artifact frame's bar, left to right, and fades, as the cards settle in. */
 .a2a-welcome {
   container-type: size;
@@ -976,12 +976,6 @@
   83% { background: #161616; }
   88.9% { width: calc(4 * var(--u, 1px)); height: calc(1.6 * var(--u, 1px)); bottom: calc(2 * var(--u, 1px)); background: #161616; }
 }
-/* What an agent's thinking through, row by row, in mono (the header stays sans). */
-.a2a-mono {
-  font-family: "Geist Mono Variable", ui-monospace, monospace;
-  font-size: 0.94em;
-  letter-spacing: -0.01em;
-}
 @media (prefers-reduced-motion: reduce) {
   .a2a-pulse-bar {
     animation: none;
@@ -1082,6 +1076,13 @@
 @keyframes a2a-converted {
   from { opacity: 0; transform: translate(40px, 40px) scale(0.96); }
 }
+.a2a-converted-out {
+  animation: a2a-converted-out 400ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+@keyframes a2a-converted-out {
+  to { opacity: 0; transform: translate(0, 16px) scale(0.98); }
+}
 @media (prefers-reduced-motion: reduce) {
   .a2a-converted { animation: a2a-load-in 300ms ease-out backwards; }
+  .a2a-converted-out { animation: a2a-converted-out 200ms linear forwards; }
 }

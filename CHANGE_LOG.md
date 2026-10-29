@@ -30,6 +30,34 @@ Entry format:
 
 ## Unreleased
 
+## 26.0.0 — 2026-10-29 23:12 IST
+**Kind:** large feature — the Command Center and phone made less dev-centric: one-line thinking states paced by how hard each turn is, business language and source chips in place of tool calls, Alex as the decision-maker, and the agent on your own side renamed Coworker.
+- **GM feedback, "less dev-centric", on branch `new-scope`** (copy and components only; same story, same turns):
+  - **Outcome first:** each seller-agent turn now opens with a one-line business result beside its logo, e.g. "Countered at 12% and grew the order to $72,072". The reasoning folds under it.
+  - **Plumbing into business language:** the Salesforce tool calls (`dispatch_readonly` …) and the uppercase READ/FETCH/WRITE labels are gone. Musings and checks show source chips (Salesforce logo + "Accounts", "Price books", "Inventory"…). Musings are sans now. Geist Mono and `.a2a-mono` are removed.
+  - **Natural names:** "Isar's Oktoberfest quote/order", and offers "Pay in 15 days" and "Ginger Ale bundle". v1/v2/v3a/v3b are no longer shown. Q-1042 and O-5531 stay only as quiet sans id chips. "Over A2A" now reads "Signed as Fizz Drinks". Welcome's signal pills are sans.
+  - **Alex as decision-maker:** the decision card leads with "Isar wants 15%. Your call", then the agent's recommendation (send both, $69K+ either way). Its reasons sit behind "Why". Each offer is led by "What Fizz gets" ($69,615 with cash in 15 days, or $73,185 with +$3,570). "Send both offers" stays primary.
+  - Turn titles ("N turns on Q-1042") are unchanged, by choice.
+  - **Source chip stacks:** button-sized chips (Salesforce logo + area) now sit under four seller-agent replies: the counter, the hold-out lead, the two offers and the order.
+- **Thinking states, both sides** (seller drawer and phone): each agent turn now thinks on one line that changes in place, instead of showing a log of musings and plan checklists. It opens calmly ("Thinking…", "Looking into it…", "On it…"), then shows what it's doing in 6–10 words, about 1.9s a line. Then it folds to what it did ("Checked stock, price and credit, then countered") with a chevron. Opened, it lists every step with its source chips. Redundant leads were dropped (the seller's first turn, the phone's counter).
+- **Isar's messages** carry John's photo with the buyer-agent badge, and read "John Müller's agent · Isar Bottling".
+- **Follow-up prompt chips** in the seller drawer, taken from the latest settled turn (e.g. "Why counter at 12%?", "Compare the two offers"). They're for show only.
+- **Handoff to Alex:** before the decision card, the agent writes "@Alex I need your call on this one", with Alex's photo.
+- **"Coworker" replaces "Agent" on the Command Center:** the button reads "Coworker" and shows Alex's photo overlapped by the agent's mark. The drawer title, close label, status ("Coworker responding"), screen-reader text, footer note, Welcome pill and campaign notes follow. The other company's agent ("Isar's agent", "Fizz's agent") keeps "agent".
+- **"Coworker" on John's side too:** "Your Coworker" in the phone's header, menu card, input ("Ask your Coworker"), Mike's cart ("Assign to your Coworker", "With your Coworker"), settings ("Coworker and limits") and the phone's turns timeline. The who's-acting bar reads "John's Coworker" and "Alex's Coworker". Before login, Fizz's store helper is now "Fizz", with the button "Ask Fizz" (was "Ask agent"). "Mike's agent" and the story's step names are unchanged.
+- **Source chips under replies are smaller:** 24px tall, 12px text, 4px apart (were button-sized, 32px).
+- **Thinking takes as long as the turn is hard:** each turn has a pace. **Hard** (4 lines, about 9s): the seller's counter and hold-out, and the phone's top-up and weighing of the two offers. **Steady** (3 lines, about 6.5s): the phone's counter. **Quick** (2 lines, about 4s): the seller sending both offers, and the phone's order and template. Lines are spread across the turn's steps and vary a little around their hold (1.7–2s), so it doesn't tick evenly. Opened, the thinking still lists every step.
+- **Converted banner** (bottom right, after the order) now fades out after 5 seconds instead of staying.
+- **Sidenav:** "Agents" is removed from the nav and the icon rail.
+- **Welcome:** the button reads "See Command Center" (was "Load Command Center").
+- **Agent-setup prologue scope dropped** (25.4.0's proposal): not to be built.
+
+## 25.4.0 — 2026-10-29 09:57 IST
+**Kind:** small addition — new scope (agent setup and guardrails) proposed as a prologue, in Figma only; hosting. No app code changed.
+- **New scope from the GM: setting up the agents and their guardrails.** Proposed as a prologue before the 15 steps: Margret Reyes sets up Fizz's agent the way you'd onboard a new hire, by talking to it (Create → Connect → Goal → Skills + limits → Test → Go live). Then Alex makes it his own, the 15 steps run, and the agent asks Margret for more freedom afterward. It's built from Linear's agent guidance, Intercom Fin's plain-language guidance and preview, and Claude Code's allow, ask and deny tiers, but stays conversational rather than settings or markdown files. Recorded in `A2A_INTENT.md` §13. Branch `new-scope`.
+- **Figma ([Revised with setup](https://www.figma.com/design/lWnasgbunlULMbH2GTkdy6/Agentic-B2B-Commerce---Vision?node-id=44-2)):** v1 flow and wireframes are kept and marked superseded. v2 adds the flow (P1–P7, steps 1–15, P8) and eight wireframes, P1–P8. Every frame shows Margret's chat and her agent's profile filling in on the left, and Alex's Command Center on the right.
+- **Hosted on git.soma Pages (SSO).** New `gh-pages` branch, on its own history: `index.html` (the share build of 25.3.0) and `.nojekyll`. To update: rebuild, replace `index.html` there, push.
+
 ## 25.3.0 — 2026-10-27 21:33 IST
 **Kind:** small addition — the sidenav is an icon rail on 13"/14" laptops; `/` opens the A2A prototype; a one-file shareable build.
 - **`/` opens the A2A vision prototype.** A fresh clone lands on it. The earlier demos move behind the hash: `#chat` (browser chat) and `#desktop` (Cowork). `#a2a` still works. (`src/Root.tsx`)

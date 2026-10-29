@@ -110,7 +110,7 @@ sees each agent's move land on the other side.
   Claude's full-screen MCP display mode: centered, with its own width and side padding). Our AI app only gets
   part of the viewport, so we cut the side padding down, maybe to nothing, and the Command Center takes the
   whole width of the main content area.
-- **It opens on a welcome (added 2026-10-24):** "while you were away", not a login. App tiles and signal pills float around a headline and **Load Command Center**, which loads the dashboard (skeleton cards, a line sweeping along the bottom of the frame's bar). It follows the phone: on opening, the store loads as a skeleton under Safari's progress line, then the welcome's tiles and pills burst out.
+- **It opens on a welcome (added 2026-10-24):** "while you were away", not a login. App tiles and signal pills float around a headline and **See Command Center**, which loads the dashboard (skeleton cards, a line sweeping along the bottom of the frame's bar). It follows the phone: on opening, the store loads as a skeleton under Safari's progress line, then the welcome's tiles and pills burst out.
 - **Today (added 2026-10-24):** once John's agent sends Q-1042 v1, a "Today" section opens above "Last 6 months", holding the Task pipeline with the request, a short beat (0.6s) after the phone sends it. It arrives in place (2026-10-25): the card stays put, its heading turns into Today, Last 6 months opens beneath it, and the row lands with a pale blue wash. It shows who it's assigned to as a pill (the agent's avatar and "Agent responding"), with coloured typing dots while the agent works on it and none when it's idle. (2026-10-25: the dots became a CRED-style pulse, the same one that shows by an agent's avatar in the chats while it thinks.) **Superseded later on 2026-10-25:** Today is now the first section from load, a dashed frame with one row of cards (going out today, booked today, stock watch), and Q-1042 arrives as a task card at the front of that row; see DESIGN_DECISIONS.
 - The **seller agent** is a docked right chat sidebar (not floating). So far it has no chat, only what surrounds one (2026-10-24): a header, an empty state with its limits and suggestions, and a prompt box as wide as the chat column. Clicking Q-1042 (added 2026-10-24) opens it on a chat: Isar's agent's request, then the seller agent taking it in (reading, pulling up the account, checking the rules, weighing a counter), holding at "Weighing the options", then (2026-10-25) folding, saying why 15% is over its limit, running its checks one at a time (stock, price book, policy, credit, drafting and sending v2) and showing the v2 counter-offer card, waiting on Isar. Its work visibly runs on Salesforce (2026-10-25): any musing or check that goes to Salesforce shows the call under it, as Cowork does ("Called `dispatch_readonly` merchant-catalog-management").
 - **Shells come first:** the iPhone and the AI app shell get designed before anything inside them.
@@ -314,3 +314,46 @@ shown but not taken. The older frames below are kept as they were.
 8. ~~**Step 15**~~ Settled 2026-10-25: the agent offers the template; John saves it.
 9. ~~**The cross-sell step**~~ Settled 2026-10-25: the cross-sell is the bundle (v3b, +1,000 Ginger Ale concentrate), §5.
 10. ~~**The Figma wireframes**~~ Settled 2026-10-25: no need to redo them as phone frames.
+
+## 13. Prologue: setting up the agent (proposed 2026-10-28, not settled)
+
+New scope from the GM's PDF ("Story for Buying and Selling Agent Setup for B2B"). Here "setup" means setting up the
+agents and the limits on what they can do, not the storefront. Branch `new-scope`. Wireframes are on Figma page
+[Revised with setup](https://www.figma.com/design/lWnasgbunlULMbH2GTkdy6/Agentic-B2B-Commerce---Vision?node-id=44-2):
+v2 (v1 is superseded).
+
+### 13.1 The idea
+
+- Set up the agent like a new hire's first day: through a conversation, not settings, toggles or markdown files.
+- The agent suggests its own job, finds what it can already see, and suggests its limits from how Margret already runs her team. She only says what's different.
+- An agent profile next to the chat fills in as they talk, so the setup is visible.
+- Borrowed from Linear (team guidance; delegating to an agent while a person stays accountable), Intercom Fin (plain-language guidance, a preview before going live), and Claude Code (allow, ask and deny become On its own, Rep decides and Never).
+
+### 13.2 The beats
+
+| # | Beat | What happens |
+|---|---|---|
+| P1 | Create | Margret: "I want an agent that sells for my team." It suggests its job and the name Fizz's agent. |
+| P2 | Connect | It already sees Salesforce (accounts and price books, contracts, PIM, revenue management). She says margins stay internal. |
+| P3 | Goal | The CRO's Q4 goals and Oktoberfest are already in. She adds, by voice, getting Alpine Coffee into outlets that don't carry it yet by Oct 31. |
+| P4 | Skills + limits | On its own: discounts up to 15% under $2,000 ("you approved all 212 last quarter"). Rep decides: anything above that, and Net15. Never: fixed price; she adds free delivery. |
+| P5 | Test | It replays last week's 36 requests: 31 handled, 4 to the rep, 1 refused. She pretends to be Isar asking for 15% on $70K, and it hands that to Alex. |
+| P6 | Go live | She picks the reps (Alex, Sam, Lee, Priya) and when it tells her things. Alex sees "Fizz's agent joined your team." |
+| P7 | Alex makes it his | It introduces itself and says what Margret allowed. He sets up an Alpine add-on campaign (5 cases at 10%, else 3 at 5%), which a preview shows is inside her limits. |
+| 1–15 | The A2A story | Unchanged. |
+| P8 | More freedom | After step 15, the agent asks whether it can handle Oktoberfest deals like Isar's itself up to $75K. She answers in one tap. |
+
+### 13.3 Defaults taken (change if wrong)
+
+- Margret sets up the agent on desktop on the left, with Alex on the right; John's phone returns at step 1.
+- Above her limits, it goes to the rep, not to Margret, so step 10 stays as it is.
+- The 12% at Net30 Oktoberfest limit stays; Margret's own limit is 15% under $2,000.
+- Setting up a buying agent isn't shown yet.
+
+### 13.4 Open questions
+
+1. In the GM's PDF, is the "buying agent" Fizz's customer-facing store agent or John's agent?
+2. Margret on desktop or on the phone?
+3. Above her limits, does it go to the rep (as now) or to Margret?
+4. Keep the Friday report in P8?
+
