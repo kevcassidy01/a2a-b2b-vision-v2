@@ -19,7 +19,8 @@ The living context for this project. What it is, why it exists, and where we are
 
 ## Current state
 
-- **2026-10-27, sharing with the GM:** `/` opens the A2A prototype. Kevin (PM Director) sends it to the GM as one HTML file built with `npm run build:share`. The GM gets click-through only, with no hotkeys. Hosting must be internal only: git.soma Pages is SSO-gated and needs a `base` path. Vercel and Netlify aren't approved.
+- **2026-10-28, new scope from the GM: agent setup and guardrails** (branch `new-scope`, source: the GM's PDF "Story for Buying and Selling Agent Setup for B2B"). Here "setup" means setting up the agents and the limits on what they can do, not the storefront. It's proposed as a prologue before the 15 steps: Margret sets up Fizz's agent by talking to it, like a new hire's first day (`A2A_INTENT.md` §13). It exists as wireframes in Figma only; Somnath has seen them, but the story isn't settled and nothing is built.
+- **2026-10-27, sharing with the GM:** `/` opens the A2A prototype. Kevin (PM Director) sends it to the GM as one HTML file built with `npm run build:share`. The GM gets click-through only, with no hotkeys. Hosting must be internal only (Vercel and Netlify aren't approved): git.soma Pages, SSO-gated, serves the share build from the `gh-pages` branch (`index.html`; one file, so no `base` path needed). Turning Pages on (Settings → Pages → `gh-pages`, root) is pending as of 2026-10-27.
 - **App scaffolded and running** (Vite + React 19 + TS + Tailwind v4). Dev server: `npm run dev` → http://localhost:5173/.
 - Foundations in place: `src/styles/tokens.css` (two-layer tokens, light only, **palette retuned to neutral near-white — exact values measured from claude.ai**), `src/copy/copy.ts` (typed single-source copy), **Hanken Grotesk** UI sans + **Anthropic Serif → EB Garamond** serif, **Lucide** icons (`lucide-react`).
 - **Sidenav largely built:** collapse toggle (+ "Hide sidebar" tooltip) · `Claude` wordmark @18px/medium · Chat/Code **segmented control** (sliding, no-op) → **search bar** → **nav group** (New[active, always-washed, shows Ctrl+O on hover] · Projects · Artifacts · Code · Customize, each with hover shortcut hints except Customize; 0px gap) → **"Chats and tasks"** caption + prefs sliders + 3 dummy **recents** → edge-to-edge separator + **account footer** (24px avatar #E3E3E1 · email @15px · chevron [one button] · 32px download button). Reusable shell: `Separator`, `Tooltip`, `NavItem`, `SearchBar`, `RecentItem`, `ChatCodeToggle`, `icons/IncognitoIcon`.
@@ -82,6 +83,7 @@ The living context for this project. What it is, why it exists, and where we are
 
 ## Open questions
 
+- Setup prologue (`A2A_INTENT.md` §13.4): what "buying agent" means in the GM's PDF; Margret on desktop or phone; whether deals above her limits go to the rep or to her; whether to keep the Friday report. (Asked 2026-10-28.)
 - Insights recap: should the **Share it on Slack** chip go inert, so the reply keeps one live chip? Should live chips on dictated steps become generic? (Asked 2026-10-16, unanswered.)
 
 - Milestone contents vs. later (rough order agreed; details per-piece).

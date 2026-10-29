@@ -30,6 +30,12 @@ Entry format:
 
 ## Unreleased
 
+## 25.4.0 — 2026-10-29 09:57 IST
+**Kind:** small addition — new scope (agent setup and guardrails) proposed as a prologue, in Figma only; hosting. No app code changed.
+- **New scope from the GM: setting up the agents and their guardrails.** Proposed as a prologue before the 15 steps: Margret Reyes sets up Fizz's agent the way you'd onboard a new hire, by talking to it (Create → Connect → Goal → Skills + limits → Test → Go live). Then Alex makes it his own, the 15 steps run, and the agent asks Margret for more freedom afterward. It's built from Linear's agent guidance, Intercom Fin's plain-language guidance and preview, and Claude Code's allow, ask and deny tiers, but stays conversational rather than settings or markdown files. Recorded in `A2A_INTENT.md` §13. Branch `new-scope`.
+- **Figma ([Revised with setup](https://www.figma.com/design/lWnasgbunlULMbH2GTkdy6/Agentic-B2B-Commerce---Vision?node-id=44-2)):** v1 flow and wireframes are kept and marked superseded. v2 adds the flow (P1–P7, steps 1–15, P8) and eight wireframes, P1–P8. Every frame shows Margret's chat and her agent's profile filling in on the left, and Alex's Command Center on the right.
+- **Hosted on git.soma Pages (SSO).** New `gh-pages` branch, on its own history: `index.html` (the share build of 25.3.0) and `.nojekyll`. To update: rebuild, replace `index.html` there, push.
+
 ## 25.3.0 — 2026-10-27 21:33 IST
 **Kind:** small addition — the sidenav is an icon rail on 13"/14" laptops; `/` opens the A2A prototype; a one-file shareable build.
 - **`/` opens the A2A vision prototype.** A fresh clone lands on it. The earlier demos move behind the hash: `#chat` (browser chat) and `#desktop` (Cowork). `#a2a` still works. (`src/Root.tsx`)
