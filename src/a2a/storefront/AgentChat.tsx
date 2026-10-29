@@ -5,9 +5,7 @@ import {
   BookmarkPlus,
   Check,
   ChevronDown,
-  Circle,
   CircleCheck,
-  CircleDot,
   Database,
   Eye,
   FileSearch,
@@ -16,7 +14,6 @@ import {
   Lightbulb,
   PencilLine,
   Plus,
-  Route,
   ShoppingCart,
   Square,
   X,
@@ -38,13 +35,42 @@ import { demoNow } from "../demoClock";
 
 const a = copy.a2a.storefront.agent;
 const STEPS = a.plan.steps;
-const WORDS = a.reasoning.split(" ");
-const WORD = 35;
 const MUSINGS = a.musings;
-/** How long each musing runs before the next, in ms: fetches from SAP take
- *  longer, so the demo shows the agent going out to a system and waiting. */
-const MUSE = { fetch: 1600, other: 800 };
-const museFor = (kind: string) => (kind === "fetch" ? MUSE.fetch : MUSE.other);
+/**
+ * How long a turn thinks, by how hard it is: `shown`, at most how many lines run
+ * (spread across its steps; opened, the thinking lists them all); `open`, how long
+ * the opener shows; `line`, how long a line holds, in ms (long enough to read 6–10
+ * words). Lines vary a little around it (VARY), so the thinking doesn't tick.
+ */
+const PACE = {
+  quick: { shown: 2, open: 600, line: 1700 },
+  steady: { shown: 3, open: 800, line: 1800 },
+  hard: { shown: 4, open: 1000, line: 2000 },
+} as const;
+type Pace = (typeof PACE)[keyof typeof PACE];
+const VARY = [1, 0.9, 1.1, 0.95];
+
+/** One line of the agent's thinking: a musing (no `done`) or a plan step. */
+type Item = { kind: string; doing: string; done?: string; detail?: string; source?: string };
+const fromMusings = (ms: readonly { kind: string; text: string }[]): Item[] => ms.map((m) => ({ kind: m.kind, doing: m.text }));
+
+/**
+ * The lines a turn shows while it thinks, starting at `start`, at its `pace`: up to
+ * `pace.shown` of its items, spread evenly and always ending on the last. `shown[k]`
+ * is the item line k shows, from `lines[k]`. `line(i)` is when the line covering item
+ * i starts, and `step(i)` when it's done (an item between shown lines is done with the next one).
+ */
+function think(items: readonly Item[], start: number, pace: Pace) {
+  const n = Math.min(items.length, pace.shown);
+  const shown = Array.from({ length: n }, (_, k) => (n === 1 ? items.length - 1 : Math.round((k * (items.length - 1)) / (n - 1))));
+  // When each line starts, then when the last one ends.
+  const at = [start + pace.open];
+  for (let k = 0; k < n; k++) at.push(at[k] + Math.round(pace.line * VARY[k % VARY.length]));
+  const lines = at.slice(0, n);
+  const folded = at[n] + 300;
+  const cover = (i: number) => shown.findIndex((s) => s >= i);
+  return { lines, shown, folded, line: (i: number) => at[cover(i)], step: (i: number) => at[cover(i) + 1] };
+}
 
 /** What a musing or a step did, as an icon: read, fetched, wrote, noticed, wondered. */
 const KIND: Record<string, LucideIcon> = {
@@ -55,81 +81,76 @@ const KIND: Record<string, LucideIcon> = {
   wonder: Lightbulb,
 };
 
+/** The handoff's thinking: its musings, then its plan's steps. */
+const I1 = [...fromMusings(MUSINGS), ...STEPS];
 /**
- * The handoff's timeline, in ms from Assign: the reasoning, a timeline of
- * musings one after another, then the paragraph streaming in a word at a
- * time, then it folds away; the lead line, then the plan, whose steps run one
- * after another; then the cart it built, the reply, the quote and suggestions.
+ * The handoff's timeline, in ms from Assign: the thinking, a line at a time,
+ * folds; the lead line, then the cart it built, the reply, the quote and suggestions.
  */
 const T = (() => {
-  const think = 700;
-  // When each musing starts, then the paragraph after the last.
-  const muse = MUSINGS.map((_, i) => think + MUSINGS.slice(0, i).reduce((n, m) => n + museFor(m.kind), 0));
-  const para = think + MUSINGS.reduce((n, m) => n + museFor(m.kind), 0);
-  const thinkFor = para - think + WORDS.length * WORD + 300;
-  const thought = think + thinkFor + 300;
-  const plan = thought + 700;
-  const step = (i: number) => plan + 700 + i * 1400; // when step i is done
-  const done = step(STEPS.length - 1) + 500;
-  return { think, muse, para, thinkFor, thought, plan, step, done, end: done + 1200 };
+  const start = 700;
+  const k = think(I1, start, PACE.hard);
+  const lead = k.folded + 300;
+  const done = lead + 900;
+  // When plan step i is done.
+  return { think: start, ...k, step: (i: number) => k.step(MUSINGS.length + i), lead, done, end: done + 1200 };
 })();
 
 const C = a.counter;
+const I2 = [...fromMusings(C.musings), ...C.plan.steps];
 /**
- * The counter's timeline, in ms from v2 landing: Fizz's offer comes in; the
- * agent weighs it (musings one after another, no paragraph), folds; the lead
- * line, then its reply plan step by step; then the reply and where the quote stands.
+ * The counter's timeline, in ms from Fizz's counter landing: the offer comes
+ * in; the agent thinks it through, a line at a time, and folds; then the reply
+ * and where the quote stands.
  */
 const T2 = (() => {
   const offer = 600;
-  const think = offer + 1400;
-  const muse = C.musings.map((_, i) => think + C.musings.slice(0, i).reduce((n, m) => n + museFor(m.kind), 0));
-  const thought = think + C.musings.reduce((n, m) => n + museFor(m.kind), 0) + 900;
-  const plan = thought + 700;
-  const step = (i: number) => plan + 700 + i * 1400;
-  const done = step(C.plan.steps.length - 1) + 500;
-  return { offer, think, muse, thinkFor: thought - think, thought, plan, step, done, end: done + 1200 };
+  const start = offer + 1400;
+  const k = think(I2, start, PACE.steady);
+  const done = k.folded;
+  return { offer, think: start, ...k, done, end: done + 1200 };
 })();
 const V = a.v3;
+const I3 = fromMusings(V.musings);
 /**
- * The two offers' timeline (story step 12), in ms from v3a and v3b landing:
- * Fizz's two offers come in; the agent weighs them (the bundle in its
- * musings), folds; the lead line, then the approval it puts to John.
+ * The two offers' timeline (story step 12), in ms from them landing: Fizz's
+ * two offers come in; the agent thinks them through (the bundle in its
+ * thinking), folds; the lead line, then the approval it puts to John.
  */
 const T3 = (() => {
   const offers = 600;
-  const think = offers + 1600;
-  const muse = V.musings.map((_, i) => think + V.musings.slice(0, i).reduce((n, m) => n + museFor(m.kind), 0));
-  const thought = think + V.musings.reduce((n, m) => n + museFor(m.kind), 0) + 900;
+  const start = offers + 1600;
+  const k = think(I3, start, PACE.hard);
+  const thought = k.folded;
   const ask = thought + 900;
-  return { offers, think, muse, thinkFor: thought - think, thought, ask, end: ask + 400 };
+  return { offers, think: start, ...k, thought, ask, end: ask + 400 };
 })();
 
 const O = a.order;
+const I4: readonly Item[] = O.plan.steps;
 /**
  * The order's timeline (story steps 13–14), in ms from John's Approve: his
- * turn; the agent's plan step by step (accept v3a, place O-5531, log the PO);
- * then the order, the reply, the turns so far and the done mark.
+ * turn; the agent's thinking, a line a step (accept, place the order, log the
+ * PO); then the order, the reply, the turns so far and the done mark.
  */
 const T4 = (() => {
   const start = 700;
-  const plan = start + 300;
-  const step = (i: number) => plan + 700 + i * 1400;
-  const done = step(O.plan.steps.length - 1) + 500;
-  return { start, plan, step, done, end: done + 1200 };
+  const k = think(I4, start + 300, PACE.quick);
+  const done = k.folded;
+  return { start, ...k, done, end: done + 1200 };
 })();
 const M = a.template;
+const I5 = fromMusings(M.musings);
 /**
  * Step 15's timeline, in ms from the order turn settling: the agent, still on
  * its turn, thinks ahead (Oktoberfest's dates, looked up on oktoberfest.de),
  * folds, says the festival comes round every year, and offers the template.
  */
 const T5 = (() => {
-  const think = 600;
-  const muse = M.musings.map((_, i) => think + M.musings.slice(0, i).reduce((n, m) => n + museFor(m.kind), 0));
-  const thought = think + M.musings.reduce((n, m) => n + museFor(m.kind), 0) + 900;
+  const k = think(I5, 600, PACE.quick);
+  const thought = k.folded;
   const ask = thought + 900;
-  return { think, muse, thinkFor: thought - think, thought, ask, end: ask + 400 };
+  return { think: 600, ...k, thought, ask, end: ask + 400 };
 })();
 /** Once John saves it, in ms from his tap: his turn, then the agent's reply with the saved card, and its done mark. */
 const T6 = { reply: 1400, card: 1800, done: 2200, end: 2400 };
@@ -215,28 +236,19 @@ export function AgentChat({
     if (started) markAssigned();
   }, [started, markAssigned]);
 
-  const done = STEPS.filter((_, i) => t !== null && t >= T.step(i)).length;
-  const done2 = C.plan.steps.filter((_, i) => t2 !== null && t2 >= T2.step(i)).length;
-  const muse2 = t2 === null ? 0 : T2.muse.filter((x) => t2 >= x).length;
   // Each turn lights John's agent from when something lands for it until its pulse stops.
   const working2 = t2 !== null && t2 >= T2.offer && t2 < T2.done + 1100;
-  const muse3 = t3 === null ? 0 : T3.muse.filter((x) => t3 >= x).length;
-  const done4 = O.plan.steps.filter((_, i) => t4 !== null && t4 >= T4.step(i)).length;
   const working3 = t3 !== null && t3 >= T3.offers && t3 < T3.ask;
   const working4 = t4 !== null && t4 < T4.done + 600;
-  const muse5 = t5 === null ? 0 : T5.muse.filter((x) => t5 >= x).length;
   const working5 = t5 !== null && t5 >= T5.think && t5 < T5.ask;
   const working6 = t6 !== null && t6 < T6.done;
   const working = (t !== null && t < T.done + 900) || working2 || working3 || working4 || working5 || working6;
-  const words = t === null ? 0 : Math.max(0, Math.min(WORDS.length, Math.floor((t - T.para) / WORD)));
-  // How many musings have started.
-  const muse = t === null ? 0 : T.muse.filter((x) => t >= x).length;
   // What's on screen changes in beats, not every tick: scroll on those.
   const beat =
-    (t === null ? -1 : [T.think, T.thought, T.plan, T.done, T.done + 300, T.done + 600, T.done + 900].filter((x) => t >= x).length) +
-    (t2 === null ? 0 : [T2.offer, T2.think, T2.thought, T2.plan, T2.done, T2.done + 300, T2.done + 600, T2.done + 900, T2.done + 1100].filter((x) => t2 >= x).length) +
+    (t === null ? -1 : [T.think, T.folded, T.lead, T.done, T.done + 300, T.done + 600, T.done + 900].filter((x) => t >= x).length) +
+    (t2 === null ? 0 : [T2.offer, T2.think, T2.done, T2.done + 300, T2.done + 600, T2.done + 900, T2.done + 1100].filter((x) => t2 >= x).length) +
     (t3 === null ? 0 : [T3.offers, T3.think, T3.thought, T3.ask].filter((x) => t3 >= x).length) +
-    (t4 === null ? 0 : [0, T4.start, T4.plan, T4.done, T4.done + 300, T4.done + 600].filter((x) => t4 >= x).length) +
+    (t4 === null ? 0 : [0, T4.start, T4.done, T4.done + 300, T4.done + 600].filter((x) => t4 >= x).length) +
     (t5 === null ? 0 : [T5.think, T5.thought, T5.ask].filter((x) => t5 >= x).length) +
     (t6 === null ? 0 : [0, T6.reply, T6.card, T6.done].filter((x) => t6 >= x).length);
 
@@ -271,7 +283,7 @@ export function AgentChat({
   useEffect(() => {
     const el = thread.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  }, [beat, done, words, muse, done2, muse2, muse3, done4, muse5]);
+  }, [beat]);
 
   // The turns on Q-1042 so far, as each side's lands: v1, v2, the hold-out, v3a and v3b, the order.
   const turns = [quoted, t2 !== null && t2 >= T2.offer, held, t3 !== null && t3 >= T3.offers, ordered].filter(Boolean).length;
@@ -338,11 +350,11 @@ export function AgentChat({
             </Empty>
           ) : (
             <>
-              <Thread t={t} words={words} muse={muse} done={done} />
-              {t2 !== null && <CounterTurn t={t2} muse={muse2} done={done2} />}
-              {t3 !== null && <OffersTurn t={t3} muse={muse3} approved={approved} onApprove={() => setApproved(true)} />}
-              {t4 !== null && <OrderTurn t={t4} done={done4} typing={t4 < T4.done + 600 || working5} />}
-              {t5 !== null && <TemplateTurn t={t5} muse={muse5} t6={t6} onSave={() => setSaved(true)} />}
+              <Thread t={t} />
+              {t2 !== null && <CounterTurn t={t2} />}
+              {t3 !== null && <OffersTurn t={t3} approved={approved} onApprove={() => setApproved(true)} />}
+              {t4 !== null && <OrderTurn t={t4} typing={t4 < T4.done + 600 || working5} />}
+              {t5 !== null && <TemplateTurn t={t5} t6={t6} onSave={() => setSaved(true)} />}
             </>
           )}
         </div>
@@ -402,7 +414,7 @@ function Empty({ title, body, children }: { title: string; body: string; childre
 }
 
 /** John's turn (the cart he handed over), then the agent's, as far as it's got. */
-function Thread({ t, words, muse, done }: { t: number; words: number; muse: number; done: number }) {
+function Thread({ t }: { t: number }) {
   return (
     <>
       <div className="sf-rise flex flex-col items-end">
@@ -424,16 +436,8 @@ function Thread({ t, words, muse, done }: { t: number; words: number; muse: numb
       {t >= T.think && (
         <div className="mt-7">
           <Head typing={t < T.done + 900} />
-          <Reasoning
-            thinking={t < T.thought}
-            musings={MUSINGS}
-            muse={muse}
-            mulling={a.mulling}
-            thought={a.thought(Math.round(T.thinkFor / 1000))}
-            paragraph={WORDS.slice(0, t < T.thought ? words : WORDS.length).join(" ")}
-          />
-          {t >= T.thought && <AgentSays className="mt-3"><Rich text={a.lead} /></AgentSays>}
-          {t >= T.plan && <Plan plan={a.plan} done={done} />}
+          <Thinking t={t} items={I1} at={T} opener={a.opener} summary={a.summary} paragraph={a.reasoning} />
+          {t >= T.lead && <AgentSays className="mt-3"><Rich text={a.lead} /></AgentSays>}
           {t >= T.done && <Result />}
           {t >= T.done + 300 && <AgentSays className="mt-5"><Rich text={a.reply} /></AgentSays>}
           {t >= T.done + 600 && <Quote q={a.quote} />}
@@ -450,22 +454,14 @@ function Thread({ t, words, muse, done }: { t: number; words: number; muse: numb
  * extra volume, holds out for 15% at Net30 (inside John's limits, so it doesn't
  * ask him), and says where the quote stands.
  */
-function CounterTurn({ t, muse, done }: { t: number; muse: number; done: number }) {
+function CounterTurn({ t }: { t: number }) {
   return (
     <>
       {t >= T2.offer && <Offer />}
       {t >= T2.think && (
         <div className="mt-7">
           <Head typing={t < T2.done + 1100} />
-          <Reasoning
-            thinking={t < T2.thought}
-            musings={C.musings}
-            muse={muse}
-            mulling={C.mulling}
-            thought={C.thought(Math.round(T2.thinkFor / 1000))}
-          />
-          {t >= T2.thought && <AgentSays className="mt-3"><Rich text={C.lead} /></AgentSays>}
-          {t >= T2.plan && <Plan plan={C.plan} done={done} />}
+          <Thinking t={t} items={I2} at={T2} opener={C.opener} summary={C.summary} />
           {t >= T2.done + 300 && <AgentSays className="mt-5"><Rich text={C.reply} /></AgentSays>}
           {t >= T2.done + 600 && <Quote q={C.quote} />}
           {t >= T2.done + 900 && <Turns turns={C.turns} n={3} />}
@@ -588,20 +584,14 @@ function Offer() {
  * the bundle in its thinking, recommends v3a and asks John, since Net15
  * changes the terms he set.
  */
-function OffersTurn({ t, muse, approved, onApprove }: { t: number; muse: number; approved: boolean; onApprove: () => void }) {
+function OffersTurn({ t, approved, onApprove }: { t: number; approved: boolean; onApprove: () => void }) {
   return (
     <>
       {t >= T3.offers && <Offers />}
       {t >= T3.think && (
         <div className="mt-7">
           <Head typing={t < T3.ask} />
-          <Reasoning
-            thinking={t < T3.thought}
-            musings={V.musings}
-            muse={muse}
-            mulling={V.mulling}
-            thought={V.thought(Math.round(T3.thinkFor / 1000))}
-          />
+          <Thinking t={t} items={I3} at={T3} opener={V.opener} summary={V.summary} />
           {t >= T3.thought && <AgentSays className="mt-3"><Rich text={V.lead} /></AgentSays>}
           {t >= T3.ask && <Approval approved={approved} onApprove={onApprove} />}
         </div>
@@ -623,12 +613,12 @@ function OffersTurn({ t, muse, approved, onApprove }: { t: number; muse: number;
 }
 
 /** Story steps 13–14: the agent accepts v3a, places O-5531 and logs the PO; then the order, the reply and the turns so far. Its turn runs on into step 15. */
-function OrderTurn({ t, done, typing }: { t: number; done: number; typing: boolean }) {
+function OrderTurn({ t, typing }: { t: number; typing: boolean }) {
   if (t < T4.start) return null;
   return (
     <div className="mt-7">
       <Head typing={typing} />
-      {t >= T4.plan && <Plan plan={O.plan} done={done} />}
+      {t >= T4.start + 300 && <Thinking t={t} items={I4} at={T4} opener={O.opener} summary={O.summary} />}
       {t >= T4.done && <Order />}
       {t >= T4.done + 300 && <AgentSays className="mt-5"><Rich text={O.reply} /></AgentSays>}
       {t >= T4.done + 600 && <Turns turns={C.turns} n={5} />}
@@ -644,18 +634,12 @@ function OrderTurn({ t, done, typing }: { t: number; done: number; typing: boole
  * agent's reply with the success card (the recurring order, saved), and its
  * mark to say it's done.
  */
-function TemplateTurn({ t, muse, t6, onSave }: { t: number; muse: number; t6: number | null; onSave: () => void }) {
+function TemplateTurn({ t, t6, onSave }: { t: number; t6: number | null; onSave: () => void }) {
   if (t < T5.think) return null;
   const saved = t6 !== null;
   return (
     <>
-      <Reasoning
-        thinking={t < T5.thought}
-        musings={M.musings}
-        muse={muse}
-        mulling={M.mulling}
-        thought={M.thought(Math.round(T5.thinkFor / 1000))}
-      />
+      <Thinking t={t} items={I5} at={T5} opener={M.opener} summary={M.summary} />
       {t >= T5.thought && <AgentSays className="mt-3"><Rich text={M.said} /></AgentSays>}
       {t >= T5.ask && <Template saved={saved} onSave={onSave} />}
       {saved && (
@@ -776,7 +760,6 @@ function Offers() {
         <ul className="mt-4 flex flex-col gap-2.5">
           {o.list.map((v) => (
             <li key={v.id} className="rounded-2xl bg-[#f6f6f8] px-3.5 py-3">
-              <p className="text-[12px] text-text-muted">{v.id}</p>
               <p className="text-[15px] font-bold tracking-[-0.01em] text-text">{v.name}</p>
               <Figures rows={v.rows} />
               {"note" in v && <p className="mt-2.5 text-[13px] font-semibold text-[#1f7a3d]">{v.note}</p>}
@@ -833,7 +816,6 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
                 >
                   {on && <span className="size-1.5 rounded-full bg-white" />}
                 </span>
-                <span className="text-[12px] text-text-muted">{o.id}</span>
                 {i === 0 && <span className="ml-auto rounded-full bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{p.tag}</span>}
               </span>
               <span className="mt-1 block text-[15px] font-bold tracking-[-0.01em] text-text">{o.name}</span>
@@ -879,7 +861,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
           className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
         >
           <Check className="size-[18px]" strokeWidth={2.5} />
-          {p.approve(pick)}
+          {p.approve}
         </button>
       )}
     </div>
@@ -1000,66 +982,79 @@ function AgentSays({ className = "", children }: { className?: string; children:
 }
 
 /**
- * The agent's reasoning, as a timeline: a header row, then one row per musing
- * (what it's reading, fetching, noticing or wondering, each with its icon),
- * joined by a line and arriving one at a time, the current one shimmering;
- * then the paragraph, small and quiet, streaming in as the last row. Once it's
- * done it folds to a chevron and how long it took; a tap opens or folds it.
+ * The agent's thinking, as one line that changes in place: a calm opener, then
+ * what it's doing now, a line at a time (shimmering, by a pulsing dot), so it
+ * never reads as a log. Once it's done it folds to what it came to, with a
+ * chevron; opened, every step it took (and on the first turn, its reasoning).
  */
-function Reasoning({
-  thinking,
-  musings,
-  muse,
-  mulling,
-  thought,
+function Thinking({
+  t,
+  items,
+  at,
+  opener,
+  summary,
   paragraph,
 }: {
-  thinking: boolean;
-  musings: readonly { kind: string; text: string }[];
-  muse: number;
-  mulling: string;
-  thought: string;
-  /** The paragraph so far, streamed in after the musings; none on later turns. */
+  t: number;
+  items: readonly Item[];
+  at: { lines: readonly number[]; shown: readonly number[]; folded: number };
+  opener: string;
+  summary: string;
   paragraph?: string;
 }) {
-  const [userOpen, setUserOpen] = useState<boolean | null>(null);
-  const open = userOpen ?? thinking;
-  const shown = thinking ? musings.slice(0, muse) : musings;
-  const para = paragraph !== undefined && (!thinking || muse === musings.length);
-  const last = paragraph === undefined ? thinking && muse > 0 : thinking && !para;
+  const [open, setOpen] = useState(false);
+  const thinking = t < at.folded;
+  const n = at.lines.filter((x) => t >= x).length;
+  const line = thinking ? (n === 0 ? opener : items[at.shown[n - 1]].doing) : summary;
   return (
     <div className="sf-rise mt-3">
       <button
         type="button"
-        aria-expanded={open}
-        onClick={() => setUserOpen(!open)}
-        className="relative flex min-h-8 items-center gap-2 text-left text-[14px] font-medium text-text-muted"
+        aria-expanded={thinking ? undefined : open}
+        onClick={() => setOpen(!open)}
+        disabled={thinking}
+        className="relative flex min-h-8 items-start gap-2 py-1 text-left text-[14px] font-medium leading-snug text-text-muted"
       >
-        <span className="grid size-4 shrink-0 place-items-center">
+        <span className="grid h-5 w-4 shrink-0 place-items-center">
           {thinking ? (
             <span aria-hidden className="sf-pulse size-2 rounded-full bg-[#0b84d0]" />
           ) : (
             <CircleCheck className="size-4" strokeWidth={2.25} />
           )}
         </span>
-        <span className={thinking ? "sf-shimmer" : undefined}>
-          {thinking ? mulling : thought}
+        <span aria-live="polite">
+          <span key={line} className={`sf-rise inline-block ${thinking ? "sf-shimmer" : ""}`}>
+            {line}
+          </span>
         </span>
-        <ChevronDown className={`size-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2.25} />
+        {!thinking && (
+          <ChevronDown className={`mt-0.5 size-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2.25} />
+        )}
       </button>
-      {open && (
+      {!thinking && open && (
         <ol>
-          {shown.map((m, i) => (
-            <TimelineRow
-              key={m.text}
-              icon={KIND[m.kind]}
-              mono
-              current={last && i === muse - 1}
-            >
-              {m.text}
+          {items.map((it) => (
+            <TimelineRow key={it.doing} icon={KIND[it.kind]}>
+              {it.done ? (
+                <>
+                  <span className="block font-semibold text-text">{it.done}</span>
+                  {it.detail && (
+                    <span className="mt-0.5 block">
+                      <Rich text={it.detail} />
+                    </span>
+                  )}
+                  {it.source && (
+                    <span className="block">
+                      <StepSource kind={it.kind} source={it.source} />
+                    </span>
+                  )}
+                </>
+              ) : (
+                it.doing
+              )}
             </TimelineRow>
           ))}
-          {para && (
+          {paragraph && (
             <TimelineRow icon={AlignLeft}>
               <span className="text-text-muted/80">{paragraph}</span>
             </TimelineRow>
@@ -1075,14 +1070,11 @@ function TimelineRow({
   icon: Icon,
   mark,
   current = false,
-  mono = false,
   children,
 }: {
   icon?: LucideIcon;
   mark?: ReactNode;
   current?: boolean;
-  /** A musing (what it's thinking through) rather than prose or a turn: set in mono. */
-  mono?: boolean;
   children: ReactNode;
 }) {
   // The line runs from the row above (or the header) to this icon, and on below it to the foot of the row,
@@ -1094,90 +1086,17 @@ function TimelineRow({
       <span className="grid h-[17px] w-4 shrink-0 place-items-center">
         {mark ?? (Icon && <Icon className={`size-3.5 ${current ? "text-text" : ""}`} strokeWidth={2} />)}
       </span>
-      <span className={`${mono ? "a2a-mono" : ""} ${current ? "sf-shimmer" : ""}`}>{children}</span>
+      <span className={current ? "sf-shimmer" : undefined}>{children}</span>
     </li>
   );
 }
 
-/** The plan: its goal and how many steps are done, then each step pending, running or done. Open while it runs, folded once it's done; a tap on the header opens or folds it. */
-type PlanCopy = {
-  title: string;
-  of: string;
-  done: string;
-  toggle: string;
-  steps: readonly { doing: string; done: string; detail: string; kind: string; source: string }[];
-};
-
-function Plan({ plan: p, done }: { plan: PlanCopy; done: number }) {
-  const [userOpen, setUserOpen] = useState<boolean | null>(null);
-  const STEPS = p.steps;
-  const open = userOpen ?? done < STEPS.length;
-  return (
-    <div className="sf-rise mt-4 rounded-[24px] bg-[#f6f6f8] px-4 py-1">
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-label={p.toggle}
-        onClick={() => setUserOpen(!open)}
-        className="flex h-14 w-full items-center gap-3 text-left"
-      >
-        <Route className="size-5 shrink-0 text-text" strokeWidth={2} />
-        <span className="min-w-0 flex-1">
-          <span className="block text-[15.5px] font-bold tracking-[-0.01em] text-text">{p.title}</span>
-          <span className="block text-[13px] text-text-muted">
-            {done} {p.of} {STEPS.length} {p.done}
-          </span>
-        </span>
-        <ChevronDown
-          className={`size-5 shrink-0 text-text-muted transition-transform ${open ? "rotate-180" : ""}`}
-          strokeWidth={2.25}
-        />
-      </button>
-      {open && (
-        <ol className="pb-3">
-          {STEPS.map((s, i) => {
-            const state = i < done ? "done" : i === done ? "running" : "pending";
-            return (
-              <li key={s.done} className="relative flex gap-3 py-2.5">
-                {i < STEPS.length - 1 && (
-                  <span aria-hidden className="absolute -bottom-2.5 left-[9.5px] top-[34px] w-px bg-black/10" />
-                )}
-                {state === "done" ? (
-                  <CircleCheck className="mt-px size-5 shrink-0 text-text" strokeWidth={2.25} />
-                ) : state === "running" ? (
-                  <CircleDot className="mt-px size-5 shrink-0 text-[#0b84d0]" strokeWidth={2.25} />
-                ) : (
-                  <Circle className="mt-px size-5 shrink-0 text-black/20" strokeWidth={2.25} />
-                )}
-                <div className="min-w-0">
-                  <p
-                    className={`text-[15px] font-semibold tracking-[-0.01em] ${
-                      state === "running" ? "sf-shimmer" : state === "pending" ? "text-text-muted" : "text-text"
-                    }`}
-                  >
-                    {state === "done" ? s.done : s.doing}
-                  </p>
-                  {state !== "pending" && <p className="mt-0.5 text-[13.5px] leading-snug text-text-muted"><Rich text={s.detail} /></p>}
-                  {state === "done" && (
-                    <StepSource kind={s.kind} source={s.source} />
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ol>
-      )}
-    </div>
-  );
-}
-
-/** What a done step touched: how (read, fetch, write, in small capitals) and which system. */
+/** What a done step touched: how (read, fetch or write, as an icon) and which system. */
 function StepSource({ kind, source }: { kind: string; source: string }) {
   const Icon = KIND[kind];
   return (
     <span className="mt-2 inline-flex h-7 items-center gap-1.5 rounded-full bg-white px-2.5 text-[12.5px] font-medium text-text shadow-[0_0_0_1px_rgb(0_0_0/0.06)]">
       <Icon className="size-3.5 shrink-0" strokeWidth={2.25} />
-      <span className="font-mono text-[10.5px] uppercase tracking-[0.06em] text-text-muted">{kind}</span>
       {source}
     </span>
   );

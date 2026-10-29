@@ -7,7 +7,6 @@ import {
   Plus,
   Search,
   Shapes,
-  Waypoints,
   type LucideIcon,
 } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
@@ -88,7 +87,6 @@ function Sidenav() {
         <Group icon={Shapes} label={t.nav.artifacts}>
           <ChatRow icon={Pin} label={t.pinnedArtifact} active />
         </Group>
-        <NavRow icon={Waypoints} label={t.nav.agents} />
         <NavRow icon={Clock} label={t.nav.scheduled} />
       </div>
 
@@ -168,7 +166,6 @@ function Rail() {
       <div className="mt-3 flex flex-col gap-px">
         <RailItem icon={Plus} label={t.nav.newChat} />
         <RailItem icon={Shapes} label={t.nav.artifacts} active />
-        <RailItem icon={Waypoints} label={t.nav.agents} />
         <RailItem icon={Clock} label={t.nav.scheduled} />
       </div>
       <div className="mt-3 w-6 border-t border-white/[0.07] pt-3" aria-hidden />

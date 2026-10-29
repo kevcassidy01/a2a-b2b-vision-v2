@@ -46,7 +46,7 @@ const QUOTE_GAP = 600;
  * for the white cards below. Built top to bottom a section at a time from the
  * engineering version; so far, the header.
  *
- * It opens on the Welcome (Alex has been away). Load Command Center brings it
+ * It opens on the Welcome (Alex has been away). See Command Center brings it
  * in: skeleton cards under the header while the frame's load line sweeps
  * along the bottom of its bar, edge to edge; then the real cards fade up.
  */

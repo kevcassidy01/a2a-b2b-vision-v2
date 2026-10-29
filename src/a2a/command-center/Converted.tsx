@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import thumbsUp from "../../assets/a2a/thumbs-up.png";
 import { copy } from "../../copy/copy";
 import { Rich } from "../Rich";
@@ -7,16 +8,25 @@ const t = copy.a2a.commandCenter.converted;
 /**
  * Converted — the end state's notification, bottom right, over everything but
  * the confetti: the campaign's first conversion. It comes in from the bottom
- * right with the confetti once O-5531 is placed, and stays. White, hairline
+ * right with the confetti once O-5531 is placed, and goes after 5 seconds. White, hairline
  * border and a soft shadow, roomy like a card: the title and one line on the
  * left, the thumbs-up mascot on the right, facing them.
  */
 export function Converted({ on }: { on: boolean }) {
-  if (!on) return null;
+  // In with a 500ms delay, up for 5s, then out; it unmounts once it's faded.
+  const [leaving, setLeaving] = useState(false);
+  const [gone, setGone] = useState(false);
+  useEffect(() => {
+    if (!on) return;
+    const id = setTimeout(() => setLeaving(true), 5500);
+    return () => clearTimeout(id);
+  }, [on]);
+  if (!on || gone) return null;
   return (
     <div
       role="status"
-      className="a2a-converted absolute bottom-6 right-6 z-[35] flex w-[420px] max-w-[calc(100%-48px)] items-center gap-5 rounded-2xl border border-black/[0.08] bg-white p-6 shadow-[0_20px_48px_-16px_rgb(0_0_0/0.24),0_2px_6px_rgb(0_0_0/0.05)]"
+      onAnimationEnd={(e) => e.animationName === "a2a-converted-out" && setGone(true)}
+      className={`${leaving ? "a2a-converted-out" : "a2a-converted"} absolute bottom-6 right-6 z-[35] flex w-[420px] max-w-[calc(100%-48px)] items-center gap-5 rounded-2xl border border-black/[0.08] bg-white p-6 shadow-[0_20px_48px_-16px_rgb(0_0_0/0.24),0_2px_6px_rgb(0_0_0/0.05)]`}
     >
       <div className="min-w-0 flex-1">
         <p className="a2a-title text-[16px] font-semibold leading-snug tracking-[-0.01em] text-text">{t.title}</p>

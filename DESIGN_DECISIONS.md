@@ -6,6 +6,10 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-10-29 A2A: your own side's agent is called "Coworker"
+Decision: on the Command Center, Alex's agent is "Coworker". Its button shows Alex's photo overlapped by the agent's mark. John's own agent on the phone is "your Coworker" too, and the who's-acting bar reads "John's Coworker" and "Alex's Coworker". The other company's agent stays "agent" ("Isar's agent", "Fizz's agent"). Fizz's store helper, before login, is "Fizz" ("Ask Fizz").
+Rationale: Somnath: Alex works alongside it like a new hire, and a Coworker is asked rather than operated. You can only have a Coworker on your own side, so the other company's stays an agent.
+
 ### 2026-10-27 A2A: on smaller screens the sidenav is an icon rail, always
 Decision: below 1536px wide, the Command Center shell's sidenav is a 56px rail of icons with tooltips at their right, from the first frame. There's no collapse or expand control at any size.
 Rationale: on a small laptop the full sidenav squeezes the Command Center. Nobody watching should have to fix the layout before it holds.

@@ -42,7 +42,7 @@ const PILLS: { x: number; y: number; dot: string; tilt: number }[] = [
  * Welcome — the Command Center before it loads: Alex has been away. The apps
  * it draws from float around the edges as tiles, with pills for what it
  * tracks (bursting out a few seconds in), and in the middle how many updates
- * are waiting, a headline and Load Command Center. Light,
+ * are waiting, a headline and See Command Center. Light,
  * after a dark welcome Somnath shared.
  */
 export function Welcome({ onLoad }: { onLoad: () => void }) {
@@ -64,7 +64,7 @@ export function Welcome({ onLoad }: { onLoad: () => void }) {
           return (
             <Burst key={s} x={p.x} y={p.y}>
               <span
-                className="a2a-float flex h-7 items-center gap-2 whitespace-nowrap rounded-lg bg-white px-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-text-muted shadow-[0_0_0_1px_rgb(0_0_0/0.08),0_6px_16px_-6px_rgb(0_0_0/0.12)]"
+                className="a2a-float flex h-7 items-center gap-2 whitespace-nowrap rounded-lg bg-white px-2.5 text-[12px] font-medium text-text-muted shadow-[0_0_0_1px_rgb(0_0_0/0.08),0_6px_16px_-6px_rgb(0_0_0/0.12)]"
                 style={{ rotate: `${p.tilt}deg`, animationDelay: `${i * -1.1 - 0.4}s` }}
               >
                 <span className="size-1.5 rounded-full" style={{ background: p.dot }} />
