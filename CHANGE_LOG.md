@@ -2,6 +2,12 @@
 
 Chronological record of changes. Newest at the top.
 
+## Unreleased
+
+## 26.4.2 - 2026-11-02 17:02 EST
+
+- Deployment: add GitHub Pages publishing on the personal copy, with repository-prefixed assets and direct buyer/seller route entries. Both prototypes retain standalone playback without a backend.
+
 ## Versioning — `MAJOR.MINOR.PATCH`
 
 - **MAJOR** (`X.0.0`) — large feature.
