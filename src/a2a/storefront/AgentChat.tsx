@@ -346,7 +346,7 @@ export function AgentChat({
                   <button
                     key={q}
                     type="button"
-                    className="flex h-12 items-center justify-center rounded-full px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+                    className="flex h-12 items-center justify-center rounded-[12px] px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
                   >
                     {q}
                   </button>
@@ -358,7 +358,7 @@ export function AgentChat({
               <button
                 type="button"
                 onClick={() => setStarted(true)}
-                className="mt-7 flex h-12 items-center gap-2 rounded-full px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+                className="mt-7 flex h-12 items-center gap-2 rounded-[12px] px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
               >
                 <ShoppingCart className="size-[18px]" strokeWidth={2.25} />
                 {a.suggestion}
@@ -719,14 +719,14 @@ function Template({ saved, onSave }: { saved: boolean; onSave: () => void }) {
           <button
             type="button"
             onClick={onSave}
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-[12px] sf-btn-dark text-[15px] font-semibold"
           >
             <Check className="size-[18px]" strokeWidth={2.5} />
             {c.save}
           </button>
           <button
             type="button"
-            className="flex h-12 w-full items-center justify-center rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+            className="flex h-12 w-full items-center justify-center rounded-[12px] text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
           >
             {c.notNow}
           </button>
@@ -874,7 +874,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
         <button
           type="button"
           onClick={onApprove}
-          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-[12px] sf-btn-dark text-[15px] font-semibold"
         >
           <Check className="size-[18px]" strokeWidth={2.5} />
           {p.approve}
@@ -921,13 +921,13 @@ function Order() {
       <div className="mt-4 flex flex-col gap-2">
         <button
           type="button"
-          className="flex h-12 w-full items-center justify-center rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+          className="flex h-12 w-full items-center justify-center rounded-[12px] sf-btn-dark text-[15px] font-semibold"
         >
           {o.details}
         </button>
         <button
           type="button"
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-[12px] text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
         >
           <FileText className="size-[18px]" strokeWidth={2.25} />
           {o.po}
@@ -979,7 +979,7 @@ function Saved() {
       </dl>
       <button
         type="button"
-        className="mt-4 flex h-12 w-full items-center justify-center rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+        className="mt-4 flex h-12 w-full items-center justify-center rounded-[12px] text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
       >
         {c.open}
       </button>
@@ -1192,7 +1192,7 @@ function Composer({
             <button
               key={s}
               type="button"
-              className="h-10 shrink-0 rounded-full px-4 text-[14.5px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+              className="h-10 shrink-0 rounded-[10px] px-4 text-[14.5px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
             >
               {s}
             </button>

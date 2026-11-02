@@ -40,7 +40,7 @@ export function Login({ onSignedIn }: { onSignedIn: () => void }) {
           }}
           className="flex flex-col rounded-[32px] bg-white px-6 pb-8 pt-9"
         >
-          <h1 className="text-[32px] font-bold leading-tight tracking-[-0.025em] text-text">
+          <h1 className="text-[32px] font-bold leading-[1.04] tracking-[-0.025em] text-text">
             {l.title}
           </h1>
           <p className="mt-1.5 text-[16px] text-text-muted">{l.subtitle}</p>
@@ -78,7 +78,7 @@ export function Login({ onSignedIn }: { onSignedIn: () => void }) {
           <button
             type="submit"
             aria-busy={signingIn}
-            className={`sf-pill sf-pill-dark mt-7 w-full gap-2 ${filled ? "" : "opacity-40"}`}
+            className={`sf-btn sf-btn-dark mt-7 w-full gap-2 ${filled ? "" : "opacity-40"}`}
           >
             {signingIn ? (
               <>
@@ -92,7 +92,7 @@ export function Login({ onSignedIn }: { onSignedIn: () => void }) {
 
           <div className="mt-8 h-px bg-black/[0.08]" aria-hidden />
           <p className="mt-6 text-center text-[14px] text-text-muted">{l.newHere}</p>
-          <button type="button" className="sf-pill sf-pill-outline mt-3 w-full">
+          <button type="button" className="sf-btn sf-btn-outline mt-3 w-full">
             {t.cta.request}
           </button>
         </form>

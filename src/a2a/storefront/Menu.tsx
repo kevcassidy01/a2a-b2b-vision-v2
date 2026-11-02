@@ -131,16 +131,16 @@ export function Menu({
 
         <div className="sf-drawer-item" style={at(lead + 1 + groups.length)}>
           {signedIn ? (
-            <button type="button" onClick={onLogOut} className="sf-pill sf-pill-outline mt-8 w-full gap-2">
+            <button type="button" onClick={onLogOut} className="sf-btn sf-btn-outline mt-8 w-full gap-2">
               <LogOut className="size-[18px]" strokeWidth={2.25} />
               {n.logOut}
             </button>
           ) : (
             <div className="mt-8 flex flex-col gap-3">
-              <button type="button" onClick={onLogIn} className="sf-pill sf-pill-dark w-full">
+              <button type="button" onClick={onLogIn} className="sf-btn sf-btn-dark w-full">
                 {t.logIn}
               </button>
-              <button type="button" className="sf-pill sf-pill-outline w-full">
+              <button type="button" className="sf-btn sf-btn-outline w-full">
                 {t.cta.request}
               </button>
             </div>

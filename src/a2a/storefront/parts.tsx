@@ -1,5 +1,6 @@
 import { Bell, Check, Menu as MenuIcon } from "lucide-react";
 import sparkle from "../../assets/a2a/agent-sparkle.png";
+import fizzLogo from "../../assets/a2a/fizz-logo.png";
 import john from "../../assets/a2a/john.png";
 import { copy } from "../../copy/copy";
 import { useSite } from "./site";
@@ -50,7 +51,7 @@ export function Header({ onLogIn, signedIn = false }: { onLogIn?: () => void; si
           </>
         ) : (
           onLogIn && (
-            <button type="button" onClick={onLogIn} className="sf-pill sf-pill-outline sf-pill-sm">
+            <button type="button" onClick={onLogIn} className="sf-btn sf-btn-outline sf-btn-sm">
               {t.logIn}
             </button>
           )
@@ -134,12 +135,7 @@ export function AgentMark({ className = "", onDark = false }: { className?: stri
 
 export function Logo() {
   return (
-    <span className="flex items-baseline gap-1.5">
-      <span className="sf-logo text-[28px]">{t.brand}</span>
-      <span className="rounded-[4px] bg-text px-1 py-px text-[10px] font-bold uppercase tracking-[0.04em] text-white">
-        {t.brandTag}
-      </span>
-    </span>
+    <img src={fizzLogo} alt={t.brand} className="h-[26px] w-auto" />
   );
 }
 

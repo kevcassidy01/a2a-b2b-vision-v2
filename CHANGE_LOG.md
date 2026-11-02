@@ -30,6 +30,12 @@ Entry format:
 
 ## Unreleased
 
+## 26.2.0 — 2026-11-03 00:01 IST
+**Kind:** small addition — the phone's look, round one (branch `buyer-feedback`): Figtree type, the new Fizz logo, rounded-rectangle buttons with dark glass.
+- **New Fizz logo on the phone** (`src/assets/a2a/fizz-logo.png`, from Somnath's Gemini image): two black bubbles and a red dot before the red italic "fizz", in the header and footer. The PARTNERS tag is gone. Its fake checkerboard background and watermark were cut out to true transparency. The brand tiles' wordmarks are unchanged.
+- **Phone buttons are rounded rectangles, as Airbnb's and Shopify's:** 12px corners on the 48px buttons, 10px on the small ones (header Log in, chat suggestions). `.sf-pill` is now `.sf-btn`, and the agent chat's buttons follow. Status chips, John's account pill, round icon buttons and the floating agent button stay round. **The dark buttons are dark glass** (`.sf-btn-dark`, the phone's Liquid Glass tinted darker, as the floating agent button is): a smoky frost over the slide or page, lit along the top edge; the agent chat's three dark buttons use it too. This breaks the 2026-10-23 rule that glass is only on the phone's own shell and system menus (A2A_INTENT §4), at Somnath's ask.
+- **Trying fonts on the storefront's titles (branch `buyer-feedback`):** Figtree (bold, −0.02em, in the copy's own case, no capitals) in place of Anton's condensed capitals; Space Grotesk, then Outfit, were tried first and dropped. On the hero headlines, account greeting and section titles (`.sf-display`), and now the site's body text too (`.sf-page`: home, login, account). The Fizz logo and brand wordmarks stay Inter. Every big title on the site now shares the hero's line height, 1.04 (set once on `.sf-display`; the login title and the feature card's title moved from 1.25 to match). All three hero slides' titles are 700, from `.sf-display` (a try at evening them out by eye, lighter on the lime and red slides, read too thin and was undone). Anton stays installed to switch back.
+
 ## 26.1.0 — 2026-11-02 23:17 IST
 **Kind:** small addition — no split screen: the buyer and seller each have their own URL, on two devices, linked live through the dev server.
 - **GM feedback, "no split screen": buyer and seller each get their own URL, for two devices.**

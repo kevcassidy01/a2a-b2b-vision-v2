@@ -82,7 +82,7 @@ function Section({
 }) {
   return (
     <section className="px-4 pt-14">
-      <h2 className="sf-display text-center text-[32px] leading-[1.05] text-text">
+      <h2 className="sf-display text-center text-[32px] text-text">
         {title}
       </h2>
       {subtitle && (
@@ -182,7 +182,7 @@ function ProductRow({
               <Lock className="size-3.5" strokeWidth={2.25} />
               {t.products.priceGate}
             </p>
-            <button type="button" className="sf-pill sf-pill-outline mt-4 self-start">
+            <button type="button" className="sf-btn sf-btn-outline mt-4 self-start">
               {t.products.view}
             </button>
           </div>
@@ -272,7 +272,7 @@ function Feature() {
         <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-text-muted">
           {t.feature.eyebrow}
         </p>
-        <h2 className="mt-2 text-[24px] font-bold leading-tight tracking-[-0.02em] text-text">
+        <h2 className="mt-2 text-[24px] font-bold leading-[1.04] tracking-[-0.02em] text-text">
           {t.feature.title}
         </h2>
         <p className="mt-2 text-[16px] leading-normal text-text-muted">{t.feature.body}</p>
@@ -321,16 +321,16 @@ function Cta({ onLogIn }: { onLogIn: () => void }) {
   return (
     <section className="px-4 pt-14">
       <div className="flex flex-col items-center rounded-[32px] bg-white px-6 py-10 text-center">
-        <h2 className="sf-display text-[32px] leading-[1.05] text-text">
+        <h2 className="sf-display text-[32px] text-text">
           {t.cta.title}
         </h2>
         <p className="mt-2 max-w-[280px] text-[16px] leading-normal text-text-muted">
           {t.cta.body}
         </p>
-        <button type="button" onClick={onLogIn} className="sf-pill sf-pill-dark mt-6 w-full">
+        <button type="button" onClick={onLogIn} className="sf-btn sf-btn-dark mt-6 w-full">
           {t.logIn}
         </button>
-        <button type="button" className="sf-pill sf-pill-outline mt-3 w-full">
+        <button type="button" className="sf-btn sf-btn-outline mt-3 w-full">
           {t.cta.request}
         </button>
       </div>

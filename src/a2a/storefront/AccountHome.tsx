@@ -42,7 +42,7 @@ export function AccountHome() {
     <div className="sf-page isolate min-h-full">
       <Header signedIn />
       <section className="px-4 pt-6">
-        <h1 className="sf-display text-[34px] leading-[1.04] text-text">{t.greeting}</h1>
+        <h1 className="sf-display text-[34px] text-text">{t.greeting}</h1>
         <p className="mt-1 text-[15px] text-text-muted">{t.company}</p>
         <Notice />
         <Quick />
@@ -119,20 +119,20 @@ function Notice() {
           {ordered ? (
             <>
               <OrderChecklist className="mt-4 border-t border-black/[0.08] pt-4" />
-              <button type="button" className="sf-pill sf-pill-dark mt-4 w-full">
+              <button type="button" className="sf-btn sf-btn-dark mt-4 w-full">
                 {o.details}
               </button>
-              <button type="button" className="sf-pill sf-pill-outline mt-2 w-full gap-2">
+              <button type="button" className="sf-btn sf-btn-outline mt-2 w-full gap-2">
                 <FileText className="size-[18px]" strokeWidth={2.25} />
                 {o.po}
               </button>
             </>
           ) : (
             <>
-              <button type="button" className="sf-pill sf-pill-dark mt-4 w-full">
+              <button type="button" className="sf-btn sf-btn-dark mt-4 w-full">
                 {n.cta}
               </button>
-              <button type="button" onClick={() => openAgent(!assigned)} className="sf-pill sf-pill-outline mt-2 w-full gap-2">
+              <button type="button" onClick={() => openAgent(!assigned)} className="sf-btn sf-btn-outline mt-2 w-full gap-2">
                 <AgentMark className="-ml-1 size-7 bg-transparent!" />
                 {assigned ? n.openAgent : n.assign}
               </button>
@@ -284,7 +284,7 @@ function BuyAgain() {
               <p className="text-[14px] text-text-muted">{p.pack}</p>
               <p className="text-[13px] text-text-muted">{p.last}</p>
             </div>
-            <button type="button" className="sf-pill sf-pill-outline sf-pill-sm">
+            <button type="button" className="sf-btn sf-btn-outline sf-btn-sm">
               {b.add}
             </button>
           </li>

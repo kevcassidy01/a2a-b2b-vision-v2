@@ -134,7 +134,6 @@ export const copy = {
     /** John's view: Fizz Drinks' B2B store on the phone, before he logs in. */
     storefront: {
       brand: "fizz",
-      brandTag: "Partners",
       /** The names drawn on the cans. */
       canLabels: {
         fizz: "fizz",

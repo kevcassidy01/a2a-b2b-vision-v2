@@ -9,6 +9,8 @@ import "@fontsource-variable/hanken-grotesk";
 import "@fontsource-variable/inter";
 // The storefront's hero headlines: Anton (one weight) — via .sf-display.
 import "@fontsource/anton/latin-400.css";
+// Trying Figtree on the storefront's titles instead (buyer-feedback) — via .sf-display.
+import "@fontsource-variable/figtree";
 import "./index.css";
 import { copy } from "./copy/copy";
 
