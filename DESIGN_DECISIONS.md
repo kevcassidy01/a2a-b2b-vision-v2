@@ -6,6 +6,11 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-11-02 A2A: no split screen; the buyer and the seller each have a URL, on their own device
+Decision: `/buyer` shows John's drawn iPhone, centred; `/seller` shows Alex's Command Center. Both play the same story; through the dev server (`npm run demo`) each side's moves, plus pause, restart and jumps, reach the other live. Opening one page restarts the other from the top. With no other page linked, a page plays the missing side itself on that side's timings. No who's-acting bar on either. `/` keeps the split screen.
+Rationale: Nitin (GM): no split screen. Two devices make it read as two companies, each with its own agent, rather than one screen of both.
+Supersedes: 2026-10-23 "One screen, split in two" (A2A_INTENT §4) for the demo; the split stays at `/`.
+
 ### 2026-10-29 A2A: your own side's agent is called "Coworker"
 Decision: on the Command Center, Alex's agent is "Coworker". Its button shows Alex's photo overlapped by the agent's mark. John's own agent on the phone is "your Coworker" too, and the who's-acting bar reads "John's Coworker" and "Alex's Coworker". The other company's agent stays "agent" ("Isar's agent", "Fizz's agent"). Fizz's store helper, before login, is "Fizz" ("Ask Fizz").
 Rationale: Somnath: Alex works alongside it like a new hire, and a Coworker is asked rather than operated. You can only have a Coworker on your own side, so the other company's stays an agent.

@@ -38,6 +38,8 @@ type Story = {
   accept: () => void;
   ordered: boolean;
   placeOrder: () => void;
+  /** Makes a move by name: for a page showing one side, when the other side's move arrives or is stood in for (SidePage). */
+  fire: (beat: Beat) => void;
   working: ReadonlySet<Doing>;
   setWorking: (who: Doing, on: boolean) => void;
 };
@@ -58,19 +60,35 @@ const StoryContext = createContext<Story>({
   accept: () => {},
   ordered: false,
   placeOrder: () => {},
+  fire: () => {},
   working: new Set(),
   setWorking: () => {},
 });
 
+/** The moves one side makes that the other side sees (the booleans above). */
+export type Beat = "quoteSent" | "counterSent" | "heldOut" | "askedAlex" | "v3Sent" | "accepted" | "ordered";
+
+/** Whose move each one is: John's side (the phone) or Fizz's (the Command Center). */
+export const OWNER: Record<Beat, "buyer" | "seller"> = {
+  quoteSent: "buyer",
+  counterSent: "seller",
+  heldOut: "buyer",
+  askedAlex: "seller",
+  v3Sent: "seller",
+  accepted: "buyer",
+  ordered: "buyer",
+};
+
+/** The step from which each move has already happened, on a run that jumps there. */
+const DONE_FROM: Record<Beat, number> = { quoteSent: 6, counterSent: 9, heldOut: 10, askedAlex: 11, v3Sent: 12, accepted: 14, ordered: 15 };
+
 /** Starting `from` a later step (a jump), the beats before it have already happened. */
 export function StoryProvider({ from = 1, children }: { from?: number; children: ReactNode }) {
-  const [quoteSent, setQuoteSent] = useState(from >= 6);
-  const [counterSent, setCounterSent] = useState(from >= 9);
-  const [heldOut, setHeldOut] = useState(from >= 10);
-  const [askedAlex, setAskedAlex] = useState(from >= 11);
-  const [v3Sent, setV3Sent] = useState(from >= 12);
-  const [accepted, setAccepted] = useState(from >= 14);
-  const [ordered, setOrdered] = useState(from >= 15);
+  const [beats, setBeats] = useState(() => {
+    const b = {} as Record<Beat, boolean>;
+    for (const k of Object.keys(DONE_FROM) as Beat[]) b[k] = from >= DONE_FROM[k];
+    return b;
+  });
   const [working, setWorkingSet] = useState<ReadonlySet<Doing>>(new Set());
   const setWorking = useCallback((agent: Doing, on: boolean) => {
     setWorkingSet((s) => {
@@ -81,16 +99,17 @@ export function StoryProvider({ from = 1, children }: { from?: number; children:
       return next;
     });
   }, []);
-  const sendQuote = useCallback(() => setQuoteSent(true), []);
-  const sendCounter = useCallback(() => setCounterSent(true), []);
-  const holdOut = useCallback(() => setHeldOut(true), []);
-  const askAlex = useCallback(() => setAskedAlex(true), []);
-  const sendV3 = useCallback(() => setV3Sent(true), []);
-  const accept = useCallback(() => setAccepted(true), []);
-  const placeOrder = useCallback(() => setOrdered(true), []);
+  const fire = useCallback((beat: Beat) => setBeats((b) => (b[beat] ? b : { ...b, [beat]: true })), []);
+  const sendQuote = useCallback(() => fire("quoteSent"), [fire]);
+  const sendCounter = useCallback(() => fire("counterSent"), [fire]);
+  const holdOut = useCallback(() => fire("heldOut"), [fire]);
+  const askAlex = useCallback(() => fire("askedAlex"), [fire]);
+  const sendV3 = useCallback(() => fire("v3Sent"), [fire]);
+  const accept = useCallback(() => fire("accepted"), [fire]);
+  const placeOrder = useCallback(() => fire("ordered"), [fire]);
   const story = useMemo(
-    () => ({ from, quoteSent, sendQuote, counterSent, sendCounter, heldOut, holdOut, askedAlex, askAlex, v3Sent, sendV3, accepted, accept, ordered, placeOrder, working, setWorking }),
-    [from, quoteSent, sendQuote, counterSent, sendCounter, heldOut, holdOut, askedAlex, askAlex, v3Sent, sendV3, accepted, accept, ordered, placeOrder, working, setWorking],
+    () => ({ from, ...beats, fire, sendQuote, sendCounter, holdOut, askAlex, sendV3, accept, placeOrder, working, setWorking }),
+    [from, beats, fire, sendQuote, sendCounter, holdOut, askAlex, sendV3, accept, placeOrder, working, setWorking],
   );
   return <StoryContext.Provider value={story}>{children}</StoryContext.Provider>;
 }

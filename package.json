@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "demo": "vite --host",
     "build": "tsc -b && vite build",
     "build:share": "tsc -b && vite build --mode share",
     "preview": "vite preview"

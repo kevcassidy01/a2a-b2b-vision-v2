@@ -52,12 +52,13 @@ function useRail() {
  * layer's edge is the only thing separating the two. The Command Center fills
  * the white layer edge to edge (A2A_INTENT §4).
  */
-export function CommandCenterShell({ children }: { children?: ReactNode }) {
+export function CommandCenterShell({ children, window }: { children?: ReactNode; window?: boolean }) {
   const rail = useRail();
+  const mark = window ? <Lights /> : <span className="a2a-orb size-[28px]" aria-hidden />;
   return (
     <GlassPanel radius={SHELL_RADIUS} className="h-full min-w-0 flex-1">
       <div className="flex h-full">
-        {rail ? <Rail /> : <Sidenav />}
+        {rail ? <Rail mark={mark} wide={window} /> : <Sidenav mark={mark} wide={window} />}
         <main
           className="a2a-white-layer a2a-content min-w-0 flex-1 overflow-hidden bg-surface"
           style={{
@@ -72,12 +73,27 @@ export function CommandCenterShell({ children }: { children?: ReactNode }) {
   );
 }
 
-function Sidenav() {
+/**
+ * A Mac window's close, minimise and zoom lights, for the shell shown as its
+ * own window (/seller). Set dressing, so not buttons. Inset as far from the
+ * window's left edge as from its top (20px).
+ */
+function Lights() {
+  return (
+    <span className="flex h-[28px] items-center gap-2" aria-hidden>
+      {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
+        <span key={c} className="size-3 rounded-full shadow-[inset_0_0_0_0.5px_rgb(0_0_0/0.25)]" style={{ background: c }} />
+      ))}
+    </span>
+  );
+}
+
+function Sidenav({ mark, wide }: { mark: ReactNode; wide?: boolean }) {
   return (
     <nav className="flex w-[232px] shrink-0 flex-col pb-2 pt-3 text-[13.5px] text-white/55">
-      {/* Header: the app mark, then search and collapse (Cowork's header icons). */}
+      {/* Header: the app mark (or a window's lights), then search and collapse (Cowork's header icons). */}
       <div className="flex items-center gap-0.5 px-3">
-        <span className="a2a-orb mr-auto size-[28px]" aria-hidden />
+        <span className={`mr-auto flex ${wide ? "pl-2" : ""}`}>{mark}</span>
         <IconButton icon={Search} label={t.search} />
         <IconButton icon={PanelLeft} label={t.collapse} />
       </div>
@@ -156,10 +172,11 @@ function Sidenav() {
  * Command Center's pinned there); Projects; Alex at the foot. The chats and
  * recents are set dressing, so they go.
  */
-function Rail() {
+/** `wide` makes room for a window's lights, inset as on a Mac, with the white layer's gap after them. */
+function Rail({ mark, wide }: { mark: ReactNode; wide?: boolean }) {
   return (
-    <nav className="flex w-[56px] shrink-0 flex-col items-center pb-2 pt-3 text-white/55">
-      <span className="a2a-orb size-[28px]" aria-hidden />
+    <nav className={`flex ${wide ? "w-[80px]" : "w-[56px]"} shrink-0 flex-col items-center pb-2 pt-3 text-white/55`}>
+      {wide ? <span className="flex self-start pl-5">{mark}</span> : mark}
       <div className="mt-2">
         <IconButton icon={Search} label={t.search} side="right" />
       </div>

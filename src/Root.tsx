@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import App from "./App";
 import { A2AStage } from "./a2a/A2AStage";
+import { sideFromUrl } from "./a2a/link";
 import { Desktop } from "./desktop/Desktop";
 import { ViewToggle, type View } from "./shell/ViewToggle";
 
@@ -14,7 +15,8 @@ const routeFromHash = (): Route =>
  * opens on it. The earlier demos stay behind the hash, with the floating
  * toggle between them: `#chat`, the browser chat; `#desktop`, the Cowork
  * desktop. The route lives in the URL so a reload or a shared link opens the
- * same screen. (`#a2a`, the old link, still opens the prototype.)
+ * same screen. (`#a2a`, the old link, still opens the prototype.) /buyer and
+ * /seller open one side each, for its own device (link.tsx).
  */
 export default function Root() {
   const [route, setRoute] = useState<Route>(routeFromHash);
@@ -31,7 +33,7 @@ export default function Root() {
     setRoute(v);
   };
 
-  if (route === "a2a") return <A2AStage />;
+  if (route === "a2a") return <A2AStage side={sideFromUrl()} />;
 
   return (
     <>

@@ -62,6 +62,8 @@ The PDF's 7 steps, which our story walks through:
 
 ## 4. The screen (settled 2026-10-23)
 
+**Superseded 2026-11-02 (Nitin: no split screen):** the demo runs on two devices, `/buyer` (John's iPhone, centred) and `/seller` (Alex's Command Center), linked live; no who's-acting bar. The split below stays at `/`. See §10.
+
 **One screen, split in two.** No tabs or toggle. Both sides are on screen the whole time, so the audience
 sees each agent's move land on the other side.
 
@@ -288,6 +290,7 @@ shown but not taken. The older frames below are kept as they were.
 - **Code:** `src/a2a/`, apart from `src/chat` and `src/desktop`. Page: `/#a2a`. Copy in `src/copy/copy.ts` (`copy.a2a`).
 - **One screen:** John's iPhone with the storefront and his agent on the left, Alex's Command Center and
   the seller agent's drawer on the right, the "who's acting" bar below (§4).
+- **Two devices (2026-11-02):** `/buyer` and `/seller` (or `#buyer`, `#seller` in the share file) each show one side. `npm run demo` serves them on the network; open `http://<laptop-ip>:<port>/buyer` and `/seller` on the same Wi-Fi. The `a2a-link` Vite plugin relays each side's beats, and pause, restart and jumps, over the dev server's socket (`src/a2a/link.tsx`). Opening one page restarts the other. A page with no partner plays the other side itself, on cues each script exports (`BUYER_CUES`, `SELLER_CUES`).
 - **Scripted, no live LLM.** One shared story state drives both sides, so a move on one side shows up on the other.
 - **Presenter keys:** ` pauses and plays the whole demo (story clock, timers, animations); Shift+` restarts it; **C** opens a secret contents menu (top left, dark glass) to jump to any of the 15 steps, which restarts the story from where that step begins.
 - **Sounds** (`src/a2a/sounds.ts`, Mixkit, free): a tone when Mike's notification reaches John after login,

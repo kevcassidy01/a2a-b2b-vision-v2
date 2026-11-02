@@ -32,6 +32,7 @@ import { useSite } from "./site";
 import { AgentMark, OrderChecklist } from "./parts";
 import { Pulse } from "../Pulse";
 import { demoNow } from "../demoClock";
+import type { Cue } from "../link";
 
 const a = copy.a2a.storefront.agent;
 const STEPS = a.plan.steps;
@@ -155,6 +156,21 @@ const T5 = (() => {
 /** Once John saves it, in ms from his tap: his turn, then the agent's reply with the saved card, and its done mark. */
 const T6 = { reply: 1400, card: 1800, done: 2200, end: 2400 };
 const TICK = 50;
+
+/** How long John takes over his two moves when his side's stood in for, in ms: assigning Mike's cart once he's in, then approving v3a. */
+const JOHN_ASSIGNS = 8000;
+const JOHN_APPROVES = 4000;
+/**
+ * John's side played on its own, for the Command Center's page when no phone
+ * is linked (link.tsx): each of his side's moves, as long after what it
+ * answers as the phone takes to make it.
+ */
+export const BUYER_CUES: readonly Cue[] = [
+  { beat: "quoteSent", after: null, ms: JOHN_ASSIGNS + T.done + 300 },
+  { beat: "heldOut", after: "counterSent", ms: T2.done + 300 },
+  { beat: "accepted", after: "v3Sent", ms: T3.ask + JOHN_APPROVES + T4.step(0) },
+  { beat: "ordered", after: "accepted", ms: T4.step(1) - T4.step(0) },
+];
 
 /** Ms since a turn began (the handoff, or v2 landing), ticking until it's done; null before it. On a jump, it can start `from` partway in. */
 function useClock(started: boolean, end: number, from = 0) {

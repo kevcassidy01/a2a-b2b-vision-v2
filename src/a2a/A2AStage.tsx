@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ACTORS, ActorBar, type Actor } from "./ActorBar";
 import { ArtifactFrame } from "./ArtifactFrame";
 import { CommandCenterShell } from "./CommandCenterShell";
@@ -9,21 +9,26 @@ import { IPhoneFrame } from "./IPhoneFrame";
 import { MailNotification } from "./MailNotification";
 import { PartnerSite } from "./storefront/PartnerSite";
 import { StoryProvider, useStory } from "./story";
+import { Relay, StandIn, useLink, type Side } from "./link";
+import { BUYER_CUES } from "./storefront/AgentChat";
+import { SELLER_CUES } from "./command-center/QuoteThread";
 import "./a2a.css";
 
 /**
- * A2AStage — the one split screen (A2A_INTENT §4): John's storefront on an
- * iPhone on the left, Alex's Command Center in the glass AI app shell on the
- * right, and under both the bar showing who is acting. The backdrop is a dusk
+ * A2AStage — the prototype. With no `side`, the split screen (A2A_INTENT §4):
+ * John's storefront on an iPhone on the left, Alex's Command Center in the
+ * glass AI app shell on the right, and under both the bar showing who is
+ * acting. With a `side`, one of them alone in the middle of the screen, for
+ * its own device (/buyer, /seller; link.tsx). The backdrop is a dusk
  * mountain range (John Towner, Unsplash) under a light dark wash, so the chrome
  * floats on depth and shadow (Linear's scene).
  */
-export function A2AStage() {
-  const { run, from, jump } = useDemoKeys();
+export function A2AStage({ side }: { side?: Side }) {
+  const { run, from, jump, peer } = useDemoKeys(side);
   return (
     <>
       <StoryProvider key={run} from={from}>
-        <Stage />
+        {side ? <OneSide side={side} peer={peer} /> : <Stage />}
       </StoryProvider>
       <Contents at={from} onJump={jump} />
     </>
@@ -34,32 +39,77 @@ export function A2AStage() {
  * The presenter's keys: ` pauses and plays the demo (its clocks, timers and
  * animations, demoClock); Shift+` (~) restarts it from the top, playing. They
  * do nothing while typing in a field. Returns the run, a key that remounts
- * the whole story on restart, the step it starts from, and a jump to a step
- * (the contents, Contents), which restarts it from there, playing.
+ * the whole story on restart, the step it starts from, a jump to a step
+ * (the contents, Contents), which restarts it from there, playing, and on a
+ * one-side page whether the other side's linked. There, each of these
+ * reaches the other side's page too.
  */
-function useDemoKeys() {
+function useDemoKeys(side?: Side) {
   const [run, setRun] = useState(0);
   const [from, setFrom] = useState(1);
   const paused = usePaused();
+  const jumpHere = useCallback((step: number) => {
+    setPaused(false);
+    setFrom(step);
+    setRun((r) => r + 1);
+  }, []);
+  const link = useLink(side, jumpHere, setPaused);
+  const jump = (step: number) => {
+    jumpHere(step);
+    link.jump(step);
+  };
+  const pause = (p: boolean) => {
+    setPaused(p);
+    link.pause(p);
+  };
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.code !== "Backquote" || e.ctrlKey || e.metaKey || e.altKey || e.repeat || isTyping(e)) return;
       e.preventDefault();
-      if (e.shiftKey) {
-        setPaused(false);
-        setFrom(1);
-        setRun((r) => r + 1);
-      } else setPaused(!paused);
+      if (e.shiftKey) jump(1);
+      else pause(!paused);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [paused]);
-  const jump = (step: number) => {
-    setPaused(false);
-    setFrom(step);
-    setRun((r) => r + 1);
-  };
-  return { run, from, jump };
+  });
+  return { run, from, jump, peer: link.peer };
+}
+
+/**
+ * One side alone, in the middle of the screen (no split screen, no
+ * who's-acting bar): John's phone, or Alex's Command Center with Gmail's
+ * notification. It sends its moves to the other side's page and makes that
+ * side's as they arrive; with no other side linked, it plays them itself.
+ */
+function OneSide({ side, peer }: { side: Side; peer: boolean }) {
+  const { from, ordered } = useStory();
+  const paused = usePaused();
+  return (
+    <div
+      className="a2a-stage a2a-scene relative flex h-screen w-screen items-center justify-center overflow-hidden p-2.5"
+      data-paused={paused || undefined}
+    >
+      {side === "buyer" ? (
+        <IPhoneFrame>
+          <PartnerSite />
+        </IPhoneFrame>
+      ) : (
+        <>
+          {/* A desktop app's window, centred on the wallpaper rather than filling the screen. */}
+          <div className="flex h-[min(96vh,1120px)] w-[min(92vw,1680px)]">
+            <CommandCenterShell window>
+              <ArtifactFrame>
+                <CommandCenter />
+              </ArtifactFrame>
+            </CommandCenterShell>
+          </div>
+          <MailNotification ordered={ordered && from < 15} />
+        </>
+      )}
+      <Relay side={side} />
+      {!peer && <StandIn cues={side === "buyer" ? SELLER_CUES : BUYER_CUES} />}
+    </div>
+  );
 }
 
 /**

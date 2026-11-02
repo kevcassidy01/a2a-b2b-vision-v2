@@ -30,6 +30,15 @@ Entry format:
 
 ## Unreleased
 
+## 26.1.0 — 2026-11-02 23:17 IST
+**Kind:** small addition — no split screen: the buyer and seller each have their own URL, on two devices, linked live through the dev server.
+- **GM feedback, "no split screen": buyer and seller each get their own URL, for two devices.**
+  - `/buyer` is John's iPhone, centred. `/seller` is Alex's Command Center as a desktop app window, centred on the wallpaper (92% of the screen's width and 96% of its height, at most 1680×1120), with a Mac window's close, minimise and zoom lights in place of the app's orb (inset 20px from the window's top and left; the rail widens to 80px to fit them), and the Gmail notification at the end. No who's-acting bar on either. `/` keeps the split screen.
+  - **Live link:** `npm run demo` (Vite with `--host`) serves both pages. A small Vite plugin (`a2a-link`, vite.config.ts) relays each side's moves over the dev server's socket (`src/a2a/link.tsx`), so the buyer's quote lands on Alex's screen and so on.
+  - Pause (`), restart (Shift+`) and the C menu's jumps are synced across both pages. When one page opens, the other restarts from step 1, so they start together.
+  - **Stand-in:** with no other page linked (or no server, e.g. the share file's `#buyer` / `#seller`), a page plays the missing side's moves on that side's timings: John assigns the quote after 8s and approves 4s after the offers; Alex opens and decides after 4s each.
+  - story.tsx: the seven beats are one record with an owner per beat (`OWNER`) and a generic `fire(beat)`.
+
 ## 26.0.1 — 2026-10-29 23:29 IST
 **Kind:** fix — fresh clones now get the Command Center's title font.
 - **Avant Garde for Salesforce is in the repo** (was gitignored), so a fresh clone shows it on the Command Center's titles, store name and big numbers instead of falling back to Inter. The repo is internal, used on Salesforce laptops. The Anthropic Serif files stay gitignored.

@@ -30,6 +30,7 @@ import { skipTo, useStory } from "../story";
 import { CardAction, CardStatus, KnowledgeCard } from "./KnowledgeCard";
 import { Pulse } from "../Pulse";
 import { demoNow } from "../demoClock";
+import type { Cue } from "../link";
 
 const q = copy.a2a.commandCenter.agent.quote;
 const MUSINGS = q.musings;
@@ -134,6 +135,20 @@ const T4 = (() => {
 
 /** O-5531 arrives (story step 14), in ms from it being placed: the order, the agent's word, the turns so far and the done mark. */
 const T5 = { start: 300, card: 400, said: 900, turns: 1300, end: 1500 };
+
+/** How long Alex takes over his two moves when his side's stood in for, in ms: opening Q-1042 once it lands, then sending both offers. */
+const ALEX_OPENS = 4000;
+const ALEX_DECIDES = 4000;
+/**
+ * Alex's side played on its own, for the phone's page when no Command Center
+ * is linked (link.tsx): each of his side's moves, as long after what it
+ * answers as the Command Center takes to make it.
+ */
+export const SELLER_CUES: readonly Cue[] = [
+  { beat: "counterSent", after: "quoteSent", ms: ALEX_OPENS + T.sent },
+  { beat: "askedAlex", after: "heldOut", ms: T2.decision },
+  { beat: "v3Sent", after: "askedAlex", ms: ALEX_DECIDES + T3.sent },
+];
 
 /** What a musing or a check did, as an icon: read, looked up, wrote, noticed, wondered. */
 const KIND: Record<string, LucideIcon> = { read: FileSearch, fetch: Database, write: PencilLine, notice: Eye, wonder: Lightbulb };
