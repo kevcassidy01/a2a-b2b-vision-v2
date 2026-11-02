@@ -51,7 +51,7 @@ export function Header({ onLogIn, signedIn = false }: { onLogIn?: () => void; si
           </>
         ) : (
           onLogIn && (
-            <button type="button" onClick={onLogIn} className="sf-btn sf-btn-outline sf-btn-sm">
+            <button type="button" onClick={onLogIn} className="sf-btn sf-btn-outline sf-btn-sm h-10">
               {t.logIn}
             </button>
           )
@@ -61,7 +61,7 @@ export function Header({ onLogIn, signedIn = false }: { onLogIn?: () => void; si
           aria-label={t.menu}
           aria-expanded={menuOpen}
           onClick={openMenu}
-          className="-mr-1 grid size-10 place-items-center rounded-full text-text"
+          className="-mr-1 grid size-10 place-items-center rounded-[12px] bg-black/[0.05] text-text"
         >
           <MenuIcon className="size-[22px]" strokeWidth={2} />
         </button>
@@ -70,7 +70,7 @@ export function Header({ onLogIn, signedIn = false }: { onLogIn?: () => void; si
   );
 }
 
-/** A bell in an outlined circle, as tall as John's pill. Quiet when John logs
+/** A bell on a grey rounded square, as tall as John's pill. Quiet when John logs
  *  in; when Mike's cart notification arrives it rings and gets a red dot. */
 function NotificationBell() {
   const { notified } = useSite();
@@ -78,42 +78,42 @@ function NotificationBell() {
     <button
       type="button"
       aria-label={notified ? t.notifications.unread : t.notifications.label}
-      className="relative grid size-9 place-items-center rounded-full text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.16)]"
+      className="relative grid size-10 place-items-center rounded-[12px] bg-black/[0.05] text-text"
     >
       <Bell key={String(notified)} className={`size-[18px] ${notified ? "sf-ring" : ""}`} strokeWidth={2} />
       {notified && (
         <span
           aria-hidden
-          className="sf-pop absolute right-[5px] top-[5px] size-2.5 rounded-full bg-[var(--fizz-red)] shadow-[0_0_0_2px_#fff]"
+          className="sf-pop absolute right-[7px] top-[7px] size-2.5 rounded-full bg-[var(--fizz-red)] shadow-[0_0_0_2px_#f2f2f2]"
         />
       )}
     </button>
   );
 }
 
-/** John's avatar in a circle, then his name, in a fully rounded pill as tall
- *  as Log in, the circle 3px in from the pill's edge. */
+/** John's avatar in a circle, then his name, on a grey rounded rectangle as tall
+ *  as the bell, the circle 4px in from its edge. */
 function AccountPill() {
   return (
     <button
       type="button"
       aria-label={t.account.label}
-      className="flex h-9 items-center gap-2 rounded-full bg-black/[0.05] p-[3px] pr-3.5"
+      className="flex h-10 items-center gap-2 rounded-[12px] bg-black/[0.05] p-1 pr-3.5"
     >
-      <img src={john} alt="" className="size-[30px] rounded-full bg-white object-cover" />
+      <img src={john} alt="" className="size-8 rounded-full bg-white object-cover" />
       <span className="text-[14px] font-bold tracking-[-0.01em] text-text">{t.account.name}</span>
     </button>
   );
 }
 
 /** John's agent, floating bottom centre over every page but the login, just
- *  above Safari's bar: a darker glass pill with the sparkle and "New task"
+ *  above Safari's bar: a near-black rounded rectangle with the sparkle and "New task"
  *  ("Ask agent" before login, when it's Fizz's helpful agent), shrinking to
  *  the sparkle in a circle when the bar shrinks (Safari's `float`). */
 export function AgentFab({ signedIn }: { signedIn: boolean }) {
   const { openAgent } = useSite();
   return (
-    <button type="button" aria-label={signedIn ? t.agent.open : t.agent.signedOut.fab} onClick={() => openAgent()} className="sf-fab a2a-liquid-glass">
+    <button type="button" aria-label={signedIn ? t.agent.open : t.agent.signedOut.fab} onClick={() => openAgent()} className="sf-fab">
       <AgentMark className="size-8 bg-transparent!" />
       <span className="sf-fab-label">{signedIn ? t.agent.fab : t.agent.signedOut.fab}</span>
     </button>
@@ -142,7 +142,7 @@ export function Logo() {
 /** Dense and quiet, as Coca-Cola's: the logo, links, then uppercase legal lines. */
 export function Footer() {
   return (
-    <footer className="mt-14 bg-white px-6 pb-12 pt-10">
+    <footer className="mt-14 bg-[#f4f4f5] px-6 pb-12 pt-10">
       <Logo />
       <ul className="mt-6 flex flex-col gap-3">
         {t.footer.links.map((l) => (

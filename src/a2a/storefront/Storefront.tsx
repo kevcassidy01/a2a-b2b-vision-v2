@@ -107,7 +107,7 @@ function Brands() {
               onClick={(e) => e.preventDefault()}
               className="flex flex-col items-center gap-2"
             >
-              <span className="grid aspect-square w-full place-items-center rounded-2xl bg-white">
+              <span className="grid aspect-square w-full place-items-center rounded-[24px] bg-white shadow-[inset_0_0_0_1px_#e4e4e7]">
                 <span
                   className="sf-logo text-[22px]"
                   style={{ color: TONES[BRAND_TONES[i]].can }}
@@ -172,7 +172,7 @@ function ProductRow({
   return (
     <ul className="sf-no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4">
       {items.map((p, i) => (
-        <li key={p.name} className="flex w-[220px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-white">
+        <li key={p.name} className="flex w-[220px] shrink-0 snap-start flex-col overflow-hidden rounded-[24px] bg-[#f4f4f5]">
           <div className="sf-product-shot grid h-[200px] place-items-center">{shot(i)}</div>
           <div className="flex flex-1 flex-col p-5">
             <h3 className="text-[18px] font-bold leading-snug tracking-[-0.015em] text-text">{p.name}</h3>
@@ -195,7 +195,7 @@ function ProductRow({
 /** A white card of rows: a leading mark, a name and a line, a chevron. */
 function RowList({ rows }: { rows: { key: string; mark: ReactNode; name: string; detail: string }[] }) {
   return (
-    <ul className="flex flex-col rounded-2xl bg-white px-5">
+    <ul className="flex flex-col rounded-[24px] bg-[#f4f4f5] px-5">
       {rows.map((r) => (
         <li key={r.key} className="[&:not(:last-child)]:border-b [&:not(:last-child)]:border-black/[0.08]">
           <a href="#" onClick={(e) => e.preventDefault()} className="flex items-center gap-4 py-4">
@@ -250,7 +250,7 @@ function Marketing() {
             name: p.name,
             detail: p.detail,
             mark: (
-              <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-[#eeeeee] text-text">
+              <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-white text-text">
                 <Icon className="size-5" strokeWidth={2} />
               </span>
             ),
@@ -268,7 +268,7 @@ function Feature() {
       <div className="overflow-hidden rounded-[32px] bg-[#e40f30] pb-12">
         <img src={plantsPhoto} alt="" className="block w-full" />
       </div>
-      <div className="relative mx-4 -mt-16 rounded-2xl bg-white p-6">
+      <div className="relative mx-4 -mt-16 rounded-[24px] bg-[#f4f4f5] p-6">
         <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-text-muted">
           {t.feature.eyebrow}
         </p>
@@ -293,7 +293,7 @@ function Feature() {
 function Perks() {
   return (
     <Section title={t.perks.title}>
-      <ul className="flex flex-col rounded-2xl bg-white px-5">
+      <ul className="flex flex-col rounded-[24px] bg-[#f4f4f5] px-5">
         {t.perks.items.map((p, i) => {
           const Icon = PERK_ICONS[i];
           return (
@@ -301,7 +301,7 @@ function Perks() {
               key={p.title}
               className="flex gap-4 py-5 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-black/[0.08]"
             >
-              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[#eeeeee] text-text">
+              <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-white text-text">
                 <Icon className="size-5" strokeWidth={2} />
               </span>
               <div>
@@ -320,7 +320,7 @@ function Perks() {
 function Cta({ onLogIn }: { onLogIn: () => void }) {
   return (
     <section className="px-4 pt-14">
-      <div className="flex flex-col items-center rounded-[32px] bg-white px-6 py-10 text-center">
+      <div className="flex flex-col items-center rounded-[24px] bg-[#f4f4f5] px-6 py-10 text-center">
         <h2 className="sf-display text-[32px] text-text">
           {t.cta.title}
         </h2>

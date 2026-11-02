@@ -30,6 +30,19 @@ Entry format:
 
 ## Unreleased
 
+## 26.3.0 — 2026-11-03 00:24 IST
+**Kind:** small addition — the phone's look, round two (branch `buyer-feedback`, merged into `master`): white page and grey cards, stat tiles, a segmented Orders filter, rounded squares for icon buttons and chips, fact chips on the agent's cards, solid black rounder buttons, a blurred /buyer wallpaper.
+- Rounder buttons on the phone: 16px corners on the 48px buttons (the site's, the agent chat's and the floating Ask Fizz / New task), 12px on the small ones, 14px on the chat's suggestions.
+- /buyer: the wallpaper behind the phone is lightly blurred (10px); /seller and the split screen keep it sharp.
+- The stat tiles after login and the brand tiles under Shop by brand are white with a grey border (#e4e4e7), the stat tiles' icon squares grey.
+- The agent's floating button (Ask Fizz / New task) gets the same treatment: solid near-black, a rounded rectangle when expanded, rounding into a circle when Safari's bar shrinks; no glass.
+- Dark buttons are solid near-black (#1d1d1f) again: the dark glass from 26.2.0 is dropped (it read as grey on the light page).
+- The phone's look, round two (buyer-feedback), after the inspiration board: a white page with grey cards (#f4f4f5, 24px corners) in place of the #eeeeee page and white cards, across the store, login, account home, menu and footer.
+- Account home: three stat tiles under the greeting (credit available, open orders, saved this year), each an icon square, the figure large and its label small; credit and open orders change once O-5531 is placed. The credit moved out of Your account, which gains a Credit limit row.
+- Recent orders: a segmented control (All / Open / Delivered), a grey track with the chosen segment raised in white; Open gets a dot when O-5531 joins it, until John taps it.
+- Rounded squares instead of circles: the header's menu, bell and John's pill on grey; the agent sheet's and menu's close; the composer and its buttons; status, source and tag chips at 8px. Avatars and the agent's mark stay round.
+- The agent's quote and order cards show their facts as chips with icons (units, discount, terms, order id) in place of a "·" line.
+
 ## 26.2.0 — 2026-11-03 00:01 IST
 **Kind:** small addition — the phone's look, round one (branch `buyer-feedback`): Figtree type, the new Fizz logo, rounded-rectangle buttons with dark glass.
 - **New Fizz logo on the phone** (`src/assets/a2a/fizz-logo.png`, from Somnath's Gemini image): two black bubbles and a red dot before the red italic "fizz", in the header and footer. The PARTNERS tag is gone. Its fake checkerboard background and watermark were cut out to true transparency. The brand tiles' wordmarks are unchanged.

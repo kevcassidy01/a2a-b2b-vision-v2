@@ -38,7 +38,7 @@ export function Login({ onSignedIn }: { onSignedIn: () => void }) {
             e.preventDefault();
             if (filled) setSigningIn(true);
           }}
-          className="flex flex-col rounded-[32px] bg-white px-6 pb-8 pt-9"
+          className="flex flex-col rounded-[24px] bg-[#f4f4f5] px-6 pb-8 pt-9"
         >
           <h1 className="text-[32px] font-bold leading-[1.04] tracking-[-0.025em] text-text">
             {l.title}

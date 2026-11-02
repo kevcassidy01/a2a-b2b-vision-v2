@@ -31,6 +31,19 @@
     ),
     url("../assets/a2a/wallpaper.jpg") center / cover #0d0e10;
 }
+/* /buyer: the same wallpaper lightly blurred behind the phone, on a layer of
+   its own (oversized, so the blur's soft edge stays off screen). */
+.a2a-scene-blur {
+  isolation: isolate;
+}
+.a2a-scene-blur::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  z-index: -1;
+  background: inherit;
+  filter: blur(10px);
+}
 
 /* The shell's material, in two layers like the iPhone body:
    - .a2a-glass: the blur and the shadow, with a light tint, never masked;

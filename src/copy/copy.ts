@@ -613,6 +613,12 @@ export const copy = {
             valueLabel: "Order total",
           },
         },
+        /** Three figures at a glance, under the greeting. Credit drops and open orders go up once O-5531 is placed. */
+        stats: {
+          credit: "Credit available",
+          open: { label: "Open orders", value: "1", after: "2" },
+          saved: { label: "Saved this year", value: "$4,860" },
+        },
         quick: [
           { label: "Quick order", icon: "quick" },
           { label: "Buy again", icon: "again" },
@@ -633,6 +639,7 @@ export const copy = {
           title: "Your account",
           credit: { label: "Credit available", value: "$84,200", of: "of $150,000", share: 0.56 },
           rows: [
+            { label: "Credit limit", value: "$150,000" },
             { label: "Payment terms", value: "Net30" },
             { label: "Next delivery", value: "Tue, Oct 27 · Munich" },
             { label: "Open quotes", value: "None" },
@@ -653,6 +660,8 @@ export const copy = {
         orders: {
           title: "Recent orders",
           all: "All orders",
+          /** The list's filter; Open gets a dot when an order joins it. */
+          filters: { all: "All", open: "Open", delivered: "Delivered" },
           items: [
             { id: "O-5512", date: "Oct 14", total: "$21,860", status: "In transit" },
             { id: "O-5498", date: "Sep 30", total: "$18,420", status: "Delivered" },

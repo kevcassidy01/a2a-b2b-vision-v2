@@ -45,10 +45,10 @@ export function Menu({
       <button type="button" aria-label={t.closeMenu} tabIndex={-1} onClick={onClose} className="sf-scrim absolute inset-0" />
       <nav
         aria-label={n.label}
-        className="sf-drawer-panel sf-no-scrollbar absolute inset-y-0 right-0 w-[85%] overflow-y-auto bg-[#eeeeee] px-4 pb-32"
+        className="sf-drawer-panel sf-no-scrollbar absolute inset-y-0 right-0 w-[85%] overflow-y-auto bg-white px-4 pb-32"
       >
         {/* The status bar's own strip, opaque, so the menu scrolls behind the time, the island and the battery (as iOS does). */}
-        <div aria-hidden className="sticky top-0 z-10 -mx-4 h-[54px] bg-[#eeeeee]" />
+        <div aria-hidden className="sticky top-0 z-10 -mx-4 h-[54px] bg-white" />
         <div className="sf-drawer-item flex h-14 items-center gap-3" style={at(0)}>
           {signedIn ? (
             <>
@@ -67,7 +67,7 @@ export function Menu({
             type="button"
             aria-label={t.closeMenu}
             onClick={onClose}
-            className="-mr-1 grid size-10 shrink-0 place-items-center rounded-full bg-black/[0.06] text-text"
+            className="-mr-1 grid size-10 shrink-0 place-items-center rounded-[12px] bg-black/[0.05] text-text"
           >
             <X className="size-5" strokeWidth={2.25} />
           </button>
@@ -77,7 +77,7 @@ export function Menu({
           <button
             type="button"
             onClick={onAgent}
-            className="sf-drawer-item mt-3 flex w-full items-center gap-3 rounded-2xl bg-[#1d1d1f] p-4 text-left text-white"
+            className="sf-drawer-item mt-3 flex w-full items-center gap-3 rounded-[24px] bg-[#1d1d1f] p-4 text-left text-white"
             style={at(1)}
           >
             <AgentMark onDark className="size-11" />
@@ -102,7 +102,7 @@ export function Menu({
         {groups.map((g, i) => (
           <section key={g.title} className="sf-drawer-item mt-6" style={at(lead + 1 + i)}>
             <h2 className="px-1 text-[13px] font-semibold uppercase tracking-[0.06em] text-text-muted">{g.title}</h2>
-            <ul className="mt-2 rounded-2xl bg-white px-4">
+            <ul className="mt-2 rounded-[24px] bg-[#f4f4f5] px-4">
               {g.items.map((item) => {
                 const Icon = ICONS[item.icon];
                 return (
@@ -116,7 +116,7 @@ export function Menu({
                       <span className="mr-auto truncate text-[16px] font-semibold tracking-[-0.01em]">{item.label}</span>
                       {"detail" in item && <span className="truncate text-[14px] text-text-muted">{item.detail}</span>}
                       {"count" in item && (
-                        <span className="grid h-6 min-w-6 place-items-center rounded-full bg-[var(--fizz-red)] px-2 text-[13px] font-bold text-white">
+                        <span className="grid h-6 min-w-6 place-items-center rounded-[8px] bg-[var(--fizz-red)] px-2 text-[13px] font-bold text-white">
                           {item.count}
                         </span>
                       )}
