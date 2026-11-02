@@ -77,7 +77,7 @@ export function Menu({
           <button
             type="button"
             onClick={onAgent}
-            className="sf-drawer-item mt-3 flex w-full items-center gap-3 rounded-[24px] bg-[#1d1d1f] p-4 text-left text-white"
+            className="sf-drawer-item mt-3 flex w-full items-center gap-3 rounded-[16px] bg-[#1d1d1f] p-4 text-left text-white"
             style={at(1)}
           >
             <AgentMark onDark className="size-11" />
@@ -102,7 +102,7 @@ export function Menu({
         {groups.map((g, i) => (
           <section key={g.title} className="sf-drawer-item mt-6" style={at(lead + 1 + i)}>
             <h2 className="px-1 text-[13px] font-semibold uppercase tracking-[0.06em] text-text-muted">{g.title}</h2>
-            <ul className="mt-2 rounded-[24px] border border-[#e4e4e7] bg-white px-4">
+            <ul className="mt-2 rounded-[16px] border border-[#e4e4e7] bg-white px-4">
               {g.items.map((item) => {
                 const Icon = ICONS[item.icon];
                 return (

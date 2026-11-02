@@ -1,7 +1,9 @@
 /* Fizz Drinks' B2B storefront on the phone: a white page, white cards with a grey border
-   (#e4e4e7, 24px; the hero's slides 32px), bold headings, rounded-rectangle
-   buttons, and rounded squares rather than circles for icon buttons and chips
-   (people stay round). Fizz red only in the logo, the drinks and the unread dot. */
+   (#e4e4e7), bold headings, rounded-rectangle buttons, and rounded squares rather than circles for icon buttons and chips
+   (people stay round). Fizz red only in the logo, the drinks and the unread dot.
+   Radii run on one scale, set by size from the 48px button: 8 chips and tags,
+   12 small and icon buttons, 16 buttons and fields, 24 cards, 32 the hero
+   slides. Blocks stacked in one column share a radius (the menu's are all 16). */
 
 .sf-page {
   --fizz-red: #e8112d;
@@ -76,7 +78,7 @@
   display: flex;
   height: 52px;
   align-items: center;
-  border-radius: 12px;
+  border-radius: 16px;
   background: #fff;
   box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.22);
   transition: background-color 250ms ease-out;

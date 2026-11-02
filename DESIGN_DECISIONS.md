@@ -6,6 +6,10 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-11-03 A2A: on the phone, corner radii run on one five-step scale
+Decision: radii are set by an element's size, anchored on the 48px button at 16px: 8 for chips and tags, 12 for small buttons (36px), icon buttons (40px), icon squares and thumbnails, 16 for buttons, text fields and the chat composer, 24 for cards, grouped lists and chat bubbles, 32 for the hero slides only. People's photos stay round, and so does the collapsed FAB. Blocks stacked in one column at the same width share a radius: the menu's Coworker card, Search field and lists are all 16. Card actions pin to the card's foot and are full width on the phone.
+Rationale: Somnath: radii had drifted to about 14 values, with a 12px Search field above 24px lists in the menu. One scale, set from the buttons, reads as one family.
+
 ### 2026-11-02 A2A: no split screen; the buyer and the seller each have a URL, on their own device
 Decision: `/buyer` shows John's drawn iPhone, centred; `/seller` shows Alex's Command Center. Both play the same story; through the dev server (`npm run demo`) each side's moves, plus pause, restart and jumps, reach the other live. Opening one page restarts the other from the top. With no other page linked, a page plays the missing side itself on that side's timings. No who's-acting bar on either. `/` keeps the split screen.
 Rationale: Nitin (GM): no split screen. Two devices make it read as two companies, each with its own agent, rather than one screen of both.

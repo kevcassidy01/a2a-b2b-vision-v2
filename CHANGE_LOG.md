@@ -30,9 +30,14 @@ Entry format:
 
 ## Unreleased
 
+## 26.4.1 — 2026-11-03 00:53 IST
+**Kind:** fix
+- Corner radii on the phone run on one scale, set by size from the 48px button: 8 chips and tags, 12 small and icon buttons, 16 buttons and fields, 24 cards, lists and chat bubbles, 32 the hero slides. Text fields go 12 to 16 to match the buttons; stat and quick tiles 20 to 24; chat bubbles 20–22 to 24; suggestion buttons 14 to 12; the composer 18 to 16; the small "New" tags 6 to 8; the skeleton follows. In the menu, the Coworker card, Search and lists all share 16, so nothing stacked in one column differs.
+- Copy fix: a repeated phrase in the 26.4.0 entry.
+
 ## 26.4.0 — 2026-11-03 00:46 IST
 **Kind:** small addition
-- White cards with a grey border (#e4e4e7) in place of the grey cards with a grey border (#e4e4e7) in place of the grey cards everywhere on the phone (store, login, account home, menu); the footer is white under a grey rule; what sat white on the grey cards (chips, icon squares) is grey now.
+- White cards with a grey border (#e4e4e7) in place of the grey cards everywhere on the phone (store, login, account home, menu); the footer is white under a grey rule; what sat white on the grey cards (chips, icon squares) is grey now.
 - Card actions sit at the card's foot: on the product cards the price line and a full-width View pin to the bottom, level across the row whatever the text above; the hero slides' buttons are full width.
 - The hero slides drop their capitalised captions ("New in", "Fizz trade credit", "Oktoberfest stock-up"): the title stands alone.
 - A grey ring (#d4d4d8) in place of the black one on the outlined buttons (View, Log in, Request an account and the like).

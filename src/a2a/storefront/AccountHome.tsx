@@ -84,7 +84,7 @@ function Notice() {
         <div key={String(ordered)} className={`sf-arrive-card mt-3 rounded-[24px] border border-[#e4e4e7] bg-white p-4 ${ordered ? "sf-rise" : ""}`}>
           <div className="flex gap-3">
             {ordered ? (
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#e3f3e6]">
+              <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-[#e3f3e6]">
                 <Check className="size-5 text-[#1f7a3d]" strokeWidth={2.75} />
               </span>
             ) : (
@@ -160,8 +160,8 @@ function Stats() {
   return (
     <ul className="mt-5 grid grid-cols-3 gap-2">
       {tiles.map(({ icon: Icon, value, label }) => (
-        <li key={label} className="rounded-[20px] border border-[#e4e4e7] bg-white p-3">
-          <span className="grid size-9 place-items-center rounded-[10px] bg-[#f4f4f5] text-text">
+        <li key={label} className="rounded-[24px] border border-[#e4e4e7] bg-white p-3">
+          <span className="grid size-9 place-items-center rounded-[12px] bg-[#f4f4f5] text-text">
             <Icon className="size-[18px]" strokeWidth={2} />
           </span>
           <p key={value} className={`mt-3 text-[20px] font-bold tabular-nums tracking-[-0.025em] text-text ${ordered && label !== s.saved.label ? "a2a-bump" : ""}`}>
@@ -185,7 +185,7 @@ function Quick() {
             <a
               href="#"
               onClick={(e) => e.preventDefault()}
-              className="flex h-[84px] flex-col items-center justify-center gap-2 rounded-[20px] border border-[#e4e4e7] bg-white text-text"
+              className="flex h-[84px] flex-col items-center justify-center gap-2 rounded-[24px] border border-[#e4e4e7] bg-white text-text"
             >
               <Icon className="size-[22px]" strokeWidth={2} />
               <span className="text-[12.5px] font-semibold">{q.label}</span>
@@ -336,7 +336,7 @@ function Orders() {
           role="tab"
           aria-selected={filter === f}
           onClick={() => pick(f)}
-          className={`flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[9px] text-[14px] font-semibold transition-[background-color,box-shadow] ${
+          className={`flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[8px] text-[14px] font-semibold transition-[background-color,box-shadow] ${
             filter === f ? "bg-white text-text shadow-[0_1px_3px_rgb(0_0_0/0.1),0_0_0_0.5px_rgb(0_0_0/0.06)]" : "text-text-muted"
           }`}
         >

@@ -442,7 +442,7 @@ function Thread({ t }: { t: number }) {
           <img src={john} alt="" className="size-9 rounded-full bg-white object-cover" />
           {a.handoff.label} · {a.handoff.time}
         </p>
-        <div className="flex items-center gap-3 rounded-[22px] rounded-br-none bg-[#fdebe1] p-3 pr-5">
+        <div className="flex items-center gap-3 rounded-[24px] rounded-br-none bg-[#fdebe1] p-3 pr-5">
           <span className="grid size-11 place-items-center rounded-[12px] bg-white">
             <ShoppingCart className="size-5 text-text" strokeWidth={2} />
           </span>
@@ -556,7 +556,7 @@ function Offer() {
         <FizzMark className="size-9" />
         {C.from}
       </p>
-      <p className="mb-2 max-w-[92%] rounded-[22px] rounded-br-none bg-[#f2f2f4] px-4 py-3 text-[15px] leading-[1.45] text-text">
+      <p className="mb-2 max-w-[92%] rounded-[24px] rounded-br-none bg-[#f2f2f4] px-4 py-3 text-[15px] leading-[1.45] text-text">
         <Rich text={C.said} />
       </p>
       <div className="w-full rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
@@ -585,7 +585,7 @@ function Offer() {
         </ul>
         <dl className="mt-1 grid grid-cols-3 gap-2">
           {o.terms.map((f) => (
-            <div key={f.label} className="rounded-2xl bg-[#f6f6f8] px-3 py-2.5">
+            <div key={f.label} className="rounded-[16px] bg-[#f6f6f8] px-3 py-2.5">
               <dt className="text-[12px] text-text-muted">{f.label}</dt>
               <dd className="mt-0.5 text-[17px] font-bold tabular-nums tracking-[-0.01em] text-text">{f.value}</dd>
               {"note" in f && f.note && <dd className="text-[11.5px] leading-snug text-text-muted">{f.note}</dd>}
@@ -622,7 +622,7 @@ function OffersTurn({ t, approved, onApprove }: { t: number; approved: boolean; 
             <img src={john} alt="" className="size-9 rounded-full bg-white object-cover" />
             {V.you.label} · {V.you.time}
           </p>
-          <p className="rounded-[22px] rounded-br-none bg-[#fdebe1] px-4 py-3 text-text">
+          <p className="rounded-[24px] rounded-br-none bg-[#fdebe1] px-4 py-3 text-text">
             <span className="block text-[16px] font-semibold">{V.you.text}</span>
             <span className="block text-[14px] text-text/70">{V.you.detail}</span>
           </p>
@@ -668,7 +668,7 @@ function TemplateTurn({ t, t6, onSave }: { t: number; t6: number | null; onSave:
             <img src={john} alt="" className="size-9 rounded-full bg-white object-cover" />
             {M.you.label} · {M.you.time}
           </p>
-          <p className="rounded-[22px] rounded-br-none bg-[#fdebe1] px-4 py-3 text-[16px] font-semibold text-text">{M.you.text}</p>
+          <p className="rounded-[24px] rounded-br-none bg-[#fdebe1] px-4 py-3 text-[16px] font-semibold text-text">{M.you.text}</p>
         </div>
       )}
       {t6 !== null && t6 >= T6.reply && (
@@ -764,7 +764,7 @@ function Offers() {
         <FizzMark className="size-9" />
         {V.from}
       </p>
-      <p className="mb-2 max-w-[92%] rounded-[22px] rounded-br-none bg-[#f2f2f4] px-4 py-3 text-[15px] leading-[1.45] text-text">
+      <p className="mb-2 max-w-[92%] rounded-[24px] rounded-br-none bg-[#f2f2f4] px-4 py-3 text-[15px] leading-[1.45] text-text">
         <Rich text={V.said} />
       </p>
       <div className="w-full rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
@@ -779,7 +779,7 @@ function Offers() {
         </div>
         <ul className="mt-4 flex flex-col gap-2.5">
           {o.list.map((v) => (
-            <li key={v.id} className="rounded-2xl bg-[#f6f6f8] px-3.5 py-3">
+            <li key={v.id} className="rounded-[16px] bg-[#f6f6f8] px-3.5 py-3">
               <p className="text-[15px] font-bold tracking-[-0.01em] text-text">{v.name}</p>
               <Figures rows={v.rows} />
               {"note" in v && <p className="mt-2.5 text-[13px] font-semibold text-[#1f7a3d]">{v.note}</p>}
@@ -825,7 +825,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
               aria-checked={on}
               disabled={approved}
               onClick={() => setPick(o.id)}
-              className={`rounded-2xl px-3.5 py-3 text-left transition-[background-color,box-shadow] ${
+              className={`rounded-[16px] px-3.5 py-3 text-left transition-[background-color,box-shadow] ${
                 on ? "bg-white shadow-[0_0_0_2px_#1d1d1f]" : "bg-[#f6f6f8] shadow-[0_0_0_1px_rgb(0_0_0/0.04)]"
               } ${approved && !on ? "opacity-50" : ""}`}
             >
@@ -836,7 +836,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
                 >
                   {on && <span className="size-1.5 rounded-full bg-white" />}
                 </span>
-                {i === 0 && <span className="ml-auto rounded-[6px] bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{p.tag}</span>}
+                {i === 0 && <span className="ml-auto rounded-[8px] bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{p.tag}</span>}
               </span>
               <span className="mt-1 block text-[15px] font-bold tracking-[-0.01em] text-text">{o.name}</span>
               <Figures rows={o.rows} notes={"changed" in o ? { Terms: o.changed } : {}} />
@@ -1015,7 +1015,7 @@ function Saved() {
  *  side it comes from), the full width of the thread. Cards keep all their corners. */
 function AgentSays({ className = "", children }: { className?: string; children: ReactNode }) {
   return (
-    <p className={`sf-rise rounded-[20px] rounded-bl-none bg-[#f2f2f4] px-4 py-3 text-[16px] leading-[1.5] text-text ${className}`}>
+    <p className={`sf-rise rounded-[24px] rounded-bl-none bg-[#f2f2f4] px-4 py-3 text-[16px] leading-[1.5] text-text ${className}`}>
       {children}
     </p>
   );
@@ -1162,7 +1162,7 @@ function Result() {
                 <span className="flex items-center gap-2">
                   <span className="truncate text-[15px] font-semibold tracking-[-0.01em] text-text">{l.name}</span>
                   {added && (
-                    <span className="rounded-[6px] bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{r.isNew}</span>
+                    <span className="rounded-[8px] bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{r.isNew}</span>
                   )}
                 </span>
                 <span className="block text-[13px] text-text-muted">
@@ -1216,14 +1216,14 @@ function Composer({
             <button
               key={s}
               type="button"
-              className="h-10 shrink-0 rounded-[14px] px-4 text-[14.5px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+              className="h-10 shrink-0 rounded-[12px] px-4 text-[14.5px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
             >
               {s}
             </button>
           ))}
         </div>
       )}
-      <div className="flex h-[54px] items-center gap-1 rounded-[18px] bg-[#f2f2f4] px-[7px]">
+      <div className="flex h-[54px] items-center gap-1 rounded-[16px] bg-[#f2f2f4] px-[7px]">
         <button type="button" aria-label={a.add} className="grid size-10 shrink-0 place-items-center rounded-[12px] text-text">
           <Plus className="size-[22px]" strokeWidth={2} />
         </button>
