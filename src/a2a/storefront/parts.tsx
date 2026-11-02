@@ -142,7 +142,7 @@ export function Logo() {
 /** Dense and quiet, as Coca-Cola's: the logo, links, then uppercase legal lines. */
 export function Footer() {
   return (
-    <footer className="mt-14 bg-[#f4f4f5] px-6 pb-12 pt-10">
+    <footer className="mt-14 border-t border-[#e4e4e7] bg-white px-6 pb-12 pt-10">
       <Logo />
       <ul className="mt-6 flex flex-col gap-3">
         {t.footer.links.map((l) => (

@@ -81,7 +81,7 @@ function Notice() {
   return (
     <div className="sf-arrive" data-shown={notified || undefined} inert={!notified}>
       <div className="overflow-hidden">
-        <div key={String(ordered)} className={`sf-arrive-card mt-3 rounded-[24px] bg-[#f4f4f5] p-4 ${ordered ? "sf-rise" : ""}`}>
+        <div key={String(ordered)} className={`sf-arrive-card mt-3 rounded-[24px] border border-[#e4e4e7] bg-white p-4 ${ordered ? "sf-rise" : ""}`}>
           <div className="flex gap-3">
             {ordered ? (
               <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#e3f3e6]">
@@ -91,7 +91,7 @@ function Notice() {
               /* Mike and his agent, together: his photo, his agent's mark stacked over its right edge. */
               <span role="img" aria-label={`${n.from} and ${n.agent}`} className="flex shrink-0 items-start">
                 <img src={mike} alt="" className="size-10 rounded-full bg-[#f2f2f4] object-cover" />
-                <AgentMark className="-ml-3 size-10 bg-white! shadow-[0_0_0_2px_#f4f4f5,0_0_0_3px_rgb(0_0_0/0.08)]" />
+                <AgentMark className="-ml-3 size-10 bg-white! shadow-[0_0_0_2px_#fff,0_0_0_3px_rgb(0_0_0/0.08)]" />
               </span>
             )}
             <div className="min-w-0 flex-1">
@@ -110,7 +110,7 @@ function Notice() {
               {status && (
                 <span
                   key={status.text}
-                  className="a2a-bump mt-2.5 inline-flex h-7 items-center gap-1.5 rounded-[8px]! bg-white px-2.5 text-[13px] font-semibold text-text"
+                  className="a2a-bump mt-2.5 inline-flex h-7 items-center gap-1.5 rounded-[8px]! bg-[#f4f4f5] px-2.5 text-[13px] font-semibold text-text"
                 >
                   <span aria-hidden className="size-2 rounded-full" style={{ background: status.dot }} />
                   {status.text}
@@ -160,7 +160,7 @@ function Stats() {
   return (
     <ul className="mt-5 grid grid-cols-3 gap-2">
       {tiles.map(({ icon: Icon, value, label }) => (
-        <li key={label} className="rounded-[20px] bg-white p-3 shadow-[inset_0_0_0_1px_#e4e4e7]">
+        <li key={label} className="rounded-[20px] border border-[#e4e4e7] bg-white p-3">
           <span className="grid size-9 place-items-center rounded-[10px] bg-[#f4f4f5] text-text">
             <Icon className="size-[18px]" strokeWidth={2} />
           </span>
@@ -185,7 +185,7 @@ function Quick() {
             <a
               href="#"
               onClick={(e) => e.preventDefault()}
-              className="flex h-[84px] flex-col items-center justify-center gap-2 rounded-[20px] bg-[#f4f4f5] text-text"
+              className="flex h-[84px] flex-col items-center justify-center gap-2 rounded-[20px] border border-[#e4e4e7] bg-white text-text"
             >
               <Icon className="size-[22px]" strokeWidth={2} />
               <span className="text-[12.5px] font-semibold">{q.label}</span>
@@ -215,7 +215,7 @@ function Block({ title, all, above, children }: { title: string; all?: string; a
         )}
       </div>
       {above}
-      <div className="mt-3 rounded-[24px] bg-[#f4f4f5] px-4">{children}</div>
+      <div className="mt-3 rounded-[24px] border border-[#e4e4e7] bg-white px-4">{children}</div>
     </section>
   );
 }
@@ -238,7 +238,7 @@ function Carts() {
                 <p className="flex items-center gap-2">
                   <span className="truncate text-[16px] font-bold tracking-[-0.01em] text-text">{cart.name}</span>
                   {"shared" in cart && (
-                    <span className="inline-flex h-6 shrink-0 items-center gap-1 rounded-[8px] bg-white px-2 text-[12px] font-semibold text-text">
+                    <span className="inline-flex h-6 shrink-0 items-center gap-1 rounded-[8px] bg-[#f4f4f5] px-2 text-[12px] font-semibold text-text">
                       <Users className="size-3.5" strokeWidth={2.25} />
                       {cart.shared}
                     </span>
@@ -358,7 +358,7 @@ function Orders() {
                   {order.date} · {order.total}
                 </p>
               </div>
-              <span className="inline-flex h-7 items-center gap-1.5 rounded-[8px] bg-white px-2.5 text-[13px] font-semibold text-text">
+              <span className="inline-flex h-7 items-center gap-1.5 rounded-[8px] bg-[#f4f4f5] px-2.5 text-[13px] font-semibold text-text">
                 <span aria-hidden className="size-2 rounded-full" style={{ background: STATUS_DOT[order.status] }} />
                 {order.status}
               </span>

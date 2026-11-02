@@ -1,5 +1,5 @@
-/* Fizz Drinks' B2B storefront on the phone: a white page, grey cards
-   (#f4f4f5, 24px; the hero's slides 32px), bold headings, rounded-rectangle
+/* Fizz Drinks' B2B storefront on the phone: a white page, white cards with a grey border
+   (#e4e4e7, 24px; the hero's slides 32px), bold headings, rounded-rectangle
    buttons, and rounded squares rather than circles for icon buttons and chips
    (people stay round). Fizz red only in the logo, the drinks and the unread dot. */
 
@@ -38,7 +38,7 @@
 }
 
 /* Buttons: rounded rectangles, as Airbnb's and Shopify's (16px; 12px when
-   small), filled near-black, white (on dark slides), or outlined. No
+   small), filled near-black, white (on dark slides), or outlined in grey. No
    hover states anywhere on the phone: it's a touch screen, so a tap is direct. */
 .sf-btn {
   display: inline-flex;
@@ -68,7 +68,7 @@
 }
 .sf-btn-outline {
   color: #1d1d1f;
-  box-shadow: inset 0 0 0 1.5px #1d1d1f;
+  box-shadow: inset 0 0 0 1.5px #d4d4d8;
 }
 
 /* A text field: 52px, white, a hairline ring. AutoFill tints it pale yellow, as Safari does. */

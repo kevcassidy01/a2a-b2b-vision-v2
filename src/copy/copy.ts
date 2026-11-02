@@ -676,17 +676,14 @@ export const copy = {
         slideOf: "Go to slide",
         slides: [
           {
-            eyebrow: "New in",
             title: "Fizz Zero Lime concentrate, now shipping",
             cta: "See the range",
           },
           {
-            eyebrow: "Fizz trade credit",
             title: "A credit line that grows with your orders",
             cta: "Apply now",
           },
           {
-            eyebrow: "Oktoberfest stock-up",
             title: "12% off concentrate orders over 1,000 units",
             cta: "Log in to order",
           },

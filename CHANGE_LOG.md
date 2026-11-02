@@ -30,6 +30,13 @@ Entry format:
 
 ## Unreleased
 
+## 26.4.0 — 2026-11-03 00:46 IST
+**Kind:** small addition
+- White cards with a grey border (#e4e4e7) in place of the grey cards with a grey border (#e4e4e7) in place of the grey cards everywhere on the phone (store, login, account home, menu); the footer is white under a grey rule; what sat white on the grey cards (chips, icon squares) is grey now.
+- Card actions sit at the card's foot: on the product cards the price line and a full-width View pin to the bottom, level across the row whatever the text above; the hero slides' buttons are full width.
+- The hero slides drop their capitalised captions ("New in", "Fizz trade credit", "Oktoberfest stock-up"): the title stands alone.
+- A grey ring (#d4d4d8) in place of the black one on the outlined buttons (View, Log in, Request an account and the like).
+
 ## 26.3.1 — 2026-11-03 00:31 IST
 **Kind:** docs
 - README rewritten for this repo: the A2A prototype first (the story, `/`, `/buyer`, `/seller`, two devices with `npm run demo`, presenter keys, the one-file share build, how the code is organized), the earlier chat and desktop demos as reference, and the right repo URL.

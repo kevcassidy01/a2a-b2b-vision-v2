@@ -102,7 +102,7 @@ export function Menu({
         {groups.map((g, i) => (
           <section key={g.title} className="sf-drawer-item mt-6" style={at(lead + 1 + i)}>
             <h2 className="px-1 text-[13px] font-semibold uppercase tracking-[0.06em] text-text-muted">{g.title}</h2>
-            <ul className="mt-2 rounded-[24px] bg-[#f4f4f5] px-4">
+            <ul className="mt-2 rounded-[24px] border border-[#e4e4e7] bg-white px-4">
               {g.items.map((item) => {
                 const Icon = ICONS[item.icon];
                 return (
