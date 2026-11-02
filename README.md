@@ -1,20 +1,18 @@
-# Claudeforce Commerce
+# A2A B2B Commerce Vision (v2)
 
-A scripted, clickable vision of agent-to-agent B2B commerce, plus the two earlier demos it borrows from:
+A scripted, clickable prototype of **agent-to-agent B2B commerce**. A buyer's agent and a seller's agent negotiate a large order end to end, and people step in only where policy says they must.
 
-- **A2A vision** (`/`): John's buying agent and Fizz Drinks' selling agent negotiate an order, with John and Alex in the loop. See [A2A_INTENT.md](./A2A_INTENT.md).
-- **Browser chat** (`/#chat`): Claude in the browser (claude.ai), with Salesforce MCP apps inline in the chat. Three journeys for **Alpine**, a B2B merchant.
-- **Cowork desktop** (`/#desktop`): a Mac desktop with the Claude Cowork app, where Claude works across Salesforce, Gmail, Slack, Gong and Calendar. Four flows for **Ohana Networks**.
+**The story:** Fizz Drinks runs an Oktoberfest offer. At Isar Bottling, Mike's agent starts a cart from it. John (Procurement Director, Munich) hands the cart to his Coworker. The Coworker tops it up for Munich and asks Fizz for a quote. Fizz's agent counters, and Alex (Fizz sales rep, New York) sends two final offers. John approves one, and order **O-5531** is placed: 19,500 units at 15% off, Net15. In all 15 steps, people act three times. The agents do the rest.
 
-Everything plays from authored scripts, so a demo never depends on the network, a live org or a model's mood. Anyone can run either demo, and each has its own presenter guide.
+Everything plays from authored scripts, so a demo never depends on the network, a live org or a model's mood.
 
 | | |
 |---|---|
-| **Status** | Demo-ready prototypes. Scripted, not wired to a live org or the Claude API |
+| **Status** | Demo-ready prototype. Scripted, not wired to a live org or an LLM |
 | **Version** | See the top of [CHANGE_LOG.md](./CHANGE_LOG.md) |
 | **Default branch** | `master` (feature branches are kept on origin and never deleted) |
-| **Repo** | https://git.soma.salesforce.com/somnath-mallela/claudeforce-commerce |
-| **Stack** | React 19, TypeScript, Vite 8, Tailwind CSS v4, zustand, lucide-react |
+| **Repo** | https://git.soma.salesforce.com/somnath-mallela/a2a-b2b-vision-v2 |
+| **Stack** | React 19, TypeScript, Vite 8, Tailwind CSS v4, lucide-react |
 
 ---
 
@@ -23,73 +21,40 @@ Everything plays from authored scripts, so a demo never depends on the network, 
 You need Node.js **20.19+ or 22.12+** (`node -v`).
 
 ```bash
-git clone https://git.soma.salesforce.com/somnath-mallela/claudeforce-commerce.git
-cd claudeforce-commerce
+git clone https://git.soma.salesforce.com/somnath-mallela/a2a-b2b-vision-v2.git
+cd a2a-b2b-vision-v2
 npm install
 npm run dev
 ```
 
 | Open | What you get |
 |---|---|
-| **http://localhost:5173/** | The A2A vision prototype |
-| **http://localhost:5173/#chat** | The browser chat |
-| **http://localhost:5173/#desktop** | The Cowork desktop |
+| **http://localhost:5173/** | Both sides on one screen: John's iPhone on the left, Alex's Command Center on the right, and a bar showing who's acting |
+| **http://localhost:5173/buyer** | John's phone alone: the Fizz storefront and his Coworker |
+| **http://localhost:5173/seller** | Alex's Command Center alone, as a desktop app window |
 
-In the browser chat and the desktop, the **Browser | Desktop** toggle at the bottom right switches between them. If port 5173 is busy, Vite picks the next free port and prints it in the terminal. Hard-reload (⌘⇧R) to start every flow fresh.
+If port 5173 is busy, Vite picks the next free port and prints it.
 
-With Claude Code, just ask: *"Run the dev server and open the browser chat"* (or *"the desktop demo"*). [CLAUDE.md](./CLAUDE.md) tells it how.
+### Two devices
+
+Run `npm run demo` (the dev server, open to your network). Open `http://<laptop-ip>:<port>/buyer` on one device and `/seller` on another, on the same Wi-Fi. Each side's moves reach the other live through the dev server. A page with no partner plays the other side by itself, so either page also works alone.
+
+### Presenter keys
+
+- **`** pauses and plays the whole demo.
+- **Shift + `** restarts it.
+- **C** opens the contents menu, where you can jump to any of the 15 steps.
+
+On two devices, these keys control both pages.
+
+### Share it as one file
+
+`npm run build:share` builds the prototype into **one HTML file**, `dist-share/share.html`. It opens with a double-click and needs no server or network. Use `#buyer` or `#seller` on its URL for one side.
 
 Other scripts:
 
 - `npm run build` type-checks (`tsc -b`) and builds for production.
 - `npm run preview` serves the production build.
-- `npm run build:share` builds the A2A prototype alone into **one HTML file**, `dist-share/share.html` (about 8 MB). Send it round; it opens from a double-click, no server or network needed.
-
----
-
-## Presenter guides
-
-| Demo | Act-by-act guide (start here) | Step-by-step detail |
-|---|---|---|
-| Browser chat | [docs/browser-chat-demo-guide.md](./docs/browser-chat-demo-guide.md) | [docs/demo-scripts/](./docs/demo-scripts/) (one per journey) |
-| Cowork desktop | [docs/cowork-demo-run-sheet.md](./docs/cowork-demo-run-sheet.md) | [docs/cowork-demo-flows.md](./docs/cowork-demo-flows.md) (flow charts) |
-
-The two demos are independent: a change to one doesn't change the other.
-
----
-
-## Demo 1: Browser chat (`/`)
-
-A faithful clone of `claude.ai/new`, with Salesforce MCP apps inline in the chat (cards, carousels, floating charts and full-screen views). You are Aaron at Alpine (aaron@alpine.com). Alpine sells coffee equipment and energy drinks through its **Alpine B2B** store. Three journeys, each a fixed chat in the sidenav:
-
-| # | Journey | What it shows | Runbook | Demo script |
-|---|---|---|---|---|
-| 1 | **Quote approval** | Morton's pending quotes, an entitlement check, a free sample Claude recommends within margin, a note and approval | [quote-management-flow.md](./docs/quote-management-flow.md) | [quote-management.md](./docs/demo-scripts/quote-management.md) |
-| 2 | **Checkout anywhere** | Ordering on behalf of Morton: entitlements, flavor tiles, a fresh cart, address and PO, a placed order, then `/reorder` | [checkout-anywhere-flow.md](./docs/checkout-anywhere-flow.md) | [checkout-anywhere.md](./docs/demo-scripts/checkout-anywhere.md) |
-| 3 | **Merchant insights** | Store health as a dashboard, four problems Claude remembers, a Things to do card sent to Slack, promotions made live, and a PDF report | [merchant-insights-flow.md](./docs/merchant-insights-flow.md) | [merchant-insights.md](./docs/demo-scripts/merchant-insights.md) |
-
-- Prompts are **dictated**: click the mic and the next line comes in by itself. Typing your own words works too. Slash-only prompts (`/approve-quote`, `/export-report`) are typed.
-- Every **Salesforce write** plays as a timeline of records before Claude replies.
-- The latest reply ends with **follow-up chips**, and one of them plays the next step.
-- Each journey's chat **persists** when you switch journeys. **New** restarts the journey you're on; a refresh restarts all three.
-- Prompts match on keywords, so small rewording is safe, and off-script prompts get a fallback reply.
-
----
-
-## Demo 2: Cowork desktop (`/#desktop`)
-
-A Mac desktop with a menu bar, desktop files, Slack banners and Salesforce notices. The Claude Cowork window has a sidebar with **New**, **Agents**, **Scheduled** and **Artifacts**, a right panel showing progress, skills, connectors and files, and a mic that dictates each line. You are Aaron, a sales rep at Ohana Networks (networking hardware). Claude does the legwork and brings only the decisions to you.
-
-The four flows, in demo order:
-
-| # | Flow | Kind | How it starts | What it shows |
-|---|---|---|---|---|
-| 1 | **Canary Wharf Workspaces** | Multimodal chat | **New**, then drop 3 desktop files and use the mic | A customer call becomes an order. Claude reads the files, the Gong call, Gmail, Slack and Salesforce, does 8 tasks on its own and brings 4 decisions one at a time. The customer then orders |
-| 2 | **Delivery Watch** | Agent | The first **New session** row | It watches every open order and cart for 60 days, fixes what it can within policy and reports $160K saved |
-| 3 | **Growth Scout** | Agent | The second **New session** row | It sends lapsed accounts approved win-back quotes with a recommended add-on, asks you about the big ones, and lets you change the discount by voice |
-| 4 | **Morning Brief** | Scheduled task | **Scheduled**, then the **Daily briefing** template | Set up one day, read the next morning (Ctrl+S jumps the clock). It covers accounts, the store, the inbox and Slack, and what both agents did overnight. You act on it by voice |
-
-Vision, decisions and build handoff: [COWORK_INTENT.md](./docs/old-intent/COWORK_INTENT.md).
 
 ---
 
@@ -97,43 +62,50 @@ Vision, decisions and build handoff: [COWORK_INTENT.md](./docs/old-intent/COWORK
 
 ```
 src/
-  Root.tsx            picks the browser chat or the desktop from the URL hash
-  App.tsx             the browser chat app
-  shell/              shared chrome: sidebar, composers, menus, the prompt editor, dictation
-  chat/               the browser chat: transcript, MCP app slots, widgets (viz/)
-    experiences/      one script per browser journey (quote, checkout, insights)
-  desktop/            the Mac desktop: menu bar, icons, Slack banner, the Cowork window
-    cowork/           the Cowork app: sidebar, Home, Agents, Scheduled
-      chat/           Cowork's chat, store and blocks
-        scripts/      one script per Cowork flow (prestige = Canary Wharf, delivery, growth, brief)
-  copy/copy.ts        every user-facing string, in one typed file
-  styles/tokens.css   the design tokens (primitives, then semantic tokens)
+  a2a/                the prototype
+    A2AStage.tsx      the stage: both sides, or one (/buyer, /seller)
+    story.tsx         the shared story state both sides play from
+    link.tsx          the live link between /buyer and /seller
+    storefront/       John's side: the Fizz storefront on the iPhone, and his Coworker's chat
+    command-center/   Alex's side: the Command Center, Fizz's agent and the quote thread
+  copy/copy.ts        every user-facing string, in one typed file (copy.a2a)
 ```
 
-**Scripts drive everything.** A flow is a list of timed beats (prose, skill lines, integration steps, Salesforce writes, cards) that play into the chat. `intents` map what the user types to a reply, `dictations` feed the mic, and agents' `watch` posts arrive on a timer with a Slack banner. To change what a flow says or does, edit its script, not the components.
-
-**Keep chrome and content apart.** The shell and blocks are generic. The experiences live in the scripts.
+**Scripts drive everything.** The story is a sequence of beats, and each side fires and reacts to them. To change what someone says, edit `copy.ts`, not the components.
 
 ---
 
 ## Working docs
 
-The repo keeps its own working memory. Read these at the start of a session:
+The repo keeps its own working memory. Read these at the start of a session.
 
 | Doc | What it holds |
 |---|---|
+| [A2A_INTENT.md](./A2A_INTENT.md) | The prototype: storyline, the 15 steps, agent rules, screens, open questions. **Build from this** |
 | [SESSION_CONTEXT.md](./SESSION_CONTEXT.md) | What the project is and where it stands |
 | [DESIGN_DECISIONS.md](./DESIGN_DECISIONS.md) | Settled design and interaction decisions, with the reasons |
-| [A2A_INTENT.md](./A2A_INTENT.md) | The agent-to-agent B2B commerce prototype: storyline, rules, screens, open questions |
-| [COWORK_INTENT.md](./docs/old-intent/COWORK_INTENT.md) | The Cowork desktop vision, its numbered decisions and the build handoff |
 | [CHANGE_LOG.md](./CHANGE_LOG.md) | Every change, newest first, versioned at commit |
 | [TODO.md](./TODO.md) | Open work in three priority buckets |
 | [CLAUDE.md](./CLAUDE.md) | Instructions and standing rules for Claude Code in this repo |
+
+---
+
+## Earlier demos
+
+This repo started as a Claude app experience kit, and the two earlier demos still run behind the URL hash. They're reference only, and independent of the A2A prototype.
+
+| Open | Demo | Guide |
+|---|---|---|
+| `/#chat` | Browser chat: claude.ai with Salesforce MCP apps inline, three journeys for Alpine | [browser-chat-demo-guide.md](./docs/browser-chat-demo-guide.md) |
+| `/#desktop` | Cowork desktop: Claude working across Salesforce, Gmail, Slack and Gong for Ohana Networks | [cowork-demo-run-sheet.md](./docs/cowork-demo-run-sheet.md) |
+
+Their intent docs are in [docs/old-intent/](./docs/old-intent/).
+
+---
 
 ## Contributing
 
 - Plan before building. Agree on the approach before writing feature code.
 - Log changes under `## Unreleased` in CHANGE_LOG.md. The version moves only at commit.
-- When a flow's prompts or buttons change, update its presenter guide, demo script or runbook too.
-- Keep the two demos independent. Shared plain components are fine, but behavior changes go in surface-specific code.
-- Check every change with `npx tsc -b --noEmit && npx vite build`.
+- Keep the chrome (shells, frames) apart from the experience (story, copy).
+- Check every change with `npx tsc -b && npx vite build`.

@@ -30,6 +30,10 @@ Entry format:
 
 ## Unreleased
 
+## 26.3.1 — 2026-11-03 00:31 IST
+**Kind:** docs
+- README rewritten for this repo: the A2A prototype first (the story, `/`, `/buyer`, `/seller`, two devices with `npm run demo`, presenter keys, the one-file share build, how the code is organized), the earlier chat and desktop demos as reference, and the right repo URL.
+
 ## 26.3.0 — 2026-11-03 00:24 IST
 **Kind:** small addition — the phone's look, round two (branch `buyer-feedback`, merged into `master`): white page and grey cards, stat tiles, a segmented Orders filter, rounded squares for icon buttons and chips, fact chips on the agent's cards, solid black rounder buttons, a blurred /buyer wallpaper.
 - Rounder buttons on the phone: 16px corners on the 48px buttons (the site's, the agent chat's and the floating Ask Fizz / New task), 12px on the small ones, 14px on the chat's suggestions.
