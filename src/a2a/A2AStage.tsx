@@ -86,7 +86,7 @@ function OneSide({ side, peer }: { side: Side; peer: boolean }) {
   const paused = usePaused();
   return (
     <div
-      className="a2a-stage a2a-scene relative flex h-screen w-screen items-center justify-center overflow-hidden p-2.5"
+      className={`a2a-stage a2a-scene relative flex h-screen w-screen items-center justify-center overflow-hidden p-2.5 ${side === "buyer" ? "a2a-scene-blur" : ""}`}
       data-paused={paused || undefined}
     >
       {side === "buyer" ? (

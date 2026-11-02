@@ -66,7 +66,7 @@ export function Hero({ onLogIn }: { onLogIn: () => void }) {
               <p className={`relative text-[13px] font-semibold uppercase tracking-[0.06em] ${light ? "text-white/75" : "text-text-muted"}`}>
                 {s.eyebrow}
               </p>
-              <h2 className={`sf-display relative mt-2 text-[36px] leading-[1.04] ${light ? "text-white" : "text-text"}`}>
+              <h2 className={`sf-display relative mt-2 text-[36px] ${light ? "text-white" : "text-text"}`}>
                 {s.title}
               </h2>
               {look.backdrop ? null : look.photo ? (
@@ -82,7 +82,7 @@ export function Hero({ onLogIn }: { onLogIn: () => void }) {
                   e.preventDefault();
                   if (look.logsIn) onLogIn();
                 }}
-                className={`sf-pill relative self-start ${look.backdrop ? "mt-auto" : "mt-5"} ${light ? "sf-pill-light" : "sf-pill-dark"}`}
+                className={`sf-btn relative self-start ${look.backdrop ? "mt-auto" : "mt-5"} ${light ? "sf-btn-light" : "sf-btn-dark"}`}
               >
                 {s.cta}
               </a>

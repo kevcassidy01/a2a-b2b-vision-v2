@@ -11,7 +11,7 @@ export function SiteSkeleton() {
     <div aria-hidden className="min-h-full bg-white">
       <div className="flex h-14 items-center gap-3 px-4 pt-[54px] [box-sizing:content-box]">
         <Bone className="mr-auto h-7 w-28 rounded-md" />
-        <Bone className="h-9 w-[68px] rounded-full" />
+        <Bone className="h-9 w-[68px] rounded-[10px]" />
         <Bone className="size-7 rounded-md" />
       </div>
       <div className="flex gap-3 overflow-hidden px-4 pt-4">
@@ -20,7 +20,7 @@ export function SiteSkeleton() {
           <Bone className="mt-3 h-8 w-[85%] rounded-md" />
           <Bone className="mt-2 h-8 w-[70%] rounded-md" />
           <Bone className="mt-2 h-8 w-[55%] rounded-md" />
-          <Bone className="mt-auto h-12 w-36 rounded-full" />
+          <Bone className="mt-auto h-12 w-36 rounded-[16px]" />
         </div>
         <div className="h-[480px] w-[calc(100%-32px)] shrink-0 rounded-[32px] bg-[#f6f6f8]" />
       </div>

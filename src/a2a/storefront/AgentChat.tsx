@@ -2,7 +2,9 @@ import {
   AlignLeft,
   ArrowLeftRight,
   ArrowUp,
+  BadgePercent,
   BookmarkPlus,
+  CalendarClock,
   Check,
   ChevronDown,
   CircleCheck,
@@ -10,8 +12,10 @@ import {
   Eye,
   FileSearch,
   FileText,
+  Hash,
   History,
   Lightbulb,
+  Package,
   PencilLine,
   Plus,
   ShoppingCart,
@@ -331,7 +335,7 @@ export function AgentChat({
             type="button"
             aria-label={a.close}
             onClick={onClose}
-            className="grid size-10 place-items-center rounded-full bg-black/[0.06] text-text"
+            className="grid size-10 place-items-center rounded-[12px] bg-black/[0.05] text-text"
           >
             <X className="size-5" strokeWidth={2.25} />
           </button>
@@ -346,7 +350,7 @@ export function AgentChat({
                   <button
                     key={q}
                     type="button"
-                    className="flex h-12 items-center justify-center rounded-full px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+                    className="flex h-12 items-center justify-center rounded-[16px] px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
                   >
                     {q}
                   </button>
@@ -358,7 +362,7 @@ export function AgentChat({
               <button
                 type="button"
                 onClick={() => setStarted(true)}
-                className="mt-7 flex h-12 items-center gap-2 rounded-full px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+                className="mt-7 flex h-12 items-center gap-2 rounded-[16px] px-5 text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
               >
                 <ShoppingCart className="size-[18px]" strokeWidth={2.25} />
                 {a.suggestion}
@@ -407,7 +411,7 @@ function TaskBar({ fizz, turns }: { fizz: boolean; turns: number }) {
           key={turns}
           role="img"
           aria-label={a.task.turns(turns)}
-          className="a2a-bump flex h-7 items-center gap-1.5 rounded-full! bg-black/[0.05] px-2.5 text-[13px] font-semibold tabular-nums text-text"
+          className="a2a-bump flex h-7 items-center gap-1.5 rounded-[8px]! bg-black/[0.05] px-2.5 text-[13px] font-semibold tabular-nums text-text"
         >
           <ArrowLeftRight aria-hidden className="size-3.5 text-text-muted" strokeWidth={2.25} />
           {turns}
@@ -439,7 +443,7 @@ function Thread({ t }: { t: number }) {
           {a.handoff.label} · {a.handoff.time}
         </p>
         <div className="flex items-center gap-3 rounded-[22px] rounded-br-none bg-[#fdebe1] p-3 pr-5">
-          <span className="grid size-11 place-items-center rounded-2xl bg-white">
+          <span className="grid size-11 place-items-center rounded-[12px] bg-white">
             <ShoppingCart className="size-5 text-text" strokeWidth={2} />
           </span>
           <span>
@@ -557,7 +561,7 @@ function Offer() {
       </p>
       <div className="w-full rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
         <div className="flex items-center gap-3">
-          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+          <span className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#f2f2f4]">
             <FileText className="size-5 text-text" strokeWidth={2} />
           </span>
           <span className="min-w-0">
@@ -685,7 +689,7 @@ function Template({ saved, onSave }: { saved: boolean; onSave: () => void }) {
   return (
     <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
       <div className="flex items-center gap-3">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+        <span className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#f2f2f4]">
           <BookmarkPlus className="size-5 text-text" strokeWidth={2} />
         </span>
         <span className="min-w-0 flex-1">
@@ -719,14 +723,14 @@ function Template({ saved, onSave }: { saved: boolean; onSave: () => void }) {
           <button
             type="button"
             onClick={onSave}
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-[16px] sf-btn-dark text-[15px] font-semibold"
           >
             <Check className="size-[18px]" strokeWidth={2.5} />
             {c.save}
           </button>
           <button
             type="button"
-            className="flex h-12 w-full items-center justify-center rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+            className="flex h-12 w-full items-center justify-center rounded-[16px] text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
           >
             {c.notNow}
           </button>
@@ -765,7 +769,7 @@ function Offers() {
       </p>
       <div className="w-full rounded-[24px] bg-white p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
         <div className="flex items-center gap-3">
-          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+          <span className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#f2f2f4]">
             <FileText className="size-5 text-text" strokeWidth={2} />
           </span>
           <span className="min-w-0">
@@ -802,7 +806,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
   return (
     <div className="sf-rise -mx-2 mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
       <div className="flex items-center gap-3">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+        <span className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#f2f2f4]">
           <FileText className="size-5 text-text" strokeWidth={2} />
         </span>
         <span className="min-w-0 flex-1">
@@ -832,7 +836,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
                 >
                   {on && <span className="size-1.5 rounded-full bg-white" />}
                 </span>
-                {i === 0 && <span className="ml-auto rounded-full bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{p.tag}</span>}
+                {i === 0 && <span className="ml-auto rounded-[6px] bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{p.tag}</span>}
               </span>
               <span className="mt-1 block text-[15px] font-bold tracking-[-0.01em] text-text">{o.name}</span>
               <Figures rows={o.rows} notes={"changed" in o ? { Terms: o.changed } : {}} />
@@ -866,7 +870,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
         <p className="mt-0.5 text-[13.5px] leading-snug text-text-muted"><Rich text={p.whyNot.text} /></p>
       </div>
       {approved ? (
-        <span className="sf-rise mt-3 inline-flex h-7 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
+        <span className="sf-rise mt-3 inline-flex h-7 items-center gap-1.5 rounded-[8px] bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
           <span aria-hidden className="size-2 rounded-full bg-[#1f9d55]" />
           {p.approved}
         </span>
@@ -874,7 +878,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
         <button
           type="button"
           onClick={onApprove}
-          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-[16px] sf-btn-dark text-[15px] font-semibold"
         >
           <Check className="size-[18px]" strokeWidth={2.5} />
           {p.approve}
@@ -884,7 +888,7 @@ function Approval({ approved, onApprove }: { approved: boolean; onApprove: () =>
   );
 }
 
-/** The order as placed: its id and status, the lines (photo, units, site), and the total. */
+/** The order as placed: its status, its facts as chips (id, units, discount, terms), the lines (photo, units, site), and the total. */
 function Order() {
   const o = O.card;
   return (
@@ -893,10 +897,10 @@ function Order() {
         <SuccessTile />
         <span className="min-w-0 flex-1">
           <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{o.title}</span>
-          <span className="block text-[13px] text-text-muted">{o.meta}</span>
         </span>
         <Status>{o.status}</Status>
       </div>
+      <Facts meta={o.meta} className="mt-3" />
       <ul className="mt-3">
         {o.lines.map((l, i) => (
           <li key={l.name} className="flex items-center gap-3 border-t border-black/[0.07] py-3">
@@ -921,13 +925,13 @@ function Order() {
       <div className="mt-4 flex flex-col gap-2">
         <button
           type="button"
-          className="flex h-12 w-full items-center justify-center rounded-full bg-[#1d1d1f] text-[15px] font-semibold text-white active:bg-black"
+          className="flex h-12 w-full items-center justify-center rounded-[16px] sf-btn-dark text-[15px] font-semibold"
         >
           {o.details}
         </button>
         <button
           type="button"
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-[16px] text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
         >
           <FileText className="size-[18px]" strokeWidth={2.25} />
           {o.po}
@@ -940,16 +944,36 @@ function Order() {
 /** A success card's tile (an order placed, a recurring order saved): pale green, with a green check in place of the object's icon. */
 function SuccessTile() {
   return (
-    <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#e3f3e6]">
+    <span className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#e3f3e6]">
       <Check className="size-[22px] text-[#1f7a3d]" strokeWidth={2.75} />
     </span>
+  );
+}
+
+/** A card's facts as chips (units, discount, terms, its id), each with an icon
+ *  for what it is, split from the copy's "·"-separated meta line. */
+function Facts({ meta, className = "" }: { meta: string; className?: string }) {
+  const icon = (f: string): LucideIcon =>
+    /units/.test(f) ? Package : /%/.test(f) ? BadgePercent : /^Net/.test(f) ? CalendarClock : Hash;
+  return (
+    <ul className={`flex flex-wrap gap-1.5 ${className}`}>
+      {meta.split(" · ").map((f) => {
+        const Icon = icon(f);
+        return (
+          <li key={f} className="inline-flex h-7 items-center gap-1.5 rounded-[8px] bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold tabular-nums text-text">
+            <Icon aria-hidden className="size-3.5 shrink-0 text-text-muted" strokeWidth={2.25} />
+            {f}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
 /** A status chip at a phone card's right: a dot (green, a success) and a word. */
 function Status({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
+    <span className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
       <span aria-hidden className="size-2 rounded-full bg-[#1f9d55]" />
       {children}
     </span>
@@ -979,7 +1003,7 @@ function Saved() {
       </dl>
       <button
         type="button"
-        className="mt-4 flex h-12 w-full items-center justify-center rounded-full text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+        className="mt-4 flex h-12 w-full items-center justify-center rounded-[16px] text-[15px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
       >
         {c.open}
       </button>
@@ -1111,7 +1135,7 @@ function TimelineRow({
 function StepSource({ kind, source }: { kind: string; source: string }) {
   const Icon = KIND[kind];
   return (
-    <span className="mt-2 inline-flex h-7 items-center gap-1.5 rounded-full bg-white px-2.5 text-[12.5px] font-medium text-text shadow-[0_0_0_1px_rgb(0_0_0/0.06)]">
+    <span className="mt-2 inline-flex h-7 items-center gap-1.5 rounded-[8px] bg-white px-2.5 text-[12.5px] font-medium text-text shadow-[0_0_0_1px_rgb(0_0_0/0.06)]">
       <Icon className="size-3.5 shrink-0" strokeWidth={2.25} />
       {source}
     </span>
@@ -1138,7 +1162,7 @@ function Result() {
                 <span className="flex items-center gap-2">
                   <span className="truncate text-[15px] font-semibold tracking-[-0.01em] text-text">{l.name}</span>
                   {added && (
-                    <span className="rounded-full bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{r.isNew}</span>
+                    <span className="rounded-[6px] bg-[#e3f3fc] px-2 py-0.5 text-[11.5px] font-bold text-[#0b6aa6]">{r.isNew}</span>
                   )}
                 </span>
                 <span className="block text-[13px] text-text-muted">
@@ -1153,20 +1177,20 @@ function Result() {
   );
 }
 
-/** The quote request, waiting on Fizz: white and outlined like the cart, its status at the foot. */
+/** The quote request, waiting on Fizz: white and outlined like the cart, its facts as chips, its status at the foot. */
 function Quote({ q }: { q: { id: string; status: string; meta: string } }) {
   return (
     <div className="sf-rise mt-4 rounded-[24px] p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.1)]">
       <div className="flex items-center gap-3">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#f2f2f4]">
+        <span className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#f2f2f4]">
           <FileText className="size-5 text-text" strokeWidth={2} />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-[16px] font-bold tracking-[-0.01em] text-text">{q.id}</span>
-          <span className="mt-0.5 block text-[13px] text-text-muted">{q.meta}</span>
         </span>
       </div>
-      <span className="mt-4 inline-flex h-7 items-center gap-1.5 rounded-full bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
+      <Facts meta={q.meta} className="mt-3" />
+      <span className="mt-4 inline-flex h-7 items-center gap-1.5 rounded-[8px] bg-[#f2f2f4] px-2.5 text-[12.5px] font-semibold text-text">
         <span aria-hidden className="sf-pulse size-2 rounded-full bg-[#f5b500]" />
         {q.status}
       </span>
@@ -1192,15 +1216,15 @@ function Composer({
             <button
               key={s}
               type="button"
-              className="h-10 shrink-0 rounded-full px-4 text-[14.5px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
+              className="h-10 shrink-0 rounded-[14px] px-4 text-[14.5px] font-semibold text-text shadow-[inset_0_0_0_1px_rgb(0_0_0/0.14)]"
             >
               {s}
             </button>
           ))}
         </div>
       )}
-      <div className="flex h-[54px] items-center gap-1 rounded-full bg-[#f2f2f4] px-[7px]">
-        <button type="button" aria-label={a.add} className="grid size-10 shrink-0 place-items-center rounded-full text-text">
+      <div className="flex h-[54px] items-center gap-1 rounded-[18px] bg-[#f2f2f4] px-[7px]">
+        <button type="button" aria-label={a.add} className="grid size-10 shrink-0 place-items-center rounded-[12px] text-text">
           <Plus className="size-[22px]" strokeWidth={2} />
         </button>
         <input
@@ -1214,7 +1238,7 @@ function Composer({
           type="button"
           aria-label={working ? a.stop : a.send}
           disabled={!working}
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-[#1d1d1f] text-white disabled:opacity-20"
+          className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-[#1d1d1f] text-white disabled:opacity-20"
         >
           {working ? <Square className="size-3.5" strokeWidth={0} fill="currentColor" /> : <ArrowUp className="size-5" strokeWidth={2.5} />}
         </button>

@@ -1,10 +1,13 @@
-/* Fizz Drinks' B2B storefront on the phone, in Coca-Cola's design language:
-   a #eeeeee page, white cards (16px; 32px for the big ones), bold headings,
-   pill buttons in near-black. Fizz red only in the logo and the drinks. */
+/* Fizz Drinks' B2B storefront on the phone: a white page, grey cards
+   (#f4f4f5, 24px; the hero's slides 32px), bold headings, rounded-rectangle
+   buttons, and rounded squares rather than circles for icon buttons and chips
+   (people stay round). Fizz red only in the logo, the drinks and the unread dot. */
 
 .sf-page {
   --fizz-red: #e8112d;
-  background: #eeeeee;
+  /* Trying Figtree for the site's text too, not just its titles (buyer-feedback). */
+  font-family: "Figtree Variable", var(--font-sans);
+  background: #fff;
 }
 .sf-no-scrollbar {
   scrollbar-width: none;
@@ -13,53 +16,57 @@
   display: none;
 }
 
-/* The wordmark: heavy, tight, a little italic. */
+/* The wordmark: heavy, tight, a little italic. Brand marks stay Inter
+   whatever the site's text is set in. */
 .sf-logo {
   color: var(--fizz-red);
+  font-family: var(--font-sans);
   font-weight: 900;
   font-style: italic;
   letter-spacing: -0.05em;
   line-height: 1;
 }
 
-/* Display titles: Anton, tall and condensed, in capitals, like a can's label
-   or a promo banner. On the hero headlines and the section titles; cards,
+/* Display titles: Figtree bold, in the copy's own case (trying it in place of
+   Anton's condensed capitals, buyer-feedback). On the hero headlines and the section titles; cards,
    products and the login page stay Inter bold. */
 .sf-display {
-  font-family: "Anton", var(--font-sans);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.005em;
+  font-family: "Figtree Variable", var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.04;
 }
 
-/* Pill buttons: filled near-black, white (on dark slides), or outlined. No
+/* Buttons: rounded rectangles, as Airbnb's and Shopify's (16px; 12px when
+   small), filled near-black, white (on dark slides), or outlined. No
    hover states anywhere on the phone: it's a touch screen, so a tap is direct. */
-.sf-pill {
+.sf-btn {
   display: inline-flex;
   height: 48px;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
+  border-radius: 16px;
   padding: 0 24px;
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
-.sf-pill-sm {
+.sf-btn-sm {
   height: 36px;
+  border-radius: 12px;
   padding: 0 16px;
   font-size: 14px;
 }
-.sf-pill-dark {
+.sf-btn-dark {
   background: #1d1d1f;
   color: #fff;
 }
-.sf-pill-light {
+.sf-btn-light {
   background: #fff;
   color: #1d1d1f;
 }
-.sf-pill-outline {
+.sf-btn-outline {
   color: #1d1d1f;
   box-shadow: inset 0 0 0 1.5px #1d1d1f;
 }
@@ -123,6 +130,7 @@
   border-radius: 10% 10% 40% 40% / 20% 20% 80% 80%;
 }
 .sf-can-label {
+  font-family: var(--font-sans);
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   font-weight: 900;
@@ -268,20 +276,21 @@
   transition: transform 560ms var(--ease);
 }
 
-/* The agent's floating pill: Safari's dark Liquid Glass (a2a-liquid-glass),
-   tinted darker so it stands apart from the bar, 48px like its pills: the
-   sparkle and "New task". When the bar shrinks, the label folds away and it's
-   a sparkle in a circle. */
-.sf-fab.a2a-liquid-glass {
-  background: rgb(10 10 12 / 0.82);
-}
+/* The agent's floating button: near-black like the site's dark buttons, a
+   rounded rectangle (16px) at 48px with the sparkle and "New task". When the
+   bar shrinks, the label folds away and it rounds into a circle. */
 .sf-fab {
   display: flex;
   height: 48px;
   align-items: center;
-  border-radius: 9999px;
+  border-radius: 16px;
+  background: #1d1d1f;
+  color: #fff;
+  box-shadow: 0 8px 24px -8px rgb(0 0 0 / 0.4);
   padding: 0 18px 0 8px;
-  transition: padding 380ms var(--fab-ease);
+  transition:
+    padding 380ms var(--fab-ease),
+    border-radius 380ms var(--fab-ease);
   --fab-ease: cubic-bezier(0.32, 0.72, 0, 1);
 }
 .sf-fab-label {
@@ -299,6 +308,7 @@
 }
 [data-collapsed] .sf-fab {
   padding: 0 8px;
+  border-radius: 24px;
 }
 [data-collapsed] .sf-fab-label {
   max-width: 0;
