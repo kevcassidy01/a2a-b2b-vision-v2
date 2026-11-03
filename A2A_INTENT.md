@@ -8,6 +8,8 @@ Started 2026-10-23. The earlier intent docs (the browser chat and the Cowork des
 
 ---
 
+Standalone presentation update (2026-11-03): `/buyer` is a responsive full-browser storefront without simulated device/Safari chrome or wallpaper. Narrow layouts retain the storefront's mobile design; desktop expands hero, products and account sections. `/` retains the split phone demo. Story and relay behavior do not change.
+
 ## 1. What this is and why
 
 A clickable prototype that shows **a buyer's agent and a seller's agent negotiating a large B2B order end

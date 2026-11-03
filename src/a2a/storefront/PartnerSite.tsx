@@ -34,7 +34,7 @@ const NOTIFY = 1600;
  * agent's sheet, which keeps its chat while he's logged in (logged out, it's
  * Fizz's helpful agent instead).
  */
-export function PartnerSite() {
+export function PartnerSite({ fullPage = false }: { fullPage?: boolean }) {
   // On a jump past step 1, John's already logged in with Mike's cart in; past step 3, his agent has it, its sheet up.
   const { from } = useStory();
   const [page, setPage] = useState<Page>("home");
@@ -47,6 +47,43 @@ export function PartnerSite() {
   const [assigned, setAssigned] = useState(from >= 4);
   const markAssigned = useCallback(() => setAssigned(true), []);
   const timers = useRef<(() => void)[]>([]);
+
+  // Browser overlays own keyboard focus; the split demo keeps its existing behavior.
+  useEffect(() => {
+    if (!fullPage || (!menuOpen && agent === null)) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const panel = document.querySelector<HTMLElement>(menuOpen ? ".a2a-buyer-page .sf-drawer-panel" : ".a2a-buyer-page .sf-sheet-panel");
+    if (!panel) return;
+    const controls = () => [...panel.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input, textarea, [tabindex="0"]')];
+    controls()[0]?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        if (menuOpen) setMenuOpen(false);
+        else setAgent(null);
+      } else if (e.key === "Tab") {
+        const items = controls();
+        const first = items[0];
+        const last = items.at(-1);
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      if (previous?.isConnected && !previous.closest('[inert]')) previous.focus();
+      else {
+        const fallback = document.querySelector<HTMLElement>('.a2a-buyer-page .sf-page > header button[aria-expanded], .a2a-buyer-page .sf-fab');
+        if (fallback && !fallback.closest('[inert]')) fallback.focus();
+      }
+    };
+  }, [fullPage, menuOpen, agent !== null]);
 
   /** Loads `to`, logged in or out as `signed`, once the old page has had its moment. */
   const load = useCallback((to: Page, signed: boolean) => {
@@ -100,10 +137,11 @@ export function PartnerSite() {
   return (
     <SiteContext.Provider value={site}>
       <Safari
+        fullPage={fullPage}
         pageKey={`${page}-${signedIn}-${booted}`}
         loading={loading}
         onBack={page === "home" ? undefined : () => go("home")}
-        compact={agent !== null}
+        compact={agent !== null || (fullPage && menuOpen)}
         float={!booted || page === "login" ? undefined : <AgentFab signedIn={signedIn} />}
         overlay={
           <>
@@ -137,7 +175,7 @@ export function PartnerSite() {
         {!booted ? (
           <SiteSkeleton />
         ) : page === "login" ? (
-          <Login onSignedIn={onSignedIn} />
+          <Login onSignedIn={onSignedIn} onBack={fullPage ? () => go("home") : undefined} />
         ) : signedIn ? (
           <AccountHome />
         ) : (

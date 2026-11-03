@@ -27,6 +27,7 @@ export function Safari({
   overlay,
   compact = false,
   float,
+  fullPage = false,
 }: {
   children: ReactNode;
   /** Which page is showing; a new one starts at the top. */
@@ -36,6 +37,7 @@ export function Safari({
   overlay?: ReactNode;
   compact?: boolean;
   float?: ReactNode;
+  fullPage?: boolean;
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [progress, setProgress] = useState<"idle" | "run" | "done">("idle");
@@ -67,7 +69,18 @@ export function Safari({
     else if (moved) setCollapsed(true);
   };
 
-  return (
+   if (fullPage) return (
+     <>
+       <main key={pageKey} className="sf-browser-scroll absolute inset-0 overflow-y-auto" inert={compact} aria-busy={loading}>
+         {children}
+         <div className="h-24" aria-hidden />
+       </main>
+       {float && <div className="sf-browser-float" inert={compact}>{float}</div>}
+       {overlay}
+     </>
+   );
+
+   return (
     <>
       <div key={pageKey} onScroll={onScroll} className="a2a-no-scrollbar absolute inset-0 overflow-y-auto">
         {children}

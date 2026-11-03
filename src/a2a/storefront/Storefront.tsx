@@ -54,7 +54,7 @@ const PERK_ICONS: LucideIcon[] = [BadgePercent, ReceiptText, CalendarClock];
  */
 export function Storefront({ onLogIn }: { onLogIn: () => void }) {
   return (
-    <div className="sf-page isolate min-h-full">
+    <div className="sf-page sf-public isolate min-h-full">
       <Header onLogIn={onLogIn} />
       <Hero onLogIn={onLogIn} />
       <Brands />
@@ -99,7 +99,7 @@ function Section({
 function Brands() {
   return (
     <Section title={t.brands.title}>
-      <ul className="grid grid-cols-3 gap-3">
+      <ul className="sf-brands grid grid-cols-3 gap-3">
         {t.brands.items.map((b, i) => (
           <li key={b.name}>
             <a
@@ -170,7 +170,7 @@ function ProductRow({
   shot: (i: number) => ReactNode;
 }) {
   return (
-    <ul className="sf-no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4">
+    <ul className="sf-products sf-no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4">
       {items.map((p, i) => (
         <li key={p.name} className="flex w-[220px] shrink-0 snap-start flex-col overflow-hidden rounded-[24px] border border-[#e4e4e7] bg-white">
           <div className="sf-product-shot grid h-[200px] place-items-center">{shot(i)}</div>
@@ -265,7 +265,7 @@ function Marketing() {
 /** Coca-Cola's overlap: a big coloured picture (Somnath's photo of three pouches, on the floor's red below it), with a white text card riding up over its bottom. */
 function Feature() {
   return (
-    <section className="px-4 pt-14">
+    <section className="sf-feature px-4 pt-14">
       <div className="overflow-hidden rounded-[32px] bg-[#e40f30] pb-12">
         <img src={plantsPhoto} alt="" className="block w-full" />
       </div>

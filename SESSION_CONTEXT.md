@@ -19,6 +19,8 @@ The living context for this project. What it is, why it exists, and where we are
 
 ## Current state
 
+- **2026-11-03, standalone buyer layout:** `/buyer` now fills the browser with responsive storefront/account layouts and no simulated phone/Safari chrome or wallpaper. Root split keeps its phone; seller and relay are unchanged. Verification: `.agents/artifacts/buyer-responsive-page.md`.
+
 - **2026-11-03, standalone seller layout:** `/seller` now fills the browser with no wallpaper or simulated Mac window. Buyer/root remain framed demos; live relay wiring unchanged. Verification and limits: `.agents/artifacts/seller-full-page.md`.
 
 - **2026-11-03, approved personal-copy live relay:** implementation locally verified (8 tests and normal/share/configured builds); deployment pending for the existing Salesforce-team Heroku app `kevcassidy-a2a-relay-vision` connected to the personal public GitHub repo / Pages. This approval supersedes internal-only hosting for this copy, not other prototypes. Production requires both `VITE_RELAY_URL` and an explicit room token. Deployment steps: [docs/live-relay.md](./docs/live-relay.md). No commit, push or provisioning authorized in this session.

@@ -4,6 +4,10 @@ Chronological record of changes. Newest at the top.
 
 ## Unreleased
 
+- Fix standalone buyer review findings: add an explicit Back to home action on login without signing in; reject disconnected/inert focus-restoration targets and fall back to the visible page menu/FAB after menu-to-chat handoff. Browser regressions pass at 1440/390/320px; 26 Node tests and build pass. No commit or push.
+
+- Make standalone `/buyer` a responsive browser storefront without the mock iPhone, status bar, Safari URL bar or wallpaper. Preserve narrow storefront styling, expand desktop hero/catalog/account layouts, bound menu/chat overlays to the dynamic viewport, and add standalone keyboard focus handling. Root split, seller and relay remain unchanged. Evidence: `.agents/artifacts/buyer-responsive-page.md`.
+
 - Fix standalone seller mobile checkout funnel overlap: measure a 720px minimum plot inside a bounded, keyboard-focusable horizontal scroller; other layouts keep existing plot sizing. Chrome at 320/390px verifies 174px column spacing, non-overlapping label bounds and no page overflow. Add a scoped regression test; evidence in `.agents/artifacts/seller-full-page.md`.
 
 - Make standalone `/seller` an edge-to-edge browser app: opaque sidebar, no wallpaper, simulated Mac lights, outer glass window, inset, radius or shadow. Preserve buyer/root presentation and relay behavior; scope mobile header/card/control reflow to seller. Evidence: `.agents/artifacts/seller-full-page.md`.

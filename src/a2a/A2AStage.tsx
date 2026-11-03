@@ -19,8 +19,8 @@ import "./a2a.css";
  * John's storefront on an iPhone on the left, Alex's Command Center in the
  * glass AI app shell on the right, and under both the bar showing who is
  * acting. With a `side`, one of them alone in the middle of the screen, for
- * its own device (/buyer, /seller; link.tsx). The seller fills the browser;
- * the buyer and split demo backdrop is a dusk
+ * its own device (/buyer, /seller; link.tsx). Both fill the browser;
+ * the split demo backdrop is a dusk
  * mountain range (John Towner, Unsplash) under a light dark wash, so the chrome
  * floats on depth and shadow (Linear's scene).
  */
@@ -87,13 +87,11 @@ function OneSide({ side, peer }: { side: Side; peer: boolean }) {
   const paused = usePaused();
   return (
     <div
-      className={`a2a-stage relative flex overflow-hidden ${side === "buyer" ? "a2a-scene a2a-scene-blur h-screen w-screen items-center justify-center p-2.5" : "a2a-seller-page"}`}
+       className={`a2a-stage relative flex overflow-hidden ${side === "buyer" ? "a2a-buyer-page" : "a2a-seller-page"}`}
       data-paused={paused || undefined}
     >
       {side === "buyer" ? (
-        <IPhoneFrame>
-          <PartnerSite />
-        </IPhoneFrame>
+         <PartnerSite fullPage />
       ) : (
         <>
             <CommandCenterShell fullPage>

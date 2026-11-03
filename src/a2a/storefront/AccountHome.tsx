@@ -40,7 +40,7 @@ const STATUS_DOT: Record<string, string> = {
  */
 export function AccountHome() {
   return (
-    <div className="sf-page isolate min-h-full">
+    <div className="sf-page sf-account isolate min-h-full">
       <Header signedIn />
       <section className="px-4 pt-6">
         <h1 className="sf-display text-[34px] text-text">{t.greeting}</h1>

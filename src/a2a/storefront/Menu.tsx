@@ -92,7 +92,8 @@ export function Menu({
         <label className="sf-field sf-drawer-item mt-3 gap-2 px-4" style={at(lead)}>
           <Search className="size-[18px] shrink-0 text-text-muted" strokeWidth={2.25} />
           <input
-            type="search"
+             type="search"
+            aria-label={n.search}
             placeholder={n.search}
             readOnly
             className="h-full min-w-0 flex-1 bg-transparent text-[16px] text-text outline-none placeholder:text-text-muted"

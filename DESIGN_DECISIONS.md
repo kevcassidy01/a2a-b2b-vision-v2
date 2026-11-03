@@ -6,6 +6,11 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-11-03 A2A: standalone buyer is a responsive storefront
+Decision: `/buyer` bypasses simulated iPhone and Safari chrome. Keep the existing mobile content, typography, cards and carousel; at 768px and above expand hero, catalog grids, account sections and footer within a 1280px content area. Chat is a bounded 600px desktop panel and a near-full-height mobile sheet, with internal scrolling and standalone focus management. Root split retains its phone, and seller/relay are unchanged.
+Rationale: the user requested a real browser storefront, not an enlarged phone or narrow centered mobile column.
+Supersedes: drawn iPhone presentation for standalone buyer only.
+
 ### 2026-11-03 A2A: standalone seller fills the browser
 Decision: `/seller` uses an opaque, full-viewport application shell without wallpaper, Mac traffic lights, outer margins, rounded window corners or glass shadows. Keep the app sidebar and artifact toolbar; dashboard and drawer scrolling remain internal. Mobile reflow overrides apply only to standalone seller. Buyer and root split demo retain their existing presentation.
 Rationale: the user requested authentic browser-page positioning rather than a simulated desktop window.

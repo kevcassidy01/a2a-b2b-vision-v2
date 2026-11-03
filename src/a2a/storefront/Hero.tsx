@@ -45,7 +45,7 @@ export function Hero({ onLogIn }: { onLogIn: () => void }) {
     track.current?.scrollTo({ left: i * step(), behavior: "smooth" });
 
   return (
-    <section aria-label={t.label} className="pt-4">
+    <section aria-label={t.label} className="sf-hero pt-4">
       <div
         ref={track}
         onScroll={onScroll}

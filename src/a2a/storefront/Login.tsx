@@ -17,7 +17,7 @@ const SIGN_IN = 1200;
  * pale yellow AutoFill tint); tapping a field before then fills them too.
  * Then Log in turns to a spinner, and a moment later John is logged in.
  */
-export function Login({ onSignedIn }: { onSignedIn: () => void }) {
+export function Login({ onSignedIn, onBack }: { onSignedIn: () => void; onBack?: () => void }) {
   const [filled, setFilled] = useState(false);
   const [signingIn, setSigningIn] = useState(false);
   const fill = () => setFilled(true);
@@ -30,9 +30,14 @@ export function Login({ onSignedIn }: { onSignedIn: () => void }) {
   }, [signingIn, onSignedIn]);
 
   return (
-    <div className="sf-page isolate flex min-h-full flex-col">
+    <div className="sf-page sf-login isolate flex min-h-full flex-col">
       <Header />
       <section className="px-4 pt-6">
+        {onBack && (
+          <button type="button" onClick={onBack} className="sf-btn sf-btn-outline mb-4">
+            Back to home
+          </button>
+        )}
         <form
           onSubmit={(e) => {
             e.preventDefault();
