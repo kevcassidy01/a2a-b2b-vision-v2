@@ -4,6 +4,11 @@ Chronological record of changes. Newest at the top.
 
 ## Unreleased
 
+- Fix reviewer-confirmed relay crashes: reject non-string message kinds/beats before property lookup, contain message validation exceptions, and reject malformed/non-origin-form upgrade targets after origin checks. Add test-first real-socket/raw-upgrade regressions verifying health remains available; 11 tests pass.
+
+- Add a bounded, room-isolated Node WebSocket relay for the approved personal Pages / Salesforce-team Heroku prototype, with health endpoint, Heroku web entry, production opt-in transport, open-time hello, reconnect, pairing reset and standalone fallback. Vite demo transport remains available; no UI expansion.
+- Add live-socket and browser transport lifecycle tests, repository-variable Pages wiring, and dashboard deployment instructions in `docs/live-relay.md`. No commit, push or hosting provisioning performed.
+
 ## 26.4.2 - 2026-11-02 17:02 EST
 
 - Deployment: add GitHub Pages publishing on the personal copy, with repository-prefixed assets and direct buyer/seller route entries. Both prototypes retain standalone playback without a backend.

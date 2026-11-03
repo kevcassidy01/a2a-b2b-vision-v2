@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { demoTimeout } from "./demoClock";
 import { OWNER, useStory, type Beat } from "./story";
+import { validMessage } from "./protocol.js";
+import { connectRelay, relayAddress } from "./transport.js";
 
 /**
  * The link between the two pages (no split screen): John's phone at /buyer and
@@ -8,7 +10,8 @@ import { OWNER, useStory, type Beat } from "./story";
  * `npm run demo`, both pages are served by the one dev server, and its socket
  * (Vite's own, relayed by the a2a-link plugin in vite.config.ts) carries each
  * side's moves, and the presenter's restart, jump and pause, to the other.
- * With no other side there (or no server: the share file, Pages), a page
+ * Production uses VITE_RELAY_URL only with an explicit ?room= token.
+ * With no other side there (or no configured server), a page
  * plays the missing side's moves itself, on that side's timings (StandIn).
  */
 export type Side = "buyer" | "seller";
@@ -31,18 +34,25 @@ const EVENT = "a2a:link";
 /** This page, so it can tell its own messages from the other side's. */
 const ID = Math.random().toString(36).slice(2);
 const hot = import.meta.hot;
+const address = relayAddress(import.meta.env.VITE_RELAY_URL, new URLSearchParams(window.location.search).get("room"));
+const listeners = new Set<(m: Msg) => void>();
+let connection: ReturnType<typeof connectRelay> | undefined;
 
 function send(side: Side, body: Body) {
   hot?.send(EVENT, { ...body, id: ID, side });
+  if (!hot) connection?.send({ ...body, id: ID, side });
 }
 
 function listen(fn: (m: Msg) => void) {
-  if (!hot) return () => {};
   const on = (m: Msg) => {
-    if (m.id !== ID) fn(m);
+    if (validMessage(m) && m.id !== ID) fn(m);
   };
-  hot.on(EVENT, on);
-  return () => hot.off(EVENT, on);
+  if (hot) {
+    hot.on(EVENT, on);
+    return () => hot.off(EVENT, on);
+  }
+  listeners.add(on);
+  return () => { listeners.delete(on); };
 }
 
 /** How often a page says it's there, and how long without word before the other side counts as gone, in ms. */
@@ -56,31 +66,43 @@ const GONE_AFTER = 5000;
  * restarts from the top, so the two start together.
  */
 export function useLink(side: Side | undefined, jumpHere: (step: number) => void, pauseHere: (p: boolean) => void) {
-  const [peer, setPeer] = useState(false);
+  const [peer, setPeer] = useState(Boolean(side && (hot || address)));
   const heard = useRef(0);
   const here = useRef({ jumpHere, pauseHere });
   here.current = { jumpHere, pauseHere };
   useEffect(() => {
-    if (!side || !hot) return;
+    setPeer(Boolean(side && (hot || address)));
+    heard.current = 0;
+    if (!side || (!hot && !address)) return;
+    const started = performance.now();
     const off = listen((m) => {
       if (m.kind === "jump") return here.current.jumpHere(m.from);
       if (m.kind === "pause") return here.current.pauseHere(m.paused);
       if (m.kind !== "here" || m.side === side) return;
+      const newlyPaired = heard.current === 0 || performance.now() - heard.current > GONE_AFTER;
       heard.current = performance.now();
       setPeer(true);
-      if (m.hello) {
+      if (m.hello || newlyPaired) {
         send(side, { kind: "here" });
         here.current.jumpHere(1);
       }
     });
-    send(side, { kind: "here", hello: true });
+    if (hot) send(side, { kind: "here", hello: true });
+    else connection = connectRelay(address!, (m) => {
+      for (const listener of listeners) listener(m as Msg);
+    }, () => send(side, { kind: "here", hello: true }), () => {
+      heard.current = 0;
+      setPeer(false);
+    });
     const id = window.setInterval(() => {
       send(side, { kind: "here" });
-      if (performance.now() - heard.current > GONE_AFTER) setPeer(false);
+      if (performance.now() - (heard.current || started) > GONE_AFTER) setPeer(false);
     }, HEARTBEAT);
     return () => {
       off();
       clearInterval(id);
+      connection?.close();
+      connection = undefined;
     };
   }, [side]);
   const jump = useCallback((step: number) => side && send(side, { kind: "jump", from: step }), [side]);
@@ -106,7 +128,7 @@ export function Relay({ side }: { side: Side }) {
   useEffect(
     () =>
       listen((m) => {
-        if (m.kind === "beat" && OWNER[m.beat] !== side) fire(m.beat);
+        if (m.kind === "beat" && m.side !== side && OWNER[m.beat] !== side) fire(m.beat);
       }),
     [side, fire],
   );

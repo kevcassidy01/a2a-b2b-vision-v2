@@ -27,7 +27,10 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm test
       - run: npm run build -- --base="/${{ github.event.repository.name }}/"
+        env:
+          VITE_RELAY_URL: ${{ vars.VITE_RELAY_URL }}
       - name: Create standalone route entries
         run: |
           mkdir -p dist/buyer dist/seller

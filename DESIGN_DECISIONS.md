@@ -6,6 +6,11 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-11-03 A2A: opt-in isolated production relay on the approved personal copy
+Decision: personal GitHub Pages may connect to the existing Salesforce-team Heroku app via an explicit build-time relay URL and per-demo room query parameter. No room means standalone. Vite's demo link remains the local path. A pairing/reconnection restarts both stories; loss of a peer enables the existing stand-in. No new visible controls.
+Rationale: user explicitly approved the personal public repo / Pages connection, while requiring isolated demos, safe fallback and no hosting provisioning in this implementation session. See `docs/live-relay.md` for limits and deployment.
+Supersedes: internal-only hosting restriction for this approved personal copy only.
+
 ### 2026-11-03 A2A: on the phone, corner radii run on one five-step scale
 Decision: radii are set by an element's size, anchored on the 48px button at 16px: 8 for chips and tags, 12 for small buttons (36px), icon buttons (40px), icon squares and thumbnails, 16 for buttons, text fields and the chat composer, 24 for cards, grouped lists and chat bubbles, 32 for the hero slides only. People's photos stay round, and so does the collapsed FAB. Blocks stacked in one column at the same width share a radius: the menu's Coworker card, Search field and lists are all 16. Card actions pin to the card's foot and are full width on the phone.
 Rationale: Somnath: radii had drifted to about 14 values, with a 12px Search field above 24px lists in the menu. One scale, set from the buttons, reads as one family.

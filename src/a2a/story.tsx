@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+export { OWNER } from "./protocol.js";
 
 /**
  * Who's at it, for the who's-acting bar: an agent while it works, a person
@@ -69,15 +70,6 @@ const StoryContext = createContext<Story>({
 export type Beat = "quoteSent" | "counterSent" | "heldOut" | "askedAlex" | "v3Sent" | "accepted" | "ordered";
 
 /** Whose move each one is: John's side (the phone) or Fizz's (the Command Center). */
-export const OWNER: Record<Beat, "buyer" | "seller"> = {
-  quoteSent: "buyer",
-  counterSent: "seller",
-  heldOut: "buyer",
-  askedAlex: "seller",
-  v3Sent: "seller",
-  accepted: "buyer",
-  ordered: "buyer",
-};
 
 /** The step from which each move has already happened, on a run that jumps there. */
 const DONE_FROM: Record<Beat, number> = { quoteSent: 6, counterSent: 9, heldOut: 10, askedAlex: 11, v3Sent: 12, accepted: 14, ordered: 15 };
