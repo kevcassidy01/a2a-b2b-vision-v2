@@ -4,6 +4,8 @@ Chronological record of changes. Newest at the top.
 
 ## Unreleased
 
+- Add standalone `/demo/` launcher with unique matched buyer/seller room links, safe new-tab actions, accessible copy feedback/manual fallback, and explicit New Demo Pair reset. Preserve the root split demo and Pages base path; add dependency-free Node coverage.
+
 - Fix reviewer-confirmed relay crashes: reject non-string message kinds/beats before property lookup, contain message validation exceptions, and reject malformed/non-origin-form upgrade targets after origin checks. Add test-first real-socket/raw-upgrade regressions verifying health remains available; 11 tests pass.
 
 - Add a bounded, room-isolated Node WebSocket relay for the approved personal Pages / Salesforce-team Heroku prototype, with health endpoint, Heroku web entry, production opt-in transport, open-time hello, reconnect, pairing reset and standalone fallback. Vite demo transport remains available; no UI expansion.

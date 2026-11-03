@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node relay/server.js",
-    "test": "node --test relay/*.test.js",
+    "test": "node --test relay/*.test.js tests/*.test.js",
     "heroku-postbuild": "node --version",
     "dev": "vite",
     "demo": "vite --host",
