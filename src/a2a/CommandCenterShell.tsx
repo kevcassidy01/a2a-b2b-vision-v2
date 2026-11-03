@@ -52,48 +52,36 @@ function useRail() {
  * layer's edge is the only thing separating the two. The Command Center fills
  * the white layer edge to edge (A2A_INTENT §4).
  */
-export function CommandCenterShell({ children, window }: { children?: ReactNode; window?: boolean }) {
+export function CommandCenterShell({ children, fullPage }: { children?: ReactNode; fullPage?: boolean }) {
   const rail = useRail();
-  const mark = window ? <Lights /> : <span className="a2a-orb size-[28px]" aria-hidden />;
-  return (
-    <GlassPanel radius={SHELL_RADIUS} className="h-full min-w-0 flex-1">
-      <div className="flex h-full">
-        {rail ? <Rail mark={mark} wide={window} /> : <Sidenav mark={mark} wide={window} />}
+  const mark = <span className="a2a-orb size-[28px]" aria-hidden />;
+  const content = (
+      <div className="flex h-full min-h-0">
+        {rail ? <Rail mark={mark} /> : <Sidenav mark={mark} />}
         <main
           className="a2a-white-layer a2a-content min-w-0 flex-1 overflow-hidden bg-surface"
           style={{
-            margin: `${INSET}px ${INSET}px ${INSET}px 0`,
-            borderRadius: SHELL_RADIUS - INSET,
+            margin: fullPage ? 0 : `${INSET}px ${INSET}px ${INSET}px 0`,
+            borderRadius: fullPage ? 0 : SHELL_RADIUS - INSET,
           }}
         >
           {children}
         </main>
       </div>
-    </GlassPanel>
+  );
+  return fullPage ? (
+    <div className="a2a-page-shell h-full min-h-0 min-w-0 flex-1">{content}</div>
+  ) : (
+    <GlassPanel radius={SHELL_RADIUS} className="h-full min-w-0 flex-1">{content}</GlassPanel>
   );
 }
 
-/**
- * A Mac window's close, minimise and zoom lights, for the shell shown as its
- * own window (/seller). Set dressing, so not buttons. Inset as far from the
- * window's left edge as from its top (20px).
- */
-function Lights() {
-  return (
-    <span className="flex h-[28px] items-center gap-2" aria-hidden>
-      {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
-        <span key={c} className="size-3 rounded-full shadow-[inset_0_0_0_0.5px_rgb(0_0_0/0.25)]" style={{ background: c }} />
-      ))}
-    </span>
-  );
-}
-
-function Sidenav({ mark, wide }: { mark: ReactNode; wide?: boolean }) {
+function Sidenav({ mark }: { mark: ReactNode }) {
   return (
     <nav className="flex w-[232px] shrink-0 flex-col pb-2 pt-3 text-[13.5px] text-white/55">
-      {/* Header: the app mark (or a window's lights), then search and collapse (Cowork's header icons). */}
+      {/* Header: the app mark, then search and collapse (Cowork's header icons). */}
       <div className="flex items-center gap-0.5 px-3">
-        <span className={`mr-auto flex ${wide ? "pl-2" : ""}`}>{mark}</span>
+        <span className="mr-auto flex">{mark}</span>
         <IconButton icon={Search} label={t.search} />
         <IconButton icon={PanelLeft} label={t.collapse} />
       </div>
@@ -172,11 +160,10 @@ function Sidenav({ mark, wide }: { mark: ReactNode; wide?: boolean }) {
  * Command Center's pinned there); Projects; Alex at the foot. The chats and
  * recents are set dressing, so they go.
  */
-/** `wide` makes room for a window's lights, inset as on a Mac, with the white layer's gap after them. */
-function Rail({ mark, wide }: { mark: ReactNode; wide?: boolean }) {
+function Rail({ mark }: { mark: ReactNode }) {
   return (
-    <nav className={`flex ${wide ? "w-[80px]" : "w-[56px]"} shrink-0 flex-col items-center pb-2 pt-3 text-white/55`}>
-      {wide ? <span className="flex self-start pl-5">{mark}</span> : mark}
+    <nav className="flex w-[56px] shrink-0 flex-col items-center pb-2 pt-3 text-white/55">
+      {mark}
       <div className="mt-2">
         <IconButton icon={Search} label={t.search} side="right" />
       </div>

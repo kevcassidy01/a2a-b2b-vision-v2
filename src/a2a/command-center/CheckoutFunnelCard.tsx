@@ -101,7 +101,8 @@ export function CheckoutFunnelCard() {
         <ActionButton icon={Download} label={t.export} />
       </div>
 
-      <div ref={wrap} className="relative mt-5">
+      <div className="a2a-funnel-scroll mt-5" tabIndex={0} role="region" aria-label={t.title}>
+      <div ref={wrap} className="a2a-funnel-plot relative">
         {width > 0 && (
           <svg width={width} height={TOP + PLOT + 4} role="img" aria-label={t.title} className="block overflow-visible">
             {flows.map((f) => (
@@ -167,6 +168,7 @@ export function CheckoutFunnelCard() {
             </span>
           </div>
         )}
+      </div>
       </div>
     </section>
   );

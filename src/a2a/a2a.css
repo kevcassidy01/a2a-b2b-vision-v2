@@ -85,6 +85,121 @@
     0 1px 3px rgb(0 0 0 / 0.25);
 }
 
+/* Standalone seller is a browser app, not a window on the demo wallpaper. */
+.a2a-seller-page {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  background: #131416;
+}
+.a2a-page-shell {
+  background: #131416;
+}
+.a2a-seller-page .a2a-white-layer {
+  box-shadow: none;
+}
+/* Keep Sankey columns readable without widening the seller dashboard. */
+.a2a-seller-page .a2a-funnel-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.a2a-seller-page .a2a-funnel-plot {
+  min-width: 720px;
+}
+
+@media (max-width: 767px) {
+  .a2a-seller-page .a2a-artifact > header {
+    height: auto;
+    min-height: 44px;
+    flex-wrap: wrap;
+    padding-block: 8px;
+  }
+  .a2a-seller-page .a2a-hero,
+  .a2a-seller-page .a2a-dashboard-body {
+    padding-inline: 12px;
+  }
+  .a2a-seller-page .a2a-dashboard-heading {
+    flex-wrap: wrap;
+  }
+  .a2a-seller-page .a2a-dashboard-heading > :first-child {
+    flex-basis: 100%;
+  }
+  .a2a-seller-page .a2a-welcome {
+    overflow-y: auto;
+  }
+  .a2a-seller-page .a2a-welcome > :last-child {
+    min-height: 100%;
+    height: auto;
+    padding: 32px 16px;
+  }
+  .a2a-seller-page .a2a-welcome h1 {
+    white-space: normal;
+    font-size: 28px;
+  }
+  .a2a-seller-page .a2a-today-row,
+  .a2a-seller-page .a2a-today-row[data-task] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .a2a-seller-page .a2a-today-row:not([data-task]) > :first-child,
+  .a2a-seller-page .a2a-today-row > :last-child {
+    display: none;
+  }
+  .a2a-seller-page .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    min-width: 0;
+  }
+  .a2a-seller-page .a2a-period > :first-child,
+  .a2a-seller-page .a2a-view-picker {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+  .a2a-seller-page .a2a-campaign-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .a2a-seller-page .a2a-bone {
+    max-width: 100%;
+  }
+  .a2a-seller-page .bg-track {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+  .a2a-seller-page section.a2a-card > .flex:first-child {
+    flex-wrap: wrap;
+  }
+  .a2a-seller-page section.a2a-card > .grid > * {
+    min-width: 0;
+  }
+  .a2a-seller-page .a2a-dashboard-body section,
+  .a2a-seller-page .a2a-dashboard-body .flex {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .a2a-seller-page .a2a-card > .flex {
+    max-width: 100%;
+    width: 100%;
+  }
+  .a2a-seller-page .a2a-card > .flex > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .a2a-seller-page .a2a-drawer > :first-child {
+    height: auto;
+    min-height: 56px;
+    flex-wrap: wrap;
+    padding: 8px;
+  }
+  .a2a-seller-page .a2a-drawer .max-w-\[680px\] {
+    padding-inline: 12px;
+  }
+  .a2a-seller-page .a2a-mail {
+    max-width: calc(100% - 24px);
+    right: 12px;
+  }
+}
+
 /* Sidenav rows on dark glass: a faint white wash on hover, a stronger one when active. */
 .a2a-nav-btn {
   transition: background-color var(--dur-fast, 120ms) ease-out;

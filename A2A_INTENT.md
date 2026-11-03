@@ -64,6 +64,8 @@ The PDF's 7 steps, which our story walks through:
 
 **Superseded 2026-11-02 (Nitin: no split screen):** the demo runs on two devices, `/buyer` (John's iPhone, centred) and `/seller` (Alex's Command Center), linked live; no who's-acting bar. The split below stays at `/`. See §10.
 
+**Standalone seller update 2026-11-03:** `/seller` is a full browser page, not a simulated Mac window: no wallpaper, traffic lights, outer inset, rounded corners or glass shadow. Its sidebar and app content fill the viewport, with internal scrolling and mobile reflow. Buyer and root split presentation stay unchanged.
+
 **One screen, split in two.** No tabs or toggle. Both sides are on screen the whole time, so the audience
 sees each agent's move land on the other side.
 
@@ -359,4 +361,3 @@ v2 (v1 is superseded).
 2. Margret on desktop or on the phone?
 3. Above her limits, does it go to the rep (as now) or to Margret?
 4. Keep the Friday report in P8?
-

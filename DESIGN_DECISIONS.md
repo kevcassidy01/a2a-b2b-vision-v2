@@ -6,6 +6,11 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-11-03 A2A: standalone seller fills the browser
+Decision: `/seller` uses an opaque, full-viewport application shell without wallpaper, Mac traffic lights, outer margins, rounded window corners or glass shadows. Keep the app sidebar and artifact toolbar; dashboard and drawer scrolling remain internal. Mobile reflow overrides apply only to standalone seller. Buyer and root split demo retain their existing presentation.
+Rationale: the user requested authentic browser-page positioning rather than a simulated desktop window.
+Supersedes: centered desktop-window presentation for standalone seller only.
+
 ### 2026-11-03 A2A: generate the demo pair explicitly
 Decision: `/demo/` initially shows only the existing header and Generate Demo button over the shared A2A wallpaper. The buyer/seller cards and supporting instructions appear only after generation succeeds. The same button can generate another fresh room; reload returns to the start. Use a Vite HTML entry to share the existing image asset in local and Pages builds.
 Rationale: the user requested a focused starting screen that visually matches the two prototypes without duplicating the wallpaper binary.

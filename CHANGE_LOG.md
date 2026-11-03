@@ -4,6 +4,10 @@ Chronological record of changes. Newest at the top.
 
 ## Unreleased
 
+- Fix standalone seller mobile checkout funnel overlap: measure a 720px minimum plot inside a bounded, keyboard-focusable horizontal scroller; other layouts keep existing plot sizing. Chrome at 320/390px verifies 174px column spacing, non-overlapping label bounds and no page overflow. Add a scoped regression test; evidence in `.agents/artifacts/seller-full-page.md`.
+
+- Make standalone `/seller` an edge-to-edge browser app: opaque sidebar, no wallpaper, simulated Mac lights, outer glass window, inset, radius or shadow. Preserve buyer/root presentation and relay behavior; scope mobile header/card/control reflow to seller. Evidence: `.agents/artifacts/seller-full-page.md`.
+
 - Restyle `/demo/` with the prototypes' shared wallpaper and dark glass cards; retain header copy and initially show only the header and Generate Demo. Generate on click, reveal buyer/seller open/copy controls after success, and retain fresh-room regeneration. Move the launcher to a Vite HTML build entry to reuse the existing emitted asset without duplicating the image. Verification: 19 Node tests pass and repository-prefixed production build passes; evidence in `.agents/artifacts/demo-launcher-design.md`.
 
 - Add standalone `/demo/` launcher with unique matched buyer/seller room links, safe new-tab actions, accessible copy feedback/manual fallback, and explicit New Demo Pair reset. Preserve the root split demo and Pages base path; add dependency-free Node coverage.

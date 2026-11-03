@@ -19,6 +19,8 @@ The living context for this project. What it is, why it exists, and where we are
 
 ## Current state
 
+- **2026-11-03, standalone seller layout:** `/seller` now fills the browser with no wallpaper or simulated Mac window. Buyer/root remain framed demos; live relay wiring unchanged. Verification and limits: `.agents/artifacts/seller-full-page.md`.
+
 - **2026-11-03, approved personal-copy live relay:** implementation locally verified (8 tests and normal/share/configured builds); deployment pending for the existing Salesforce-team Heroku app `kevcassidy-a2a-relay-vision` connected to the personal public GitHub repo / Pages. This approval supersedes internal-only hosting for this copy, not other prototypes. Production requires both `VITE_RELAY_URL` and an explicit room token. Deployment steps: [docs/live-relay.md](./docs/live-relay.md). No commit, push or provisioning authorized in this session.
 
 - **2026-11-02, GM (Nitin) feedback round, on `master`:** first item built (26.1.0), **no split screen**. The buyer (`/buyer`) and seller (`/seller`) run on two devices, linked live through `npm run demo`; each plays standalone with no partner. `/` keeps the split. More feedback items to come from Somnath. Hard rule: never touch the v1 repo `a2a-b2b-commerce-vision`.

@@ -181,7 +181,7 @@ function Circle({ className = "", children }: { className?: string; children: Re
 }
 
 /** An account's row: its name, the stage path, then what the agent's at. */
-const ROW = "grid grid-cols-[minmax(0,1.1fr)_264px_minmax(0,1.3fr)] items-center gap-4";
+const ROW = "a2a-campaign-row grid grid-cols-[minmax(0,1.1fr)_264px_minmax(0,1.3fr)] items-center gap-4";
 
 function Account({ name, steps, children }: { name: string; steps: readonly Step[]; children: ReactNode }) {
   return (

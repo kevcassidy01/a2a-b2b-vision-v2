@@ -84,7 +84,7 @@ export function CommandCenter() {
     <div className="absolute inset-0 overflow-hidden" aria-busy={loading}>
       <div ref={canvas} className="a2a-canvas a2a-no-scrollbar absolute inset-0 overflow-y-auto">
         <Header agentOpen={agentOpen} onAgent={() => setAgentOpen((o) => !o)} />
-        <div className="relative flex flex-col gap-8 px-8 pb-8 pt-6">
+        <div className="a2a-dashboard-body relative flex flex-col gap-8 px-8 pb-8 pt-6">
           {loading ? (
             <CommandCenterSkeleton />
           ) : (
@@ -184,7 +184,7 @@ function Header({
     <>
       <header className="a2a-hero sticky top-0 z-20 flex flex-col px-8 pt-6">
         <p className="text-[13.5px] text-text-muted">{t.greeting}</p>
-        <div className="mt-1 flex items-center gap-2">
+        <div className="a2a-dashboard-heading mt-1 flex items-center gap-2">
           <div className="mr-auto flex min-w-0 items-center gap-2.5">
             <Store
               className="size-[22px] shrink-0 text-text-muted"
@@ -212,7 +212,7 @@ function Header({
         </div>
         <div className="mt-4 flex flex-wrap items-start gap-2">
           {/* What to look at: the view (a mode). */}
-          <ViewPicker className="mr-auto" />
+          <ViewPicker className="a2a-view-picker mr-auto" />
           {/* Where the figures come from. On narrower screens the scope drops
               to the next line, still at the right. */}
           <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
@@ -275,7 +275,7 @@ function useFadeTo(canvas: RefObject<HTMLDivElement | null>, mark: RefObject<HTM
 /** The period and store the figures below Today cover. It scrolls with the page. */
 function Period({ ref }: { ref: RefObject<HTMLDivElement | null> }) {
   return (
-    <div ref={ref} className="mb-3 flex flex-wrap items-center gap-2">
+    <div ref={ref} className="a2a-period mb-3 flex flex-wrap items-center gap-2">
       <Segmented
         options={t.period.options}
         initial={2}

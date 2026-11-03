@@ -29,7 +29,7 @@ export function useFrameLoading(loading: boolean) {
 export function ArtifactFrame({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="flex h-full flex-col">
+    <div className="a2a-artifact flex h-full flex-col">
       <header className="relative flex h-11 shrink-0 items-center gap-1 border-b border-border pl-4 pr-2">
         <h2 className="mr-auto truncate text-[13.5px] font-medium text-text">
           {t.title}
