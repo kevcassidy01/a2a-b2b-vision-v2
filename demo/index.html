@@ -6,18 +6,21 @@
   <title>Launch a Demo Pair | Agent-to-Agent Commerce</title>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; background: #fcfcfb; color: #0b0b0b; font: 16px/1.5 Inter, system-ui, sans-serif; }
-    main { max-width: 1000px; margin: auto; padding: 64px 24px 40px; }
-    .eyebrow { color: #52514f; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; }
+    [hidden] { display: none !important; }
+    body { margin: 0; min-height: 100svh; background: #0d0e10; color: #fff; font: 16px/1.5 Inter, system-ui, sans-serif; }
+    body::before { content: ''; position: fixed; inset: 0; z-index: -1; background: linear-gradient(rgba(0,0,0,.68), rgba(0,0,0,.78)), var(--wallpaper) center / cover; }
+    main { max-width: 1000px; margin: auto; padding: clamp(48px, 12vh, 128px) 24px 40px; }
+    header { max-width: 720px; }
+    .eyebrow { color: #e0e4eb; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; }
     h1 { font-size: clamp(32px, 5vw, 48px); line-height: 1.15; letter-spacing: -.035em; margin: 16px 0; }
-    .intro { max-width: 640px; color: #52514f; font-size: 18px; }
+    .intro { max-width: 640px; color: #e0e4eb; font-size: 18px; }
     .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 32px 0; }
-    section { background: #fff; border: 1px solid #e4e4e7; border-radius: 24px; padding: 28px; }
-    .number { color: #0176d3; font-size: 14px; font-weight: 650; }
+    section { background: rgba(13,18,28,.88); border: 1px solid #737e90; border-radius: 24px; padding: 28px; backdrop-filter: blur(20px); }
+    .number { color: #9bd1ff; font-size: 14px; font-weight: 650; }
     h2 { font-size: 28px; letter-spacing: -.02em; margin: 12px 0 8px; }
-    section p { color: #52514f; margin: 0 0 24px; }
+    section p { color: #e0e4eb; margin: 0 0 24px; }
     a, button { min-height: 48px; border-radius: 16px; font: inherit; font-weight: 600; cursor: pointer; }
-    .open { display: block; background: #0176d3; color: #fff; padding: 12px 16px; text-align: center; text-decoration: none; }
+    .open { display: block; background: #0868b4; color: #fff; padding: 12px 16px; text-align: center; text-decoration: none; }
     .open:hover { background: #014486; }
     .open:not([href]) { background: #52514f; cursor: default; }
     label { display: block; margin-top: 24px; margin-bottom: 8px; font-size: 14px; font-weight: 600; }
@@ -25,12 +28,13 @@
     input { min-width: 0; width: 100%; border: 1px solid #898781; border-radius: 12px; padding: 12px; color: #30302e; background: #fcfcfb; font: 14px/1.5 ui-monospace, monospace; }
     button { background: #fff; color: #30302e; border: 1px solid #898781; padding: 10px 16px; }
     button:hover { background: #edece8; }
-    :focus-visible { outline: 3px solid #014486; outline-offset: 4px; }
-    .instructions { color: #52514f; max-width: 720px; }
-    .reset { margin-top: 16px; }
-    #status { min-height: 3em; color: #30302e; margin-top: 16px; }
-    footer { border-top: 1px solid #edece8; margin-top: 24px; padding-top: 16px; color: #52514f; font-size: 14px; }
-    @media (max-width: 640px) { main { padding: 32px 16px; } .pair { grid-template-columns: 1fr; gap: 16px; } section { padding: 24px; } }
+    :focus-visible { outline: 3px solid #9bd1ff; outline-offset: 4px; }
+    .instructions { color: #e0e4eb; max-width: 720px; }
+    .reset { margin-top: 16px; padding-inline: 28px; }
+    #status { color: #fff; margin-top: 16px; }
+    #status:empty { margin: 0; }
+    footer { border-top: 1px solid #737e90; margin-top: 24px; padding-top: 16px; color: #e0e4eb; font-size: 14px; }
+    @media (max-width: 640px) { main { padding: 48px 16px; } .pair { grid-template-columns: 1fr; gap: 16px; } section { padding: 24px; } .copy-row { flex-wrap: wrap; } .copy-row button { width: 100%; } }
   </style>
 </head>
 <body>
@@ -40,6 +44,9 @@
       <h1>Two sides. One demo.</h1>
       <p class="intro">Open the buyer and seller in two windows or on two devices. Both links below share one unique room.</p>
     </header>
+    <button class="reset" id="new-pair" type="button" aria-controls="demo-pair" aria-expanded="false">Generate Demo</button>
+    <p id="status" role="status" aria-live="polite" aria-atomic="true"></p>
+    <div id="demo-pair" hidden>
     <div class="pair">
       <section aria-labelledby="buyer-heading">
         <div class="number">01 / BUYER</div>
@@ -67,13 +74,16 @@
     <div class="instructions">
       <p>Use exactly one buyer and one seller from this pair. For another device, send its matching link rather than opening this launcher again.</p>
       <p id="copy-help">You can also select either link and copy it manually. Live pairing requires the deployed relay; without it, each side plays standalone.</p>
-      <p>New Demo Pair creates a fresh room. Close the old demo tabs, then open both new links. Reloading this launcher also creates a new pair.</p>
+      <p>Generate Demo creates a fresh room. Close the old demo tabs, then open both new links. Reloading this launcher returns to the start; generate a new pair when you are ready.</p>
     </div>
-    <button class="reset" id="new-pair" type="button">New Demo Pair</button>
-    <p id="status" role="status" aria-live="polite" aria-atomic="true"></p>
-    <noscript><p>Enable JavaScript to generate a unique buyer and seller pair.</p></noscript>
     <footer>Fizz Drinks / B2B commerce vision prototype</footer>
+    </div>
+    <noscript><p>Enable JavaScript to generate a unique buyer and seller pair.</p></noscript>
   </main>
+  <script type="module">
+    import wallpaper from '../src/assets/a2a/wallpaper.jpg';
+    document.documentElement.style.setProperty('--wallpaper', `url("${wallpaper}")`);
+  </script>
   <script>
     const status = document.getElementById('status');
     let generation = 0;
@@ -90,9 +100,11 @@
           document.getElementById(`${side}-copy`).disabled = false;
         }
         generation++;
+        document.getElementById('demo-pair').hidden = false;
+        document.getElementById('new-pair').setAttribute('aria-expanded', 'true');
         status.textContent = 'New demo pair ready. Both links share the same room.';
       } catch {
-        status.textContent = 'Could not create a demo pair. Open this page over HTTPS or localhost and try New Demo Pair again.';
+        status.textContent = 'Could not create a demo pair. Open this page over HTTPS or localhost and try Generate Demo again.';
       }
     }
     for (const side of ['buyer', 'seller']) {
@@ -111,7 +123,6 @@
       });
     }
     document.getElementById('new-pair').addEventListener('click', newPair);
-    newPair();
   </script>
 </body>
 </html>

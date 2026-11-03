@@ -4,6 +4,8 @@ Chronological record of changes. Newest at the top.
 
 ## Unreleased
 
+- Restyle `/demo/` with the prototypes' shared wallpaper and dark glass cards; retain header copy and initially show only the header and Generate Demo. Generate on click, reveal buyer/seller open/copy controls after success, and retain fresh-room regeneration. Move the launcher to a Vite HTML build entry to reuse the existing emitted asset without duplicating the image. Verification: 19 Node tests pass and repository-prefixed production build passes; evidence in `.agents/artifacts/demo-launcher-design.md`.
+
 - Add standalone `/demo/` launcher with unique matched buyer/seller room links, safe new-tab actions, accessible copy feedback/manual fallback, and explicit New Demo Pair reset. Preserve the root split demo and Pages base path; add dependency-free Node coverage.
 
 - Fix reviewer-confirmed relay crashes: reject non-string message kinds/beats before property lookup, contain message validation exceptions, and reject malformed/non-origin-form upgrade targets after origin checks. Add test-first real-socket/raw-upgrade regressions verifying health remains available; 11 tests pass.

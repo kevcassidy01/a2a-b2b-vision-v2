@@ -23,5 +23,8 @@ export default defineConfig(({ mode }) =>
         publicDir: false,
         build: { outDir: "dist-share", rollupOptions: { input: "share.html" } },
       }
-    : { plugins: [react(), tailwindcss(), a2aLink] },
+    : {
+        plugins: [react(), tailwindcss(), a2aLink],
+        build: { rollupOptions: { input: ['index.html', 'demo/index.html'] } },
+      },
 );

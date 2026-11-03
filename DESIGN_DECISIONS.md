@@ -6,6 +6,10 @@ Format: `### [date] Title` → Decision, Rationale, (optional) Supersedes.
 
 ---
 
+### 2026-11-03 A2A: generate the demo pair explicitly
+Decision: `/demo/` initially shows only the existing header and Generate Demo button over the shared A2A wallpaper. The buyer/seller cards and supporting instructions appear only after generation succeeds. The same button can generate another fresh room; reload returns to the start. Use a Vite HTML entry to share the existing image asset in local and Pages builds.
+Rationale: the user requested a focused starting screen that visually matches the two prototypes without duplicating the wallpaper binary.
+
 ### 2026-11-03 A2A: opt-in isolated production relay on the approved personal copy
 Decision: personal GitHub Pages may connect to the existing Salesforce-team Heroku app via an explicit build-time relay URL and per-demo room query parameter. No room means standalone. Vite's demo link remains the local path. A pairing/reconnection restarts both stories; loss of a peer enables the existing stand-in. No new visible controls.
 Rationale: user explicitly approved the personal public repo / Pages connection, while requiring isolated demos, safe fallback and no hosting provisioning in this implementation session. See `docs/live-relay.md` for limits and deployment.
